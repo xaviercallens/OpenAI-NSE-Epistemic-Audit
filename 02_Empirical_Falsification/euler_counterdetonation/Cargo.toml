@@ -1,0 +1,8 @@
+[package]
+name = "euler_counterdetonation"
+version = "0.1.0"
+edition = "2021"
+authors = ["Xavier Callens <callensxavier@gmail.com>", "MechanicaFluidorum Program"]
+description = "High-performance Rust solver intercepting the OpenAI Euler ultraviolet singularity via Dual-Scale topological regularization"
+
+[dependencies]

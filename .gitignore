@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.env
+venv/
+env/
+ENV/
+
+# Rust build artifacts
+target/
+**/target/
+Cargo.lock
+
+# Lean build artifacts
+.lake/
+lake-packages/
+
+# OS and editor files
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
