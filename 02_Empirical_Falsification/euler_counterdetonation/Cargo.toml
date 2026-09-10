@@ -6,3 +6,4 @@ authors = ["Xavier Callens <callensxavier@gmail.com>", "MechanicaFluidorum Progr
 description = "High-performance Rust solver intercepting the OpenAI Euler ultraviolet singularity via Dual-Scale topological regularization"
 
 [dependencies]
+ode_solvers = "0.6.2"

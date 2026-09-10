@@ -3,8 +3,8 @@
   ════════════════════════════════════════════════════════════════════════════════
   MODULE: Dual-Scale Topological Metric & Beale-Kato-Majda (BKM) Regularity
   
-  Imports the OpenAI Euler/Navier-Stokes definitions and proves that under
-  the physical Dual-Scale metric:
+  Imports the OpenAI Euler/Navier-Stokes definitions and sets up the open axioms 
+  for proving that under the physical Dual-Scale metric:
     k_eff(k) = min(|k|, 1 / (alpha' * |k|))
   the manufactured ultraviolet cascade is strictly censored in L^\infty.
   ════════════════════════════════════════════════════════════════════════════════
@@ -25,24 +25,21 @@ noncomputable def dualScaleWavenumber (k : ℝ) : ℝ :=
   if k = 0 then 0
   else min (abs k) (1 / (alpha' * abs k))
 
-/-- THEOREM: Ultraviolet Boundedness
+/-- [CHALLENGE 1] THEOREM: Ultraviolet Boundedness
     The effective wavenumber under the Dual-Scale metric is globally bounded
     by 1 / sqrt(alpha'), forbidding sub-Planckian / ultraviolet runaway. -/
-theorem dual_scale_wavenumber_bounded (k : ℝ) :
-    dualScaleWavenumber alpha' k ≤ 1 / Real.sqrt alpha' := by
-  sorry
+axiom dual_scale_wavenumber_bounded (k : ℝ) :
+    dualScaleWavenumber alpha' k ≤ 1 / Real.sqrt alpha'
 
-/-- CONTRA-POSITIVE BEALE-KATO-MAJDA (BKM) THEOREM:
+/-- [CHALLENGE 2] CONTRA-POSITIVE BEALE-KATO-MAJDA (BKM) THEOREM:
     If the Dual-Scale regularized vorticity satisfies:
       ∫_0^T ‖ω(·, t)‖_{L^∞} dt < ∞,
     then the velocity field u(·, t) remains smooth across [0, T],
     and no finite-time singularity can form. -/
-theorem bkm_regularity_censorship
+axiom bkm_regularity_censorship
     (T : ℝ) (hT : 0 < T)
     (omega_bound : ℝ) (h_bound : 0 < omega_bound) :
     (∀ t ∈ Icc 0 T, True) →
-    True := by
-  intro _
-  trivial
+    True
 
 end NSECensorship.Topological

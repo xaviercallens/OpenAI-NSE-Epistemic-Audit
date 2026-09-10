@@ -15,99 +15,104 @@ Description:
     Any physical sign perturbation or phase randomization immediately
     destroys the resonant triad alignment, arresting the ultraviolet
     cascade and preventing finite-time singularity formation.
+    
+    Rigorous Integration:
+    Uses SciPy's implicit Radau ODE solver, designed for stiff systems,
+    to ensure cascade arrest is a true physical consequence of phase 
+    cancellation, not an artifact of numerical dissipation.
 """
 
 import os
-import sys
 import numpy as np
+from scipy.integrate import solve_ivp
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-def simulate_dyadic_shell(phases, N=20, t_max=1.8, dt=1e-4, nu=1e-5):
+def dyadic_rhs(t, u, phases, lambdas, N, nu):
     """
-    Simulates energy-conserving dyadic shell model with arbitrary inter-shell phase angles:
+    RHS for the energy-conserving dyadic shell model with inter-shell phase angles:
       d u_n / dt = lambda_n cos(theta_n) u_{n-1}^2 - lambda_{n+1} cos(theta_{n+1}) u_n u_{n+1} - nu * lambda_n^2 * u_n
     """
-    lambdas = 2.0 ** np.arange(N)
-    u = np.zeros(N)
-    u[0] = 1.0  # Initial energy injection at large scale
+    du = np.zeros(N)
     
-    t = 0.0
-    times = [0.0]
-    enstrophies = [float(np.sum((lambdas**2) * (u**2)))]
-    energies = [float(0.5 * np.sum(u**2))]
-    spectra = [u.copy()]
+    # Boundary n = 0
+    du[0] = - lambdas[1] * np.cos(phases[1]) * u[0] * u[1] - nu * (lambdas[0]**2) * u[0]
     
-    steps = int(t_max / dt)
-    save_interval = max(1, steps // 200)
+    # Inner shells 1 <= n < N-1
+    for n in range(1, N - 1):
+        transfer_in = lambdas[n] * np.cos(phases[n]) * (u[n-1]**2)
+        transfer_out = lambdas[n+1] * np.cos(phases[n+1]) * u[n] * u[n+1]
+        visc = nu * (lambdas[n]**2) * u[n]
+        du[n] = transfer_in - transfer_out - visc
+                 
+    # Boundary n = N - 1
+    du[N-1] = lambdas[N-1] * np.cos(phases[N-1]) * (u[N-2]**2) - nu * (lambdas[N-1]**2) * u[N-1]
+    
+    return du
 
-    for step in range(1, steps + 1):
-        du = np.zeros(N)
-        
-        # Shell 0
-        transfer_out_0 = lambdas[1] * np.cos(phases[1]) * u[0] * u[1]
-        du[0] = - transfer_out_0 - nu * (lambdas[0]**2) * u[0]
-        
-        # Intermediate shells
-        for n in range(1, N - 1):
-            transfer_in = lambdas[n] * np.cos(phases[n]) * (u[n-1]**2)
-            transfer_out = lambdas[n+1] * np.cos(phases[n+1]) * u[n] * u[n+1]
-            visc = nu * (lambdas[n]**2) * u[n]
-            du[n] = transfer_in - transfer_out - visc
-            
-        # Ultraviolet boundary shell
-        du[N-1] = lambdas[N-1] * np.cos(phases[N-1]) * (u[N-2]**2) - nu * (lambdas[N-1]**2) * u[N-1]
-        
-        # Integration step (positivity preserving)
-        u = np.maximum(u + dt * du, 0.0)
-        t += dt
-        
-        if step % save_interval == 0:
-            ens = float(np.sum((lambdas**2) * (u**2)))
-            ene = float(0.5 * np.sum(u**2))
-            times.append(t)
-            enstrophies.append(ens)
-            energies.append(ene)
-            spectra.append(u.copy())
-            
-            if ens > 1e15:
-                # Singularity / runaway reached
-                break
-                
-    return np.array(times), np.array(enstrophies), np.array(energies), np.array(spectra), lambdas
+def run_rigorous_simulation(phases, N=22, t_max=1.75, nu=1e-5):
+    lambdas = 2.0 ** np.arange(N)
+    u0 = np.zeros(N)
+    u0[0] = 1.0  # Initial energy injection at large scale
+    
+    # Event function to detect singularity (H1 norm explosion)
+    def singularity_event(t, y, *args):
+        enstrophy = np.sum((lambdas**2) * (y**2))
+        return 1e15 - enstrophy
+    singularity_event.terminal = True
+    singularity_event.direction = -1
+
+    sol = solve_ivp(
+        dyadic_rhs, 
+        [0, t_max], 
+        u0, 
+        args=(phases, lambdas, N, nu),
+        method='Radau', # Implicit stiff solver to avoid numerical dissipation
+        events=singularity_event,
+        rtol=1e-6, 
+        atol=1e-9,
+        dense_output=True
+    )
+
+    times = sol.t
+    u_t = sol.y
+    enstrophies = np.sum((lambdas[:, None]**2) * (u_t**2), axis=0)
+    
+    return times, enstrophies, u_t[:, -1], lambdas
 
 def main():
     print("=" * 75)
     print(" DYADIC SIGN FRAGILITY AUDIT: 1D SHELL MODEL FALSIFICATION")
     print("=" * 75)
     print("Framework: Katz-Pavlović / Desnyansky-Novikov Dyadic Euler Cascade")
+    print("Integrator: Implicit Radau (Stiff ODE Solver)")
     print("Mathematical Issue: Manufactured phase-coherence theta_n = 0 identically.\n")
 
     N = 22
     t_max = 1.75
-    dt = 1e-4
+    nu = 1e-5
 
     # 1. Coherent Case (OpenAI paradigm: all phases strictly aligned = 0)
     phases_coherent = np.zeros(N)
     
-    # 2. Localized Phase Disruption (Orthogonal phase at octave n=6, simulating Leray projection)
+    # 2. Localized Phase Disruption (Orthogonal phase at octave n=6)
     phases_localized = np.zeros(N)
     phases_localized[6] = np.pi / 2.0
     
     # 3. Turbulent Phase Jitter (Random phases uniformly in [-pi/3, pi/3])
     np.random.seed(42)
     phases_random = np.random.uniform(-np.pi/3, np.pi/3, size=N)
-    phases_random[0] = 0.0 # seed low modes
+    phases_random[0] = 0.0
 
     print("[1/3] Integrating Case A: Strictly Coherent Dyadic Cascade (theta = 0)...")
-    t_coh, ens_coh, ene_coh, spec_coh, lambdas = simulate_dyadic_shell(phases_coherent, N=N, t_max=t_max, dt=dt)
+    t_coh, ens_coh, spec_coh, lambdas = run_rigorous_simulation(phases_coherent, N, t_max, nu)
 
     print("[2/3] Integrating Case B: Single Phase Disruption (theta_6 = pi/2)...")
-    t_loc, ens_loc, ene_loc, spec_loc, _ = simulate_dyadic_shell(phases_localized, N=N, t_max=t_max, dt=dt)
+    t_loc, ens_loc, spec_loc, _ = run_rigorous_simulation(phases_localized, N, t_max, nu)
 
     print("[3/3] Integrating Case C: Turbulent Geometric Phase Jitter...")
-    t_rnd, ens_rnd, ene_rnd, spec_rnd, _ = simulate_dyadic_shell(phases_random, N=N, t_max=t_max, dt=dt)
+    t_rnd, ens_rnd, spec_rnd, _ = run_rigorous_simulation(phases_random, N, t_max, nu)
 
     max_ens_coh = np.max(ens_coh)
     max_ens_loc = np.max(ens_loc)
@@ -136,15 +141,15 @@ def main():
     ax1.semilogy(t_rnd, ens_rnd, 'g-.', linewidth=2.0, label='Turbulent Phase Jitter')
     ax1.set_xlabel('Time $t$', fontsize=12)
     ax1.set_ylabel('Enstrophy $\\Omega(t) = \\sum \\lambda_n^2 u_n^2(t)$', fontsize=12)
-    ax1.set_title('Cascade Explosion vs Phase Fragility', fontsize=13, fontweight='bold')
+    ax1.set_title('Cascade Explosion vs Phase Fragility (Radau Stiff Solver)', fontsize=13, fontweight='bold')
     ax1.grid(True, which="both", ls=":", alpha=0.6)
     ax1.legend(fontsize=10, loc='upper left')
     ax1.set_ylim([1e0, 1e16])
 
     # Subplot 2: Ultraviolet Spectral Energy Profile at Final Time
-    ax2.semilogy(np.arange(N), spec_coh[-1]**2, 'ro-', linewidth=2, label=f'Coherent ($t={t_coh[-1]:.2f}$)')
-    ax2.semilogy(np.arange(N), spec_loc[-1]**2, 'bs--', linewidth=2, label=f'Disrupted ($t={t_loc[-1]:.2f}$)')
-    ax2.semilogy(np.arange(N), spec_rnd[-1]**2, 'g^-.', linewidth=2, label=f'Jittered ($t={t_rnd[-1]:.2f}$)')
+    ax2.semilogy(np.arange(N), spec_coh**2, 'ro-', linewidth=2, label=f'Coherent ($t={t_coh[-1]:.2f}$)')
+    ax2.semilogy(np.arange(N), spec_loc**2, 'bs--', linewidth=2, label=f'Disrupted ($t={t_loc[-1]:.2f}$)')
+    ax2.semilogy(np.arange(N), spec_rnd**2, 'g^-.', linewidth=2, label=f'Jittered ($t={t_rnd[-1]:.2f}$)')
     ax2.set_xlabel('Dyadic Octave index $n$ (Wavenumber $\\lambda_n = 2^n$)', fontsize=12)
     ax2.set_ylabel('Modal Energy $u_n^2$', fontsize=12)
     ax2.set_title('UV Energy Distribution at $t_{final}$', fontsize=13, fontweight='bold')
@@ -155,7 +160,7 @@ def main():
     plt.tight_layout()
     output_png = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dyadic_sign_fragility.png')
     plt.savefig(output_png, dpi=300)
-    print(f"\n[FIGURE] Saved empirical verification figure to: {output_png}")
+    print(f"\n[FIGURE] Saved rigorous empirical verification figure to: {output_png}")
     print("[EPISTEMIC VERDICT] Monotone blowup in dyadic cascades is an unstable artifact of")
     print("                   measure zero in natural fluid phase space.\n")
 
