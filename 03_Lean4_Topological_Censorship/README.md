@@ -1,6 +1,6 @@
 # 03_Lean4_Topological_Censorship [Tier A]
 
-## Strategy: Direct Dependency Ingestion (Judo Épistémique)
+## Strategy: Direct Dependency Ingestion (Epistemic Judo)
 
 Rather than re-proving fluid mechanics from scratch, this module directly imports the official OpenAI repository as a Lake package dependency:
 

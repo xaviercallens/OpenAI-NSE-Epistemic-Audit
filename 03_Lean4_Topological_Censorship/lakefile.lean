@@ -7,5 +7,5 @@ lean_lib «NSECensorship» {}
 
 require mathlib from git "https://github.com/leanprover-community/mathlib4.git"
 
--- Importation directe du dépôt d'OpenAI pour l'audit épistémique
+-- Direct import of the OpenAI repository for epistemic audit
 require NavierStokesAndEuler from git "https://github.com/openai/NavierStokesAndEuler" @ "main"
