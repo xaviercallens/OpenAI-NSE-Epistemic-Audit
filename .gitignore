@@ -24,4 +24,6 @@ lake-packages/
 *.swp
 *~
 .vscode/
-.idea/
+# Distribution and bundle archives
+*.zip
+*.tar.gz

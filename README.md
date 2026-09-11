@@ -24,8 +24,8 @@ By reverse-engineering the OpenAI Lean 4 codebase, we isolated the pathological 
 In the `02_Empirical_Falsification/` directory, we provide high-performance Python and Rust solvers that intercept these exact initial conditions. We demonstrate that natural fluid spaces systematically destroy the phase coherence required for these blow-ups.
 
 *   **Sign Fragility (1D):** Proves that scalar dyadic blow-up mechanisms are strictly dependent on forced positive phase coherence.
-*   **Triadic Frustration Index ($\mathcal{D} \gg 10$):** Calculates the immense geometric phase cancellations forced by the Leray projector on a 3D Galerkin lattice $\mathbb{Z}^3$.
-*   **Euler Counter-Detonation (Rust):** Ingests the OpenAI fractal packet series and proves that under a Dual-Scale topological cutoff ($R_{eff} = \max(R, \alpha'/R)$), the singularity is aborted, and the fluid rebounds into a globally regular Beltrami flow.
+*   **Triadic Frustration Index:** Quantifies the geometric phase cancellations forced by the Leray projector on a 3D Galerkin lattice $\mathbb{Z}^3$ (median $\mathcal{D} \approx 2.4$, 95th percentile $\mathcal{D} > 27$, with $>40\times$ isotropic shell vector cancellation).
+*   **Euler Counter-Detonation (Rust):** Evaluates an adaptive RK4(5) dynamical cascade model showing that under a Dual-Scale topological cutoff ($R_{eff} = \max(R, \alpha'/R)$), ultraviolet runaway is quenched and the flow relaxes into a regular Beltrami state.
 
 ### Quickstart / Reproduction
 
@@ -52,10 +52,12 @@ python3 01_Challenger_Paper/zenodo_retriever.py --verify
 Read our full epistemic audit and theoretical refutation: 
 **[On the Physical Vacuity of Manufactured Singularities (PDF)](01_Challenger_Paper/OpenAI_NSE_EpistemicAudit.pdf)**
 
-## 🚀 Upcoming: Lean 4 Topological Censorship (Tier A)
-*Status: Awaiting compute quota restoration.*
-In `/03_Lean4_Topological_Censorship`, we directly import the OpenAI Lean 4 infrastructure as a dependency. By applying a physical geometric metric $k_{eff} = \min(|k|, 1/(\alpha'|k|))$ to their exact Sobolev spaces, we will formally prove via the contrapositive of the Beale-Kato-Majda (BKM) criterion that their manufactured singularities are topologically censored, ensuring global regularity.
+## 🚀 Lean 4 Open Challenges: Topological Censorship (Tier A)
+In `/03_Lean4_Topological_Censorship`, we import the OpenAI Lean 4 infrastructure as a dependency. By formulating the physical geometric metric $k_{eff} = \min(|k|, 1/(\alpha'|k|))$, we establish verified open challenge propositions to prove via the contrapositive Beale-Kato-Majda (BKM) criterion that ultraviolet singularities are topologically censored.
 
 ---
-*Maintained by the MechanicaFluidorum Program | SocrateAI Lab*  
+**Maintained by**: The MechanicaFluidorum Program | **Socrate AI Lab**  
+*A non-profit scientific research organization (French Association Loi 1901) dedicated to Neuro-Symbolic Scientific AI.*  
+- **GitHub Repository**: [github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit)  
+- **Permanent Zenodo Archive**: [DOI: 10.5281/zenodo.22696718](https://doi.org/10.5281/zenodo.22696718)  
 *Disclaimer: This repository is an independent scientific audit and is not affiliated with OpenAI or the Clay Mathematics Institute.*

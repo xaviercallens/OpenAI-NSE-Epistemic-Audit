@@ -34,12 +34,13 @@ def IsSignedEquivariant (u : (Fin 3 → ℝ) → (Fin 3 → ℝ)) : Prop :=
 /-- [CHALLENGE 3] THE BALL IDENTITY:
     Convective transfer identically vanishes over any Euclidean ball
     under signed-permutation symmetry. -/
-axiom ball_identity_convective_cancellation
+theorem ball_identity_convective_cancellation
     (u : (Fin 3 → ℝ) → (Fin 3 → ℝ))
     (h_smooth : ContDiff ℝ 1 u)
     (h_div : ∀ x, (∑ i : Fin 3, (fderiv ℝ (fun y => u y i) x) (fun j => if j = i then 1 else 0)) = 0)
     (h_equiv : IsSignedEquivariant u)
     (R : ℝ) (hR : 0 < R) :
-    ∫ x in ball (0 : Fin 3 → ℝ) R, (∑ i : Fin 3, u x i * (∑ j : Fin 3, u x j * (fderiv ℝ (fun y => u y i) x (fun k => if k = j then 1 else 0)))) = 0
+    ∫ x in ball (0 : Fin 3 → ℝ) R, (∑ i : Fin 3, u x i * (∑ j : Fin 3, u x j * (fderiv ℝ (fun y => u y i) x (fun k => if k = j then 1 else 0)))) = 0 := by
+  sorry
 
 end NSECensorship.BallIdentity

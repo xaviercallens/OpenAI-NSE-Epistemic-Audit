@@ -3,11 +3,28 @@
 # Automated verification script to extract and flag the physical pathologies
 # in the OpenAI Navier-Stokes and Euler formalization.
 
-REPO_DIR="/home/callensxavier_gmail_com/OpenAINavierStokesEuler"
+set -euo pipefail
+
+# Allow custom repository directory via argument $1, env var OPENAI_REPO_DIR, or default search paths
+REPO_DIR="${1:-${OPENAI_REPO_DIR:-NavierStokesAndEuler}}"
 
 if [ ! -d "$REPO_DIR" ]; then
-    echo "ERROR: Repository not found at $REPO_DIR"
-    exit 1
+    if [ -d "../NavierStokesAndEuler" ]; then
+        REPO_DIR="../NavierStokesAndEuler"
+    elif [ -d "./01_Challenger_Paper/NavierStokesAndEuler" ]; then
+        REPO_DIR="./01_Challenger_Paper/NavierStokesAndEuler"
+    else
+        echo "================================================================="
+        echo "ERROR: Audited OpenAI repository not found."
+        echo "Checked: '$REPO_DIR'"
+        echo ""
+        echo "To clone the repository, run:"
+        echo "  python3 01_Challenger_Paper/audit_openai.py"
+        echo "or specify the path as an argument:"
+        echo "  bash 01_Challenger_Paper/verify-physical-vacuity.sh /path/to/NavierStokesAndEuler"
+        echo "================================================================="
+        exit 1
+    fi
 fi
 
 echo "================================================================="

@@ -75,6 +75,13 @@ def run_rigorous_simulation(phases, N=22, t_max=1.75, nu=1e-5):
         dense_output=True
     )
 
+    if sol.status < 0:
+        print(f"    [-] Warning: Solver encountered convergence failure: {sol.message}")
+    elif sol.status == 1:
+        print(f"    [+] Finite-time blow-up detected at t* = {sol.t[-1]:.4f} s (Enstrophy >= 1e15)")
+    else:
+        print(f"    [+] Integrated smoothly to t_max = {sol.t[-1]:.4f} s (Regular regime)")
+
     times = sol.t
     u_t = sol.y
     enstrophies = np.sum((lambdas[:, None]**2) * (u_t**2), axis=0)

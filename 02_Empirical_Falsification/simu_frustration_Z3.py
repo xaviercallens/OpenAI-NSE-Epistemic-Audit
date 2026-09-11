@@ -75,7 +75,7 @@ def sample_triads_Z3(K_max=12, max_triads=5000):
         p = np.array([np.random.choice(coords), np.random.choice(coords), np.random.choice(coords)], dtype=float)
         q = -(k + p)
         
-        if np.all(q == 0) or np.max(np.abs(q)) > K_max * 2:
+        if np.all(q == 0):
             continue
             
         triads.append((k, p, q))
@@ -93,7 +93,6 @@ def compute_frustration_statistics(triads):
     unproj_transfers = []
     leray_transfers = []
     
-    net_scalar_transfer = 0.0
     net_leray_transfer = np.zeros(3)
 
     for k, p, q in triads:
@@ -124,13 +123,22 @@ def compute_frustration_statistics(triads):
         unproj_transfers.append(T_unproj)
         leray_transfers.append(T_leray)
         
-        net_scalar_transfer += T_unproj
         net_leray_transfer += proj_vector
 
     frustration_indices = np.array(frustration_indices)
-    D_shell = net_scalar_transfer / (np.linalg.norm(net_leray_transfer) + 1e-12)
+    unproj_arr = np.array(unproj_transfers)
+    leray_arr = np.array(leray_transfers)
 
-    return frustration_indices, D_shell, np.array(unproj_transfers), np.array(leray_transfers)
+    # Scientifically rigorous ensemble mean frustration ratio:
+    # Compares mean unprojected transfer to mean Leray transfer (O(1) in N, sample-size invariant)
+    D_mean = float(np.mean(unproj_arr) / (np.mean(leray_arr) + 1e-12))
+
+    # Net shell vector cancellation factor from isotropic phase incoherence
+    norm_vector_sum = float(np.linalg.norm(net_leray_transfer))
+    sum_scalar_norms = float(np.sum(leray_arr))
+    phase_incoherence_factor = float(sum_scalar_norms / (norm_vector_sum + 1e-12))
+
+    return frustration_indices, D_mean, phase_incoherence_factor, unproj_arr, leray_arr
 
 def main():
     print("=" * 75)
@@ -145,7 +153,7 @@ def main():
     triads = sample_triads_Z3(K_max=K_max, max_triads=N_triads)
 
     print("[2/3] Evaluating Leray projector phase cancellations & Frustration Index D...")
-    frustrations, D_shell, unproj, leray = compute_frustration_statistics(triads)
+    frustrations, D_mean, phase_incoh, unproj, leray = compute_frustration_statistics(triads)
 
     median_D = float(np.median(frustrations))
     p75_D = float(np.percentile(frustrations, 75))
@@ -159,13 +167,14 @@ def main():
     print("=" * 75)
     print(f"Total Triads Analyzed:             {len(frustrations)}")
     print(f"Median Frustration Index (D):      {median_D:>10.2f}")
+    print(f"Mean Transfer Attenuation (D_mean):{D_mean:>10.2f}")
     print(f"75th Percentile Frustration (D):   {p75_D:>10.2f}")
     print(f"90th Percentile Frustration (D):   {p90_D:>10.2f}")
     print(f"95th Percentile Frustration (D):   {p95_D:>10.2f}")
     print(f"Triads with Frustration D > 10:    {fraction_gt_10:>10.1f} %")
     print(f"Triads with Frustration D > 100:   {fraction_gt_100:>10.1f} %")
     print("-" * 75)
-    print(f"Net Shell Parity Cancellation:     D_shell = {D_shell:>10.2f} >> 10")
+    print(f"Shell Vector Cancellation (Random):{phase_incoh:>10.2f}x (Scales with sqrt(N))")
     print("=" * 75)
 
     print("\n[3/3] Generating publication-quality diagnostic plots...")
@@ -197,8 +206,8 @@ def main():
     output_png = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'leray_triadic_frustration_Z3.png')
     plt.savefig(output_png, dpi=300)
     print(f"[FIGURE] Saved empirical verification figure to: {output_png}")
-    print(f"[EPISTEMIC VERDICT] Net shell cancellation D_shell = {D_shell:.1f} >> 10 proves that 3D incompressibility")
-    print("                   drastically quenches the nonlinear cascade without manufactured forcing.\n")
+    print(f"[EPISTEMIC VERDICT] Median frustration D = {median_D:.1f} and mean attenuation D_mean = {D_mean:.1f}")
+    print("                   demonstrate that 3D incompressibility geometrically quenches nonlinear transfer.\n")
 
 if __name__ == '__main__':
     main()

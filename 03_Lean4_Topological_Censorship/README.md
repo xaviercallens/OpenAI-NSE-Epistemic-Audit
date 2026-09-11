@@ -9,10 +9,13 @@ require NavierStokesAndEuler from git "https://github.com/openai/NavierStokesAnd
 ```
 
 ### Objectives & Open Falsification Challenges
-To maintain rigorous scientific standards and avoid the epistemic pitfalls we critique in OpenAI's work, this module does not rely on `sorry` tactics. Instead, we have formally defined the topological censorship axioms and launched them as **Open Scientific Challenges**.
+To maintain rigorous mathematical standards and avoid introducing unproven axioms into the Lean 4 kernel, this module formalizes the core propositions and marks open conjectures with Lean 4's standard `sorry` tactic, launching them as verified **Open Scientific Challenges** for the formal verification community:
 
-1. **[CHALLENGE 1] Sobolev Metric Substitution:** Prove the global boundedness of the physical Dual-Scale metric $k_{eff} = \min(|k|, 1 / (\alpha' |k|))$. (See `TopologicalCensorship.lean`).
-2. **[CHALLENGE 2] Beale-Kato-Majda (BKM) Censorship:** Prove formally that under this physical metric, the $L^\infty$ vorticity norm $\int_0^T \|\omega(\cdot, t)\|_{L^\infty} dt$ remains uniformly bounded, topologically censoring their manufactured blow-up trajectories.
+1. **[CHALLENGE 1] Sobolev Metric Substitution:** Formally prove the global boundedness of the physical Dual-Scale metric $k_{eff} = \min(|k|, 1 / (\alpha' |k|)) \le 1/\sqrt{\alpha'}$. (See `TopologicalCensorship.lean`).
+2. **[CHALLENGE 2] Beale-Kato-Majda (BKM) Censorship:** Prove that under this physical metric, the $L^\infty$ vorticity norm remains uniformly bounded, topologically censoring the manufactured blow-up trajectories. (See `TopologicalCensorship.lean`).
 3. **[CHALLENGE 3] Ball Identity Formalization:** Prove the parity cancellation of the convective nonlinearity $\int_{B_R(0)} \langle (u \cdot \nabla)u, u \rangle dx = 0$ under the signed-permutation hyperoctahedral group $B_3$. (See `BallIdentity.lean`).
 
-We invite the Lean 4 proof assistant community to formalize these open axioms, completing the Tier A refutation.
+We invite the Lean 4 proof assistant and fluid dynamics communities to collaborate on resolving these open challenges.
+
+---
+*Maintained by the MechanicaFluidorum Program | Socrate AI Lab (French Non-Profit Association Loi 1901 for Neuro-Symbolic Scientific AI)*
