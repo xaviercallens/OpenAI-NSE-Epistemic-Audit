@@ -11,11 +11,10 @@
 *   **Reproduction Protocol:** `REPRODUCTION_PROTOCOL.md` (Step-by-step verification protocol)
 *   **Zenodo Automated Retriever:** `zenodo_retriever.py` (NIST SHA-256 cryptographic verifier)
 
-### Certified Zenodo Open-Science Archive
+### Certified Zenodo Open-Science Archives
 
-This publication and its verification assets are certified on Zenodo:
-- **DOI:** [`10.5281/zenodo.22696718`](https://doi.org/10.5281/zenodo.22696718)
-- **Record ID:** `22696718`
+- **Published English Manuscript**: [`10.5281/zenodo.22108301`](https://doi.org/10.5281/zenodo.22108301) (Record ID: `22108301`)
+- **Certified Epistemic Audit Deposit**: [`10.5281/zenodo.22696718`](https://doi.org/10.5281/zenodo.22696718) (Record ID: `22696718`)
 - **GitHub Repository:** [`github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit`](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit)
 
 To cryptographically verify all local files against the certified SHA-256 manifest:

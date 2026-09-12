@@ -1,7 +1,8 @@
 # Epistemic Audit of the OpenAI Navier-Stokes/Euler Singularity
 **An Empirical and Analytical Refutation of Manufactured Singularities in Fluid Dynamics**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22696718.svg)](https://doi.org/10.5281/zenodo.22696718)
+[![English Preprint DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22108301.svg)](https://doi.org/10.5281/zenodo.22108301)
+[![Audit Deposit DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22696718.svg)](https://doi.org/10.5281/zenodo.22696718)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 In September 2026, an OpenAI multi-agent system formalized finite-time blow-up proofs for the forced 3D Navier-Stokes equations (Millennium Prize Alternatives C & D) and the unforced 3D Euler equations in the Lean 4 proof assistant. 
@@ -59,5 +60,6 @@ In `/03_Lean4_Topological_Censorship`, we import the OpenAI Lean 4 infrastructur
 **Maintained by**: The MechanicaFluidorum Program | **Socrate AI Lab**  
 *A non-profit scientific research organization (French Association Loi 1901) dedicated to Neuro-Symbolic Scientific AI.*  
 - **GitHub Repository**: [github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit)  
-- **Permanent Zenodo Archive**: [DOI: 10.5281/zenodo.22696718](https://doi.org/10.5281/zenodo.22696718)  
+- **Published English Manuscript**: [DOI: 10.5281/zenodo.22108301](https://doi.org/10.5281/zenodo.22108301)  
+- **Certified Epistemic Audit Deposit**: [DOI: 10.5281/zenodo.22696718](https://doi.org/10.5281/zenodo.22696718)  
 *Disclaimer: This repository is an independent scientific audit and is not affiliated with OpenAI or the Clay Mathematics Institute.*
