@@ -1,75 +1,138 @@
 # Reproduction Protocol: Epistemic Audit of OpenAI's Navier-Stokes Formalization
 
-This protocol provides step-by-step instructions for peer reviewers and fluid dynamicists to verify the structural pathologies (Method of Manufactured Solutions and Ultraviolet Cascade) embedded in the OpenAI Navier-Stokes and Euler Lean 4 code.
-
-## Prerequisites
-- A standard Linux/macOS bash shell.
-- `git` installed.
-- (Optional) `elan` and `lake` if you wish to re-compile the full proof tree (requires 32GB+ RAM).
+This protocol provides step-by-step instructions for peer reviewers, fluid dynamicists, and formal verification researchers to independently reproduce all findings of the epistemic audit.
 
 ---
 
-## Step 1: Clone the Exact Formalization Commit
-The physical defects are woven into the Lean source files. Clone the repository and checkout the specific audited commit to ensure reproducibility:
+## 1. Prerequisites
+
+- Linux or macOS system (x86_64 or aarch64)
+- Python $\ge$ 3.10 with `numpy`, `scipy`, `sympy`, `requests`
+- `git`
+- (Optional for Lean 4 formalization) `elan` and `lake` with Lean 4 toolchain `leanprover/lean4:v4.11.0`
+
+Install Python dependencies:
+```bash
+pip install numpy scipy sympy requests
+```
+
+---
+
+## 2. Step 1: Clone the Audited OpenAI Formalization Commit
+
+The mathematical construction and the Method of Manufactured Solutions (MMS) are embedded directly in the Lean 4 source:
 
 ```bash
-git clone https://github.com/openai/NavierStokesAndEuler
+git clone https://github.com/openai/NavierStokesAndEuler.git
 cd NavierStokesAndEuler
 git checkout 8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538
+cd ..
 ```
 
-## Step 2: Create the Verification Script
-We have provided a bash script that programmatically extracts the mathematical definitions demonstrating the physical vacuity. In the root of the repository, create a file named `verify-physical-vacuity.sh`:
+---
+
+## 3. Step 2: Automated AST & Syntax Audit (Directive 1)
+
+Verify that the OpenAI formalization contains zero unproven gaps in the core proof and no opaque axioms:
 
 ```bash
-cat > verify-physical-vacuity.sh <<'EOF'
-#!/usr/bin/env bash
-# Automated verification script to extract and flag the physical pathologies
-# in the OpenAI Navier-Stokes and Euler formalization.
+# In the NavierStokesAndEuler directory:
+cd NavierStokesAndEuler
 
-REPO_DIR="."
+# Check for sorry/admit in core theorem path
+grep -rn "sorry" NavierStokes/
+# Expected: 0 hits in NavierStokes/ (core theorem)
+# Hits only appear in ComparatorChallenges/ (intentional open benchmark problems)
 
-echo "================================================================="
-echo " EPISTEMIC AUDIT: VERIFYING PHYSICAL VACUITY IN LEAN 4 SOURCE"
-echo "================================================================="
-echo ""
+# Verify external force type is C^\infty
+grep -rn "ContDiff ℝ ∞" NavierStokes/CandidateFromLimits.lean
+# Expected: confirms force is smooth with compact support
 
-echo "[1/2] NAVIER-STOKES: Verifying Manufactured Forcing"
-echo "-----------------------------------------------------------------"
-grep -n -A 5 "def tracedResidual" "$REPO_DIR/NavierStokes/CandidateFromLimits.lean"
-echo "-> The forcing f(x,t) is defined explicitly as the extended trace of 'pastResidual'."
-echo ""
-
-echo "[2/2] EULER: Verifying Ultraviolet Cascade Defect (Violating Continuum Limit)"
-echo "-----------------------------------------------------------------"
-grep -n -A 2 "def frequency" "$REPO_DIR/Euler/PacketSourceScaleSequence.lean"
-grep -n -A 2 "def supportScale" "$REPO_DIR/Euler/PacketSourceScaleSequence.lean"
-grep -n -A 2 "def initialPartial" "$REPO_DIR/Euler/PacketInitialSmoothLimit.lean"
-echo "-> The initial datum is an infinite superposition (initialPartial) where"
-echo "   kappa_n approaches infinity and support approaches 0, breaking the continuum."
-echo ""
-echo "VERIFICATION COMPLETE."
-EOF
-
-chmod +x verify-physical-vacuity.sh
+# Verify the Method of Manufactured Solutions (forcing defined as residual)
+grep -n -A 5 "def tracedResidual" NavierStokes/CandidateFromLimits.lean
+# Expected: shows force is defined as the extended trace of 'pastResidual'
+cd ..
 ```
 
-## Step 3: Run the Verification
-Execute the script to audit the source files:
-```bash
-./verify-physical-vacuity.sh
-```
+---
 
-**Expected Analysis:**
-1. **Navier-Stokes:** The grep output for `tracedResidual` will show that it is built via `PastExtension.pastResidual u p`. This proves that the force is not an autonomous field (like gravity) but a retro-engineered algebraic residual (Method of Manufactured Solutions) designed specifically to cancel viscous entropy production.
-2. **Euler:** The grep outputs will show `initialPartial` constructed as an infinite sum `∑ n ∈ range N`. The frequencies scale as `exp(scaleSequence / ...)`, demonstrating a super-exponential UV cascade. This violates the Knudsen limit ($Kn \ll 1$) and bypasses the Kolmogorov microscale constraint, situating the problem outside physical fluid dynamics.
+## 4. Step 3: Gevrey Regularity vs C^\infty Boundary (Directive 4)
 
-## Step 4 (Optional): Lean 4 Compilation
-To verify that these mathematically pathological but syntactically correct files compile as part of the proof tree, fetch the cache and build the specific modules:
+Verify that the Gevrey-2 cutoff function derivatives grow super-factorially ($\sim (N!)^{2.2}$) yet remain in $C^\infty$:
 
 ```bash
-lake exe cache get
-lake build NavierStokes.CandidateFromLimits
-lake build Euler.PacketInitialSmoothLimit
+python3 scripts/directive4_gevrey_regularity.py
 ```
-This confirms that the Lean compiler accepts these models into the mathematical proof of the Clay Alternative C/D, strictly exploiting the definitional loophole.
+**Expected Results:**
+- Gevrey index $s \approx 2.22$
+- Flatness at origin: $\lim_{q \to 0^+} \frac{d^N}{dq^N}\left[q^{-A} e^{-1/q^2}\right] = 0$ for all $N, A$
+- Proves no formal cheat occurred: Gevrey-2 $\subset C^\infty \setminus C^\omega$.
+
+---
+
+## 5. Step 4: Thermodynamic Paradox & Enstrophy Divergence (Directive 2)
+
+Track the asymptotic exponents of all physical quantities as $\tau = 1 - t \to 0$:
+
+```bash
+python3 scripts/directive2_thermodynamic_paradox.py
+```
+**Expected Exponents ($\tau^x$):**
+- Global $L^2$ kinetic energy: $\tau^{+0.485} \to 0$ (bounded, satisfies Prize Alternative C)
+- Local energy density: $\tau^{-2.505} \to \infty$ (diverges)
+- Enstrophy $\int |\nabla \times u|^2 dV$: $\tau^{-0.515} \to \infty$ (diverges)
+- Critical $L^p$ exponent: $p^* \approx 2.97$ ($L^3$ diverges, borderline ESS criterion)
+- Local temperature rise: $\Delta T \sim \tau^{-1.01} \to \infty$ (violates incompressibility)
+
+---
+
+## 6. Step 5: Jacobian Ill-Conditioning & Structural Instability (Directive 3 & 6)
+
+Compute the condition number $\kappa(A)$ of the 5-moment matching system and simulate 300K thermal fluctuations:
+
+```bash
+python3 scripts/directive3_jacobian_instability.py
+python3 scripts/directive6_thermal_instability.py
+```
+**Expected Results:**
+- Scaling: $\kappa(A) \sim \lambda^{-3.00} X_R^{7.75}$
+- Condition number reaches $\kappa \approx 2.17 \times 10^{28}$ at $X_R = 1000$ (exceeding Avogadro's number $N_A \approx 6.02 \times 10^{23}$)
+- Under 300K Brownian thermal fluctuations ($\delta u \approx 2.04 \times 10^{-9}$ m/s), Reynolds stress cancellation decouples at $X_R > 500$, proving the singularity is an unstable measure-zero repeller.
+
+---
+
+## 7. Step 6: Mach Number Divergence & Self-Invalidation (Directive 5)
+
+Track the local Mach number $\text{Ma} = |u|/c_s$ in physical units (water at 300K, $c_s = 1500$ m/s):
+
+```bash
+python3 scripts/directive5_mach_divergence.py
+```
+**Expected Critical Times:**
+- $\text{Ma} = 0.3$ (incompressible breakdown): $\tau \approx 6.69 \times 10^{-14}$ s
+- $\text{Ma} = 1.0$ (sonic barrier): $\tau \approx 6.16 \times 10^{-15}$ s
+- Core reaches molecular scale ($Kn \sim 1$): $\tau \approx 9.0 \times 10^{-16}$ s
+- Proves Navier-Stokes equations invalidate themselves 67 femtoseconds before mathematical blowup.
+
+---
+
+## 8. Step 7: Lean 4 Thermodynamic Censorship Formalization (Directive 7)
+
+Inspect the formal Lean 4 implementation of the bounded enstrophy axiom:
+
+```bash
+cat 03_Lean4_Topological_Censorship/src/ThermodynamicCensorship.lean
+```
+Key definitions:
+- `UniformBoundedEnstrophy`: requires $\sup_t \int |\nabla \times u|^2 dV \le \Omega_{\max}$
+- `PhysicalFluidProperties`: extends `CandidateProperties` with thermodynamic admissibility
+- `thermodynamic_censorship_challenge`: formalizes the conjecture that physical fluids cannot blow up.
+
+---
+
+## 9. Certified Verification Script
+
+To run the complete suite automatically:
+```bash
+./01_Challenger_Paper/verify-physical-vacuity.sh
+```
