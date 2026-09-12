@@ -1,0 +1,112 @@
+======================================================================
+DIRECTIVE 2: THERMODYNAMIC PARADOX AUDIT
+OpenAI Navier-Stokes Blowup — Section 2.1 / 3.5
+======================================================================
+
+--- Spatial Scales ---
+  l_r (radial width)   = tau^(1/2)
+  l_z (axial length)   = tau^(1/2 - h)
+
+--- Velocity Scales ---
+  u_theta (azimuthal)  = tau^(-1/2 - h)
+  u_z (axial)          = tau^(-1/2 - h)
+  u_r (radial)         = tau^(-1/2)
+
+--- Core Volume ---
+  dV ~ l_r^2 * l_z = tau^(2*(1/2) + 1/2 - h) = tau^(3/2 - h)
+  Symbolic: tau**(3/2 - h)
+
+--- Global Kinetic Energy ---
+  E ~ |u|^2 * dV = tau^(-1-2h) * tau^(3/2-h)
+  E ~ tau^(1/2 - 3h)
+  Symbolic exponent: 1/2 - 3*h
+  Full expression: tau**(1/2 - 3*h)
+
+  For h = 1/200:
+    Exponent = 1/2 - 3*1/200 = 97/200
+    lim(tau->0) E = 0
+    ✅ PAPER CLAIM VERIFIED: Global kinetic energy -> 0 as tau -> 0
+       (exponent 97/200 > 0 for h < 1/6)
+
+--- Local Energy Density ---
+  rho_E = |u|^2 / dV = tau^(-1-2h) / tau^(3/2-h)
+  rho_E ~ tau^(-5/2 - h)
+  Symbolic exponent: -h - 5/2
+  Full expression: tau**(-h - 5/2)
+
+  For h = 1/200:
+    Exponent = -5/2 - 1/200 = -501/200
+    lim(tau->0) rho_E = oo
+    🔴 LOCAL ENERGY DENSITY DIVERGES TO INFINITY
+
+--- Enstrophy (∫ |curl u|^2 dV) ---
+  |curl u| ~ u_theta / l_r = tau^(-1-h)
+  |curl u|^2 ~ tau^(-2-2h)
+  Enstrophy ~ tau^(-2-2h) * tau^(3/2-h) = tau^(-1/2-3h)
+  Symbolic exponent: -3*h - 1/2
+  Full expression: tau**(-3*h - 1/2)
+
+  For h = 1/200:
+    Exponent = -1/2 - 3*1/200 = -103/200
+    lim(tau->0) Enstrophy = oo
+    🔴 ENSTROPHY DIVERGES (negative exponent)
+
+--- L^p Norms: ||u||_p^p = ∫ |u|^p dV ---
+  ||u||_p^p ~ tau^{p*(-1/2-h) + 3/2-h}
+  Exponent = -p/2 - ph + 3/2 - h = 3/2 - p/2 - (p+1)h
+  Critical p* where exponent = 0: p* = 3/(1 + 2h) ≈ 3 - 6h
+
+  p =  2: exponent = +0.4850  → 0 (bounded)
+  p =  3: exponent = -0.0200  → ∞ (DIVERGES)
+  p =  4: exponent = -0.5250  → ∞ (DIVERGES)
+  p =  6: exponent = -1.5350  → ∞ (DIVERGES)
+  p = 10: exponent = -3.5550  → ∞ (DIVERGES)
+
+  Critical p* = 300/101 ≈ 2.9703
+  🔴 ALL L^p NORMS WITH p > 2.97 DIVERGE
+
+--- Fractional Sobolev Norm H^s ---
+  ||u||_{H^s}^2 ~ ∫ |k|^{2s} |û(k)|^2 dk
+  Dominant wavenumber k ~ 1/l_r = tau^(-1/2)
+  |û(k)|^2 ~ u_theta^2 * l_r^3 * l_z = tau^(-1-2h) * tau^(2) * tau^(1/2-h)
+         = tau^(3/2-3h)
+  s = 0: exponent = +1.4850  → 0 (bounded)
+  s = 1/2: exponent = +0.9850  → 0 (bounded)
+  s = 1: exponent = +0.4850  → 0 (bounded)
+  s = 3/2: exponent = -0.0150  → ∞ (DIVERGES)
+  s = 2: exponent = -0.5150  → ∞ (DIVERGES)
+  s = 3: exponent = -1.5150  → ∞ (DIVERGES)
+
+  Critical s* = 297/200 = 1.4850
+  🔴 ALL SOBOLEV NORMS H^s WITH s > 1.4850 DIVERGE
+
+--- Thermal/Incompressibility Violation ---
+  Local dissipation rate: eps = nu * |curl u|^2 ~ tau^(-2-2h)
+  Local heating: dT/dt ~ eps / (rho * c_p)
+  Temperature rise over time tau:
+    Delta_T ~ tau * eps ~ tau^(-1-2h)
+
+  For h = 1/200:
+    Delta_T ~ tau^(-1.0100) → ∞
+    🔴 LOCAL TEMPERATURE DIVERGES
+    This violates the Boussinesq/incompressible approximation
+    which assumes Delta_T / T_0 << 1
+
+======================================================================
+SUMMARY: THERMODYNAMIC PARADOX AUDIT RESULTS
+======================================================================
+
+  Quantity                      | Exponent (tau^x)  | Behavior (tau→0)
+  ------------------------------|-------------------|------------------
+  Global Kinetic Energy E       | +0.4850           | → 0  ✅ BOUNDED
+  Local Energy Density ρ_E      | -2.5050           | → ∞  🔴 DIVERGES
+  Enstrophy Ω                   | -0.5150           | → ∞  🔴 DIVERGES
+  L^3 norm                      | -0.0200           | → ∞  🔴 DIVERGES
+  H^(3/2) Sobolev norm          | -0.0150           | → ∞  🔴 DIVERGES
+  Local Temperature Rise ΔT     | -1.0100           | → ∞  🔴 DIVERGES
+
+  CONCLUSION: The global L^2 energy bound is NECESSARY AND SUFFICIENT
+  for the Millennium Prize, and OpenAI satisfies it. However, every other
+  physically meaningful quantity diverges, confirming the construction is
+  a measure-zero mathematical artifact with no physical fluid counterpart.
+

@@ -1,65 +1,115 @@
-# Epistemic Audit of the OpenAI Navier-Stokes/Euler Singularity
-**An Empirical and Analytical Refutation of Manufactured Singularities in Fluid Dynamics**
+# OpenAI Navier-Stokes Epistemic Audit
 
-[![English Preprint DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22108301.svg)](https://doi.org/10.5281/zenodo.22108301)
-[![Audit Deposit DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22696718.svg)](https://doi.org/10.5281/zenodo.22696718)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+## Thermodynamic Censorship of Navier-Stokes Singularities
 
-In September 2026, an OpenAI multi-agent system formalized finite-time blow-up proofs for the forced 3D Navier-Stokes equations (Millennium Prize Alternatives C & D) and the unforced 3D Euler equations in the Lean 4 proof assistant. 
+**An independent epistemic audit of OpenAI's Lean 4 formalized proof of finite-time blow-up for the forced 3D incompressible Navier-Stokes equations (Clay Millennium Prize, Alternatives C & D).**
 
-By circumventing the standard peer-review process and the Clay Mathematics Institute scientific board, this announcement conflated **syntactic validity** (flawless Lean 4 code) with **physical semantics** (realistic fluid dynamics). 
-
-This repository serves as a strict **Epistemic Red-Team Audit**. We demonstrate that the OpenAI singularities are physically vacuous artifacts born from exploiting the infinite divisibility of the classical abstract continuum ($\mathbb{R}^3$).
-
-## 🔍 The Epistemic Vulnerabilities Exposed
-
-By reverse-engineering the OpenAI Lean 4 codebase, we isolated the pathological mechanisms driving their singularities. We identified two classic PDE artifacts:
-
-1. **Forced Navier-Stokes (The Tautological Syringe):** 
-   The external force $f(x,t)$ driving the blow-up is not an independent, natural field. As seen in their `CandidateFromLimits.lean` module, it is reverse-engineered as the exact residual of a pre-constructed collapsing vortex trajectory (the *Method of Manufactured Solutions*). It acts as a mathematical "Maxwell's Demon" that artificially cancels viscous dissipation with infinite precision.
-2. **Unforced Euler (The Fractal Ultraviolet Bomb):** 
-   The initial condition $u_0(x)$ in `PacketInitialSmoothLimit.lean` relies on an infinite induction of vortex packets pushed into unbounded ultraviolet frequencies ($\kappa_n \to \infty$) exactly at $t=0$. To form a singularity, this requires injecting active kinetic energy into spatial scales approaching the Planck length from the onset, explicitly violating the physical continuum hypothesis (Knudsen limits).
-
-## 💻 Empirical Falsification (Tier B Laboratory)
-
-In the `02_Empirical_Falsification/` directory, we provide high-performance Python and Rust solvers that intercept these exact initial conditions. We demonstrate that natural fluid spaces systematically destroy the phase coherence required for these blow-ups.
-
-*   **Sign Fragility (1D):** Proves that scalar dyadic blow-up mechanisms are strictly dependent on forced positive phase coherence.
-*   **Triadic Frustration Index:** Quantifies the geometric phase cancellations forced by the Leray projector on a 3D Galerkin lattice $\mathbb{Z}^3$ (median $\mathcal{D} \approx 2.4$, 95th percentile $\mathcal{D} > 27$, with $>40\times$ isotropic shell vector cancellation).
-*   **Euler Counter-Detonation (Rust):** Evaluates an adaptive RK4(5) dynamical cascade model showing that under a Dual-Scale topological cutoff ($R_{eff} = \max(R, \alpha'/R)$), ultraviolet runaway is quenched and the flow relaxes into a regular Beltrami state.
-
-### Quickstart / Reproduction
-
-```bash
-# 1. Install empirical dependencies
-pip install -r 02_Empirical_Falsification/requirements.txt
-
-# 2. Run the 1D Dyadic Sign Fragility Proof
-python3 02_Empirical_Falsification/simu_sign_fragility_1D.py
-
-# 3. Compute the 3D Leray Triadic Frustration Index on Z^3
-python3 02_Empirical_Falsification/simu_frustration_Z3.py
-
-# 4. Compile and execute the Euler Counter-Detonation Rust Solver
-cd 02_Empirical_Falsification/euler_counterdetonation
-cargo run --release
-cd ../..
-
-# 5. Retrieve & verify the certified Zenodo open-science bundle
-python3 01_Challenger_Paper/zenodo_retriever.py --verify
-```
-
-## 📄 The Challenger Paper
-Read our full epistemic audit and theoretical refutation: 
-**[On the Physical Vacuity of Manufactured Singularities (PDF)](01_Challenger_Paper/OpenAI_NSE_EpistemicAudit.pdf)**
-
-## 🚀 Lean 4 Open Challenges: Topological Censorship (Tier A)
-In `/03_Lean4_Topological_Censorship`, we import the OpenAI Lean 4 infrastructure as a dependency. By formulating the physical geometric metric $k_{eff} = \min(|k|, 1/(\alpha'|k|))$, we establish verified open challenge propositions to prove via the contrapositive Beale-Kato-Majda (BKM) criterion that ultraviolet singularities are topologically censored.
+*Xavier Callens — Socrate AI Lab, MechanicaFluidorum Program*
 
 ---
-**Maintained by**: The MechanicaFluidorum Program | **Socrate AI Lab**  
-*A non-profit scientific research organization (French Association Loi 1901) dedicated to Neuro-Symbolic Scientific AI.*  
-- **GitHub Repository**: [github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit)  
-- **Published English Manuscript**: [DOI: 10.5281/zenodo.22108301](https://doi.org/10.5281/zenodo.22108301)  
-- **Certified Epistemic Audit Deposit**: [DOI: 10.5281/zenodo.22696718](https://doi.org/10.5281/zenodo.22696718)  
-*Disclaimer: This repository is an independent scientific audit and is not affiliated with OpenAI or the Clay Mathematics Institute.*
+
+## Summary
+
+In September 2026, OpenAI's multi-agent system produced a Lean 4 proof of NSE blow-up. We independently verify:
+
+| Aspect | Finding |
+|---|---|
+| **Formal correctness** | ✅ 0 `sorry`, 0 axioms, correct types |
+| **Energy bound** | ✅ Satisfies $L^\infty_t L^2_x$ (Millennium Prize) |
+| **Enstrophy** | 🔴 Diverges as $\tau^{-0.515}$ |
+| **Condition number** | 🔴 $\kappa \sim 10^{28}$ (exceeds Avogadro's number) |
+| **Mach number** | 🔴 Exceeds 0.3 at $\tau \approx 10^{-14}$ s |
+| **Gevrey class** | ✅ Gevrey-2 ⊂ $C^\infty$ — no loophole |
+
+**Verdict**: The proof is mathematically irrefutable. The constructed singularity is physically unrealizable.
+
+---
+
+## Repository Structure
+
+```
+├── 01_Challenger_Paper/                    # Original epistemic audit
+│   └── OpenAI_NSE_EpistemicAudit.tex
+├── 02_Empirical_Falsification/             # Euler counterdetonation
+│   └── euler_counterdetonation/
+├── 03_Lean4_Topological_Censorship/        # Lean 4 formalizations
+│   └── src/
+│       └── ThermodynamicCensorship.lean    # Bounded enstrophy axiom
+├── 04_Thermodynamic_Censorship_Paper/      # Full research paper
+│   └── paper.tex
+├── scripts/                                # Computational audit scripts
+│   ├── directive2_thermodynamic_paradox.py
+│   ├── directive3_jacobian_instability.py
+│   ├── directive4_gevrey_regularity.py
+│   ├── directive5_mach_divergence.py
+│   ├── directive6_thermal_instability.py
+│   └── directive_outputs/                  # Pre-computed results
+├── dataset/                                # HuggingFace dataset
+│   ├── audit_results.json
+│   └── README.md
+└── README.md                               # This file
+```
+
+## The 8 Directives
+
+### Formal Tier
+1. **Lean 4 AST Audit** — Crawl the OpenAI codebase for `sorry`, axioms, type weakening
+4. **Gevrey Regularity** — Verify cutoff derivative growth satisfies $C^\infty$
+
+### Physical Tier
+2. **Thermodynamic Paradox** — Quantify energy density, enstrophy, $L^p$ divergence
+5. **Mach Number Divergence** — Track when incompressibility assumption fails
+
+### Structural Tier
+3. **Jacobian Instability** — Condition number of 5-moment matching system
+6. **Thermal Noise Simulation** — Monte Carlo Reynolds stress decoupling
+
+### Publication Tier
+7. **ThermodynamicCensorship.lean** — Lean 4 bounded enstrophy formalization
+8. **Nature Physics Draft** — Complete paper with abstract and introduction
+
+## Quick Start
+
+```bash
+# Run the thermodynamic paradox analysis
+python3 scripts/directive2_thermodynamic_paradox.py
+
+# Run the Jacobian instability audit
+python3 scripts/directive3_jacobian_instability.py
+
+# Run the Mach number divergence tracker
+python3 scripts/directive5_mach_divergence.py
+
+# Run the thermal noise Monte Carlo
+python3 scripts/directive6_thermal_instability.py
+```
+
+## Requirements
+
+```
+python >= 3.10
+sympy >= 1.12
+numpy >= 1.24
+scipy >= 1.11
+```
+
+## Citation
+
+```bibtex
+@article{callens2026thermodynamic,
+  title={Thermodynamic Censorship of Navier-Stokes Singularities: 
+         Why Mathematical Blow-ups Are Physically Unrealizable},
+  author={Callens, Xavier},
+  journal={Preprint},
+  year={2026},
+  note={Socrate AI Lab, MechanicaFluidorum Program}
+}
+```
+
+## License
+
+CC-BY-4.0
+
+---
+
+> *"The AI has not solved the physicist's problem; it has solved the mathematician's problem and, in doing so, exposed the gap between them."*

@@ -1,0 +1,88 @@
+========================================================================
+DIRECTIVE 5: MACH NUMBER DIVERGENCE — PHYSICAL SELF-INVALIDATION
+========================================================================
+
+--- Physical Reference Scales (Water at 300.0K) ---
+  Speed of sound:    c_s = 1500.0 m/s
+  Kinematic visc:    ν   = 1.0e-06 m²/s
+  Initial core:      L₀  = 1.0 cm
+  Reference velocity: u₀  = ν/L₀ = 1.00e-04 m/s
+  Anisotropy param:  h   = 0.005
+
+--- Critical Times (tau = 1-t, singularity at tau = 0) ---
+  Ma = 0.3 (incompressible limit):  tau_break = 6.688393e-14
+  Ma = 1.0 (sonic):                 tau_sonic  = 6.164790e-15
+  Kn = 1   (continuum limit):        tau_Kn     = 9.000000e-16
+
+  Physical time remaining before singularity:
+    At Ma = 0.3: t_remaining = 6.688393e-14 seconds
+    At sonic:    t_remaining = 6.164790e-15 seconds
+
+--- Mach Number Trajectory ---
+
+           tau     |u| (m/s)          Ma       l_r (m)    Re_angular                Status
+  ------------  ------------  ----------  ------------  ------------  --------------------
+      1.00e+00    1.0000e-04  6.6667e-08    1.0000e-02    1.0000e+00  ✅ Incompressible
+      1.00e-02    1.0233e-03  6.8220e-07    1.0000e-03    1.0233e+00  ✅ Incompressible
+      1.00e-05    3.3497e-02  2.2331e-05    3.1623e-05    1.0593e+00  ✅ Incompressible
+      1.00e-08    1.0965e+00  7.3099e-04    1.0000e-06    1.0965e+00  ✅ Incompressible
+      1.00e-10    1.1220e+01  7.4801e-03    1.0000e-07    1.1220e+00  ✅ Incompressible
+      1.00e-12    1.1482e+02  7.6544e-02    1.0000e-08    1.1482e+00  ✅ Incompressible
+      1.00e-15    3.7584e+03  2.5056e+00    3.1623e-10    1.1885e+00  🔴 Supersonic
+      1.00e-18    1.2303e+05  8.2018e+01    1.0000e-11    1.2303e+00  💀 Sub-molecular
+      1.00e-20    1.2589e+06  8.3928e+02    1.0000e-12    1.2589e+00  💀 Sub-molecular
+      1.00e-25    4.2170e+08  2.8113e+05    3.1623e-15    1.3335e+00  💀 Sub-molecular
+
+--- Mach Number vs. Time to Singularity (log-log) ---
+  log₁₀(Ma) ^
+     5.4 |●                                                                
+         |●●●                                                              
+         |  ●●●                                                            
+         |     ●●●                                                         
+         |       ●●●                                                       
+     3.0 |          ●●●                                                    
+         |            ●●●●                                                 
+         |               ●●●                                               
+         |                 ●●●                                             
+         |                    ●●●                                          
+     0.5 |                      ●●●●                                       
+         |═════════════════════════●●●═════════════════════════════════════ ← Ma=1.0 (SONIC BARRIER)
+         |                           ●●●●                                  
+         |──────────────────────────────●●●──────────────────────────────── ← Ma=0.3 (INCOMPRESSIBLE LIMIT)
+         |                                ●●●●                             
+    -2.0 |                                   ●●●                           
+         |                                     ●●●●                        
+         |                                        ●●●                      
+         |                                           ●●●                   
+         |                                             ●●●                 
+    -4.5 |                                                ●●●              
+         |                                                  ●●●●●●●●●●●●●●●
+         +-----------------------------------------------------------------> log₁₀(τ)
+          -25                                                            0
+
+========================================================================
+SUMMARY: MACH NUMBER DIVERGENCE ANALYSIS
+========================================================================
+
+  The OpenAI collapsing vortex core reaches:
+  
+  • Ma = 0.3 at τ = 6.69e-14 seconds before singularity
+    → Incompressibility assumption FAILS
+    → Must switch to COMPRESSIBLE Navier-Stokes
+    
+  • Ma = 1.0 at τ = 6.16e-15 seconds before singularity
+    → SONIC BARRIER — shock waves form
+    → Entropy production becomes dominant
+    
+  • Core radius reaches molecular scale at τ = 9.00e-16
+    → CONTINUUM HYPOTHESIS FAILS
+    → Must use Boltzmann kinetic theory
+
+  🔴 CONCLUSION: The mathematical singularity at τ = 0 is physically
+  unreachable. The Navier-Stokes equations self-invalidate at τ ≈ 6.7e-14
+  when the Mach number exceeds 0.3. The compressible equations would
+  generate acoustic radiation and thermal shocks that arrest the collapse.
+  
+  The AI's singularity exists only in the mathematical limit of a PDE
+  that has ceased to describe the physical system it was derived from.
+

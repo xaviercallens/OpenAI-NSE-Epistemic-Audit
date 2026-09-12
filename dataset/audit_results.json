@@ -1,0 +1,128 @@
+[
+  {
+    "directive": 1,
+    "title": "Lean 4 Formal Audit (Software & Syntax)",
+    "category": "formal_verification",
+    "target": "openai/NavierStokesAndEuler",
+    "findings": {
+      "sorry_count_core": 0,
+      "sorry_count_challenges": 4,
+      "custom_axioms": 0,
+      "opaque_declarations": 0,
+      "force_type": "ContDiff ℝ ∞",
+      "force_support": "CompactPositiveTimeSupport",
+      "energy_bound_type": "UniformFiniteEnergy (Ico 0 1) u",
+      "energy_definition": "∃ E : ℝ, 0 ≤ E ∧ ∀ t ∈ times, SquareIntegrableAtTime u t ∧ kineticEnergy u t ≤ E",
+      "sobolev_weakening_detected": false,
+      "norm_weakening_detected": false
+    },
+    "verdict": "CLEAN",
+    "verdict_detail": "No formal cheats detected. Proof faithfully represents Millennium Prize requirements."
+  },
+  {
+    "directive": 2,
+    "title": "Thermodynamic Paradox (Energy Density Divergence)",
+    "category": "computational_analysis",
+    "parameters": {
+      "h": 0.005,
+      "h_constraint": "h < 1/100"
+    },
+    "results": {
+      "global_kinetic_energy": {"exponent": 0.485, "behavior": "bounded", "limit": 0},
+      "local_energy_density": {"exponent": -2.505, "behavior": "diverges", "limit": "infinity"},
+      "enstrophy": {"exponent": -0.515, "behavior": "diverges", "limit": "infinity"},
+      "L3_norm": {"exponent": -0.020, "behavior": "diverges", "limit": "infinity"},
+      "H1.5_sobolev": {"exponent": -0.015, "behavior": "diverges", "limit": "infinity"},
+      "local_temperature_rise": {"exponent": -1.010, "behavior": "diverges", "limit": "infinity"},
+      "critical_Lp_exponent": 2.9703,
+      "critical_Sobolev_index": 1.485
+    },
+    "verdict": "PHYSICAL_PATHOLOGY",
+    "verdict_detail": "Global L2 energy bounded but all other physical quantities diverge."
+  },
+  {
+    "directive": 3,
+    "title": "5-Moment Jacobian Structural Instability",
+    "category": "numerical_analysis",
+    "results": {
+      "lambda_scaling": {"exponent": -3.00, "formula": "kappa ~ lambda^(-3.00)"},
+      "XR_scaling": {"exponent": 7.75, "formula": "kappa ~ X_R^(7.75)"},
+      "condition_numbers": [
+        {"lambda": 0.5, "X_R": 10, "kappa": 1.10e10},
+        {"lambda": 0.1, "X_R": 10, "kappa": 2.36e12},
+        {"lambda": 0.01, "X_R": 10, "kappa": 2.24e16},
+        {"lambda": 0.001, "X_R": 10, "kappa": 3.88e19}
+      ],
+      "XR_sweep": [
+        {"X_R": 1, "kappa": 4.11e5},
+        {"X_R": 10, "kappa": 2.36e12},
+        {"X_R": 100, "kappa": 2.36e20},
+        {"X_R": 1000, "kappa": 1.78e28}
+      ]
+    },
+    "verdict": "CATASTROPHICALLY_ILL_CONDITIONED",
+    "verdict_detail": "Condition number exceeds Avogadro's number near singularity."
+  },
+  {
+    "directive": 4,
+    "title": "Gevrey Regularity vs C∞ Cutoff Explosion",
+    "category": "functional_analysis",
+    "results": {
+      "gevrey_index": 2.22,
+      "gevrey_class": "Gevrey-2",
+      "derivative_growth": "(N!)^2.2",
+      "flatness_verified": true,
+      "all_limits_zero": true,
+      "borel_ritt_used": true,
+      "lean4_type": "ContDiff ℝ ∞",
+      "analyticity_required": false
+    },
+    "verdict": "NO_LOOPHOLE",
+    "verdict_detail": "Gevrey-2 ⊂ C∞. The Millennium Prize requires C∞, not analyticity."
+  },
+  {
+    "directive": 5,
+    "title": "Mach Number Divergence (Physical Self-Invalidation)",
+    "category": "physical_analysis",
+    "parameters": {
+      "fluid": "water",
+      "temperature_K": 300,
+      "speed_of_sound_m_s": 1500,
+      "kinematic_viscosity_m2_s": 1.0e-6,
+      "initial_core_radius_m": 0.01,
+      "anisotropy_h": 0.005
+    },
+    "results": {
+      "tau_incompressible_break": 6.69e-14,
+      "tau_sonic": 6.16e-15,
+      "tau_continuum_break": 9.00e-16,
+      "Ma_at_tau_1e-12": 0.0765,
+      "Ma_at_tau_1e-15": 2.506,
+      "velocity_at_sonic_m_s": 1500
+    },
+    "verdict": "SELF_INVALIDATION",
+    "verdict_detail": "NSE self-invalidate at tau ~ 6.7e-14 s before mathematical singularity."
+  },
+  {
+    "directive": 6,
+    "title": "Structural Instability Under Thermal Noise",
+    "category": "monte_carlo_simulation",
+    "parameters": {
+      "temperature_K": 300,
+      "thermal_velocity_fluctuation_m_s": 2.035e-9,
+      "relative_noise": 2.035e-5,
+      "n_trials": 1000,
+      "lambda": 0.1
+    },
+    "results": {
+      "stress_cancellation_fails_at_XR": 500,
+      "fully_decoupled_at_XR": 1000,
+      "error_amplification_XR_100": 4.80e15,
+      "kappa_at_XR_1000": 2.17e28,
+      "tau_cancellation_fails": 1e-2,
+      "tau_fully_decoupled": 1e-4
+    },
+    "verdict": "CATASTROPHIC_DECOUPLING",
+    "verdict_detail": "300K thermal noise destroys Reynolds stress cancellation at X_R > 500."
+  }
+]
