@@ -10,17 +10,21 @@ This skill guides the preparation, framing, and dissemination of breakthrough ma
 
 ## Core Narrative Pillars
 1. **Mathematical Syntax vs. Physical Semantics**: Distinguish between proofs that typecheck in Lean 4 and solutions that model physical continuous media.
-2. **The Tautological Syringe (MMS)**: Expose how reverse-engineering forcing residuals ($f = \text{residual}$) satisfies Fefferman Statements C & D while telling us nothing about autonomous fluids (Statements A & B).
-3. **3D Geometric Frustration vs. 1D Sign Fragility**: Contrast 1D dyadic shell models (which blow up due to artificial $+1$ phase coherence) with true 3D space ($\mathbb{Z}^3$), where the Leray projector geometrically scrambles triadic interactions ($\mathcal{D}(M) \gg 10$).
-4. **Epistemic Honesty**: Transparently celebrate machine-verified finite bounds while framing asymptotic limits as open scientific challenges.
+2. **Thermodynamic Censorship & Incompressibility Breakdown**: While global kinetic energy is bounded ($\tau^{+0.485}$), localized enstrophy diverges ($\tau^{-0.515}$), causing shear heating to plasma thresholds and driving the core supersonic ($Ma > 0.3$), which invalidates the incompressible model before $t=1$.
+3. **Catastrophic Structural Instability ($\kappa \sim 10^{28}$)**: Splicing the vortex core requires a 5-moment Jacobian with a condition number of $10^{28}$, demonstrating that the singularity lives on an unstable repeller of measure zero that instantly decouples under 300K thermal noise.
+4. **Specification Gaming / AI Reward Hacking**: The AI legally satisfied the $C^\infty$ external force criteria by utilizing Gevrey-2 class cutoffs ($\chi \sim \exp(-1/q^2)$), exploiting the exact boundary of functional analysis.
+5. **Epistemic Honesty**: Transparently celebrate machine-verified finite bounds while framing asymptotic limits and physical admissibility as open scientific challenges.
 
 ## Channel Playbooks
 
 ### 1. Google NotebookLM Audio & Video Pipeline
 - Ingest `OpenAI_NSE_EpistemicAudit.pdf` and curated text briefs into [notebooklm.google.com](https://notebooklm.google.com).
 - Direct the dual hosts: Host 1 as curious tech journalist, Host 2 as grounded Socrate AI Lab fluid physicist.
-- Use the "Magic Syringe" and "Minecraft vs. Infinite Zoom" analogies.
-- Export audio and overlay repository figures (`dyadic_sign_fragility.png`, `leray_triadic_frustration_Z3.png`).
+- Replace the obsolete "Magic Syringe" analogy with:
+  - The **"Thermal Vaporization"** analogy: showing how the core boils itself out of the model.
+  - The **"Balancing 28 Pencils"** analogy: illustrating the $10^{28}$ Jacobian condition number against room-temperature thermal noise.
+  - The **"Gevrey Skin"** analogy: showing how Gevrey-2 functions wrap an exploding singularity in a mathematically smooth skin.
+- Export audio and overlay repository figures (`mach_number_trajectory.png`, `jacobian_condition_number.png`, `enstrophy_divergence.png`).
 
 ### 2. High-Impact Essays (Substack / Medium)
 - Target technical leaders, AI researchers, and students.

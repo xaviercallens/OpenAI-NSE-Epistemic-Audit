@@ -11,10 +11,13 @@ This skill equips the agent to defend the 3D Geometric Frustration and Ladyzhens
 ## Tactical Debate Playbook
 
 ### 1. Rebutting OpenAI's Claim ("The Computer Proved Blow-Up!")
-- **Counter-Argument**: The Lean 4 compiler verified the *syntax* of deductions in abstract Sobolev spaces $H^m(\mathbb{R}^3)$, but the solution is physically vacuous.
-- **The Forcing Attack**: In `CandidateFromLimits.lean`, the external force $f(x,t)$ is defined as `tracedResidual = pastResidual`. This is the *Method of Manufactured Solutions* (MMS). It pre-draws a collapsing vortex and sets $f = \partial_t u + u\nabla u + \nabla p - \nu\Delta u$. It acts as an omniscient Maxwell's Demon pumping energy to cancel viscosity.
-- **The Continuum Attack**: In `PacketInitialSmoothLimit.lean`, initial wave frequencies $\kappa_n \to \infty$ diverge at $t=0$, requiring active energy at sub-Planckian scales ($10^{-35}\text{ m}$), violating the Knudsen continuum hypothesis ($Kn = \lambda_{\text{mfp}}/L \ll 1$).
-- **The Prize Context**: OpenAI satisfied the loose, permissive wording of Fefferman Statements C & D (which permit arbitrary smooth forces). They did not solve Statements A & B (autonomous, unforced fluids).
+- **Acknowledge Syntactic Purity**: The Lean 4 compiler verified the *syntax* in Sobolev spaces $H^m(\mathbb{R}^3)$ with zero axioms or `sorry` cheats. The AI legally satisfied Alternative C using Gevrey-2 class cutoffs ($\chi \sim \exp(-1/q^2)$) to ensure $f \in C_c^\infty$. Do NOT claim the force is singular or dismiss it as naive "MMS" (internal Reynolds stresses absorb the singular residual).
+- **The Structural Instability Attack ($\kappa \sim 10^{28}$)**: Splicing the singular inner core to the smooth outer flow via 5 radial moments (Lemma 8.7) produces a Jacobian condition number $\kappa \sim 10^{28}$. The solution is a measure-zero repeller that immediately decouples under standard 300K thermal fluctuations.
+- **The Thermodynamic & Incompressibility Attack**: Global $L^2$ kinetic energy is bounded ($\tau^{+0.485}$), but local enstrophy diverges ($\tau^{-0.515}$), causing infinite shear heating. The core velocity breaches the incompressibility limit ($Ma > 0.3$) at $\tau \approx 6.7 \times 10^{-14}\text{ s}$ and goes supersonic before $t=1$.
+- **Handling Practitioner Feedback ("N-S is just an approximation anyway")**:
+  - Concede immediately that the Millennium Prize is pure PDE mathematics and that real fluids are molecular.
+  - Pivot to the *internal self-invalidation* of the PDE: the model violates the asymptotic assumptions of its own derivation ($\nabla \cdot u = 0$, isothermal) *prior* to reaching the blowup time.
+  - Emphasize the trajectory before the singularity: the value lies in analyzing how the model breaks down and confirming the measure-zero nature of singularity basins.
 
 ### 2. Defending 3D Geometric Frustration on $\mathbb{Z}^3$
 - **Why 1D Models Fail**: Scalar dyadic shell models (Katz-Pavlović, Cheskidov) blow up because they enforce an artificial "fragilité des signes" ($\theta_n = 0$).
@@ -31,7 +34,8 @@ This skill equips the agent to defend the 3D Geometric Frustration and Ladyzhens
   - The Ladyzhenskaya-Prodi-Serrin condition $\frac{2}{s} + \frac{3}{q} \le 1$ with $s = \top$ and $q = 6$ gives $\frac{2}{\top} + \frac{3}{6} = 0 + \frac{1}{2} \le 1$.
   - Mechanized in Lean 4 using `ENNReal.div_top` and `ENNReal.div_le_iff`.
 
-## Communication Venues
-- **Lean Zulip (#maths)**: Focus on clean type signatures, Mathlib lemmas, and standard functional analysis.
-- **MathOverflow / arXiv / alphaXiv**: Focus on PDE functional analysis, Fefferman Statements A/B vs C/D, and Batchelor/Landau continuum limits.
-- **X / Twitter**: Punchy, diagram-rich, emphasizing that water in our universe does not explode.
+## Communication Venues & Tactical Framing
+- **Reddit (r/math, r/Physics, r/FluidMechanics)**: Focus on Unicode math (avoid raw LaTeX), concede that N-S is an idealization, and focus on the pre-singularity trajectory, Mach number divergence, and $\kappa \sim 10^{28}$ condition number.
+- **Lean Zulip (#maths)**: Focus on clean type signatures, AST metaprogramming, and Mathlib integration.
+- **MathOverflow / arXiv / alphaXiv**: Focus on Gevrey regularity, Fefferman Statements A/B vs C/D, and BKM / Prodi-Serrin thermodynamic bounds.
+- **X / Twitter**: Focus on open-science transparency (EMS statement), AI specification gaming, and Zenodo/GitHub reproducibility.
