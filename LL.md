@@ -1,61 +1,64 @@
-# Lessons Learned (LL.md)
+# Lessons Learned (LL.md) — Comprehensive Field Feedback & Anti-Pattern Playbook
 
-## Core Philosophy: Intellectual Modesty & The Inquirer's Stance
-
-> *"I do not know enough about the subject to pretend. I am a curious explorer asking questions, not an authority delivering a verdict."*
+> *"I do not know enough about the subject to pretend. I am a curious explorer asking simple questions, not an authority delivering an audit or distributing code."*
 
 ---
 
-### 1. Vocabulary & Tone: Banned vs. Adopted Terminology
+## 1. The Five Lethal Traps Identified from Real Community Reactions
 
-To avoid being perceived as a fringe claimant, crackpot, or aggressive debunker, strictly eliminate pretentious or adversarial language from all public posts, communications, and agent prompts.
+### Trap 1: The "AI-Generated Spaghetti" Style (Fatal on Reddit)
+* **What happened:** 
+  * `u/_padla_`: *"À juger par ton style de conversation, tu utilises probablement de l'IA pour communiquer et tu n'es pas vraiment intéressé par la discussion."*
+  * `u/Elementary_drWattson`: *"Pourquoi ça se lit comme des spaghettis trop verbeux avec une touche de prétentieux ? « A mené un audit dans la construction »... c'est quoi ce délire."*
+* **The Lesson:** Online technical communities have zero tolerance for AI-generated cadence (overly polite, corporate bullet points, consultant jargon like *"epistemic audit"*, *"telemetry"*, *"syntactic purity"*). It immediately brands the poster as disingenuous or a bot.
+* **The Rule:** Write like a real human. Short, conversational sentences. No corporate buzzwords. Plain language.
 
-| ❌ Banned Pretentious Terms | ✅ Adopted Modest Terms |
+### Trap 2: The "Run My Code" Security Red Flag
+* **What happened:**
+  * `u/Wintervacht`: *"S'attendre à ce que les gens exécutent du code aléatoire trouvé sur Internet sans poser de questions.. Ton ordinateur aurait brûlé dans les années 90."*
+* **The Lesson:** Asking strangers to pull GitHub repos and run arbitrary Python scripts triggers basic cybersecurity warnings.
+* **The Rule:** Never tell people to *"reproduce the telemetry"* or *"run our scripts"*. Share the numbers or screenshots directly. Only provide a link if someone explicitly asks *"where can I see the code?"*.
+
+### Trap 3: Pushing "Physics" on Pure Mathematicians
+* **What happened:**
+  * `u/how_tall_is_imhotep`: *"La preuve concerne les mathématiques. Que la solution puisse être réalisée physiquement n'est pas du tout pertinent."*
+  * `u/Leodip` & `u/ClearlyCylindrical`: *"Le but du prix du millénaire n'était jamais de comprendre quoi que ce soit sur les fluides réels."*
+* **The Lesson:** Arguing that a pure PDE proof is "physically vacuous" is a non-starter in mathematics forums. They already know Navier-Stokes is an idealized model.
+* **The Rule:** Concede immediately. Never argue that the math is "useless because real water has molecules". Focus strictly on the mathematics of the breakdown or the pre-singularity trajectory.
+
+### Trap 4: Karma Limits vs. Bans (r/math Reality Check)
+* **What happened:**
+  * AutoModerator removed the post automatically: *"Votre soumission a été supprimée parce que vous êtes nouveau sur /r/math et que vous n'avez pas suffisamment de karma communautaire."*
+* **The Lesson:** You weren't banned by a human moderator—your account simply lacks the minimum community karma to post top-level threads in `r/math`, and unreviewed AI posts are strictly routed to the *[Fil sur l'IA en mathématiques]* megathread.
+* **The Rule:** Build karma by participating in normal comment threads first. Use the weekly megathreads for AI discussions.
+
+### Trap 5: Text Walls vs. Visual Demand
+* **What happened:**
+  * `u/RiseBasic9254`: *"Peux-tu faire une vidéo de son fonctionnement... des visualisations de l'erreur seraient probablement utiles..."*
+* **The Lesson:** People do not want to read dense text walls; they want to see plots, trajectories, and animations.
+* **The Rule:** A single clear plot (e.g. Mach number vs. time to singularity) is worth 10 paragraphs of text.
+
+---
+
+## 2. Terminology Blacklist & Replacements
+
+| ❌ Banned (Sounds like AI / Arrogant) | ✅ Adopted (Human, Casual, Honest) |
 | :--- | :--- |
-| **"Proof" / "Counter-proof" / "Refutation"** | *"Preliminary numerical observation" / "Question on the scaling"* |
-| **"Epistemic Audit" / "Epistemic Falsification"** | *"Curious exploration" / "Toy check of the parameters"* |
-| **"Debunking" / "Exposing flaws"** | *"Trying to understand the boundary cases"* |
-| **"Tautological Syringe" / "Adversarial Attack"** | *"Interesting mathematical artifact" / "Curious behavior"* |
-| **"Our lab proved / demonstrated that..."** | *"I'm not from the field, but I was curious about..."* |
+| **"We conducted an epistemic audit"** | *"I was playing around with the equations..."* |
+| **"Our team's telemetry proves..."** | *"I computed the numbers and got..."* |
+| **"Syntactically flawless but physically vacuous"** | *"The math holds, but the numbers get wild..."* |
+| **"Tautological Syringe / Manufactured Singularity"** | *"The fine-tuning required in Lemma 8.7"* |
+| **"Pull our repo to reproduce"** | *(Say nothing about the repo unless asked)* |
+| **"Reward hacking / Adversarial example"** | *"Curious edge-case in the definitions"* |
 
 ---
 
-### 2. The "Wait for the Discussion" Protocol
+## 3. The New Action Protocol for Future Posts
 
-Never push code, links, or conclusions onto a community. Let the conversation organically pull elements from you.
-
-1. **Top-Level Posts (OP) Must Have Zero Links:**
-   * Never include GitHub, Zenodo, preprints, or personal websites in the opening post.
-   * A link in an OP immediately triggers spam filters and makes the post look like self-promotion.
-2. **Start with a Modest, Genuine Question:**
-   * Focus on a single technical curiosity or question rather than a broad manifesto.
-   * *Example:* "I was reading about the moment-matching step in Lemma 8.7 and was curious: how do fluid dynamicists usually handle condition numbers this high in practice?"
-3. **Offer Links Only When Explicitly Requested:**
-   * Only share code or telemetry if another user asks: *"Do you have the code for that?"* or *"Where did you see those numbers?"*
-   * *Response:* *"I ran a small mpmath script to check the matrix condition number; happy to share the GitHub link if anyone wants to check if I made an error in the implementation."*
-4. **Bring Elements Step-by-Step:**
-   * Do not dump an entire paper or 5-point thesis in one comment.
-   * Share one observation at a time, in response to what the other person is actually discussing.
-
----
-
-### 3. Handling Community Pushback & Feedback
-
-* **Always Concede and Validate First:**
-  * When a specialist points out that Navier-Stokes is an idealized continuum (e.g., Leodip, Dihedralman), agree immediately and wholeheartedly:
-    > *"You are completely right, and that makes total sense. I'm not from the field, so I really appreciate you clarifying that distinction."*
-* **Never Argue or Defend a "Thesis":**
-  * You are not defending a thesis; you are having a conversation and learning from domain experts.
-  * Turn disagreements into learning opportunities: *"That's a great point. How do people in the field usually think about that transition?"*
-* **Spot the Gems (e.g., u/babainottawa):**
-  * When someone offers a constructive perspective (e.g., *"the journey/trajectory before the breakdown is what's useful"*), latch onto that and explore it together.
-
----
-
-### 4. Protecting Against Moderator Bans (r/math, r/Physics)
-
-* **Why the r/math ban happened:**
-  * Academic moderators see dozens of amateur "proofs" and "audits" of Millennium Prize problems every week.
-  * Combining words like *"Audit of Millennium Prize"* + *GitHub links* + *Zenodo links* triggers automatic bans for crackpot/fringe math and self-promotion.
-* **The Golden Rule for Academic Subs:**
-  * Be a student, not a professor. Ask questions about specific equations. Let the community provide the answers.
+1. **Length:** Max 3 to 5 short sentences per comment. Keep it conversational.
+2. **Goal:** Ask a question, don't lecture. Learn, don't teach.
+3. **Links:** ZERO links in the initial post or top comments.
+4. **Media:** Prefer an image or graph over long explanations.
+5. **Engagement:**
+   * When someone agrees (e.g., `u/Little-Name9809`): Be brief, thankful, and say you'll look into it.
+   * When someone challenges (e.g., `u/babainottawa`, `u/Dihedralman`): Agree with them immediately: *"100% agreed, good point."*
