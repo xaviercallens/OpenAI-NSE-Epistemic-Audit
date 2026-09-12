@@ -1,0 +1,9 @@
+# CODEOWNERS
+# Each line is a file pattern followed by one or more owners.
+# Owners are automatically requested for review when a PR touches these files.
+
+# Default owner — everything requires @xaviercallens approval
+* @xaviercallens
+
+# Core paper — extra protection
+01_Challenger_Paper/ @xaviercallens
