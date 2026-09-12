@@ -52,7 +52,7 @@ An automated crawl of the Abstract Syntax Tree confirms the proof is structurall
 \texttt{sorry} / \texttt{admit} in core proof & 0 & 0 \\
 Custom \texttt{axiom} declarations & 0 & 0 \\
 \texttt{opaque} / \texttt{constant} declarations & 0 & 0 \\
-Force smoothness type & \texttt{ContDiff $\mathbb{R}$ $\infty$} & \texttt{ContDiff $\mathbb{R}$ $\infty$} \\
+Force smoothness type & \texttt{ContDiff} $\mathbb{R}$ $\infty$ & \texttt{ContDiff} $\mathbb{R}$ $\infty$ \\
 Force support & \texttt{CompactPositiveTimeSupport} & \texttt{CompactPositiveTimeSupport} \\
 Energy bound & $L^\infty_t L^2_x$ (uniform) & $\exists E,\, \forall t,\; \text{kineticEnergy}\; u\; t \leq E$ \\
 Sobolev weakening detected & None & None \\
@@ -71,14 +71,14 @@ Symbolic differentiation up to $N = 15$ confirms derivative coefficients grow as
 \begin{equation}
 \text{Gevrey-2} \subset C^\infty \setminus C^\omega.
 \end{equation}
-All derivatives $\lim_{q \to 0^+} d^N / dq^N [q^{-A} \exp(-1/q^2)] = 0$ for every $N$ and $A$---confirmed by SymPy. The formalization exploits the exact boundary of functional analysis to win the prize without violating the rules.
+All derivatives $\lim_{q \to 0^+} d^N / dq^N [q^{-A} \exp(-1/q^2)] = 0$ for every $N$ and $A$---confirmed by SymPy. The formalization exploits the exact boundary of functional analysis to win the prize without violating the rules. Explicitly, these non-analytic Gevrey-2 cutoffs satisfy the Clay $C^\infty$ requirement mathematically while demanding physically impossible gradient growth in real fluid configurations.
 
 \subsection{The Method of Manufactured Solutions}
-Despite this sophistication, the proof's logical architecture is unambiguously the Method of Manufactured Solutions (MMS). The paper itself states~\cite{OpenAI2026}:
+Despite this sophistication, the proof's logical architecture relies heavily on a generalized Method of Manufactured Solutions (MMS). The paper itself states~\cite{OpenAI2026} as initial motivation:
 \begin{quote}
 ``For any incompressible flow $u$ and pressure $p$, we can always define the external force $f$ to be the residual in (1.1). The Navier-Stokes equations then hold by construction.''
 \end{quote}
-The Lean 4 code confirms this: \texttt{force := SpacetimeGluing.smoothExtension(tracedResidual\;u\;p\;L)}. The docstring reads: ``No force is an input to this definition.'' The force \emph{is} the Navier-Stokes residual of the constructed velocity field.
+However, unlike standard MMS where $f = \text{residual}(u)$, the raw residual of their collapsing core is singular ($f_{\text{raw}} \to \infty$). The profound ingenuity of the proof lies in constructing oscillatory pulses whose internal nonlinear Reynolds stress perfectly cancels the singular core residual, leaving a homogenized, smooth remainder. Only after this internal wave advection cancels the singularity is the remaining residual declared as the external force $f \in C_c^\infty$. The Lean 4 code confirms this final assignment: \texttt{force := SpacetimeGluing.smoothExtension(tracedResidual\;u\;p\;L)}. The docstring reads: ``No force is an input to this definition.''
 
 % ====================================================================
 \section{Jacobian Instability: The $10^{28}$ Condition Number}
@@ -108,7 +108,7 @@ $X_R$ & $\kappa(A)$ & $\log_{10} \kappa$ \\
 \label{tab:condition}
 \end{table}
 
-Since Avogadro's number is $\sim 10^{23}$, a condition number of $10^{28}$ implies that the required geometric alignment exceeds the total number of molecules in a mole. Monte Carlo simulation confirms that standard 300K thermal fluctuations ($\delta u \approx 2.04 \times 10^{-9}$ m/s) produce errors amplified by factors exceeding $10^{15}$ through the ill-conditioned system. The Reynolds stress cancellation \emph{completely fails} at $X_R > 500$, well before the mathematical singularity.
+Since Avogadro's number is $\sim 10^{23}$, a condition number of $10^{28}$ implies that the required geometric alignment exceeds the total number of molecules in a mole. It is crucial to note that this matrix represents an un-preconditioned algebraic system. While numerical PDE solvers often employ preconditioners or coordinate rescalings to artificially reduce condition numbers, such transformations are purely mathematical conveniences. Because this ill-conditioning stems from the physical separation of radial scales ($X_R^{7.75}$), preconditioning cannot eliminate the underlying physical phase sensitivity to thermal noise. Monte Carlo simulation confirms that standard 300K thermal fluctuations ($\delta u \approx 2.04 \times 10^{-9}$ m/s) produce physical alignment errors amplified by factors exceeding $10^{15}$ through this system. The Reynolds stress cancellation \emph{completely fails} at $X_R > 500$, well before the mathematical singularity.
 
 This singularity is an unstable repeller---a set of measure zero in the space of physically realizable flows.
 
@@ -138,7 +138,7 @@ Local temperature rise $\Delta T$ & $-1.010$ & $\to \infty$ \quad{\color{red}$\b
 \label{tab:thermo}
 \end{table}
 
-Enstrophy dictates the rate of viscous dissipation. An infinite enstrophy generates infinite localized viscous heating. Long before the singular time $t=1$, the infinite shear forces would generate temperatures exceeding the plasma threshold, vaporizing the fluid into a highly compressible, supersonic shockwave. This completely violates the foundational incompressible ($\nabla \cdot u = 0$) and isothermal assumptions of the Navier-Stokes model.
+Enstrophy dictates the rate of viscous dissipation, given by $\varepsilon(t) = \nu \int_{\mathbb{R}^3} |\nabla \times u|^2 \, dx \sim \tau^{-0.515}$. Since the time integral $\int_0^1 \tau^{-0.515} \, d\tau < \infty$, the total time-integrated dissipation remains mathematically finite. However, the \emph{instantaneous} dissipation rate ($\tau^{-0.515}$) and the local dissipation density ($\tau^{-2.505}$) diverge. This divergence is the exact mechanism driving the thermal blowup. Long before the singular time $t=1$, the infinite shear forces would generate temperatures exceeding the plasma threshold, vaporizing the fluid into a highly compressible, supersonic shockwave. This completely violates the foundational incompressible ($\nabla \cdot u = 0$) and isothermal assumptions of the Navier-Stokes model.
 
 The $L^3$ divergence (exponent $-0.020$) is a borderline violation of the Escauriaza-Seregin-\v{S}ver\'{a}k~\cite{ESS2003} criterion, which proves a singularity cannot form if the $L^3$ norm is bounded. The construction threads the needle at the critical threshold.
 
@@ -148,21 +148,22 @@ The $L^3$ divergence (exponent $-0.020$) is a borderline violation of the Escaur
 
 The incompressible Navier-Stokes equations require the Mach number $\text{Ma} = |u|/c_s \ll 1$. For water at 300K ($c_s = 1500$ m/s, $\nu = 10^{-6}$ m$^2$/s), with initial core radius $\ell_0 = 1$ cm:
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\begin{tabular}{rcrl}
+\small
+\begin{tabular}{@{}cccc@{}}
 \toprule
-$\tau$ (s) & $|u|$ (m/s) & Ma & Status \\
+\textbf{Time to Singularity } $\tau\text{ (s)}$ & \textbf{Core Velocity } $|u|\text{ (m/s)}$ & \textbf{Mach Number } $Ma$ & \textbf{Physical Regime} \\ 
 \midrule
-$10^0$ & $10^{-4}$ & $6.7 \times 10^{-8}$ & \checkmark\ Incompressible \\
-$10^{-8}$ & $1.10$ & $7.3 \times 10^{-4}$ & \checkmark\ Incompressible \\
-$10^{-12}$ & $115$ & $7.7 \times 10^{-2}$ & \checkmark\ Incompressible \\
-$\mathbf{6.7 \times 10^{-14}}$ & $\mathbf{450}$ & $\mathbf{0.3}$ & {\color{red}$\boldsymbol{\times}$} \textbf{Limit breached} \\
-$6.2 \times 10^{-15}$ & $1500$ & $1.0$ & {\color{red}$\boldsymbol{\times}$} Sonic barrier \\
-$9.0 \times 10^{-16}$ & --- & --- & {\color{red}$\boldsymbol{\times}$} Sub-molecular \\
+$10^{0}$              & $1.0 \times 10^{-4}$ & $6.7 \times 10^{-8}$ & Incompressible Continuum \\
+$10^{-8}$             & $1.1$                & $7.3 \times 10^{-4}$ & Incompressible Continuum \\
+$10^{-12}$            & $115$                & $7.7 \times 10^{-2}$ & Incompressible Continuum \\
+$6.7 \times 10^{-14}$ & $450$                & $0.30$               & \textbf{Incompressibility Limit Breached} \\
+$6.2 \times 10^{-15}$ & $1500$               & $1.00$               & \textbf{Transonic / Shock Formation} \\
+$9.0 \times 10^{-16}$ & $4100$               & $2.73$               & Sub-Molecular / Continuum Breakdown \\
 \bottomrule
 \end{tabular}
-\caption{Mach number trajectory of the collapsing vortex core. The NSE self-invalidate at $\tau \approx 6.7 \times 10^{-14}$ s---67 femtoseconds before the mathematical singularity.}
+\caption{Mach number trajectory of the collapsing vortex core ($c_s = 1500\text{ m/s}$ in water). The incompressible Navier-Stokes equations physically invalidate themselves at $\tau \approx 6.7 \times 10^{-14}\text{ s}$.}
 \label{tab:mach}
 \end{table}
 
@@ -201,17 +202,17 @@ Furthermore, the ``smoothness'' of $u_0$ is preserved mathematically via Gevrey-
 \section{Thermodynamic Censorship: A Physical Axiom}
 % ====================================================================
 
-To bridge the gap between mathematics and physics, we propose the \emph{Thermodynamic Censorship Principle}, analogous to Penrose's Cosmic Censorship~\cite{Penrose1969} in general relativity:
+To bridge the gap between abstract functional analysis and physical reality, we propose the \textbf{Thermodynamic Censorship Principle}, conceptually parallel to Penrose's Cosmic Censorship in general relativity \cite{Penrose1969}:
 
 \begin{quote}
-\textbf{Axiom (Uniform Bounded Enstrophy).} A physically admissible solution to the incompressible Navier-Stokes equations satisfies
+\textbf{Axiom (Uniform Bounded Enstrophy).} \textit{A physically admissible solution to the incompressible Navier-Stokes equations on $\mathbb{R}^3 \times [0, T)$ must satisfy}
 \begin{equation}
-\sup_{0 \leq t < T} \int_{\mathbb{R}^3} |\nabla \times u(x,t)|^2\,dx \leq \Omega_{\max},
+\sup_{0 \le t < T} \int_{\mathbb{R}^3} |\nabla \times u(x,t)|^2 dx \le \Omega_{\max},
 \end{equation}
-where $\Omega_{\max}$ is a material-dependent thermodynamic constant determined by the requirement that viscous dissipation does not violate the Boussinesq approximation.
+\textit{where $\Omega_{\max} < \infty$ is a material-dependent thermodynamic threshold determined by the bound beyond which localized viscous shear heating invalidates the Boussinesq isothermal approximation.}
 \end{quote}
 
-For water at 300K, $\Omega_{\max} \approx 1.13 \times 10^{13}$ s$^{-2}$. The OpenAI construction requires $\Omega \to \infty$, violating the bound at every time sufficiently close to $T$. Under this axiom, the Gevrey-2 collapsing-vortex mechanism is provably censored.
+For liquid water at $300\text{ K}$, $\Omega_{\max} \approx 1.13 \times 10^{13}\text{ s}^{-2}$. The OpenAI construction requires $\Omega(t) \to \infty$ as $\tau \to 0$, violating this bound well before the mathematical singularity. Under this physical axiom, the Gevrey-2 collapsing-vortex mechanism is strictly censored.
 
 We have formalized this axiom in Lean 4 as \texttt{ThermodynamicCensorship.lean}, defining a \texttt{PhysicalFluidProperties} structure that extends the OpenAI \texttt{CandidateProperties} with the enstrophy bound. The censorship theorem is posed as an open challenge.
 
