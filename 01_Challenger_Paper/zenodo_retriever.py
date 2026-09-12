@@ -28,7 +28,7 @@ ZENODO_SHA256_MANIFEST = {
     "OpenAI_NSE_EpistemicAudit.pdf": "21068c6bfcee224225356a13dcf3947a9c0876ed94edd4e204b6b89804ee374e",
     "OpenAI_NSE_EpistemicAudit.tex": "2f1870efb0f5ff4badd5465e769a053f958914850b59f472b59b2bbdca47e8d6",
     "REPRODUCTION_PROTOCOL.md": "becf58bd3903e58e238078eabb137548b9fbc4dc7230eed5c6f1de0181e5d600",
-    "README.md": "d826e322c638ba3dc53438866ac78dad73c87cded2e79a332f9d9635ed72902a",
+    "README.md": "ab26a6de1884b3b5d99a86bed78de10b5cc7646402d5ff692b45565599683187",
     "audit_openai.py": "87f69e6786d5ea86228bef8d9bca112cd92a0acbb65ab35a2341d3a26a0820b6",
     "verify-physical-vacuity.sh": "cf1cedc4e0836ae216deecfab43a4bd6a44bd0c089095958d5c53c87b6e94f16"
 }
