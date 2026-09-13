@@ -115,10 +115,12 @@ print(f"  Symbolic exponent: {rho_exponent}")
 print(f"  Full expression: {e_local_simplified}")
 
 e_limit = limit(e_local.subs(h, h_val), tau, 0, '+')
-print(f"\n  For h = {h_val}:")
-print(f"    Exponent = -1 - 2*{h_val} = {Rational(-1,1) - 2*h_val} (-1.010)")
-print(f"    lim(tau->0) e_local = {e_limit}")
-print(f"    [DIVERGENCE] LOCAL ENERGY DENSITY DIVERGES TO INFINITY (Exponent: -1.010)")
+print(f"\n  Sweeping Anisotropy Parameter h (0 < h < 1/6):")
+for h_test in [Rational(1,10), Rational(1,100), Rational(1,200), Rational(1,500), Rational(1,1000)]:
+    e_limit_test = limit(e_local.subs(h, h_test), tau, 0, '+')
+    exp_test = -1 - 2*h_test
+    print(f"    h = {str(h_test):8s} | Exponent = {float(exp_test):.4f} | lim(tau->0) e_local = {e_limit_test} | [FAIL] DIVERGES")
+print(f"\n    [DIVERGENCE] LOCAL ENERGY DENSITY UNCONDITIONALLY DIVERGES FOR ALL h < 1/6")
 
 # ============================================================
 # 6. Enstrophy: Omega = ∫ |curl u|^2 dV

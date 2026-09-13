@@ -203,6 +203,38 @@ print(f"         +{'-' * width}> log₁₀(τ)")
 print(f"          {x_min:.0f}{' ' * (width - 5)}{x_max:.0f}")
 
 # ============================================================
+# Sweeping Initial Macroscopic Length Scale (L_ref)
+# ============================================================
+print(f"\n{'=' * 72}")
+print(f"SWEEP 1: INITIAL MACROSCOPIC LENGTH SCALE (L_ref)")
+print(f"{'=' * 72}")
+print(f"  {'L_ref (m)':>12s}  {'u_ref (m/s)':>12s}  {'tau_break (Ma=0.3)':>20s}  {'tau_sonic (Ma=1.0)':>20s}")
+print(f"  {'-'*12}  {'-'*12}  {'-'*20}  {'-'*20}")
+for L_test in [1e-6, 1e-4, 1e-2, 1.0, 1e2, 1e4, 1e6]:
+    u_test = nu / L_test
+    tau_b = (0.3 * c_s / u_test) ** (-1.0 / (0.5 + h))
+    tau_s = (1.0 * c_s / u_test) ** (-1.0 / (0.5 + h))
+    print(f"  {L_test:12.1e}  {u_test:12.2e}  {tau_b:20.6e}  {tau_s:20.6e}")
+
+# ============================================================
+# Sweeping Fluid Constants (Water, Air, Glycerol)
+# ============================================================
+print(f"\n{'=' * 72}")
+print(f"SWEEP 2: FLUID CONSTANTS (Water, Air, Glycerol)")
+print(f"{'=' * 72}")
+fluids = [
+    ("Water (300K)", 1500.0, 1.0e-6),
+    ("Air (300K)", 343.0, 1.5e-5),
+    ("Glycerol (293K)", 1900.0, 1.1e-3)
+]
+print(f"  {'Fluid':>15s}  {'c_s (m/s)':>10s}  {'nu (m²/s)':>10s}  {'tau_break (Ma=0.3)':>20s}")
+print(f"  {'-'*15}  {'-'*10}  {'-'*10}  {'-'*20}")
+for name, c_test, nu_test in fluids:
+    u_test = nu_test / L_ref
+    tau_b = (0.3 * c_test / u_test) ** (-1.0 / (0.5 + h))
+    print(f"  {name:15s}  {c_test:10.1f}  {nu_test:10.1e}  {tau_b:20.6e}")
+
+# ============================================================
 # Summary
 # ============================================================
 print(f"\n{'=' * 72}")
