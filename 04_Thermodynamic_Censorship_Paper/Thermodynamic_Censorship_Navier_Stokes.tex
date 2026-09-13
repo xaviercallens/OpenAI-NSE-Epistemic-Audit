@@ -154,11 +154,11 @@ A physically admissible solution to the Navier-Stokes equations must satisfy $\s
 The enstrophy bounds the total viscous dissipation rate. Exceeding $\Omega_{max}$ implies a local temperature rise sufficient to cause phase transition or significant compressibility, breaking the NSE derivation. For water at 300K, we estimate $\Omega_{max} \sim 1.13 \times 10^{13}$ s$^{-2}$.
 
 \subsection{Lean 4 Formalization}
-We have implemented this axiom in Lean 4 as \texttt{ThermodynamicCensorship.lean}. Under this axiom, any Gevrey-2 collapsing vortex singularity is formally rejected by the type checker prior to blow-up time. A potential proof of rigorous censorship may rely on the Beale-Kato-Majda criterion \cite{BKM1984}.
+We have implemented this axiom in Lean 4 as \texttt{ThermodynamicCensorship.lean}. Under this axiom, any Gevrey-class collapsing vortex singularity is formally rejected by the type checker prior to blow-up time. A potential proof of rigorous censorship may rely on the Beale-Kato-Majda criterion \cite{BKM1984}.
 
 \section{Discussion}
 
-The AI's achievement is a monumental milestone in automated reasoning. It successfully exploited the analytical blindspot between $C^\infty$ and real-analytic functions using Gevrey-2 classes.
+The AI's achievement is a monumental milestone in automated reasoning. It successfully exploited the analytical blindspot between $C^\infty$ and real-analytic functions using Gevrey-class functions.
 
 However, it solved the Clay Institute's purely mathematical formulation, not the physicist's problem. This situation strongly parallels Cosmic Censorship in General Relativity \cite{Penrose1969}, where naked singularities are mathematically possible but hypothesized to be shielded by event horizons in physical reality.
 

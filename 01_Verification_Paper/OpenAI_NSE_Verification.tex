@@ -227,7 +227,6 @@ mathematical concession obscures the physical catastrophe: the \emph{instantaneo
 rate ($\sim\tau^{-0.515}$) and the \emph{intensive local energy density} ($e_{\text{local}} \sim\tau^{-1.010}$) both
 diverge without bound. It is this divergence of local dissipation density---not the bounded
 integral---that drives the thermal shock.
-integral---that drives the thermal shock.
 
 An infinite instantaneous enstrophy implies infinite localized viscous shear heating. Long before
 the singular time $t = 1$, the shear-generated temperatures would far exceed the plasma transition
@@ -235,7 +234,7 @@ threshold, vaporizing the fluid into a supersonic, highly compressible flow. Thi
 violates both the divergence-free condition $\nabla \cdot u = 0$ and the isothermal Boussinesq
 approximation---the two foundational assumptions of the NSE model.
 
-To provide an empirical anchor for this divergence, we compared the pathological energy spectrum of the OpenAI pre-singularity trajectory against high-fidelity isotropic turbulence benchmarks from the Johns Hopkins Turbulence Database (JHTDB), resolved using the LeanFlow pseudo-spectral solver. As shown in Figure~\ref{fig:spectrum}, real physical turbulence adheres to the classic Kolmogorov $k^{-5/3}$ energy cascade, smoothly dissipating kinetic energy at the Kolmogorov microscale. In contrast, the Lean~4 constructed singularity shifts energy unphysically to diverging wavenumbers (driven by the Gevrey-2 wave packets), departing entirely from any realizable fluid-dynamic regime.
+To provide an empirical anchor for this divergence, we compared the pathological energy spectrum of the OpenAI pre-singularity trajectory against high-fidelity isotropic turbulence benchmarks from the Johns Hopkins Turbulence Database (JHTDB), resolved using the LeanFlow pseudo-spectral solver. As shown in Figure~\ref{fig:spectrum}, real physical turbulence adheres to the classic Kolmogorov $k^{-5/3}$ energy cascade, smoothly dissipating kinetic energy at the Kolmogorov microscale. In contrast, the Lean~4 constructed singularity shifts energy unphysically to diverging wavenumbers (driven by the Gevrey-class wave packets), departing entirely from any realizable fluid-dynamic regime.
 
 \begin{figure}[ht]
     \centering
@@ -351,7 +350,7 @@ constraint beyond the differential equation itself.
 
 For liquid water at 300\,K, this threshold is $\Omega_{\max} \approx 1.13 \times 10^{13}$\,s$^{-2}$.
 The OpenAI construction requires $\Omega(t) \to \infty$ as $\tau \to 0$---violating this bound
-well before the mathematical singularity. Under this axiom, the Gevrey-2 collapsing-vortex
+well before the mathematical singularity. Under this axiom, the Gevrey-class collapsing-vortex
 mechanism is strictly censored.
 
 We have formalized this axiom in Lean~4 as \texttt{ThermodynamicCensorship.lean}, defining a
@@ -363,7 +362,7 @@ with the enstrophy bound. The censorship theorem is posed as an open formal chal
 % ====================================================================
 
 The OpenAI system's achievement is a monumental milestone in automated reasoning. It successfully
-exploited the analytical blindspot between $C^\infty$ and real-analytic functions, using Gevrey-2
+exploited the analytical blindspot between $C^\infty$ and real-analytic functions, using Gevrey-class
 class cutoffs to construct a mathematically flawless singularity that the Lean~4 kernel rigorously
 certifies. It did not cheat; it solved the mathematical problem as posed.
 
@@ -446,7 +445,7 @@ Reynolds-stress cancellation of measure-zero precision---to rupture the equation
 Sobolev spaces.
 
 However, by demonstrating precisely how pathological, finely-tuned, and thermodynamically
-impossible such a configuration must be---Gevrey-2 gradients of magnitude $10^{218}$, a Jacobian
+impossible such a configuration must be---Gevrey-class gradients of magnitude $10^{218}$, a Jacobian
 sensitivity $10^5$ times greater than Avogadro's number, and self-invalidating Mach numbers
 67~femtoseconds before the blow-up---this formalization inadvertently provides overwhelming
 epistemic evidence to the contrary: \textbf{naturally occurring 3D fluids do not blow up in

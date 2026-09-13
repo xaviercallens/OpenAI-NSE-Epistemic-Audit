@@ -40,6 +40,7 @@ lake-packages/
 # Cloned tools & build sites
 atlas-lean/
 autoform-bot/
+openai_repo/
 site/
 site-src/
 03_Lean4_Topological_Censorship/site/
