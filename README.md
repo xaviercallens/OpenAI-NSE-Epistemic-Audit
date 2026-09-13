@@ -33,7 +33,7 @@ This audit proves why, through five independent lines of evidence.
 
 | # | Finding | Key Metric / Exponent |
 |---|---|---|
-| **1** | **Intensive Local Energy Density Divergence**: $e_{\text{local}} = \frac{1}{2}\rho\|u\|^2 \sim \tau^{-1.010}$ and local enstrophy $\Omega \sim \tau^{-0.515}$ diverge without bound | **$\Delta T \sim \tau^{-1.010}$** — thermal shock violates Boussinesq isothermal assumptions |
+| **1** | **Intensive Local Energy Density Divergence**: $e_{\text{local}} = \frac{1}{2}\rho\|u\|^2 \sim \tau^{-1.010}$ and global enstrophy $\Omega \sim \tau^{-0.515}$ diverge without bound | **$\Delta T \sim \tau^{-1.010}$** — thermal shock violates Boussinesq isothermal assumptions |
 | **2** | **Mach Number Self-Invalidation**: incompressible NSE invalidate themselves when $Ma \ge 0.3$ | **67 femtoseconds** ($\tau \approx 6.7 \times 10^{-14}$ s) before mathematical blow-up |
 | **3** | **Teleological Causality Reversal**: force $f$ is reverse-engineered from a pre-specified singular similarity profile | **MMS inversion** — shooting an arrow and painting a bullseye around it |
 | **4** | **Matrix Scaling & Non-Dimensionalization**: moment-matching matrix $A = D B D$ has bounded non-dimensional condition number $\kappa(B) \approx 4.11 \times 10^5$ | **$\kappa(B) \sim O(10^5)$** — raw $\kappa \sim 10^{28}$ was an unscaled dimensional artifact |
@@ -77,13 +77,15 @@ OpenAI-NSE-Verification/
 │       ├── TopologicalCensorship.lean
 │       └── NSECensorship.lean
 ├── 04_Thermodynamic_Censorship_Paper/   # Nature Physics draft
-├── scripts/                             # Directives 2–6 analyses
+├── scripts/                             # Directives 2–7 analyses
 │   ├── directive2_thermodynamic_paradox.py
 │   ├── directive3_jacobian_instability.py
 │   ├── directive4_gevrey_regularity.py
 │   ├── directive5_mach_divergence.py
-│   └── directive6_thermal_instability.py
+│   ├── directive6_thermal_instability.py
+│   └── directive7_pre_singularity_simulation.py
 ├── dataset/                             # Dataset artifacts
+│   └── animations/                      # Pre-singularity vortex animations
 └── .github/
 ```
 
@@ -101,10 +103,11 @@ OpenAI-NSE-Verification/
 git clone https://github.com/xaviercallens/OpenAI-NSE-Verification
 cd OpenAI-NSE-Verification/scripts
 pip install numpy scipy sympy mpmath matplotlib
-python directive5_mach_divergence.py        # Mach number trajectory (67 fs)
-python directive2_thermodynamic_paradox.py  # Intensive scaling (-1.010 exponent)
-python directive3_jacobian_instability.py  # Non-dimensionalization (kappa ~ 4.11e5)
-python directive4_gevrey_regularity.py      # Analytical Gevrey index (s = 1.5)
+python directive5_mach_divergence.py             # Mach number trajectory (67 fs)
+python directive2_thermodynamic_paradox.py       # Intensive scaling (-1.010 exponent)
+python directive3_jacobian_instability.py        # Non-dimensionalization (kappa ~ 4.11e5)
+python directive4_gevrey_regularity.py           # Analytical Gevrey index (s = 1.5)
+python directive7_pre_singularity_simulation.py  # Pre-singularity animated plots
 ```
 
 ### Lean 4 Challenges
