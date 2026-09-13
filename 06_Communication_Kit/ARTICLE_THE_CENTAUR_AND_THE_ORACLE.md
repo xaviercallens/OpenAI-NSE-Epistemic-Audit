@@ -32,7 +32,7 @@ We propose upgrading the current Bipartite (LLM ↔ Lean 4) loop to a new standa
 
 1. **Neural (The Intuition Engine):** LLMs propose fluid flow *ansätze*, physical models, and combinatorial proof strategies.
 2. **Symbolic (The Logic Engine):** Lean 4 (`mathlib`) verifies topological limits, norm bounds, and logical syntax.
-3. **Empirical (The Physics Engine):** A deterministic computational physics kernel (like `physlib` or `LeanFlow`) acts as a strict Thermodynamic Type-Checker.
+3. **Empirical (The Physics Engine):** A deterministic computational physics kernel (like `physlib` or our new generation solver **[LeanFlow](https://github.com/xaviercallens/SocrateAI-Numeric-DualScale-Solver)**) acts as a strict Thermodynamic Type-Checker.
 
 **How it works:** If the AI proposes a proof step that requires local Mach numbers $> 0.3$, the Empirical Engine rejects the proof tree as **"Physically Ill-Typed,"** assigning a negative reward and forcing the RL agent to find physically admissible mathematics.
 
