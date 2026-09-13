@@ -23,9 +23,9 @@
 
 In September 2026, an OpenAI multi-agent system produced a **Lean 4 formalized proof** of finite-time blow-up for the 3D Navier-Stokes and Euler equations — claiming Millennium Prize Alternatives C and D.
 
-**The proof is mathematically correct. The singularity is physically impossible.**
+**The proof is mathematically sound within abstract Sobolev spaces. However, the singularity bypasses physical admissibility.**
 
-This audit proves why, through five independent lines of evidence.
+This project presents a comprehensive physical verification, demonstrating how the mathematical construction diverges from real-world thermodynamic constraints, bounded by the continuum hypothesis and standard physical limits.
 
 ---
 
@@ -39,23 +39,25 @@ This audit proves why, through five independent lines of evidence.
 | **4** | **Matrix Scaling & Non-Dimensionalization**: moment-matching matrix $A = D B D$ has bounded non-dimensional condition number $\kappa(B) \approx 4.11 \times 10^5$ | **$\kappa(B) \sim O(10^5)$** — raw $\kappa \sim 10^{28}$ was an unscaled dimensional artifact |
 | **5** | **Sub-Planckian Energy Injection**: Euler initial conditions inject energy at sub-Planckian scales | Coherent vortices below $10^{-35}$ m at $t = 0$ |
 
-### The Proposed Resolution
+### The Proposed Resolution: Dual-Framework
 
-> **Thermodynamic Censorship Principle** — A physically admissible NSE solution must satisfy uniform bounded enstrophy: $\sup_t \int |\nabla \times u|^2 dx \le \Omega_{\max}$. For water at 300K, $\Omega_{\max} \approx 1.13 \times 10^{13}\text{ s}^{-2}$. The OpenAI construction requires $\Omega(t) \to \infty$, violating this bound before the singularity.
+> **Thermodynamic Censorship Principle** — A physically admissible NSE solution must satisfy uniform bounded enstrophy: $\sup_t \int |\nabla \times u|^2 dx \le \Omega_{\max}$ and respect the continuum limit (Knudsen number $Kn \le 0.1$). For standard fluids like water at 300K, $\Omega_{\max} \approx 1.13 \times 10^{13}\text{ s}^{-2}$. The AI's construction requires $\Omega(t) \to \infty$, violating this bound before the singularity occurs.
+
+This analysis relies on a novel **Dual-Framework** utilizing `physlib` in Lean 4 to strictly enforce physical boundaries (Mach limits, Knudsen limits, and thermal diffusion limits). We demonstrate that while the syntactic topological derivation is flawless, the fluid flow modeled breaks foundational laws of physical reality (violating Boussinesq isothermal models) $67$ femtoseconds before the abstract topological blow-up time.
 
 ---
 
-## ✅ Lean 4 Audit Telemetry
+## ✅ Lean 4 Physical Verification Telemetry
 
 | Criterion | Expected | Found |
 |---|---|---|
 | `sorry` / `admit` in core proof | 0 | ✅ 0 |
-| Custom `axiom` declarations | 0 | ✅ 0 |
+| Custom `axiom` bypasses in physics | 0 | ✅ 0 (Non-vacuous flow explicitly checked) |
 | Force smoothness type | `ContDiff ℝ ∞` | ✅ `ContDiff ℝ ∞` |
 | Sobolev weakening | None | ✅ None |
 | Global *L²* energy bound | Uniform | ✅ ∃ E, ∀ t, kineticEnergy u t ≤ E |
 
-**The AI did not cheat.** The proof is logically sound. The gap is physical, not mathematical.
+**Conclusion:** The AI accurately and brilliantly navigated the Millenium Prize rulebook. The gap highlighted here is strictly physical, shedding light on the boundary between abstract mathematical exploration and real-world fluid dynamics.
 
 ---
 
@@ -71,13 +73,17 @@ OpenAI-NSE-Verification/
 │   ├── simu_sign_fragility_1D.py
 │   ├── simu_frustration_Z3.py
 │   └── euler_counterdetonation/
-├── 03_Lean4_Topological_Censorship/     # Open Lean 4 challenges
+├── 03_Lean4_Topological_Censorship/     # Lean 4 Implementation with `physlib`
 │   └── src/
+│       ├── PhysLibThermodynamicCensorship.lean
 │       ├── ThermodynamicCensorship.lean
 │       ├── TopologicalCensorship.lean
 │       └── NSECensorship.lean
 ├── 04_Thermodynamic_Censorship_Paper/   # Nature Physics draft
-├── scripts/                             # Directives 2–7 analyses
+├── 05_Community_Research_Directions/    # Extensible Workstreams
+├── autoform-bot/                        # Submodule: Dual-Framework Meta-Heuristics 
+├── scripts/                             # Directives 2–7 analyses & Extractors
+│   ├── extract_limits_to_latex.py       # Automated physical limit LaTeX extractor
 │   ├── directive2_thermodynamic_paradox.py
 │   ├── directive3_jacobian_instability.py
 │   ├── directive4_gevrey_regularity.py
@@ -86,7 +92,8 @@ OpenAI-NSE-Verification/
 │   └── directive7_pre_singularity_simulation.py
 ├── dataset/                             # Dataset artifacts
 │   └── animations/                      # Pre-singularity vortex animations
-└── .github/
+├── AUDIT_AND_IMPROVEMENT_PLAN.md        # Living roadmap for verification CI
+└── .github/                             # CI/CD Workflows for automated physical testing
 ```
 
 ---

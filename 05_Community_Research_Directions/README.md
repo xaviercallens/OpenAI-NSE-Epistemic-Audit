@@ -18,5 +18,9 @@ Addressing the mechanics of how enstrophy divergence mathematically drives therm
 Analyzing the trajectory *before* incompressibility breaks ($Ma < 0.3$) to extract insights for Large Eddy Simulation (LES) and subgrid-scale stress models.
 * [WorkStream 3 Folder](./WorkStream3_Turbulence) 
 
+### 4. The Dual-Framework for AI PDE Verification
+We introduce a novel "Dual-Framework" combining topological validity (Sobolev spaces) and physical censorship (thermodynamics/continuum limits). This framework allows researchers to verify AI-generated mathematical physics proofs by establishing dual constraints in Lean 4.
+* **Guide**: See the [Physical Censorship Audit Skill](../autoform-bot/skills/physical-censorship/SKILL.md) and our [Lean 4 Implementation](../03_Lean4_Topological_Censorship/src/PhysLibThermodynamicCensorship.lean) to apply this to other PDEs (e.g., Euler, MHD).
+
 ---
 *We invite further PRs, issues, and discussions. The gap between pure math and physical fluids is an open frontier!*

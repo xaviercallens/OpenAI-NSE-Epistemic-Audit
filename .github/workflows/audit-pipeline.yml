@@ -1,0 +1,38 @@
+name: Physical Censorship Audit Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  audit-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Run OpenAI Lean Proof Extraction
+        run: |
+          python scripts/extract_openai_lean.py
+
+      - name: Install elan (Lean Version Manager)
+        run: |
+          curl -sSfL https://github.com/leanprover/elan/releases/download/v3.1.1/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          ./elan-init -y --default-toolchain leanprover/lean4:v4.11.0
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Verify Physical Censorship proofs
+        working-directory: 03_Lean4_Topological_Censorship
+        run: |
+          lake exe cache get
+          lake build
