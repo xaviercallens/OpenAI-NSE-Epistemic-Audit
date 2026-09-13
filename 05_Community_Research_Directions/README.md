@@ -22,5 +22,9 @@ Analyzing the trajectory *before* incompressibility breaks ($Ma < 0.3$) to extra
 We introduce a novel "Dual-Framework" combining topological validity (Sobolev spaces) and physical censorship (thermodynamics/continuum limits). This framework allows researchers to verify AI-generated mathematical physics proofs by establishing dual constraints in Lean 4.
 * **Guide**: See the [Physical Censorship Audit Skill](../autoform-bot/skills/physical-censorship/SKILL.md) and our [Lean 4 Implementation](../03_Lean4_Topological_Censorship/src/PhysLibThermodynamicCensorship.lean) to apply this to other PDEs (e.g., Euler, MHD).
 
+### 5. Positive Scientific Roadmap: Leveraging OpenAI's Formalization
+We outline how the mathematical community can directly leverage OpenAI's Lean 4 Sobolev estimation libraries, Gevrey bounds, and multi-agent proof tactics for positive breakthroughs in sub-critical PDEs, CFD model certification, and physics-informed AI.
+* **Document**: See [Positive Scientific Directions & Roadmap](./POSITIVE_FUTURE_DIRECTIONS.md)
+
 ---
 *We invite further PRs, issues, and discussions. The gap between pure math and physical fluids is an open frontier!*
