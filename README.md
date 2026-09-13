@@ -33,6 +33,17 @@ This project presents a comprehensive physical verification, demonstrating how t
 
 ---
 
+## 🛸 Tout Public & Citizen Science (General Public Section)
+
+**Welcome!** If you are not a physicist or mathematician, start here. We have translated this complex scientific audit into accessible, highly visual materials to help everyone understand the clash between abstract AI mathematics and physical reality.
+
+- 🌌 **[Read the "Tout Public" Memo](07_Tout_Public_Memo/MEMO.md):** An accessible, cyberpunk-styled visual memo explaining the mathematical singularity vs. physical turbulence, our claims, and our proposals for Neuro-Symbolic AI.
+- 💻 **[Launch the Google Colab Notebook](07_Tout_Public_Memo/Citizen_Science_Exploration.ipynb):** A fully interactive environment where you can visualize the "Thermodynamic Censorship" and see how physical reality stops infinite mathematical blow-ups. No installation required!
+
+![Cyberpunk Singularity & Turbulence](07_Tout_Public_Memo/assets/cyber_singularity_turbulence_1789311421687.jpg)
+
+---
+
 ## 🔬 The Five Epistemic Disconnects
 
 | # | Finding | Key Metric / Exponent |
