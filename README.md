@@ -82,6 +82,7 @@ OpenAI-NSE-Verification/
 │       └── NSECensorship.lean
 ├── 04_Thermodynamic_Censorship_Paper/   # Nature Physics draft
 ├── 05_Community_Research_Directions/    # Extensible Workstreams
+├── 06_Communication_Kit/                # Blog Post, Press Kit & Social Media Templates
 ├── autoform-bot/                        # Submodule: Dual-Framework Meta-Heuristics 
 ├── scripts/                             # Directives 2–7 analyses & Extractors
 │   ├── extract_limits_to_latex.py       # Automated physical limit LaTeX extractor
