@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💬 Ask a Question
-    url: https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/3
+    url: https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/3
     about: Ask questions in the Q&A Discussion thread
   - name: 💡 Propose an Idea
-    url: https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/4
+    url: https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/4
     about: Propose new research directions or open challenges
   - name: 🎉 Share Your Work
-    url: https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/5
+    url: https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/5
     about: Share reproductions, extensions, or related work

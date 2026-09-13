@@ -1,4 +1,4 @@
-# Contributing to OpenAI-NSE-Verification
+# Contributing to OpenAI-NSE-Epistemic-Audit
 
 Thank you for your interest in contributing to this Physical Verification of the OpenAI
 Navier-Stokes / Euler blow-up formalization.

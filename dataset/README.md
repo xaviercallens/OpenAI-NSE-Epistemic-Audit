@@ -29,7 +29,7 @@ This dataset accompanies the publication:
 **"On the Physical Vacuity of Manufactured Singularities: A Comprehensive Physical Verification of the OpenAI Navier-Stokes Formalization"**  
 *The MechanicaFluidorum Program | Socrate AI Lab*  
 **Zenodo DOI:** [10.5281/zenodo.22725347](https://doi.org/10.5281/zenodo.22725347) (Concept DOI: [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717))  
-**GitHub:** [xaviercallens/OpenAI-NSE-Verification](https://github.com/xaviercallens/OpenAI-NSE-Verification)
+**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit)
 
 ## Key Telemetry Summary
 
@@ -61,6 +61,6 @@ This dataset accompanies the publication:
   journal={Socrate AI Lab Preprint},
   year={2026},
   doi={10.5281/zenodo.22725347},
-  url={https://github.com/xaviercallens/OpenAI-NSE-Verification}
+  url={https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit}
 }
 ```

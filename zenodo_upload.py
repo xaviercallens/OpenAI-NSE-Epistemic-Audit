@@ -70,7 +70,7 @@ METADATA = {
         "license": "cc-by-4.0",
         "related_identifiers": [
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Verification",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit",
                 "relation": "isSupplementTo",
                 "scheme": "url"
             },
