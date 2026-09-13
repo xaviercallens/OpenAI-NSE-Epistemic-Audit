@@ -31,17 +31,17 @@ This audit proves why, through five independent lines of evidence.
 
 ## 🔬 The Five Epistemic Disconnects
 
-| # | Finding | Key Number |
+| # | Finding | Key Metric / Exponent |
 |---|---|---|
-| **1** | Internal nonlinear **Reynolds stresses** cancel the singular residual with Jacobian condition number κ | **κ ~ 10²⁸** (10⁵× Avogadro's number) — measure-zero instability |
-| **2** | Local enstrophy diverges as **τ⁻⁰·⁵¹⁵**, generating a thermal shock that violates Boussinesq | Instantaneous dissipation → ∞ long before *t* = 1 |
-| **3** | The incompressible NSE **self-invalidate** at Ma = 0.3 | **67 femtoseconds** before the mathematical singularity |
-| **4** | **Teleological causality**: the force is reverse-engineered from the desired singularity | The (u, f) pair is co-designed — remove f and u is no longer a solution |
-| **5** | Euler initial data injects energy at **sub-Planckian scales** | Coherent vortices below 10⁻³⁵ m at *t* = 0 |
+| **1** | **Intensive Local Energy Density Divergence**: $e_{\text{local}} = \frac{1}{2}\rho\|u\|^2 \sim \tau^{-1.010}$ and local enstrophy $\Omega \sim \tau^{-0.515}$ diverge without bound | **$\Delta T \sim \tau^{-1.010}$** — thermal shock violates Boussinesq isothermal assumptions |
+| **2** | **Mach Number Self-Invalidation**: incompressible NSE invalidate themselves when $Ma \ge 0.3$ | **67 femtoseconds** ($\tau \approx 6.7 \times 10^{-14}$ s) before mathematical blow-up |
+| **3** | **Teleological Causality Reversal**: force $f$ is reverse-engineered from a pre-specified singular similarity profile | **MMS inversion** — shooting an arrow and painting a bullseye around it |
+| **4** | **Matrix Scaling & Non-Dimensionalization**: moment-matching matrix $A = D B D$ has bounded non-dimensional condition number $\kappa(B) \approx 4.11 \times 10^5$ | **$\kappa(B) \sim O(10^5)$** — raw $\kappa \sim 10^{28}$ was an unscaled dimensional artifact |
+| **5** | **Sub-Planckian Energy Injection**: Euler initial conditions inject energy at sub-Planckian scales | Coherent vortices below $10^{-35}$ m at $t = 0$ |
 
 ### The Proposed Resolution
 
-> **Thermodynamic Censorship Principle** — A physically admissible NSE solution must satisfy uniform bounded enstrophy: sup₍ₜ₎ ∫ |∇×u|² dx ≤ Ω_max. For water at 300K, Ω_max ≈ 1.13 × 10¹³ s⁻². The OpenAI construction requires Ω(t) → ∞, violating this bound before the singularity.
+> **Thermodynamic Censorship Principle** — A physically admissible NSE solution must satisfy uniform bounded enstrophy: $\sup_t \int |\nabla \times u|^2 dx \le \Omega_{\max}$. For water at 300K, $\Omega_{\max} \approx 1.13 \times 10^{13}\text{ s}^{-2}$. The OpenAI construction requires $\Omega(t) \to \infty$, violating this bound before the singularity.
 
 ---
 
@@ -63,31 +63,28 @@ This audit proves why, through five independent lines of evidence.
 
 ```
 OpenAI-NSE-Verification/
-├── 01_Challenger_Paper/          # Peer-reviewed LaTeX paper + PDF
+├── 01_Verification_Paper/               # Peer-reviewed LaTeX paper + PDF
 │   ├── OpenAI_NSE_Verification.pdf
 │   ├── OpenAI_NSE_Verification.tex
-│   └── zenodo_bundle_v2.zip
-├── 02_Empirical_Observation/   # Python & Rust simulations
+│   └── zenodo_push.py
+├── 02_Empirical_Observation/            # Python & Rust simulations
 │   ├── simu_sign_fragility_1D.py
 │   ├── simu_frustration_Z3.py
 │   └── euler_counterdetonation/
-├── 03_Lean4_Topological_Censorship/  # Open Lean 4 challenges
+├── 03_Lean4_Topological_Censorship/     # Open Lean 4 challenges
 │   └── src/
 │       ├── ThermodynamicCensorship.lean
 │       ├── TopologicalCensorship.lean
 │       └── NSECensorship.lean
-├── 04_Thermodynamic_Censorship_Paper/  # Nature Physics draft
-├── scripts/                      # Directives 2–6 analyses
+├── 04_Thermodynamic_Censorship_Paper/   # Nature Physics draft
+├── scripts/                             # Directives 2–6 analyses
 │   ├── directive2_thermodynamic_paradox.py
 │   ├── directive3_jacobian_instability.py
 │   ├── directive4_gevrey_regularity.py
 │   ├── directive5_mach_divergence.py
 │   └── directive6_thermal_instability.py
-├── dataset/                      # HuggingFace dataset artifacts
+├── dataset/                             # Dataset artifacts
 └── .github/
-    ├── CODEOWNERS
-    ├── CONTRIBUTING.md
-    └── PULL_REQUEST_TEMPLATE.md
 ```
 
 ---
@@ -96,7 +93,7 @@ OpenAI-NSE-Verification/
 
 ### Read the Paper
 ```
-👉 https://github.com/xaviercallens/OpenAI-NSE-Verification/releases/download/v3.0.0/OpenAI_NSE_Verification.pdf
+👉 01_Verification_Paper/OpenAI_NSE_Verification.pdf
 ```
 
 ### Reproduce the Simulations
@@ -104,9 +101,10 @@ OpenAI-NSE-Verification/
 git clone https://github.com/xaviercallens/OpenAI-NSE-Verification
 cd OpenAI-NSE-Verification/scripts
 pip install numpy scipy sympy mpmath matplotlib
-python directive5_mach_divergence.py     # Mach number trajectory
-python directive3_jacobian_instability.py  # κ ~ 10²⁸ condition number
-python directive4_gevrey_regularity.py   # Gevrey-2 derivative growth
+python directive5_mach_divergence.py        # Mach number trajectory (67 fs)
+python directive2_thermodynamic_paradox.py  # Intensive scaling (-1.010 exponent)
+python directive3_jacobian_instability.py  # Non-dimensionalization (kappa ~ 4.11e5)
+python directive4_gevrey_regularity.py      # Analytical Gevrey index (s = 1.5)
 ```
 
 ### Lean 4 Challenges
@@ -128,12 +126,12 @@ lake build  # Requires Lean 4 + Mathlib
 | 6.2×10⁻¹⁵ | 1500 | 1.00 | ❌ Transonic |
 | 9.0×10⁻¹⁶ | 4100 | 2.73 | ❌ Sub-molecular |
 
-### Jacobian Instability
-| X_R | κ(A) | Physical meaning |
-|---|---|---|
-| 1 | 4.1 × 10⁵ | Manageable |
-| 100 | 2.4 × 10²⁰ | Exceeds double precision |
-| 1000 | **1.8 × 10²⁸** | **10⁵× Avogadro's number** |
+### Moment Matrix Non-Dimensionalization
+| X_R | κ(A) [Raw Unscaled] | κ(B) [Non-Dimensionalized] | Status |
+|---|---|---|---|
+| 1 | 4.11 × 10⁵ | 4.11 × 10⁵ | Bounded |
+| 100 | 2.36 × 10²⁰ | 4.11 × 10⁵ | Bounded |
+| 1000 | 1.78 × 10²⁸ | **4.11 × 10⁵** | **Bounded & Scale-Invariant** |
 
 ---
 

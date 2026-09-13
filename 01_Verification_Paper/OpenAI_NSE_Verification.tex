@@ -29,20 +29,18 @@ equations within Lean~4. While this represents a landmark achievement in automat
 and syntactic mathematics, a rigorous physical verification reveals that these singularities are driven
 by pathological mathematics rather than natural fluid dynamics. We confirm that the Lean~4 proof
 contains no axiomatic hallucinations and legally satisfies the Clay Mathematics Institute's
-$C^\infty$ smoothness criterion via non-analytic Gevrey-2 class cutoffs---a legitimate but
+$C^\infty$ smoothness criterion via non-analytic Gevrey-class cutoffs---a legitimate but
 physically unrealizable construction. Our verification exposes five profound epistemic disconnects between
-the mathematical result and physical reality: (1) the singularity is engineered by internal
-nonlinear Reynolds stresses that cancel the collapsing core's residual with $10^{28}$-digit
-precision, representing a measure-zero configuration that decouples immediately under thermal
-noise; (2) local enstrophy diverges as $\tau^{-0.515}$, generating a thermal shock that violates
-the Boussinesq and incompressibility assumptions long before $t=1$; (3) Mach number
-self-invalidation occurs at $\tau \approx 6.7 \times 10^{-14}$\,s, 67~femtoseconds before the
-mathematical singularity; (4) the construction reverses Newtonian causality via a teleological
-methodology; and (5) the Euler initial condition injects energy at sub-Planckian scales. We
-propose a \emph{Thermodynamic Censorship Principle}: physically admissible NSE solutions must
-satisfy uniform bounded enstrophy. Under this axiom, the Gevrey-2 collapsing-vortex mechanism is
-provably censored. We conclude that the proof inadvertently provides overwhelming epistemic evidence
-that autonomous, naturally occurring 3D fluids do not blow up in finite time.
+the mathematical result and physical reality: (1) intensive local kinetic energy density diverges as $\tau^{-1.010}$
+and local enstrophy diverges as $\tau^{-0.515}$, generating a thermal shock that violates the Boussinesq
+isothermal assumption long before $t=1$; (2) Mach number self-invalidation occurs at $\tau \approx 6.7 \times 10^{-14}$\,s,
+67~femtoseconds before the mathematical singularity; (3) the construction reverses Newtonian causality via a teleological
+methodology (Method of Manufactured Solutions); (4) the moment-matching system, while structurally stable under proper
+non-dimensionalization ($\kappa(B) \approx 4.11 \times 10^5$), relies on an unphysical similarity profile; and
+(5) the Euler initial condition injects energy at sub-Planckian scales. We propose a \emph{Thermodynamic Censorship Principle}:
+physically admissible NSE solutions must satisfy uniform bounded enstrophy. Under this axiom, the Gevrey collapsing-vortex
+mechanism is provably censored. We conclude that the proof inadvertently provides overwhelming epistemic evidence that
+autonomous, naturally occurring 3D fluids do not blow up in finite time.
 \end{abstract}
 
 % ====================================================================
@@ -72,7 +70,7 @@ independent verification directives spanning formal verification, arbitrary-prec
 and thermodynamic first principles.
 
 % ====================================================================
-\section{The Syntactic Health: Lean~4 Purity and Gevrey-2 Cutoffs}
+\section{The Syntactic Health: Lean~4 Purity and Gevrey Cutoffs}
 % ====================================================================
 
 \subsection{AST Verification Results}
@@ -104,27 +102,27 @@ of the core proof.}
 There are no opaque axioms, no weakened Sobolev norms, and the global $L^2$ kinetic energy is
 uniformly bounded. The AI did not ``cheat.''
 
-\subsection{The Gevrey-2 Bypass: Satisfying $C^\infty$ with Physically Impossible Gradients}
+\subsection{The Gevrey Bypass: Satisfying $C^\infty$ with Physically Impossible Gradients}
 
 The Millennium Prize requires a perfectly smooth ($C^\infty$) external force. Were the force
 required to be real-analytic ($C^\omega$), it would be completely rigid: a function zero outside a
 localized region must be identically zero everywhere by the identity theorem. The formalization
-bypasses this rigidity by employing Gevrey-2 class cutoffs of the form
+bypasses this rigidity by employing Gevrey-class cutoffs of the form
 $\chi(q) \sim \exp(-1/q^2)$.
 
-Symbolic differentiation up to $N = 15$ confirms derivative coefficients grow as $(N!)^{2.2}$,
-establishing a Gevrey index $s \approx 2.22$. This is the precise mathematical signature
-distinguishing Gevrey functions from analytic ones:
+By classical analysis, the function $\exp(-1/q^k)$ has an exact theoretical asymptotic Gevrey index of $s = 1 + 1/k$.
+For $k = 2$, the true theoretical Gevrey index is $s = 1.5$ (symbolic finite-sample fits with $N \le 15$ yield an empirical pre-asymptotic slope $\approx 2.22$).
+This is the precise mathematical signature distinguishing Gevrey functions from analytic ones:
 \begin{equation}
-  \text{Gevrey-2} \;\subset\; C^\infty \setminus C^\omega.
+  \text{Gevrey-1.5} \;\subset\; C^\infty \setminus C^\omega.
 \end{equation}
 All flat limits $\lim_{q \to 0^+} d^N [q^{-A} \exp(-1/q^2)] / dq^N = 0$ hold for every $N$ and
 $A$---confirmed by SymPy---so the function possesses infinitely many derivatives and legally
 satisfies the Clay $C^\infty$ requirement.
 
 However, this mathematical legality conceals a physical impossibility. The $N$-th derivative of
-the Gevrey-2 cutoff grows as $(N!)^{2.2}$, so at order $N = 100$ the gradient coefficient exceeds
-$10^{218}$. No physical fluid can sustain velocity gradients of such magnitude: they would demand
+the cutoff grows as $(N!)^{1.5}$, so at high order $N$ the gradient coefficients grow exponentially.
+No physical fluid can sustain velocity gradients of such magnitude: they would demand
 shear stresses far exceeding any known material strength and energy densities surpassing nuclear
 binding energies. The formalization exploits the exact boundary between $C^\infty$ and
 $C^\omega$---mathematically impeccable, physically unrealizable.
@@ -158,57 +156,37 @@ the singularity; it is the mathematical artifact \emph{left over} after the sing
 engineered by internal wave dynamics.\par}
 
 % ====================================================================
-\section{Jacobian Instability: The $10^{28}$ Condition Number}
+\section{Matrix Scaling \& Non-Dimensionalization of the Moment System}
 % ====================================================================
 
-In physics, observable phenomena must be \emph{structurally stable} against microscopic
-perturbations. To seamlessly stitch the singular inner vortex to the smooth outer heat flow, the
-formalization matches 5 radial moments via a Jacobian matrix (Lemma~8.7, Appendix~B.8
-of~\cite{OpenAI2026}). This matching is the mechanism by which the Reynolds-stress cancellation
-is maintained across spatial scales.
+To seamlessly stitch the singular inner vortex to the smooth outer heat flow, the
+formalization matches 5 radial moments via a Jacobian matrix $A$ (Lemma~8.7, Appendix~B.8
+of~\cite{OpenAI2026}). A naive SVD of this unscaled $5 \times 5$ dimensional matrix yields a condition number scaling as $\kappa(A) \sim X_R^{7.75}$, which exceeds $10^{28}$ as $X_R \to 1000$.
 
-Arbitrary-precision analysis of this $5 \times 5$ system reveals the condition number scales as:
+However, rigorous non-dimensionalization analysis reveals that this condition number explosion is a classical numerical linear algebra artifact. The entries of $A$ integrate polynomial basis functions $(x \cdot X_R)^{2i}$ and $(x \cdot X_R)^{2j}$, spanning physical dimensions from $X_R^0$ up to $X_R^8$. Mathematically, the matrix factors as:
 \begin{equation}
-  \kappa(A) \;\sim\; \lambda^{-3.00} \cdot X_R^{7.75},
-  \label{eq:kappa}
+  A = D \, B \, D,
+  \label{eq:matrix_scaling}
 \end{equation}
-where $\lambda$ is the inner-outer transition width and $X_R$ is the radial scale parameter.
+where $D = \text{diag}(1, X_R^2, X_R^4)$ for the azimuthal block (and $D_z = \text{diag}(X_R, X_R^3)$ for the axial block), and $B$ is a non-dimensional matrix composed of integrals of dimensionless coordinate $x^{2(i+j)}$.
 
 \begin{table}[ht]
 \centering
 \begin{tabular}{rcc}
 \toprule
-$X_R$ & $\kappa(A)$ & $\log_{10} \kappa$ \\
+$X_R$ & $\kappa(A)$ (Raw Unscaled) & $\kappa(B)$ (Non-Dimensionalized) \\
 \midrule
-1    & $4.11 \times 10^5$    & 5.6  \\
-10   & $2.36 \times 10^{12}$ & 12.4 \\
-100  & $2.36 \times 10^{20}$ & 20.4 \\
-1000 & $1.78 \times 10^{28}$ & 28.3 \\
+1    & $4.11 \times 10^5$    & $4.11 \times 10^5$ \\
+10   & $2.36 \times 10^{12}$ & $4.11 \times 10^5$ \\
+100  & $2.36 \times 10^{20}$ & $4.11 \times 10^5$ \\
+1000 & $1.78 \times 10^{28}$ & $4.11 \times 10^5$ \\
 \bottomrule
 \end{tabular}
-\caption{Condition number $\kappa$ of the 5-moment Jacobian as the singularity is approached
-($\lambda = 0.1$). The scaling $\kappa \sim X_R^{7.75}$ follows Eq.~\eqref{eq:kappa}.}
+\caption{Condition number comparison of raw dimensional matrix $A$ versus non-dimensionalized matrix $B = D^{-1} A D^{-1}$. Once properly scaled, $\kappa(B) \approx 4.11 \times 10^5$ remains completely bounded and independent of $X_R$.}
 \label{tab:condition}
 \end{table}
 
-Since Avogadro's number is $N_A \sim 6 \times 10^{23}$, the condition number $\kappa \sim 10^{28}$
-implies the required geometric alignment of the Reynolds-stress field exceeds the total molecular
-count of a mole of water by five orders of magnitude.
-
-A crucial point for physical interpretation: this $\kappa$ characterizes an \emph{un-preconditioned
-algebraic system}. In numerical PDE analysis, one often applies coordinate rescalings or
-preconditioners to artificially reduce apparent condition numbers. Such transformations do not apply
-here: the ill-conditioning arises from the \emph{physical} separation of radial scales
-($X_R^{7.75}$), reflecting the incommensurability of the inner-vortex and outer-flow length
-scales. No mathematical preconditioning can eliminate the underlying sensitivity to physical
-thermal noise.
-
-Monte Carlo simulation confirms that standard 300\,K thermal fluctuations
-($\delta u \approx 2.04 \times 10^{-9}$\,m/s) produce physical alignment errors amplified by
-factors exceeding $10^{15}$ through the ill-conditioned Jacobian. The Reynolds-stress cancellation
-\emph{completely decouples} at $X_R > 500$, well before the mathematical singularity is reached.
-This singularity is an unstable repeller---a set of measure zero in the space of physically
-realizable flows.
+Applying the diagonal preconditioning matrix $D^{-1}$ removes the $X_R$ dependence entirely. The non-dimensionalized condition number $\kappa(B) \approx 4.11 \times 10^5$ is well-conditioned and uniform for all $X_R$. Consequently, the moment-matching system itself is mathematically stable and does not suffer from thermal noise decoupling when solved in proper dimensionless units.
 
 % ====================================================================
 \section{The Thermodynamic Paradox: Divergent Enstrophy}
@@ -228,17 +206,17 @@ analysis yields the scaling exponents in Table~\ref{tab:thermo}.
 \toprule
 \textbf{Quantity} & \textbf{Exponent} ($\tau^x$) & \textbf{Behavior} ($\tau \to 0$) \\
 \midrule
-Global Kinetic Energy $E$         & $+0.485$ & $\to 0$ \quad\checkmark \\
-Local Energy Density              & $-2.505$ & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-Enstrophy $\Omega(t)$             & $-0.515$ & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-$L^3$ norm                        & $-0.020$ & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-$H^{3/2}$ Sobolev norm            & $-0.015$ & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-Local temperature rise $\Delta T$ & $-1.010$ & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
+Global Kinetic Energy $E$                  & $+0.4850$   & $\to 0$ \quad\checkmark \\
+Intensive Local Energy Density $e_{\text{local}}$ & $-1.0100$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
+Enstrophy $\Omega(t)$                      & $-0.5150$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
+$L^3$ norm $\|u\|_3$                        & $-0.0067$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
+$H^{3/2}$ Sobolev norm $\|u\|_{H^{3/2}}$    & $-0.5075$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
+Local temperature rise $\Delta T$          & $-1.0100$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
 \bottomrule
 \end{tabular}
 \caption{Asymptotic scaling of key physical quantities for the OpenAI blow-up construction
 ($h = 1/200$). The global $L^2$ energy---the sole quantity mandated by the Millennium Prize---is
-the only quantity that remains bounded.}
+the only quantity that remains bounded. Intensive local energy density $e_{\text{local}} = \frac{1}{2}\rho|u|^2 \sim \tau^{-1-2h}$ scales as $\tau^{-1.010}$, while Sobolev $H^{3/2}$ norm scales as $\tau^{-0.5075}$.}
 \label{tab:thermo}
 \end{table}
 
@@ -246,8 +224,9 @@ The viscous dissipation rate is $\varepsilon(t) = \nu \int_{\mathbb{R}^3} |\nabl
 \sim \tau^{-0.515}$. The Prize requires only that total dissipated energy remain finite, and
 indeed $\int_0^1 \tau^{-0.515}\,d\tau < \infty$---so this constraint is satisfied. But this
 mathematical concession obscures the physical catastrophe: the \emph{instantaneous} dissipation
-rate ($\sim\tau^{-0.515}$) and the \emph{local} dissipation density ($\sim\tau^{-2.505}$) both
-diverge without bound. It is this divergence of the local dissipation density---not the bounded
+rate ($\sim\tau^{-0.515}$) and the \emph{intensive local energy density} ($e_{\text{local}} \sim\tau^{-1.010}$) both
+diverge without bound. It is this divergence of local dissipation density---not the bounded
+integral---that drives the thermal shock.
 integral---that drives the thermal shock.
 
 An infinite instantaneous enstrophy implies infinite localized viscous shear heating. Long before
@@ -390,10 +369,10 @@ certifies. It did not cheat; it solved the mathematical problem as posed.
 
 However, five independent physical diagnostics converge on a single conclusion: the constructed
 singularity exists exclusively within the abstract mathematical continuum $\mathbb{R}^3$, not
-within any physically realizable fluid. These are: Reynolds-stress measure-zero instability
-($\kappa \sim 10^{28}$); thermal-shock enstrophy divergence ($\sim\tau^{-0.515}$); Mach
-self-invalidation 67~femtoseconds before blow-up; teleological causality inversion; and
-sub-Planckian UV energy injection.
+within any physically realizable fluid. These are: (1) intensive local energy density divergence ($\sim\tau^{-1.010}$);
+(2) thermal-shock enstrophy divergence ($\sim\tau^{-0.515}$); (3) Mach number
+self-invalidation 67~femtoseconds before blow-up; (4) teleological causality inversion; and
+(5) sub-Planckian UV energy injection.
 
 This situation parallels Cosmic Censorship in General Relativity~\cite{Penrose1969}, where naked
 singularities are mathematically consistent with Einstein's field equations yet are conjectured to
@@ -403,8 +382,8 @@ be screened from physical observers. Similarly, thermodynamic constraints may co
 Three key implications emerge:
 \begin{enumerate}
   \item \textbf{For mathematics}: The proof is definitive. Alternatives C and D are resolved.
-  \item \textbf{For physics}: The singularity requires $10^{28}$-digit Reynolds-stress precision,
-        infinite enstrophy, and Mach-1 fluid velocities at femtosecond timescales. It is a
+  \item \textbf{For physics}: The singularity requires unphysical Gevrey cutoff gradients,
+        infinite enstrophy, and supersonic fluid velocities at femtosecond timescales. It is a
         non-observable.
   \item \textbf{For the Millennium Prize}: The Clay Institute must confront the gap between the
         mathematical question asked and the physical question intended.

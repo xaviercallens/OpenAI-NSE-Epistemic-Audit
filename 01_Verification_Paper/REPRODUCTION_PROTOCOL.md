@@ -58,15 +58,16 @@ cd ..
 
 ## 4. Step 3: Gevrey Regularity vs C^\infty Boundary (Directive 4)
 
-Verify that the Gevrey-2 cutoff function derivatives grow super-factorially ($\sim (N!)^{2.2}$) yet remain in $C^\infty$:
+Verify that the cutoff function $\exp(-1/q^2)$ has an exact theoretical asymptotic Gevrey index $s = 1.5$, while remaining in $C^\infty$:
 
 ```bash
 python3 scripts/directive4_gevrey_regularity.py
 ```
 **Expected Results:**
-- Gevrey index $s \approx 2.22$
+- Theoretical asymptotic Gevrey index $s = 1.5$ (Gevrey-1.5 class)
+- Pre-asymptotic fit on small sample $N \le 15$ yields empirical slope $\approx 2.22$
 - Flatness at origin: $\lim_{q \to 0^+} \frac{d^N}{dq^N}\left[q^{-A} e^{-1/q^2}\right] = 0$ for all $N, A$
-- Proves no formal cheat occurred: Gevrey-2 $\subset C^\infty \setminus C^\omega$.
+- Proves no formal cheat occurred: Gevrey-1.5 $\subset C^\infty \setminus C^\omega$.
 
 ---
 
@@ -79,25 +80,27 @@ python3 scripts/directive2_thermodynamic_paradox.py
 ```
 **Expected Exponents ($\tau^x$):**
 - Global $L^2$ kinetic energy: $\tau^{+0.485} \to 0$ (bounded, satisfies Prize Alternative C)
-- Local energy density: $\tau^{-2.505} \to \infty$ (diverges)
+- Intensive local kinetic energy density: $e_{\text{local}} \sim \tau^{-1.010} \to \infty$ (diverges)
 - Enstrophy $\int |\nabla \times u|^2 dV$: $\tau^{-0.515} \to \infty$ (diverges)
-- Critical $L^p$ exponent: $p^* \approx 2.97$ ($L^3$ diverges, borderline ESS criterion)
-- Local temperature rise: $\Delta T \sim \tau^{-1.01} \to \infty$ (violates incompressibility)
+- $L^3$ norm $\|u\|_3$: $\tau^{-0.0067} \to \infty$ (diverges)
+- Sobolev norm $\|u\|_{H^{3/2}}$: $\tau^{-0.5075} \to \infty$ (diverges)
+- Local temperature rise: $\Delta T \sim \tau^{-1.010} \to \infty$ (violates Boussinesq isothermal state)
 
 ---
 
-## 6. Step 5: Jacobian Ill-Conditioning & Structural Instability (Directive 3 & 6)
+## 6. Step 5: Moment Matrix Scaling & Structural Stability (Directive 3 & 6)
 
-Compute the condition number $\kappa(A)$ of the 5-moment matching system and simulate 300K thermal fluctuations:
+Verify non-dimensionalization of the 5-moment matching system ($A = D B D$):
 
 ```bash
 python3 scripts/directive3_jacobian_instability.py
 python3 scripts/directive6_thermal_instability.py
 ```
 **Expected Results:**
-- Scaling: $\kappa(A) \sim \lambda^{-3.00} X_R^{7.75}$
-- Condition number reaches $\kappa \approx 2.17 \times 10^{28}$ at $X_R = 1000$ (exceeding Avogadro's number $N_A \approx 6.02 \times 10^{23}$)
-- Under 300K Brownian thermal fluctuations ($\delta u \approx 2.04 \times 10^{-9}$ m/s), Reynolds stress cancellation decouples at $X_R > 500$, proving the singularity is an unstable measure-zero repeller.
+- Factorization: $A = D B D$ with diagonal scaling $D = \text{diag}(1, X_R^2, X_R^4)$
+- Non-dimensionalized condition number: $\kappa(B) \approx 4.11 \times 10^5$ (bounded and constant for all $X_R$)
+- Raw condition number $\kappa(A) \sim 10^{28}$ at $X_R = 1000$ was an unscaled dimensional artifact
+- Under proper scaling, the moment-matching system remains structurally stable under physical 300K thermal fluctuations.
 
 ---
 

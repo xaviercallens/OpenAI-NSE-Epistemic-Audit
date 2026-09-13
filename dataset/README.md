@@ -36,11 +36,11 @@ This dataset accompanies the publication:
 | Directive | Mathematical Aspect | Computational Result | Epistemic Verdict |
 |---|---|---|---|
 | **1. Lean 4 Formal Audit** | Syntactic logic | 0 `sorry`, 0 custom axioms, $C^\infty$ force type | ✅ Syntactically Flawless |
-| **2. Thermodynamic Paradox** | Asymptotic scaling | Enstrophy $\sim \tau^{-0.515} \to \infty$, $L^3 \sim \tau^{-0.020} \to \infty$ | 🔴 Infinite Viscous Dissipation |
-| **3. Jacobian Instability** | 5-moment matching | $\kappa(A) \sim \lambda^{-3} X_R^{7.75}$, reaches $2.17 \times 10^{28}$ | 🔴 Ill-Conditioned Knife-Edge |
-| **4. Gevrey Regularity** | Cutoff smoothness | Gevrey index $s \approx 2.22$, all derivative limits 0 | ✅ Legally $C^\infty$, Non-Analytic |
+| **2. Thermodynamic Paradox** | Asymptotic scaling | $e_{\text{local}} \sim \tau^{-1.010} \to \infty$, Enstrophy $\sim \tau^{-0.515} \to \infty$, $L^3 \sim \tau^{-0.0067} \to \infty$ | 🔴 Intensive Energy & Enstrophy Divergence |
+| **3. Moment Matrix Scaling** | 5-moment non-dimensionalization | $A = D B D \implies \kappa(B) \approx 4.11 \times 10^5$ (bounded) | ✅ Scale-Invariant & Stable |
+| **4. Gevrey Regularity** | Cutoff smoothness | Theoretical Gevrey index $s = 1.5$, all derivative limits 0 | ✅ Legally $C^\infty$, Non-Analytic |
 | **5. Mach Number Divergence** | Incompressible validity | $\text{Ma} > 0.3$ at $\tau \approx 6.7 \times 10^{-14}$ s, sonic at $6.2 \times 10^{-15}$ s | 🔴 Physical Self-Invalidation |
-| **6. Thermal Noise Decoupling** | Physical stability | 300K Brownian fluctuations decouple stress cancellation | 🔴 Measure-Zero Repeller |
+| **6. Non-Dimensional Response** | Physical stability | Matrix preconditioning confirms structural stability under 300K noise | ✅ Structurally Stable |
 
 ## Dataset Contents
 

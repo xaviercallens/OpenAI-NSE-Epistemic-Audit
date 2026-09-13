@@ -37,10 +37,10 @@ The r/FluidMechanics discussion reached **30,000+ views** with **49 upvotes**, s
   where the dissipation tensor contraction satisfies:
   $$\int_{\mathbb{R}^3} 2\mu \, \mathbf{D}(u) : \mathbf{D}(u) \, dx = \mu \int_{\mathbb{R}^3} |\nabla \times u|^2 dx = \mu \, \Omega(t)$$
 * **Asymptotic Calculation:**
-  * With local enstrophy density scaling as $\sim \tau^{-2.515}$ and volume $dV \sim \tau^{2.0}$, the local energy generation rate per unit volume diverges as:
-    $$\dot{q}_{\text{visc}} \sim \tau^{-2.515}$$
+  * Intensive local kinetic energy density scales purely as $e_{\text{local}} = \frac{1}{2}\rho |u|^2 \sim \tau^{-1-2h} = \tau^{-1.010}$ (for $h = 1/200$).
+  * Enstrophy density scales as $\omega^2 \sim \tau^{-2-2h} = \tau^{-2.010}$.
   * Conduction timescale $t_{\text{diff}} \sim l_r^2 / \alpha_{\text{thermal}} \sim \tau^{1.0}$ is too slow to remove localized heat.
-  * Therefore, local temperature rises as $\Delta T \sim \tau^{-1.515} \to \infty$.
+  * Therefore, local temperature rises as $\Delta T \sim \tau^{-1.010} \to \infty$.
 * **Deliverable:** Write a short technical note / appendix showing how enstrophy divergence mathematically drives local temperature past the vaporization threshold in water ($T > 373\text{ K}$) and plasma threshold ($T > 10^4\text{ K}$).
 
 ---
@@ -76,14 +76,13 @@ The r/FluidMechanics discussion reached **30,000+ views** with **49 upvotes**, s
 
 ---
 
-### Work Stream 6: Measure Theory on Infinite-Dimensional Flow Space
-* **Origin:** Discussion between `u/Spidero0w0o`, `u/cowgod42`, and `u/ComprehensiveWash958`.
+### Work Stream 6: Matrix Scaling & Non-Dimensionalization
+* **Origin:** Peer-Review & Verification Report.
 * **Mathematical Rigor:**
-  * Lebesgue measure does not exist on infinite-dimensional Banach/Hilbert spaces ($L^2(\mathbb{R}^3)$ or $H^s(\mathbb{R}^3)$).
-  * However, mathematically rigorous notions of "almost every" and "measure zero" exist:
-    1. **Prevalence / Shyness** (Hunt, Sauer, Yorke, 1992): A set $S$ is *shy* if there exists a probe measure $\mu$ such that $\mu(S + v) = 0$ for all $v$.
-    2. **Gaussian / Wiener Measures** on Hilbert spaces.
-  * **Hypothesis:** The basin of attraction of the 5-moment Jacobian matching system ($\kappa \sim 10^{28}$) is a *shy set* (prevalent measure zero) in $H^s(\mathbb{R}^3)$.
+  * Raw SVD of moment matrix $A$ yields $\kappa(A) \sim X_R^{7.75}$ due to unscaled dimensional basis entries $(x \cdot X_R)^{2i}$.
+  * Factoring $A = D B D$ with $D = \text{diag}(1, X_R^2, X_R^4)$ isolates the dimensional scaling.
+  * The non-dimensionalized matrix $B = D^{-1} A D^{-1}$ has a constant, bounded condition number $\kappa(B) \approx 4.11 \times 10^5$ for all $X_R$.
+  * **Finding:** The moment-matching mechanism is mathematically well-conditioned when properly non-dimensionalized.
 
 ---
 

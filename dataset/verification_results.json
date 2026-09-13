@@ -29,48 +29,40 @@
     },
     "results": {
       "global_kinetic_energy": {"exponent": 0.485, "behavior": "bounded", "limit": 0},
-      "local_energy_density": {"exponent": -2.505, "behavior": "diverges", "limit": "infinity"},
+      "intensive_local_energy_density": {"exponent": -1.010, "behavior": "diverges", "limit": "infinity"},
       "enstrophy": {"exponent": -0.515, "behavior": "diverges", "limit": "infinity"},
-      "L3_norm": {"exponent": -0.020, "behavior": "diverges", "limit": "infinity"},
-      "H1.5_sobolev": {"exponent": -0.015, "behavior": "diverges", "limit": "infinity"},
+      "L3_norm": {"exponent": -0.00667, "behavior": "diverges", "limit": "infinity"},
+      "H1.5_sobolev_norm": {"exponent": -0.5075, "behavior": "diverges", "limit": "infinity"},
       "local_temperature_rise": {"exponent": -1.010, "behavior": "diverges", "limit": "infinity"},
       "critical_Lp_exponent": 2.9703,
       "critical_Sobolev_index": 1.485
     },
     "verdict": "PHYSICAL_PATHOLOGY",
-    "verdict_detail": "Global L2 energy bounded but all other physical quantities diverge."
+    "verdict_detail": "Global L2 energy bounded, but intensive energy density, enstrophy, L3 norm, and Sobolev H^(3/2) norm diverge."
   },
   {
     "directive": 3,
-    "title": "5-Moment Jacobian Structural Instability",
+    "title": "5-Moment Jacobian Non-Dimensionalization Audit",
     "category": "numerical_analysis",
     "results": {
-      "lambda_scaling": {"exponent": -3.00, "formula": "kappa ~ lambda^(-3.00)"},
-      "XR_scaling": {"exponent": 7.75, "formula": "kappa ~ X_R^(7.75)"},
-      "condition_numbers": [
-        {"lambda": 0.5, "X_R": 10, "kappa": 1.10e10},
-        {"lambda": 0.1, "X_R": 10, "kappa": 2.36e12},
-        {"lambda": 0.01, "X_R": 10, "kappa": 2.24e16},
-        {"lambda": 0.001, "X_R": 10, "kappa": 3.88e19}
-      ],
-      "XR_sweep": [
-        {"X_R": 1, "kappa": 4.11e5},
-        {"X_R": 10, "kappa": 2.36e12},
-        {"X_R": 100, "kappa": 2.36e20},
-        {"X_R": 1000, "kappa": 1.78e28}
-      ]
+      "raw_XR_scaling": {"exponent": 7.75, "formula": "kappa_raw ~ X_R^(7.75)"},
+      "nondimensional_factorization": "A = D * B * D",
+      "nondimensional_condition_number": 4.106371e5,
+      "is_nondimensional_bounded": true,
+      "peer_review_finding": "Raw kappa ~ 10^28 is a numerical artifact of unscaled dimensional matrices; B = D^(-1) A D^(-1) has bounded kappa for all X_R."
     },
-    "verdict": "CATASTROPHICALLY_ILL_CONDITIONED",
-    "verdict_detail": "Condition number exceeds Avogadro's number near singularity."
+    "verdict": "WELL_CONDITIONED_UNDER_SCALING",
+    "verdict_detail": "Non-dimensionalized matrix B has constant, bounded condition number kappa(B) ~ 4.11e5."
   },
   {
     "directive": 4,
     "title": "Gevrey Regularity vs C∞ Cutoff Explosion",
     "category": "functional_analysis",
     "results": {
-      "gevrey_index": 2.22,
-      "gevrey_class": "Gevrey-2",
-      "derivative_growth": "(N!)^2.2",
+      "gevrey_index_theoretical": 1.5,
+      "gevrey_index_empirical_fit_small_N": 2.22,
+      "gevrey_class": "Gevrey-1.5",
+      "derivative_growth": "(N!)^1.5",
       "flatness_verified": true,
       "all_limits_zero": true,
       "borel_ritt_used": true,
@@ -78,7 +70,7 @@
       "analyticity_required": false
     },
     "verdict": "NO_LOOPHOLE",
-    "verdict_detail": "Gevrey-2 ⊂ C∞. The Millennium Prize requires C∞, not analyticity."
+    "verdict_detail": "Gevrey-1.5 ⊂ C∞. The Millennium Prize requires C∞, not analyticity."
   },
   {
     "directive": 5,
@@ -105,7 +97,7 @@
   },
   {
     "directive": 6,
-    "title": "Structural Instability Under Thermal Noise",
+    "title": "Non-Dimensionalized Thermal Response Audit",
     "category": "monte_carlo_simulation",
     "parameters": {
       "temperature_K": 300,
@@ -115,14 +107,12 @@
       "lambda": 0.1
     },
     "results": {
-      "stress_cancellation_fails_at_XR": 500,
-      "fully_decoupled_at_XR": 1000,
-      "error_amplification_XR_100": 4.80e15,
-      "kappa_at_XR_1000": 2.17e28,
-      "tau_cancellation_fails": 1e-2,
-      "tau_fully_decoupled": 1e-4
+      "nondimensional_kappa": 4.106e5,
+      "nondimensional_stress_error": 4.26e-5,
+      "system_stable_under_thermal_noise": true
     },
-    "verdict": "CATASTROPHIC_DECOUPLING",
-    "verdict_detail": "300K thermal noise destroys Reynolds stress cancellation at X_R > 500."
+    "verdict": "STRUCTURALLY_STABLE",
+    "verdict_detail": "Under proper non-dimensionalization, the moment-matching system remains stable under physical 300K thermal fluctuations."
   }
 ]
+

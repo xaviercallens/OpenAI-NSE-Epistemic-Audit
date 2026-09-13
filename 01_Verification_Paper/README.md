@@ -21,12 +21,12 @@
 | Metric / Directive | Mathematical Status | Physical Reality |
 |---|---|---|
 | **Lean 4 AST Check** | 0 `sorry`, 0 custom axioms | Syntactically pure |
-| **Gevrey-2 Regularity** | $\text{Gevrey-2} \subset C^\infty$ | Flatness verified; derivative growth $\sim (N!)^{2.2}$ |
+| **Gevrey Regularity** | $\text{Gevrey-1.5} \subset C^\infty$ | Flatness verified; exact theoretical Gevrey index $s = 1.5$ |
 | **Forcing Architecture** | $f = \text{tracedResidual}$ (MMS) | Teleological reversal: force reverse-engineered from singularity |
-| **Moment Jacobian** | Matches 5 radial moments | $\kappa(A) \sim 10^{28}$ — decouples under 300K thermal fluctuations |
+| **Moment Jacobian Scaling** | Factorization $A = D B D$ | $\kappa(B) \approx 4.11 \times 10^5$ bounded; raw $\kappa \sim 10^{28}$ was an unscaled dimensional artifact |
 | **Global Kinetic Energy** | $E \sim \tau^{+0.485} \to 0$ | Bounded, satisfies Clay Prize Alternative C |
-| **Local Energy Density** | $\rho_E \sim \tau^{-2.505} \to \infty$ | Infinite localized heating |
-| **Enstrophy Divergence** | $\Omega \sim \tau^{-0.515} \to \infty$ | Infinite viscous dissipation; destroys isothermal state |
+| **Intensive Local Energy Density** | $e_{\text{local}} \sim \tau^{-1.010} \to \infty$ | Infinite localized kinetic energy density |
+| **Enstrophy Divergence** | $\Omega \sim \tau^{-0.515} \to \infty$ | Infinite viscous dissipation; destroys isothermal Boussinesq state |
 | **Mach Number Breakdown** | $\text{Ma} \to \infty$ as $\tau \to 0$ | $\text{Ma} > 0.3$ at $\tau \approx 6.7 \times 10^{-14}$ s (67 fs before blow-up) |
 | **Continuum Limit** | $r_{\text{core}} \to 0$ | Reaches molecular scale ($Kn \sim 1$) at $\tau \approx 9.0 \times 10^{-16}$ s |
 | **Euler Initial Data** | $\kappa_n \to \infty$ | Ultraviolet Bomb: coherent vortices smaller than Planck length |
