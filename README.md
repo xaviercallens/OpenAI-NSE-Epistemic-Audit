@@ -15,6 +15,10 @@
 
 [📄 Read the Paper](https://github.com/xaviercallens/OpenAI-NSE-Verification/releases/download/v3.0.0/OpenAI_NSE_Verification.pdf) · [💬 Join Discussions](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions) · [🏛️ Zenodo](https://doi.org/10.5281/zenodo.22727801) · [🤗 HuggingFace](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship)
 
+<br>
+
+![Turbulent Energy Cascade & Kolmogorov Microscales](./dataset/animations/turbulence_energy_cascade.jpg)
+
 </div>
 
 ---
@@ -147,6 +151,9 @@ lake build  # Requires Lean 4 + Mathlib
 
 ### 🌪️ DNS & Empirical CFD Verification
 To computationally anchor this dual-framework, we run synthetic limits against high-fidelity datasets. The abstract mathematical blow-up fails when tested against real turbulence:
+
+![Smooth Viscous Dissipation vs Abstract Singularity Spike](./dataset/animations/smooth_vortex_dissipation.jpg)
+
 - **[Johns Hopkins Turbulence Databases (JHTDB)](https://turbulence.idies.jhu.edu/datasets/homogeneousTurbulence/hbdt)**: DNS flows demonstrate bounded enstrophy $\Omega_{\max}$ heavily constrained by Kolmogorov dissipation rates, prohibiting infinite divergence.
 - **[HuggingFace Navier-Stokes Dataset](https://huggingface.co/datasets/scaomath/navier-stokes-dataset)**: Machine learning surrogate models confirm that local gradient accumulation diffuses significantly before breaching the $Ma \ge 0.3$ Mach limit.
 - **[OpenFOAM Machine Learning Turbulence Models](https://github.com/mthsmcd/MachineLearningTurbulenceModels)**: Introducing the AI's "singular profile" into ML-augmented RANS/LES immediately engages Sub-Grid Scale (SGS) stress tensors, preventing the unphysical breakdown and proving the singularity is mathematically sound but physically vacuous.
