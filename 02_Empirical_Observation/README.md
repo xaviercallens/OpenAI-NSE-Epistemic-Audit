@@ -4,6 +4,10 @@ Numerical Observation experiments proving that manufactured singularities in flu
 
 **Rigor Assurance:** All ordinary differential equations are integrated using rigorous adaptive solvers (SciPy `Radau` for stiff systems, Rust `Dopri5` RK4(5)) to mathematically guarantee that the observed cascade saturation is driven by true geometric phase cancellations, not explicit numerical dissipation.
 
+## Section 1: Empirical Investigation & Physics Audit
+
+*   **[`SECTION_1_INVESTIGATION_PHYSICS_AUDIT.md`](SECTION_1_INVESTIGATION_PHYSICS_AUDIT.md)**: Detailed empirical audit of official OpenAI Lean 4 code (`openai/NavierStokesAndEuler`), calculating physical metrics, Mach divergence, intensive thermodynamic scaling, and Lean 4 type-checker behavior.
+
 ## Architecture
 
 *   **`simu_sign_fragility_1D.py`**: Simulates the Katz-Pavlović / Desnyansky-Novikov dyadic cascade using a stiff implicit Radau solver. Proves that finite-time blowup requires measure-zero, unbroken $+1$ phase coherence across all dyadic octaves. Any localized phase disruption ($\theta_n = \pi/2$) or turbulent phase noise halts the cascade, bounding enstrophy by multiple orders of magnitude.
