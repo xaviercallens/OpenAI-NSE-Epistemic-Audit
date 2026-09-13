@@ -21,6 +21,11 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Run Python Dependencies & Unit/Integration Tests
+        run: |
+          pip install numpy scipy matplotlib
+          python -m unittest discover tests
+
       - name: Run OpenAI Lean Proof Extraction
         run: |
           python scripts/extract_openai_lean.py

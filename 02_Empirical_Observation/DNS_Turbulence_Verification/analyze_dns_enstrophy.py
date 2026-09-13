@@ -7,6 +7,8 @@ def calculate_kolmogorov_microscale(epsilon, nu=1.004e-6):
     For water at 20C, kinematic viscosity nu approx 1.004e-6 m^2/s
     epsilon is the turbulent kinetic energy dissipation rate (m^2/s^3).
     """
+    if epsilon <= 0:
+        return float('inf')
     return (nu**3 / epsilon)**0.25
 
 def verify_dns_enstrophy_bound(dns_velocity_field, dx, dy, dz, nu=1.004e-6):
