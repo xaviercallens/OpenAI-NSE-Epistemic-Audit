@@ -212,6 +212,15 @@ We invite OpenAI, DeepMind, and the open-source community to pivot these massive
 
 ---
 
+## 🦞 Visualizations, CFD, and The Thermodynamic Lobster
+
+To make our scientific audit more tangible (and entertaining), we've built a suite of visual tools and conceptual CFD simulations.
+
+* **The Thermodynamic Lobster:** Read our viral, humorous article explaining the physics of the audit: **[The Lobster and the Singularity](06_Communication_Kit/ARTICLE_THE_LOBSTER_SURVIVES.md)**. Spoiler: The mathematical singularity doesn't kill the lobster because entropy and thermodynamics save the day! (Referencing [MDPI Entropy 24(7):897](https://www.mdpi.com/1099-4300/24/7/897)).
+* **PyFR & CFD Integration:** We advocate for using awesome Python CFD libraries like **[PyFR](https://www.linkedin.com/pulse/pyfr-awesome-python-cdf-library-dmitry-buzolin/)** to act as the "Empirical Engine." See our visualization scripts (e.g., `scripts/pyfr_lobster_visualization.py`) demonstrating how the physics engine shields reality from infinite mathematical blow-ups.
+
+---
+
 ## 💬 Join the Discussion
 
 **Discussions are open to everyone** — mathematicians, physicists, engineers, students, science journalists, and curious minds.
