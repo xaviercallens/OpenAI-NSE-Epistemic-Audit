@@ -11,9 +11,9 @@
 [![Discussions](https://img.shields.io/github/discussions/xaviercallens/OpenAI-NSE-Verification)](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/xaviercallens/OpenAI-NSE-Verification/blob/main/.github/CONTRIBUTING.md)
 
-**MechanicaFluidorum Program · SocrateAI Lab · September 2026**
+**Non-Profit Citizen Science Initiative for Neuro-Symbolic Science · MechanicaFluidorum Program · September 2026**
 
-[📄 Read the Paper](https://github.com/xaviercallens/OpenAI-NSE-Verification/releases/download/v3.0.0/OpenAI_NSE_Verification.pdf) · [💬 Join Discussions](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions) · [🏛️ Zenodo](https://doi.org/10.5281/zenodo.22727801) · [🤗 HuggingFace](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship)
+[📄 Read the Paper](https://github.com/xaviercallens/OpenAI-NSE-Verification/releases/download/v3.0.0/OpenAI_NSE_Verification.pdf) · [💬 Join Discussions](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions) · [🏛️ Zenodo](https://doi.org/10.5281/zenodo.22727801) · [🤗 HuggingFace](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship) · [⚖️ Legal Notice](LEGAL_NOTICE_AND_CITIZEN_SCIENCE_DISCLAIMER.md)
 
 <br>
 
@@ -85,8 +85,11 @@ OpenAI-NSE-Verification/
 │       ├── TopologicalCensorship.lean
 │       └── NSECensorship.lean
 ├── 04_Thermodynamic_Censorship_Paper/   # Nature Physics draft
-├── 05_Community_Research_Directions/    # Extensible Workstreams
+├── 05_Community_Research_Directions/    # Extensible Workstreams & Terence Tao Manifesto
+│   ├── POSITIVE_FUTURE_DIRECTIONS.md
+│   └── TAO_NEUROSYMBOLIC_SCIENTIFIC_AI_MANIFESTO.md # The Neuro-Symbolic Scientific AI Modus Operandi
 ├── 06_Communication_Kit/                # Blog Post, Press Kit & Social Media Templates
+├── LEGAL_NOTICE_AND_CITIZEN_SCIENCE_DISCLAIMER.md # Legal protections & Fair Use disclaimers
 ├── autoform-bot/                        # Submodule: Dual-Framework Meta-Heuristics 
 ├── scripts/                             # Directives 2–7 analyses & Extractors
 │   ├── extract_limits_to_latex.py       # Automated physical limit LaTeX extractor
