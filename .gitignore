@@ -37,3 +37,11 @@ lake-packages/
 *.fdb_latexmk
 *.synctex.gz
 
+# Cloned tools & build sites
+atlas-lean/
+autoform-bot/
+site/
+site-src/
+03_Lean4_Topological_Censorship/site/
+03_Lean4_Topological_Censorship/site-src/
+
