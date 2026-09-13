@@ -14,6 +14,11 @@ But mathematics is the map; physics is the territory. Reinforcement Learning (RL
 
 Translating our rigorous epistemic audit into the physical reality of fluids reveals the exact mechanisms of this disconnect:
 
+<div align="center">
+  <img src="../02_Empirical_Observation/DNS_Turbulence_Verification/enstrophy_falsification.png" alt="Enstrophy Falsification" width="100%">
+  <p><em>Figure 1: The mathematical claim of diverging enstrophy (red) vs physical reality capped by Thermodynamic Censorship (blue).</em></p>
+</div>
+
 * **The Mach 0.3 Invalidation:** 67 femtoseconds before the AI's fluid blows up, it is moving so fast it breaks the speed of sound. The equation the AI is using assumes the fluid cannot compress (incompressible Navier-Stokes). But supersonic fluids compress violently. The AI is applying a formula to a situation where the formula no longer works.
 * **The Gevrey Loophole:** The AI bypassed the rigidity of real-analytic functions by using Gevrey-1.5 cutoffs. Physically, this allows the creation of mathematically isolated "bubbles" of fluid that do not analytically communicate with the outside flow, bypassing the instantaneous global pressure propagation that defines true incompressible fluids.
 * **Sub-Planckian Fine-Tuning:** The unforced Euler proof relies on injecting infinitely precise, coherent topological ripples into scales smaller than a proton. In physical reality, the background Brownian motion of atomic thermal noise would instantly shatter and destroy this delicate wave-cancellation geometry.

@@ -147,6 +147,11 @@ lake build  # Requires Lean 4 + Mathlib
 
 ## 📊 Key Computational Results
 
+<div align="center">
+  <img src="02_Empirical_Observation/DNS_Turbulence_Verification/enstrophy_falsification.png" alt="Enstrophy Falsification vs Kolmogorov Dissipation" width="48%">
+  <img src="dataset/animations/pre_singularity_vortex.gif" alt="Pre-Singularity Vortex Contraction" width="48%">
+</div>
+
 ### Mach Number Self-Invalidation
 | Time τ (s) | Velocity |u| (m/s) | Mach Ma | Regime |
 |---|---|---|---|

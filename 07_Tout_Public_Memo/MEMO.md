@@ -22,9 +22,12 @@ Bienvenue ! Ce document explique de manière visuelle notre audit scientifique d
 
 ### 🌪️ Singularity vs Turbulence / Singularité vs Turbulence / 奇点与湍流
 
-![Cyberpunk Singularity](assets/cyber_singularity_turbulence_1789311421687.jpg)
+<div align="center">
+  <img src="assets/cyber_singularity_turbulence_1789311421687.jpg" alt="Cyberpunk Singularity" width="48%">
+  <img src="../dataset/animations/pre_singularity_vortex.gif" alt="Vortex Core Contraction" width="48%">
+</div>
 
-**🇺🇸** In abstract mathematics, energy concentrates infinitely. In physical reality, energy dissipates into chaos (turbulence).
+**🇺🇸** In abstract mathematics, energy concentrates infinitely (as seen in the vortex contraction animation). In physical reality, energy dissipates into chaos (turbulence).
 **🇫🇷** Dans les mathématiques abstraites, l'énergie se concentre à l'infini. Dans la réalité, l'énergie se dissipe dans le chaos (turbulence).
 **🇨🇳** 在抽象数学中，能量无限集中。在物理现实中，能量消散为混沌（湍流）。
 
