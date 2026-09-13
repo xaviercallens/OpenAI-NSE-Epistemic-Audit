@@ -13,7 +13,7 @@
 
 \geometry{margin=1in}
 
-\title{\textbf{On the Physical Vacuity of Manufactured Singularities:\\ A Comprehensive Epistemic Audit of the OpenAI Navier-Stokes Formalization}}
+\title{\textbf{On the Physical Vacuity of Manufactured Singularities:\\ A Comprehensive Physical Verification of the OpenAI Navier-Stokes Formalization}}
 \author{The MechanicaFluidorum Program \\ \textit{SocrateAI Lab}}
 \date{September 2026}
 
@@ -25,11 +25,11 @@
 In September 2026, an OpenAI multi-agent system formalized finite-time blow-up proofs for the
 forced 3D Navier-Stokes equations (Millennium Prize Alternatives C and D) and the unforced Euler
 equations within Lean~4. While this represents a landmark achievement in automated theorem proving
-and syntactic mathematics, a rigorous epistemic audit reveals that these singularities are driven
+and syntactic mathematics, a rigorous physical verification reveals that these singularities are driven
 by pathological mathematics rather than natural fluid dynamics. We confirm that the Lean~4 proof
 contains no axiomatic hallucinations and legally satisfies the Clay Mathematics Institute's
 $C^\infty$ smoothness criterion via non-analytic Gevrey-2 class cutoffs---a legitimate but
-physically unrealizable construction. Our audit exposes five profound epistemic disconnects between
+physically unrealizable construction. Our verification exposes five profound epistemic disconnects between
 the mathematical result and physical reality: (1) the singularity is engineered by internal
 nonlinear Reynolds stresses that cancel the collapsing core's residual with $10^{28}$-digit
 precision, representing a measure-zero configuration that decouples immediately under thermal
@@ -59,7 +59,7 @@ phenomenological realism of its hypotheses. A proof mapping $A \implies B$ is sy
 but if hypothesis $A$ requires infinite molecular divisibility and omniscient fine-tuning, the
 conclusion $B$ is semantically vacuous for physical reality.
 
-Since the Lean~4 kernel does not permit algebraic mistakes, our audit targets a fundamentally
+Since the Lean~4 kernel does not permit algebraic mistakes, our check targets a fundamentally
 different class of vulnerabilities: \emph{definitional weaknesses}, \emph{axiomatic cheats}, and
 \emph{asymptotic pathologies}. We search for where the formalization might have ``moved the
 goalposts''---weakening a norm, altering a topological space, introducing a hidden axiom---or
@@ -67,14 +67,14 @@ where the mathematical construction becomes so ill-conditioned that it represent
 measure-zero anomaly.
 
 In this communication, we expose the ``manufactured'' nature of these singularities through eight
-independent audit directives spanning formal verification, arbitrary-precision numerical analysis,
+independent verification directives spanning formal verification, arbitrary-precision numerical analysis,
 and thermodynamic first principles.
 
 % ====================================================================
 \section{The Syntactic Health: Lean~4 Purity and Gevrey-2 Cutoffs}
 % ====================================================================
 
-\subsection{AST Audit Results}
+\subsection{AST Verification Results}
 
 An automated crawl of the Abstract Syntax Tree confirms the proof is structurally flawless:
 
@@ -94,10 +94,10 @@ Energy bound & $L^\infty_t L^2_x$ (uniform) & $\exists E,\, \forall t,\; \text{k
 Sobolev weakening detected & None & None \\
 \bottomrule
 \end{tabular}
-\caption{Lean~4 formal audit results. Four \texttt{sorry} instances exist in
+\caption{Lean~4 formal verification results. Four \texttt{sorry} instances exist in
 \texttt{ComparatorChallenges/}, a separate module containing intentional open problems---not part
 of the core proof.}
-\label{tab:lean-audit}
+\label{tab:lean-verification}
 \end{table}
 
 There are no opaque axioms, no weakened Sobolev norms, and the global $L^2$ kinetic energy is

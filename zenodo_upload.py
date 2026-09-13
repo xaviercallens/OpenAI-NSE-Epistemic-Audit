@@ -31,7 +31,7 @@ METADATA = {
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
-            "<p>An independent epistemic audit of OpenAI's Lean 4 formalized proof "
+            "<p>An independent Physical Verification of OpenAI's Lean 4 formalized proof "
             "of finite-time blow-up for the forced 3D incompressible Navier-Stokes "
             "equations (Clay Millennium Prize, Alternatives C &amp; D).</p>"
             "<p>We verify the proof is formally flawless (0 sorry, 0 axioms, correct "
@@ -58,7 +58,7 @@ METADATA = {
             "thermodynamic censorship",
             "fluid dynamics",
             "OpenAI",
-            "epistemic audit",
+            "Physical Verification",
             "enstrophy",
             "blow-up",
             "singularity"
@@ -70,7 +70,7 @@ METADATA = {
         "license": "cc-by-4.0",
         "related_identifiers": [
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Verification",
                 "relation": "isSupplementTo",
                 "scheme": "url"
             },

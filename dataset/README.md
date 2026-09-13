@@ -10,7 +10,7 @@ tags:
   - lean4
   - millennium-prize
   - openai
-  - epistemic-audit
+  - Verification
   - thermodynamic-censorship
   - computational-physics
   - mathematical-physics
@@ -18,18 +18,18 @@ language:
   - en
 size_categories:
   - n<1K
-pretty_name: "OpenAI NSE Epistemic Audit: On the Physical Vacuity of Manufactured Singularities"
+pretty_name: "OpenAI NSE Physical Verification: On the Physical Vacuity of Manufactured Singularities"
 ---
 
-# OpenAI Navier-Stokes Epistemic Audit: Telemetry & Falsification Dataset
+# OpenAI Navier-Stokes Physical Verification: Telemetry & Observation Dataset
 
 ## Overview
 
 This dataset accompanies the publication:  
-**"On the Physical Vacuity of Manufactured Singularities: A Comprehensive Epistemic Audit of the OpenAI Navier-Stokes Formalization"**  
+**"On the Physical Vacuity of Manufactured Singularities: A Comprehensive Physical Verification of the OpenAI Navier-Stokes Formalization"**  
 *The MechanicaFluidorum Program | Socrate AI Lab*  
 **Zenodo DOI:** [10.5281/zenodo.22725347](https://doi.org/10.5281/zenodo.22725347) (Concept DOI: [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717))  
-**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit)
+**GitHub:** [xaviercallens/OpenAI-NSE-Verification](https://github.com/xaviercallens/OpenAI-NSE-Verification)
 
 ## Key Telemetry Summary
 
@@ -56,11 +56,11 @@ This dataset accompanies the publication:
 ```bibtex
 @article{callens2026physicalvacuity,
   title={On the Physical Vacuity of Manufactured Singularities: 
-         A Comprehensive Epistemic Audit of the OpenAI Navier-Stokes Formalization},
+         A Comprehensive Physical Verification of the OpenAI Navier-Stokes Formalization},
   author={Callens, Xavier},
   journal={Socrate AI Lab Preprint},
   year={2026},
   doi={10.5281/zenodo.22725347},
-  url={https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit}
+  url={https://github.com/xaviercallens/OpenAI-NSE-Verification}
 }
 ```

@@ -32,14 +32,14 @@ We formalize a Thermodynamic Censorship principle: physically admissible solutio
 
 The three-dimensional incompressible Navier-Stokes equations (NSE) have stood as a cornerstone of fluid mechanics for nearly two centuries \cite{Leray1934}. In 2000, Charles Fefferman formalized the Millennium Prize problem, asking whether solutions to the unforced or forced NSE either exist globally in time and remain smooth, or whether they can develop finite-time singularities (blow-ups) \cite{Fefferman2000}.
 
-In September 2026, an OpenAI multi-agent system claimed a formalized proof in Lean 4 establishing a finite-time blow-up for the forced 3D incompressible NSE. This result formally resolves Alternatives C and D of the Millennium Prize problem. Our epistemic audit separates the mathematical validity of the proof from its physical significance. While the mathematics is robust, our arbitrary-precision analysis reveals that the constructed blow-up requires unphysical thermodynamic and kinematic extremes. This prompts a fundamental distinction between the mathematical and physical validity of NSE solutions. We introduce the concept of Thermodynamic Censorship, demonstrating that the AI-generated singularity violates fundamental physical limits prior to the blow-up time. 
+In September 2026, an OpenAI multi-agent system claimed a formalized proof in Lean 4 establishing a finite-time blow-up for the forced 3D incompressible NSE. This result formally resolves Alternatives C and D of the Millennium Prize problem. Our Physical Verification separates the mathematical validity of the proof from its physical significance. While the mathematics is robust, our arbitrary-precision analysis reveals that the constructed blow-up requires unphysical thermodynamic and kinematic extremes. This prompts a fundamental distinction between the mathematical and physical validity of NSE solutions. We introduce the concept of Thermodynamic Censorship, demonstrating that the AI-generated singularity violates fundamental physical limits prior to the blow-up time. 
 
 The paper is structured as follows. Section 2 details the formal verification of the OpenAI Lean 4 proof. Section 3 analyzes the paradoxical energy density divergence. Section 4 explores the breakdown of the incompressibility assumption via Mach number self-invalidation. Section 5 discusses the structural instability of the moment-matching system. Section 6 introduces the Thermodynamic Censorship Principle. Section 7 discusses the broader implications, and Section 8 concludes.
 
 \section{Formal Verification of the OpenAI Lean 4 Proof}
 
 \subsection{Methodology: AST Crawling and Type Verification}
-We performed a rigorous epistemic audit of the provided Lean 4 repository. Using Abstract Syntax Tree (AST) crawling, we verified that the final theorem statements strictly adhere to the Millennium Prize definitions.
+We performed a rigorous Physical Verification of the provided Lean 4 repository. Using Abstract Syntax Tree (AST) crawling, we verified that the final theorem statements strictly adhere to the Millennium Prize definitions.
 
 \subsection{Results: Zero Axiomatic Leakage}
 The formalization is pristine. We confirm:

@@ -1,6 +1,6 @@
-# 02_Empirical_Falsification [Tier B Laboratory]
+# 02_Empirical_Observation [Tier B Laboratory]
 
-Numerical falsification experiments proving that manufactured singularities in fluid dynamics are unstable, non-generic mathematical artifacts. 
+Numerical Observation experiments proving that manufactured singularities in fluid dynamics are unstable, non-generic mathematical artifacts. 
 
 **Rigor Assurance:** All ordinary differential equations are integrated using rigorous adaptive solvers (SciPy `Radau` for stiff systems, Rust `Dopri5` RK4(5)) to mathematically guarantee that the observed cascade saturation is driven by true geometric phase cancellations, not explicit numerical dissipation.
 

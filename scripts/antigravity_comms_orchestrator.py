@@ -18,7 +18,7 @@ from typing import List, Dict, Optional
 
 ZENODO_ENGLISH_RECORD = "https://zenodo.org/records/22108301"
 ZENODO_DOI = "10.5281/zenodo.22108301"
-GITHUB_REPO = "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit"
+GITHUB_REPO = "https://github.com/xaviercallens/OpenAI-NSE-Verification"
 
 @dataclass
 class MathematicianProfile:
@@ -86,10 +86,10 @@ Preprint DOI: {ZENODO_DOI}"""
         key_paper="Buckmaster & Vicol (2019): Nonuniqueness of weak solutions to the Navier-Stokes equation",
         strategic_hook="They are in a direct priority dispute with OpenAI over Euler blow-up formalization and understand the profound difference between manufactured forcing and natural regularity.",
         recommended_role="Strategic Co-authors / Referees / PDE Adversaries",
-        email_subject="Epistemic Audit of OpenAI Navier-Stokes: Manufactured Solutions vs. 3D Phase Frustration",
+        email_subject="Physical Verification of OpenAI Navier-Stokes: Manufactured Solutions vs. 3D Phase Frustration",
         email_body=f"""Dear Professors Buckmaster and Vicol,
 
-I am writing to share our recent epistemic audit and formal mathematical preprint ({ZENODO_ENGLISH_RECORD}) regarding the OpenAI Lean 4 formalization.
+I am writing to share our recent Physical Verification and formal mathematical preprint ({ZENODO_ENGLISH_RECORD}) regarding the OpenAI Lean 4 formalization.
 
 As researchers deeply aware of the subtleties of convex integration and the boundaries of weak solutions, we dissected OpenAI's CandidateFromLimits.lean and demonstrated that their forced blow-up relies on the Method of Manufactured Solutions (MMS), engineering an omniscient external forcing residual that cancels viscous dissipation.
 
@@ -136,7 +136,7 @@ The MechanicaFluidorum Program | Socrate AI Lab"""
 
 Your historic derivation of fluid dynamics from discrete particle collisions established the rigorous molecular foundations of the Navier-Stokes equations.
 
-In our recent preprint ({ZENODO_ENGLISH_RECORD}), we conducted an epistemic audit of OpenAI's Lean 4 blow-up claims. We demonstrated that their unforced Euler blow-up in PacketInitialSmoothLimit.lean requires injecting kinetic energy into wavelengths far smaller than the molecular mean free path (Kn >> 1) and approaching the Planck scale at t=0—violating the continuum hypothesis upon which fluid equations are derived.
+In our recent preprint ({ZENODO_ENGLISH_RECORD}), we conducted an Physical Verification of OpenAI's Lean 4 blow-up claims. We demonstrated that their unforced Euler blow-up in PacketInitialSmoothLimit.lean requires injecting kinetic energy into wavelengths far smaller than the molecular mean free path (Kn >> 1) and approaching the Planck scale at t=0—violating the continuum hypothesis upon which fluid equations are derived.
 
 We propose a dual-scale geometric cutoff reflecting the microscopic collision scale, and verify in Lean 4 that geometric phase frustration on Z^3 quenches the cascade. We would be honored to receive your feedback on Section 3 regarding the kinetic continuum boundary.
 

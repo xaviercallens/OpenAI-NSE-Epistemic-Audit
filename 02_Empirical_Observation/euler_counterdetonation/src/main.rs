@@ -1,6 +1,6 @@
 //! euler_counterdetonation
 //! =======================
-//! Epistemic Audit of the OpenAI Navier-Stokes/Euler Singularity
+//! Physical Verification of the OpenAI Navier-Stokes/Euler Singularity
 //! MechanicaFluidorum Program | SocrateAI Research Initiative
 //!
 //! Dynamical envelope simulation illustrating the OpenAI vortex packet cascade.
@@ -195,7 +195,7 @@ fn main() {
     }
 
     println!("\n===============================================================================");
-    println!("  EPISTEMIC AUDIT VERDICT: SINGULARITY AVERTED AND GLOBALLY CENSORING");
+    println!("  Physical Verification VERDICT: SINGULARITY AVERTED AND GLOBALLY CENSORING");
     println!("  Under the Dual-Scale physical metric, the fractal packet cascade cannot deton-");
     println!("  ate. The flow automatically re-aligns into a smooth, global Beltrami state.");
     println!("===============================================================================\n");

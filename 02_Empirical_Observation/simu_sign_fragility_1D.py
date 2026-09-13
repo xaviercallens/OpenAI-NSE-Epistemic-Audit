@@ -2,7 +2,7 @@
 """
 simu_sign_fragility_1D.py
 =========================
-Epistemic Audit of the OpenAI Navier-Stokes/Euler Singularity
+Physical Verification of the OpenAI Navier-Stokes/Euler Singularity
 MechanicaFluidorum Program | SocrateAI Research Initiative
 
 Title: Numerical Demonstration of Dyadic Cascade Sign Fragility
@@ -90,7 +90,7 @@ def run_rigorous_simulation(phases, N=22, t_max=1.75, nu=1e-5):
 
 def main():
     print("=" * 75)
-    print(" DYADIC SIGN FRAGILITY AUDIT: 1D SHELL MODEL FALSIFICATION")
+    print(" DYADIC SIGN FRAGILITY AUDIT: 1D SHELL MODEL Observation")
     print("=" * 75)
     print("Framework: Katz-Pavlović / Desnyansky-Novikov Dyadic Euler Cascade")
     print("Integrator: Implicit Radau (Stiff ODE Solver)")

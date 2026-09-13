@@ -2,7 +2,7 @@
 """
 audit_openai.py
 ===============
-Epistemic Audit of the OpenAI Navier-Stokes/Euler Singularity
+Physical Verification of the OpenAI Navier-Stokes/Euler Singularity
 MechanicaFluidorum Program | SocrateAI Research Initiative
 
 Clones or locates the target OpenAI NavierStokesAndEuler repository,
@@ -99,7 +99,7 @@ def main():
     args = parser.parse_args()
 
     print("==========================================================")
-    print(" EPISTEMIC AUDIT : EXTRACTING OPENAI LEAN 4 ARTIFACTS")
+    print(" Physical Verification : EXTRACTING OPENAI LEAN 4 ARTIFACTS")
     print("==========================================================\n")
 
     if args.no_clone and not os.path.isdir(args.repo_dir):

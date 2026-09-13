@@ -8,7 +8,7 @@ Rather than re-proving fluid mechanics from scratch, this module directly import
 require NavierStokesAndEuler from git "https://github.com/openai/NavierStokesAndEuler" @ "main"
 ```
 
-### Objectives & Open Falsification Challenges
+### Objectives & Open Observation Challenges
 To maintain rigorous mathematical standards and avoid introducing unproven axioms into the Lean 4 kernel, this module formalizes the core propositions and marks open conjectures with Lean 4's standard `sorry` tactic, launching them as verified **Open Scientific Challenges** for the formal verification community:
 
 1. **[CHALLENGE 1] Sobolev Metric Substitution:** Formally prove the global boundedness of the physical Dual-Scale metric $k_{eff} = \min(|k|, 1 / (\alpha' |k|)) \le 1/\sqrt{\alpha'}$. (See `TopologicalCensorship.lean`).

@@ -2,7 +2,7 @@
 """
 zenodo_retriever.py
 ===================
-Epistemic Audit of the OpenAI Navier-Stokes/Euler Singularity
+Physical Verification of the OpenAI Navier-Stokes/Euler Singularity
 MechanicaFluidorum Program | SocrateAI Research Initiative
 
 Title: Zenodo Certified Archive Verifier (DOI: 10.5281/zenodo.22696718)
@@ -25,8 +25,8 @@ ZENODO_API_URL = f"https://zenodo.org/api/records/{ZENODO_RECORD_ID}"
 
 # Certified SHA-256 Manifest for Zenodo Deposit 10.5281/zenodo.22696718
 ZENODO_SHA256_MANIFEST = {
-    "OpenAI_NSE_EpistemicAudit.pdf": "21068c6bfcee224225356a13dcf3947a9c0876ed94edd4e204b6b89804ee374e",
-    "OpenAI_NSE_EpistemicAudit.tex": "2f1870efb0f5ff4badd5465e769a053f958914850b59f472b59b2bbdca47e8d6",
+    "OpenAI_NSE_Verification.pdf": "21068c6bfcee224225356a13dcf3947a9c0876ed94edd4e204b6b89804ee374e",
+    "OpenAI_NSE_Verification.tex": "2f1870efb0f5ff4badd5465e769a053f958914850b59f472b59b2bbdca47e8d6",
     "REPRODUCTION_PROTOCOL.md": "becf58bd3903e58e238078eabb137548b9fbc4dc7230eed5c6f1de0181e5d600",
     "README.md": "ab26a6de1884b3b5d99a86bed78de10b5cc7646402d5ff692b45565599683187",
     "audit_openai.py": "87f69e6786d5ea86228bef8d9bca112cd92a0acbb65ab35a2341d3a26a0820b6",

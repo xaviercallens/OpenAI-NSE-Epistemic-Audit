@@ -30,4 +30,4 @@ Describe your mathematical or physical argument clearly. Include equations if ne
 If you have a suggested correction, describe it here.
 
 ---
-*Please also open a [Discussion](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions) if you'd like community input before filing a formal issue.*
+*Please also open a [Discussion](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions) if you'd like community input before filing a formal issue.*

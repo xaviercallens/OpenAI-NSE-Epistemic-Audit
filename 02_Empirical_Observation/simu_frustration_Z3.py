@@ -2,7 +2,7 @@
 """
 simu_frustration_Z3.py
 ======================
-Epistemic Audit of the OpenAI Navier-Stokes/Euler Singularity
+Physical Verification of the OpenAI Navier-Stokes/Euler Singularity
 MechanicaFluidorum Program | SocrateAI Research Initiative
 
 Title: Measurement of the 3D Leray Projector Triadic Frustration Index on Z^3

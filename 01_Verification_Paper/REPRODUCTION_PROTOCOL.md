@@ -1,6 +1,6 @@
-# Reproduction Protocol: Epistemic Audit of OpenAI's Navier-Stokes Formalization
+# Reproduction Protocol: Physical Verification of OpenAI's Navier-Stokes Formalization
 
-This protocol provides step-by-step instructions for peer reviewers, fluid dynamicists, and formal verification researchers to independently reproduce all findings of the epistemic audit.
+This protocol provides step-by-step instructions for peer reviewers, fluid dynamicists, and formal verification researchers to independently reproduce all findings of the physical verification.
 
 ---
 
@@ -18,7 +18,7 @@ pip install numpy scipy sympy requests
 
 ---
 
-## 2. Step 1: Clone the Audited OpenAI Formalization Commit
+## 2. Step 1: Clone the Checked OpenAI Formalization Commit
 
 The mathematical construction and the Method of Manufactured Solutions (MMS) are embedded directly in the Lean 4 source:
 
@@ -31,7 +31,7 @@ cd ..
 
 ---
 
-## 3. Step 2: Automated AST & Syntax Audit (Directive 1)
+## 3. Step 2: Automated AST & Syntax Check (Directive 1)
 
 Verify that the OpenAI formalization contains zero unproven gaps in the core proof and no opaque axioms:
 

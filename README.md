@@ -1,19 +1,19 @@
 <div align="center">
 
-# 🌊 OpenAI NSE / Euler Epistemic Audit
+# 🌊 OpenAI NSE / Euler Physical Verification
 
 ### *On the Physical Vacuity of Manufactured Singularities*
 
-[![Release](https://img.shields.io/github/v/release/xaviercallens/OpenAI-NSE-Epistemic-Audit?label=release&color=blue)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/latest)
+[![Release](https://img.shields.io/github/v/release/xaviercallens/OpenAI-NSE-Verification?label=release&color=blue)](https://github.com/xaviercallens/OpenAI-NSE-Verification/releases/latest)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22727801.svg)](https://doi.org/10.5281/zenodo.22727801)
 [![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Discussions](https://img.shields.io/github/discussions/xaviercallens/OpenAI-NSE-Epistemic-Audit)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/blob/main/.github/CONTRIBUTING.md)
+[![Discussions](https://img.shields.io/github/discussions/xaviercallens/OpenAI-NSE-Verification)](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/xaviercallens/OpenAI-NSE-Verification/blob/main/.github/CONTRIBUTING.md)
 
 **MechanicaFluidorum Program · SocrateAI Lab · September 2026**
 
-[📄 Read the Paper](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/download/v3.0.0/OpenAI_NSE_EpistemicAudit.pdf) · [💬 Join Discussions](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions) · [🏛️ Zenodo](https://doi.org/10.5281/zenodo.22727801) · [🤗 HuggingFace](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship)
+[📄 Read the Paper](https://github.com/xaviercallens/OpenAI-NSE-Verification/releases/download/v3.0.0/OpenAI_NSE_Verification.pdf) · [💬 Join Discussions](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions) · [🏛️ Zenodo](https://doi.org/10.5281/zenodo.22727801) · [🤗 HuggingFace](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship)
 
 </div>
 
@@ -62,12 +62,12 @@ This audit proves why, through five independent lines of evidence.
 ## 📁 Repository Structure
 
 ```
-OpenAI-NSE-Epistemic-Audit/
+OpenAI-NSE-Verification/
 ├── 01_Challenger_Paper/          # Peer-reviewed LaTeX paper + PDF
-│   ├── OpenAI_NSE_EpistemicAudit.pdf
-│   ├── OpenAI_NSE_EpistemicAudit.tex
+│   ├── OpenAI_NSE_Verification.pdf
+│   ├── OpenAI_NSE_Verification.tex
 │   └── zenodo_bundle_v2.zip
-├── 02_Empirical_Falsification/   # Python & Rust simulations
+├── 02_Empirical_Observation/   # Python & Rust simulations
 │   ├── simu_sign_fragility_1D.py
 │   ├── simu_frustration_Z3.py
 │   └── euler_counterdetonation/
@@ -96,13 +96,13 @@ OpenAI-NSE-Epistemic-Audit/
 
 ### Read the Paper
 ```
-👉 https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/download/v3.0.0/OpenAI_NSE_EpistemicAudit.pdf
+👉 https://github.com/xaviercallens/OpenAI-NSE-Verification/releases/download/v3.0.0/OpenAI_NSE_Verification.pdf
 ```
 
 ### Reproduce the Simulations
 ```bash
-git clone https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit
-cd OpenAI-NSE-Epistemic-Audit/scripts
+git clone https://github.com/xaviercallens/OpenAI-NSE-Verification
+cd OpenAI-NSE-Verification/scripts
 pip install numpy scipy sympy mpmath matplotlib
 python directive5_mach_divergence.py     # Mach number trajectory
 python directive3_jacobian_instability.py  # κ ~ 10²⁸ condition number
@@ -143,11 +143,11 @@ lake build  # Requires Lean 4 + Mathlib
 
 | Thread | Topic |
 |---|---|
-| [💬 Community Introduction](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/2) | Introduce yourself |
-| [❓ Q&A Megathread](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/3) | Ask anything |
-| [💡 Open Challenges](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/4) | Thermodynamic Censorship challenge |
-| [🎉 Show & Tell](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/5) | Reproductions & extensions |
-| [🚀 Welcome Post](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/1) | Overview & resources |
+| [💬 Community Introduction](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/2) | Introduce yourself |
+| [❓ Q&A Megathread](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/3) | Ask anything |
+| [💡 Open Challenges](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/4) | Thermodynamic Censorship challenge |
+| [🎉 Show & Tell](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/5) | Reproductions & extensions |
+| [🚀 Welcome Post](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/1) | Overview & resources |
 
 ---
 
@@ -157,7 +157,7 @@ lake build  # Requires Lean 4 + Mathlib
 @misc{callens2026nse,
   author       = {Callens, Xavier and {MechanicaFluidorum Program}},
   title        = {On the Physical Vacuity of Manufactured Singularities:
-                  A Comprehensive Epistemic Audit of the OpenAI
+                  A Comprehensive Physical Verification of the OpenAI
                   Navier-Stokes Formalization},
   year         = {2026},
   month        = sep,

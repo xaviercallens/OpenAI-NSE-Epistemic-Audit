@@ -1,6 +1,6 @@
-# Contributing to OpenAI-NSE-Epistemic-Audit
+# Contributing to OpenAI-NSE-Verification
 
-Thank you for your interest in contributing to this epistemic audit of the OpenAI
+Thank you for your interest in contributing to this Physical Verification of the OpenAI
 Navier-Stokes / Euler blow-up formalization.
 
 ## How to Contribute

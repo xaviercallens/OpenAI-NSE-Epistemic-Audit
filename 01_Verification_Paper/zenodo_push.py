@@ -2,7 +2,7 @@
 """
 zenodo_push.py
 ==============
-Epistemic Audit of the OpenAI Navier-Stokes/Euler Singularity
+Physical Verification of the OpenAI Navier-Stokes/Euler Singularity
 MechanicaFluidorum Program | Socrate AI Lab (French Association Loi 1901)
 
 Automated Zenodo synchronizer and bundle packager for Record 22696718 (Version 2).
@@ -23,8 +23,8 @@ RECORD_ID = "22696718"
 ZENODO_BASE_URL = "https://zenodo.org/api"
 
 FILES_TO_PACKAGE = [
-    ("01_Challenger_Paper/OpenAI_NSE_EpistemicAudit.pdf", "OpenAI_NSE_EpistemicAudit.pdf"),
-    ("01_Challenger_Paper/OpenAI_NSE_EpistemicAudit.tex", "OpenAI_NSE_EpistemicAudit.tex"),
+    ("01_Challenger_Paper/OpenAI_NSE_Verification.pdf", "OpenAI_NSE_Verification.pdf"),
+    ("01_Challenger_Paper/OpenAI_NSE_Verification.tex", "OpenAI_NSE_Verification.tex"),
     ("01_Challenger_Paper/REPRODUCTION_PROTOCOL.md", "REPRODUCTION_PROTOCOL.md"),
     ("01_Challenger_Paper/README.md", "README.md"),
     ("01_Challenger_Paper/audit_openai.py", "audit_openai.py"),
@@ -41,14 +41,14 @@ FILES_TO_PACKAGE = [
 
 METADATA = {
     "metadata": {
-        "title": "On the Physical Vacuity of Manufactured Singularities: A Comprehensive Epistemic Audit of the OpenAI Navier-Stokes Formalization (Version 2)",
+        "title": "On the Physical Vacuity of Manufactured Singularities: A Comprehensive Physical Verification of the OpenAI Navier-Stokes Formalization (Version 2)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
             "<p>In September 2026, an OpenAI multi-agent system formalized finite-time blow-up proofs "
             "for the forced 3D Navier-Stokes equations (Millennium Prize Alternatives C and D) and the "
             "unforced Euler equations within Lean 4. While this represents a landmark achievement in "
-            "automated theorem proving and syntactic mathematics, a rigorous epistemic audit reveals "
+            "automated theorem proving and syntactic mathematics, a rigorous Physical Verification reveals "
             "that these singularities are driven by pathological mathematics rather than natural fluid dynamics.</p>"
             "<p>We confirm the Lean 4 proof contains no axiomatic hallucinations and legally satisfies "
             "the Clay Mathematics Institute criteria via Gevrey-2 class cutoffs. However, this mathematical "
@@ -89,7 +89,7 @@ METADATA = {
             "Millennium Prize Problem",
             "Lean 4",
             "Formal Verification",
-            "Epistemic Audit",
+            "Physical Verification",
             "Fluid Dynamics",
             "Thermodynamic Censorship",
             "Gevrey Regularity",
@@ -101,7 +101,7 @@ METADATA = {
         "access_right": "open",
         "related_identifiers": [
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Verification",
                 "relation": "isSupplementTo",
                 "scheme": "url"
             },

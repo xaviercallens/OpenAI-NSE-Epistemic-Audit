@@ -10,7 +10,7 @@
 * **What happened:** 
   * `u/_padla_`: *"À juger par ton style de conversation, tu utilises probablement de l'IA pour communiquer et tu n'es pas vraiment intéressé par la discussion."*
   * `u/Elementary_drWattson`: *"Pourquoi ça se lit comme des spaghettis trop verbeux avec une touche de prétentieux ? « A mené un audit dans la construction »... c'est quoi ce délire."*
-* **The Lesson:** Online technical communities have zero tolerance for AI-generated cadence (overly polite, corporate bullet points, consultant jargon like *"epistemic audit"*, *"telemetry"*, *"syntactic purity"*). It immediately brands the poster as disingenuous or a bot.
+* **The Lesson:** Online technical communities have zero tolerance for AI-generated cadence (overly polite, corporate bullet points, consultant jargon like *"Physical Verification"*, *"telemetry"*, *"syntactic purity"*). It immediately brands the poster as disingenuous or a bot.
 * **The Rule:** Write like a real human. Short, conversational sentences. No corporate buzzwords. Plain language.
 
 ### Trap 2: The "Run My Code" Security Red Flag
@@ -44,7 +44,7 @@
 
 | ❌ Banned (Sounds like AI / Arrogant) | ✅ Adopted (Human, Casual, Honest) |
 | :--- | :--- |
-| **"We conducted an epistemic audit"** | *"I was playing around with the equations..."* |
+| **"We conducted an Physical Verification"** | *"I was playing around with the equations..."* |
 | **"Our team's telemetry proves..."** | *"I computed the numbers and got..."* |
 | **"Syntactically flawless but physically vacuous"** | *"The math holds, but the numbers get wild..."* |
 | **"Tautological Syringe / Manufactured Singularity"** | *"The fine-tuning required in Lemma 8.7"* |
