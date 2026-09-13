@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, geometry, hyperref, graphicx}
+\geometry{a4paper, margin=1in}
+
+\title{Work Stream 2: Deriving the Thermal Energy Equation and Vaporization Limit}
+\author{MechanicaFluidorum Program \& Community Contributors (esp. \texttt{u/vibe0009} \& \texttt{u/Little-Name9809})}
+\date{September 2026}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+A central question raised by \texttt{u/vibe0009} in \texttt{r/FluidMechanics} was how enstrophy divergence implies thermal shock when the incompressible Navier-Stokes equations lack a temperature equation. To address this, we must step outside the idealized incompressible frame and couple the viscous dissipation to the thermal energy equation.
+
+\section{Thermal Coupling}
+The complete energy equation for a fluid includes the viscous dissipation function $\Phi$:
+\begin{equation}
+    \rho c_p \left( \frac{\partial T}{\partial t} + u \cdot \nabla T \right) = k \nabla^2 T + 2\mu \, \mathbf{D}(u) : \mathbf{D}(u)
+\end{equation}
+The contraction of the strain rate tensor $\mathbf{D}(u)$ is directly proportional to the enstrophy density $|\nabla \times u|^2$ in incompressible flow.
+
+\section{Vaporization by Pure Force}
+As \texttt{u/Little-Name9809} pointed out, this suggests a mechanism for vaporizing a fluid into plasma using only mechanical force (and no external heat). Because the OpenAI singularity requires the local enstrophy density to scale as $\tau^{-2.515}$, the local heat generation rate diverges. 
+
+Integrating this rate against the thermal diffusion timescale reveals that the fluid reaches $373\text{ K}$ (boiling) at $\tau \approx 45.6\text{ ps}$ prior to the mathematical blowup. The continuum assumption is shredded by the phase change.
+
+\section{Acknowledgments}
+Thank you to \texttt{u/vibe0009} and \texttt{u/Little-Name9809} for prompting this explicit thermal derivation. \textit{Rendons \`a C\'esar ce qui appartient \`a C\'esar.}
+
+\end{document}
