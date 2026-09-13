@@ -47,3 +47,7 @@ site-src/
 03_Lean4_Topological_Censorship/site/
 03_Lean4_Topological_Censorship/site-src/
 
+# Test and benchmark scratch files
+.pytest_cache/
+scratch_test_certificate.json
+

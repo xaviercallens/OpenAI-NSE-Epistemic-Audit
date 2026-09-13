@@ -4,8 +4,7 @@
 
 ### *On the Physical Vacuity of Manufactured Singularities*
 
-[![Release](https://img.shields.io/github/v/release/xaviercallens/OpenAI-NSE-Epistemic-Audit?label=release&color=blue)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/latest)
-[![PyTest CI](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/pytest.yml/badge.svg)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/pytest.yml)
+[![CI Pipeline](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/audit-pipeline.yml/badge.svg)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/audit-pipeline.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22727801.svg)](https://doi.org/10.5281/zenodo.22727801)
 [![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
