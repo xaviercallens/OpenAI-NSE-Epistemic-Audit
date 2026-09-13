@@ -38,18 +38,18 @@ is logically derived from the incompressible Navier-Stokes definitions. The Lean
 
 Using our Python verification scripts, we extract the physical metrics of the OpenAI collapsing vortex core as a function of remaining time $\tau = T^* - t$:
 
-| Directive & Script | Physical Metric | Mathematical Exponent / Value | Physical Reality & Verdict |
-|---|---|---|---|
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | **Global Kinetic Energy** $E(t)$ | $E \sim \tau^{+0.485} \to 0$ | ✅ Bounded globally in $L^2$ (Paper claim verified) |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | **Intensive Energy Density** $e_{\text{local}}$ | $e_{\text{local}} \sim \tau^{-1.010} \to \infty$ | 🔴 **Diverges to $\infty$** (Local isothermal assumption fails) |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | **Vortex Enstrophy** $\Omega(t)$ | $\Omega(t) \sim \tau^{-0.515} \to \infty$ | 🔴 **Diverges to $\infty$** (Unbounded vorticity production) |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | **$L^3$ Sobolev Norm** $\|u\|_{L^3}$ | $\|u\|_{L^3} \sim \tau^{-0.00667} \to \infty$ | 🔴 **Diverges** (Breaches Escauriaza-Seregin-Šverák bound) |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | **Sobolev $H^{3/2}$ Norm** $\|u\|_{H^{3/2}}$ | $\|u\|_{H^{3/2}} \sim \tau^{-0.5075} \to \infty$ | 🔴 **Diverges** (Unbounded high-frequency derivatives) |
-| **Directive 3** (`directive3_jacobian_instability.py`) | **Moment Matrix Preconditioning** | $\kappa(B) \approx 4.11 \times 10^5$ | ⚠️ High numerical anisotropy ($h = 1/200$) |
-| **Directive 4** (`directive4_gevrey_regularity.py`) | **Gevrey Regularity Index** | $s = 1.5$ (Gevrey-1.5 class) | ✅ $C^\infty$ smooth, non-analytic cutoff force $f$ |
-| **Directive 5** (`directive5_mach_divergence.py`) | **Mach Number Breach** $\text{Ma}(t)$ | $\text{Ma} = 0.3$ at $\tau = 6.7 \times 10^{-14} \text{ s}$ | 🔴 **Incompressibility model self-invalidates at 67 fs** |
-| **Directive 5** (`directive5_mach_divergence.py`) | **Sonic Barrier Breach** $\text{Ma}(t)$ | $\text{Ma} = 1.0$ at $\tau = 6.2 \times 10^{-15} \text{ s}$ | 🔴 **Shock waves form; acoustic energy radiates away** |
-| **Directive 5** (`directive5_mach_divergence.py`) | **Knudsen Continuum Limit** $\text{Kn}$ | $\text{Kn} = 1.0$ at $\tau = 9.0 \times 10^{-19} \text{ s}$ | 🔴 **Continuum hypothesis breaks into Brownian noise** |
+| Directive & Script | Physical Metric Calculated | Mathematical Limit | Physical Conclusion |
+| :--- | :--- | :--- | :--- |
+| **Directive 2** (`directive2_thermodynamic_paradox.py`) | Global Kinetic Energy $E(t)$ | $E \sim \tau^{+0.485} \to 0$ | ✅ Bounded globally in $L^2$ (Paper claim verified) |
+| **Directive 2** (`directive2_thermodynamic_paradox.py`) | Intensive Energy Density $e_{\text{local}}$ | $e_{\text{local}} \sim \tau^{-1.010} \to \infty$ | 🔴 Diverges to $\infty$ (Local isothermal assumption fails) |
+| **Directive 2** (`directive2_thermodynamic_paradox.py`) | Vortex Enstrophy $\Omega(t)$ | $\Omega(t) \sim \tau^{-0.515} \to \infty$ | 🔴 Diverges to $\infty$ (Unbounded viscous heating) |
+| **Directive 2** (`directive2_thermodynamic_paradox.py`) | $L^3$ Lebesgue Norm $\|u\|_{L^3}$ | $\|u\|_{L^3} \sim \tau^{-0.00667} \to \infty$ | 🔴 Diverges (Breaches Escauriaza-Seregin-Šverák bound) |
+| **Directive 2** (`directive2_thermodynamic_paradox.py`) | $H^{3/2}$ Sobolev Norm $\|u\|_{H^{3/2}}$ | $\|u\|_{H^{3/2}} \sim \tau^{-0.5075} \to \infty$ | 🔴 Diverges (Unbounded high-frequency derivatives) |
+| **Directive 3** (`directive3_jacobian_instability.py`) | Moment Matrix Preconditioning | $\kappa(B) \approx 4.11 \times 10^5$ | ✅ Numerically stable, but physically absurd aspect ratio ($h=1/200$) |
+| **Directive 4** (`directive4_gevrey_regularity.py`) | Gevrey Regularity Index | $s = 1.5$ (Gevrey-1.5) | ✅ $C^\infty$ smooth, non-analytic cutoff force $f$ |
+| **Directive 5** (`directive5_mach_divergence.py`) | Mach Number Breach $Ma(t)$ | $Ma = 0.3$ at $\tau = 6.7 \times 10^{-14}$ s | 🔴 Incompressibility model self-invalidates at 67 fs |
+| **Directive 5** (`directive5_mach_divergence.py`) | Sonic Barrier Breach $Ma(t)$ | $Ma = 1.0$ at $\tau = 6.2 \times 10^{-15}$ s | 🔴 Shock waves form; acoustic energy radiates away |
+| **Directive 5** (`directive5_mach_divergence.py`) | Knudsen Continuum Limit $Kn$ | $Kn = 1.0$ at $\tau = 9.0 \times 10^{-16}$ s | 🔴 Continuum hypothesis breaks into Brownian noise |
 
 ---
 
