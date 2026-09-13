@@ -131,13 +131,17 @@ theorem openai_construction_not_admissible
     (v_openai : ℝ³ → ℝ → ℝ³)
     (h_div : Tendsto (fun t => globalEnstrophy v_openai t) (𝓝[<] 1) atTop) :
     ¬ UniformBoundedEnstrophy v_openai 1 := by
-  intro h_adm
-  rcases h_adm with ⟨Ω_max, h_pos, h_bound⟩
+  rintro ⟨Ω_max, _, h_bound⟩
   -- A function bounded by Ω_max on [0, 1) cannot tend to +∞ as t ↑ 1.
-  have h_not_top : ¬ Tendsto (fun t => globalEnstrophy v_openai t) (𝓝[<] 1) atTop := by
-    intro h_lim
-    -- standard filter contradiction
-    sorry
-  exact h_not_top h_div
+  have h_eventual := tendsto_atTop.mp h_div (Ω_max + 1)
+  -- 𝓝[<] 1 is the left neighborhood filter. Ico 0 1 belongs to it.
+  have h_nhds : Ico 0 1 ∈ 𝓝[<] 1 := by
+    apply Ico_mem_nhdsWithin_Iio
+    norm_num
+  have h_inter := Filter.inter_mem h_eventual h_nhds
+  -- The filter is proper, so there exists a t in the intersection
+  rcases Filter.nonempty_of_mem h_inter with ⟨t, ht_gt, ht_Ico⟩
+  have h_le := (h_bound t ht_Ico).2
+  linarith
 
 end NavierStokes.Thermodynamics

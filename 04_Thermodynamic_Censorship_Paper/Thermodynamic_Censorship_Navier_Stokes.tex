@@ -170,6 +170,19 @@ The OpenAI Lean 4 proof of Navier-Stokes blow-up is formally correct. The physic
 
 The AI has not solved the physicist's problem; it has solved the mathematician's problem and, in doing so, exposed the gap between them.
 
+\appendix
+\section{Appendix: Derivation of the Thermal Energy Equation from Enstrophy}
+
+To formally answer how enstrophy divergence implies thermal shock without an explicit temperature equation in the standard incompressible NSE, we must explicitly couple the momentum equations with the thermal energy equation. The classical incompressible NSE assume constant density ($\rho$) and constant temperature ($T$). To rigorously demonstrate thermal vaporization, we track the temperature field $T(x,t)$ driven by the viscous dissipation function $\Phi$:
+\begin{equation}
+\rho c_p \left( \frac{\partial T}{\partial t} + u \cdot \nabla T \right) = k \nabla^2 T + 2\mu \, \mathbf{D}(u) : \mathbf{D}(u)
+\end{equation}
+where $\mathbf{D}(u) = \frac{1}{2}(\nabla u + (\nabla u)^T)$ is the rate-of-strain tensor. For a fluid with suitable boundary conditions, the spatial integral of the dissipation tensor contraction equals the enstrophy:
+\begin{equation}
+\int_{\mathbb{R}^3} 2\mu \, \mathbf{D}(u) : \mathbf{D}(u) \, dx = \mu \int_{\mathbb{R}^3} |\nabla \times u|^2 dx = \mu \, \Omega(t)
+\end{equation}
+For the AI's collapsing vortex, the enstrophy density scales as $\omega^2 \sim \tau^{-2.010}$. Concurrently, the thermal conduction timescale $t_{\text{diff}} \sim l_r^2 / \alpha_{\text{thermal}} \sim \tau^{1.0}$ acts too slowly to diffuse the highly localized heat generation. As a result, the source term dominates, and the local temperature rises as $\Delta T \sim \tau^{-1.010} \to \infty$. This mechanically driven heating mathematically forces the fluid past the boiling threshold ($T > 373$ K for water) and eventually the plasma threshold ($T > 10^4$ K), unequivocally invalidating the incompressibility assumption prior to the singularity.
+
 \begin{thebibliography}{99}
 \bibitem{Leray1934} Leray, J. (1934). Sur le mouvement d'un liquide visqueux emplissant l'espace. \textit{Acta Mathematica}, 63, 193-248.
 \bibitem{Fefferman2000} Fefferman, C. L. (2000). Existence and smoothness of the Navier-Stokes equation. \textit{Clay Mathematics Institute}.
