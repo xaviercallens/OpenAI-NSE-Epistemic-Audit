@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, geometry, hyperref}
+\geometry{a4paper, margin=1in}
+
+\title{Work Stream 4: Mechanically Driven Cavitation}
+\author{MechanicaFluidorum Program \& Community Contributors (esp. \texttt{u/Little-Name9809})}
+\date{September 2026}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+A fascinating question posed by \texttt{u/Little-Name9809} is whether the mathematical construction of the OpenAI singularity suggests a physical mechanism to vaporize a fluid into plasma using \emph{only mechanical force} (with no external heat).
+
+\section{Hydrodynamic Cavitation}
+In the OpenAI proof, the internal wave packets transfer energy into the vortex core at a rate that diverges as $\tau \to 0$. By evaluating the local cavitation number $\sigma$:
+\begin{equation}
+    \sigma(\tau) = \frac{p_\infty - p_v}{\frac{1}{2}\rho |u(\tau)|^2}
+\end{equation}
+where $p_v$ is the vapor pressure. As the core velocity $|u(\tau)| \sim \tau^{-1/2} \to \infty$, the cavitation number rapidly approaches zero. 
+
+Before the thermal shock discussed in Work Stream 2 boils the fluid, the extreme drop in local static pressure (due to Bernoulli effects in the vortex core) induces \emph{mechanical cavitation}. This is analogous to sonoluminescence, where violent bubble collapse generates localized plasma. The mathematical singularity provides a theoretical blueprint for maximizing this acoustic concentration of energy.
+
+\section{Acknowledgments}
+Thank you to \texttt{u/Little-Name9809} for connecting the pure math PDE construction to the physics of sonoluminescence and phase transitions.
+
+\end{document}
