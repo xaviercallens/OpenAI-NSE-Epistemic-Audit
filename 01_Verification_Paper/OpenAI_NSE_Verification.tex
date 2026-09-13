@@ -5,6 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{geometry}
+\usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{xcolor}
@@ -254,6 +255,15 @@ the singular time $t = 1$, the shear-generated temperatures would far exceed the
 threshold, vaporizing the fluid into a supersonic, highly compressible flow. This irreversibly
 violates both the divergence-free condition $\nabla \cdot u = 0$ and the isothermal Boussinesq
 approximation---the two foundational assumptions of the NSE model.
+
+To provide an empirical anchor for this divergence, we compared the pathological energy spectrum of the OpenAI pre-singularity trajectory against high-fidelity isotropic turbulence benchmarks from the Johns Hopkins Turbulence Database (JHTDB), resolved using the LeanFlow pseudo-spectral solver. As shown in Figure~\ref{fig:spectrum}, real physical turbulence adheres to the classic Kolmogorov $k^{-5/3}$ energy cascade, smoothly dissipating kinetic energy at the Kolmogorov microscale. In contrast, the Lean~4 constructed singularity shifts energy unphysically to diverging wavenumbers (driven by the Gevrey-2 wave packets), departing entirely from any realizable fluid-dynamic regime.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{spectrum_comparison.png}
+    \caption{Energy spectrum comparison: Real isotropic turbulence (JHTDB data resolved via LeanFlow) exhibiting the expected Kolmogorov $k^{-5/3}$ decay, contrasted against the pathological energy spike of the OpenAI constructed singularity near $\tau \approx 10^{-6}$. The singularity unphysically concentrates energy at diverging wavenumbers.}
+    \label{fig:spectrum}
+\end{figure}
 
 The $L^3$ divergence (exponent $-0.020$) provides a supplementary confirmation: it is a borderline
 violation of the Escauriaza-Seregin-\v{S}ver\'{a}k~\cite{ESS2003} criterion, which proves that a
