@@ -164,13 +164,17 @@ To computationally anchor this dual-framework, we run synthetic limits against h
 
 **Discussions are open to everyone** — mathematicians, physicists, engineers, students, science journalists, and curious minds.
 
-| Thread | Topic |
-|---|---|
-| [💬 Community Introduction](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/2) | Introduce yourself |
-| [❓ Q&A Megathread](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/3) | Ask anything |
-| [💡 Open Challenges](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/4) | Thermodynamic Censorship challenge |
-| [🎉 Show & Tell](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/5) | Reproductions & extensions |
-| [🚀 Welcome Post](https://github.com/xaviercallens/OpenAI-NSE-Verification/discussions/1) | Overview & resources |
+Whether you want to debate the boundary between abstract Sobolev spaces and fluid mechanics, report a local GPU simulation run, or ask a question about Lean 4 formal logic, you are welcome here!
+
+| Thread Category | Discussion Thread | Focus & Topics |
+|---|---|---|
+| 🚀 **Welcome** | [🚀 Welcome Post & Overview](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/1) | Research overview, resources, & paper links |
+| 💬 **Community** | [💬 Community Introductions](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/2) | Introduce yourself & your research background |
+| ❓ **Q&A** | [❓ Q&A Megathread (Reddit & Community FAQs)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/3) | Reddit feedback (r/physics, r/math, r/MachineLearning) & answers |
+| 💡 **Challenges** | [💡 Open Challenges: Thermodynamic Censorship](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/4) | Lean 4 challenge: physical bounds vs blow-up |
+| 🎉 **Showcase** | [🎉 Show & Tell: Reproductions & OpenFOAM Runs](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/5) | Share local GPU benchmarks, certificates, & visualizations |
+
+*For complete pre-drafted thread starter posts and Reddit Q&A synthesis, see our [Discussion Bootstrap Kit](06_Communication_Kit/DISCUSSIONS_BOOTSTRAP_AND_REDDIT_FEEDBACK.md).*
 
 ---
 
