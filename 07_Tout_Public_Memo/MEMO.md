@@ -7,16 +7,23 @@
 
 ![Neuro-Symbolic AI](assets/neuro_symbolic_brain_1789311430590.jpg)
 
-### 🚀 The Clash between Math and Reality / Le Choc entre Mathématiques et Réalité / 数学与现实的碰撞
+### 🇫🇷 1. L'Héritage Français & Origine des Équations
+Les équations de Navier-Stokes décrivent le mouvement de tous les fluides (eau, air, gaz) :
+- 🇫🇷 **Claude-Louis Navier (1822)** : Illustre ingénieur français formé à l'*École Nationale des Ponts et Chaussées*, qui a introduit le premier les forces de frottement visqueux dans la dynamique des fluides.
+- 🇬🇧 **George Gabriel Stokes (1845)** : Physicien anglo-irlandais qui a complété et formalisé les équations de transport de quantité de mouvement.
 
-**🇺🇸 Introduction:**
-Welcome! This memo visually explains our scientific audit of OpenAI's recent fluid dynamics proof. OpenAI used AI to mathematically prove that a fluid can create a "singularity" (a point of infinite energy). While mathematically perfect, **it is physically impossible**. In the real world, heat, viscosity, and "Thermodynamic Censorship" destroy this singularity before it forms.
+---
 
-**🇫🇷 Introduction :**
-Bienvenue ! Ce document explique de manière visuelle notre audit scientifique des récentes découvertes d'OpenAI. OpenAI a utilisé une IA pour démontrer mathématiquement qu'un fluide peut créer une "singularité" (énergie infinie). Bien que parfaite sur le papier, **elle est impossible dans la réalité physique**. Dans le monde réel, la chaleur, la viscosité et la "Censure Thermodynamique" détruisent cette singularité.
+### ✈️ 2. Pourquoi Navier-Stokes Régit Notre Monde ?
+- ✈️ **Aéronautique & Avions** : Calculer la portance des ailes ($C_L$), réduire la traînée ($C_D$) et garantir la sécurité des avions de ligne à Mach 0.85.
+- 🌍 **Climat & Océans** : Modéliser la circulation atmosphérique, prévoir les ouragans et calculer le transport thermique des courants océaniques comme le Gulf Stream.
 
-**🇨🇳 简介：**
-欢迎！本备忘录直观地解释了我们对 OpenAI 最近流体动力学证明的科学审计。OpenAI 使用 AI 在数学上证明了流体可以产生“奇点”（无限能量的点）。虽然在数学上是完美的，但**这在物理上是不可能的**。在现实世界中，热量、粘性和“热力学审查”会在奇点形成之前将其摧毁。
+---
+
+### ❓ 3. Le Problème du Prix du Millénaire & L'Annonce d'OpenAI
+- En 2000, le *Clay Mathematics Institute* a classé la régularité de Navier-Stokes parmi les 7 **Problèmes du Prix du Millénaire** (1 million $).
+- En septembre 2026, **OpenAI** a déployé 10 000 agents IA pour prouver dans Lean 4 qu'un fluide peut créer une "singularité" (une explosion d'énergie infinie $\vec{u} \to \infty$).
+- **Notre Audit Épistémique en Mots Simples** : La preuve d'OpenAI est valide en mathématiques pures (espaces de Sobolev), mais **physiquement impossible**. Dans la réalité, la compressibilité (Mach > 0.3), le bruit thermique et la viscosité agissent comme une **Censure Thermodynamique** empêchant toute énergie infinie.
 
 ---
 

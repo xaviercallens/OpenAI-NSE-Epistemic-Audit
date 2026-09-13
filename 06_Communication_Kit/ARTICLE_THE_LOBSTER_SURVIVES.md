@@ -40,6 +40,13 @@ We created a custom visualization script (`scripts/pyfr_lobster_visualization.py
 
 ![Lobster Protected by Entropy](../dataset/animations/lobster_survival.png)
 
+## 🎨 Homage to the Original Reddit CFD Lobster & Author
+
+A special shoutout and deep scientific gratitude to the original author and the `/r/EngineeringStudents` community on Reddit for inspiring this work with the legendary post:  
+👉 **["Someone requested a CFD simulation on a lobster!"](https://www.reddit.com/r/EngineeringStudents/comments/3ji1c1/someone_requested_a_cfd_simulation_on_a_lobster/#lightbox)** (Original Thread: [Reddit Link](https://www.reddit.com/r/EngineeringStudents/s/SAfiRQdzDz)).
+
+Thank you to the author for pioneering high-speed aerodynamic CFD simulations on crustaceans! Your original simulation proved that lobsters belong in computational fluid dynamics.
+
 ## Conclusion
 
 Mathematics is the map, but physics is the territory. OpenAI built a brilliant mapmaker. Now, it's time to teach it how to read the terrain. 
