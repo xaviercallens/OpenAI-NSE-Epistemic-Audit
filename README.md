@@ -41,7 +41,7 @@ This project presents a comprehensive physical verification, demonstrating how t
 | **2** | **Mach Number Self-Invalidation**: incompressible NSE invalidate themselves when $Ma \ge 0.3$ | **67 femtoseconds** ($\tau \approx 6.7 \times 10^{-14}$ s) before mathematical blow-up |
 | **3** | **Teleological Causality Reversal**: force $f$ is reverse-engineered from a pre-specified singular similarity profile | **MMS inversion** — shooting an arrow and painting a bullseye around it |
 | **4** | **Matrix Scaling & Non-Dimensionalization**: moment-matching matrix $A = D B D$ has bounded non-dimensional condition number $\kappa(B) \approx 4.11 \times 10^5$ | **$\kappa(B) \sim O(10^5)$** — raw $\kappa \sim 10^{28}$ was an unscaled dimensional artifact |
-| **5** | **Sub-Planckian Energy Injection**: Euler initial conditions inject energy at sub-Planckian scales | Coherent vortices below $10^{-35}$ m at $t = 0$ |
+| **5** | **Sub-Planckian Coherent Fine-Tuning**: Euler initial conditions require unphysically fine-tuned sub-Planckian coherence | Phased fluctuations below $10^{-35}$ m destroyed by atomic thermal noise |
 
 ### The Proposed Resolution: Dual-Framework
 

@@ -120,12 +120,7 @@ All flat limits $\lim_{q \to 0^+} d^N [q^{-A} \exp(-1/q^2)] / dq^N = 0$ hold for
 $A$---confirmed by SymPy---so the function possesses infinitely many derivatives and legally
 satisfies the Clay $C^\infty$ requirement.
 
-However, this mathematical legality conceals a physical impossibility. The $N$-th derivative of
-the cutoff grows as $(N!)^{1.5}$, so at high order $N$ the gradient coefficients grow exponentially.
-No physical fluid can sustain velocity gradients of such magnitude: they would demand
-shear stresses far exceeding any known material strength and energy densities surpassing nuclear
-binding energies. The formalization exploits the exact boundary between $C^\infty$ and
-$C^\omega$---mathematically impeccable, physically unrealizable.
+However, this mathematical legality conceals a physical impossibility. The physical vulnerability of Gevrey cutoffs lies in their \emph{non-analyticity}. In true incompressible fluids, the pressure Poisson equation ($\nabla^2 p = -\rho \nabla \cdot (u \cdot \nabla u)$) requires global, instantaneous pressure communication. Gevrey compact cutoffs allow the artificial creation of compactly supported fluid ``bubbles'' that do not analytically communicate pressure with the surrounding domain, mathematically shielding the blow-up profile from global boundary relaxation. The formalization exploits the exact boundary between $C^\infty$ and $C^\omega$---mathematically impeccable, physically unrealizable.
 
 \subsection{The Proof Architecture: Internal Reynolds-Stress Cancellation}
 
@@ -322,11 +317,7 @@ For the unforced Euler equations, the singularity must emerge solely from the in
 $u_0(x)$. The formalization constructs $u_0$ as the limit of an infinite series of vortex packets
 with spatial frequencies $\kappa_n \to \infty$ along a super-exponential tower.
 
-Injecting kinetic energy at $t = 0$ into spatial scales approaching zero implies coherent vortex
-structures smaller than Planck scales ($\sim 10^{-35}$\,m), violating the continuum hypothesis
-far below the Kolmogorov microscale. The ``smoothness'' of $u_0$ is preserved mathematically via
-Gevrey-class flatness, but at the cost of infinite physical complexity: the initial velocity field
-oscillates and twists at scales beyond any realizable molecular configuration.
+Because $u_0 \in C^\infty$, the energy spectrum decays faster than any polynomial at high frequencies, rendering energy at sub-Planckian scales ($\sim 10^{-35}$\,m) mathematically infinitesimal ($\sim 10^{-100}$\,J). However, the physical impossibility lies in \emph{sub-Planckian coherent fine-tuning}. The finite-time singularity causally relies on these sub-atomic fluctuations being perfectly phased and coherently aligned at $t=0$ so background shear can amplify them. In real fluids, discrete atomic motion, Brownian fluctuations, and thermal noise destroy sub-molecular coherence instantly, rendering such fine-tuned initial configurations physically unrealizable.
 
 % ====================================================================
 \section{Thermodynamic Censorship: A Physical Axiom}
