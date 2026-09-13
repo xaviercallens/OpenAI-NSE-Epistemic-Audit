@@ -41,6 +41,7 @@ lake-packages/
 atlas-lean/
 autoform-bot/
 openai_repo/
+physlib/
 site/
 site-src/
 03_Lean4_Topological_Censorship/site/

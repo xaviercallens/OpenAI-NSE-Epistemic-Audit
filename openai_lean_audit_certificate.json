@@ -2,7 +2,7 @@
   "certificate_title": "OpenAI Navier-Stokes Epistemic Audit Certificate",
   "repository_url": "https://github.com/openai/NavierStokesAndEuler.git",
   "git_commit_sha": "f9e8bc5b38b6e212696e8a30e3e91517af887bbd",
-  "audit_timestamp_utc": "2026-09-13T13:53:48.529895+00:00",
+  "audit_timestamp_utc": "2026-09-13T13:57:45.687066+00:00",
   "formalization_verdict": {
     "syntactic_soundness": "PRISTINE_100_PERCENT_ACCEPTED",
     "physical_realizability": "THERMODYNAMICALLY_UNREALIZABLE",
@@ -16017,5 +16017,5 @@
       }
     }
   },
-  "certificate_signature_sha256": "ed892e5b31fabe10609688a6cf283fce700587b2ef7ee7ae240850f96d7740b0"
+  "certificate_signature_sha256": "f3317e50707fadbab0c70f58bc45a6921eaf5980d9fca17372e479ee0e2bbfc2"
 }
