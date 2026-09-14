@@ -99,7 +99,6 @@ OpenAI-NSE-Epistemic-Audit/
 ├── 05_Community_Research_Directions/    # Extensible Workstreams & Terence Tao Manifesto
 │   ├── POSITIVE_FUTURE_DIRECTIONS.md
 │   └── TAO_NEUROSYMBOLIC_SCIENTIFIC_AI_MANIFESTO.md # The Neuro-Symbolic Scientific AI Modus Operandi
-├── 06_Communication_Kit/                # Blog Post, Press Kit & Social Media Templates
 ├── LEGAL_NOTICE_AND_CITIZEN_SCIENCE_DISCLAIMER.md # Legal protections & Fair Use disclaimers
 ├── autoform-bot/                        # Submodule: Dual-Framework Meta-Heuristics 
 ├── scripts/                             # Directives 2–7 analyses & Extractors
@@ -220,8 +219,8 @@ To make our scientific audit more tangible (and entertaining), we've built a sui
 * **Reproduction Protocol & Scientific Literature References:** Follow our step-by-step reproduction guide, physics deep-dive, literature bibliography (Fefferman, Leray, BKM, ESS, Tao), and Lean 4 formalization: **[Reproduction Protocol & Literature References](12_Reproduction_Protocol_and_Physics_References/REPRODUCTION_PROTOCOL_AND_PHYSICS_REFERENCES.md)**.
 * **Proposed Solution (Neuro-Symbolic Engine & Lean 4 Interception):** Read our technical demonstration showing how physical predicates in Lean 4 intercept and refuse OpenAI unphysical blowup proofs: **[The Neuro-Symbolic Engine (LeanFlow)](11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md)**.
 * **OpenAI PoC Proposal (Physics-Informed Proof Search):** Explore our working Proof of Concept designed for OpenAI research & reasoning teams: **[OpenAI PoC Proposal](10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md)**. Demonstrating how to embed physical domain tactics (`physlib`) into Lean 4 multi-agent proof search architectures.
-* **The Thermodynamic Lobster:** Read our viral, humorous article explaining the physics of the audit: **[The Lobster and the Singularity](06_Communication_Kit/ARTICLE_THE_LOBSTER_SURVIVES.md)**. Spoiler: The mathematical singularity doesn't kill the lobster because entropy and thermodynamics save the day! (Referencing [MDPI Entropy 24(7):897](https://www.mdpi.com/1099-4300/24/7/897) and paying homage to the original [Reddit /r/EngineeringStudents CFD Lobster](https://www.reddit.com/r/EngineeringStudents/comments/3ji1c1/someone_requested_a_cfd_simulation_on_a_lobster/)).
-* **Singularities Do Not Exist (T-Duality & Dual-Scale Regularization):** Read our scientific overview on why both fluid and black hole singularities are mathematical artifacts, and how we use String Theory's T-duality principles to build regularized AI solvers: **[The End of Infinite Density](06_Communication_Kit/ARTICLE_DUAL_SCALE_REGULARIZATION.md)**. To see the code behind this physics engine, check out the **[SocrateAI-Scientific-DualScaleSimulator](https://github.com/xaviercallens/SocrateAI-Scientific-DualScaleSimulator)**.
+* **Empirical DNS and OpenFOAM Telemetry:** Analyze full direct numerical simulations and Taylor-Green Vortex benchmarks comparing LeanFlow and OpenFOAM against mathematical blow-up profiles in **[Section 1: Investigation & Physics Audit](02_Empirical_Observation/SECTION_1_INVESTIGATION_PHYSICS_AUDIT.md)**.
+* **Dual-Scale Regularization Framework:** Review the mathematical foundation showing why infinite-density singularities are regularized by thermodynamic limits: **[Thermodynamic Censorship Paper](04_Thermodynamic_Censorship_Paper/Thermodynamic_Censorship_Navier_Stokes.pdf)**.
 * **PyFR & CFD Integration:** We advocate for using awesome Python CFD libraries like **[PyFR](https://www.linkedin.com/pulse/pyfr-awesome-python-cdf-library-dmitry-buzolin/)** to act as the "Empirical Engine." See our visualization scripts (e.g., `scripts/pyfr_lobster_visualization.py`) demonstrating how the physics engine shields reality from infinite mathematical blow-ups.
 * **Navier-Stokes Masterclass (2-Hour Training):** Dive deep into the fluid equations with our interactive Jupyter Notebook course. Learn the math, write a CFD solver in Python, and visualize why the OpenAI singularity is physically impossible using the LeanFlow dual-scale approach. Available in **[English](08_Training_Course/Navier_Stokes_Training_EN.ipynb)**, **[Français](08_Training_Course/Navier_Stokes_Training_FR.ipynb)**, and **[中文](08_Training_Course/Navier_Stokes_Training_ZH.ipynb)**.
 
@@ -237,11 +236,11 @@ Whether you want to debate the boundary between abstract Sobolev spaces and flui
 |---|---|---|
 | 🚀 **Welcome** | [🚀 Welcome Post & Overview](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/1) | Research overview, resources, & paper links |
 | 💬 **Community** | [💬 Community Introductions](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/2) | Introduce yourself & your research background |
-| ❓ **Q&A** | [❓ Q&A Megathread (Reddit & Community FAQs)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/3) | Reddit feedback (r/physics, r/math, r/MachineLearning) & answers |
+| ❓ **Q&A** | [❓ Q&A Megathread (Reddit & Community FAQs)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/3) | Community feedback (r/physics, r/math, r/MachineLearning) & answers |
 | 💡 **Challenges** | [💡 Open Challenges: Thermodynamic Censorship](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/4) | Lean 4 challenge: physical bounds vs blow-up |
 | 🎉 **Showcase** | [🎉 Show & Tell: Reproductions & OpenFOAM Runs](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/5) | Share local GPU benchmarks, certificates, & visualizations |
 
-*For complete pre-drafted thread starter posts and Reddit Q&A synthesis, see our [Discussion Bootstrap Kit](06_Communication_Kit/DISCUSSIONS_BOOTSTRAP_AND_REDDIT_FEEDBACK.md).*
+*All community members are invited to participate in the open GitHub Discussions above.*
 
 ---
 

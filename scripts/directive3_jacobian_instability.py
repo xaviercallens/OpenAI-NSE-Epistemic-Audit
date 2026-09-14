@@ -18,6 +18,9 @@ condition number completely independent of X_R.
 
 import numpy as np
 from scipy.linalg import svd
+
+# NumPy 1.x and 2.x compatibility (np.trapz removed in NumPy 2.0)
+trapezoid = getattr(np, 'trapezoid', getattr(np, 'trapz', None))
 import sys
 
 # Set UTF-8 output encoding if possible
@@ -49,7 +52,7 @@ def construct_A_theta(lam, X_R):
     for i in range(3):
         for j in range(3):
             integrand = (x * X_R) ** (2 * i) * phi[j]
-            A[i, j] = np.trapz(integrand, x)
+            A[i, j] = trapezoid(integrand, x)
     
     return A
 
@@ -73,7 +76,7 @@ def construct_A_z(lam, X_R):
     for i in range(2):
         for j in range(2):
             integrand = (x * X_R) ** (2 * i + 1) * phi[j]
-            A[i, j] = np.trapz(integrand, x)
+            A[i, j] = trapezoid(integrand, x)
     
     return A
 

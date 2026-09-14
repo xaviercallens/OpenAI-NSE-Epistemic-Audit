@@ -15,6 +15,9 @@ import numpy as np
 from scipy.linalg import svd, norm, solve
 import sys
 
+# NumPy 1.x and 2.x compatibility (np.trapz removed in NumPy 2.0)
+trapezoid = getattr(np, 'trapezoid', getattr(np, 'trapz', None))
+
 # Set UTF-8 output encoding if possible
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
@@ -52,14 +55,14 @@ def construct_moment_system(lam, X_R):
     for i in range(3):
         for j in range(3):
             integrand = (x * X_R) ** (2 * (i + j)) * bump
-            A_theta[i, j] = np.trapz(integrand, x)
+            A_theta[i, j] = trapezoid(integrand, x)
     
     # Axial block
     A_z = np.zeros((2, 2))
     for i in range(2):
         for j in range(2):
             integrand = (x * X_R) ** (2 * (i + j) + 2) * bump
-            A_z[i, j] = np.trapz(integrand, x)
+            A_z[i, j] = trapezoid(integrand, x)
     
     # Non-dimensional scaling matrices
     D_theta_inv = np.diag([1.0, X_R**(-2), X_R**(-4)])

@@ -51,3 +51,11 @@ site-src/
 .pytest_cache/
 scratch_test_certificate.json
 
+# Release exclusions: communication, social media, agents, skills
+06_Communication_Kit/
+.agents/
+*.agents/
+skills/
+*social_media*
+*communication*
+.venv/
