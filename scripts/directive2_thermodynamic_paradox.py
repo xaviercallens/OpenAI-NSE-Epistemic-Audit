@@ -12,10 +12,17 @@ Corrected per peer-review report for intensive dimensional scaling:
 - Sobolev H^(3/2) Norm: ||u||_{H^(3/2)} ~ tau^(-0.5075)
 """
 
+import os
 import sys
 from sympy import (
     symbols, sqrt, Rational, simplify, limit, oo, 
     Function, Abs, pprint, S, latex, exp, log
+)
+
+# Ensure scripts directory is in sys.path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from physics_constants import (
+    WATER_300K, ANISOTROPY_H_DEFAULT_RAT, ANISOTROPY_H_MAX
 )
 
 # Set UTF-8 output encoding if possible
@@ -30,8 +37,8 @@ h = symbols('h', positive=True)     # anisotropy parameter (0 < h < 1/100)
 p_exp = symbols('p', positive=True, integer=True)  # Lp exponent
 s = symbols('s', positive=True)     # Sobolev index
 
-# Fix h to a representative value for numerical checks
-h_val = Rational(1, 200)  # h = 0.005 < 1/100
+# Fix h to a representative value for numerical checks from centralized constants
+h_val = Rational(ANISOTROPY_H_DEFAULT_RAT.numerator, ANISOTROPY_H_DEFAULT_RAT.denominator)  # h = 1/200 < 1/100
 
 print("=" * 70)
 print("DIRECTIVE 2: THERMODYNAMIC PARADOX AUDIT (DIMENSIONALLY CORRECTED)")

@@ -9,33 +9,35 @@ core as tau -> 0, demonstrating that the incompressibility assumption
 
 import numpy as np
 import os
+import sys
+
+# Ensure scripts directory is in sys.path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from physics_constants import (
+    WATER_300K, BOLTZMANN_CONSTANT, ANISOTROPY_H_DEFAULT,
+    MACH_INCOMPRESSIBILITY_LIMIT, SONIC_MACH_LIMIT,
+    L_REF_DEFAULT, get_reference_velocity
+)
 
 # ============================================================
-# Physical Constants (Water at 300K)
+# Physical Constants (Water at 300K) from Unified Repository
 # ============================================================
-c_s = 1500.0       # Speed of sound in water (m/s)
-nu = 1.0e-6         # Kinematic viscosity of water (m²/s)
-rho = 1000.0        # Density (kg/m³)
-k_B = 1.381e-23     # Boltzmann constant (J/K)
-T = 300.0           # Temperature (K)
+c_s = WATER_300K.speed_of_sound           # Speed of sound in water (m/s)
+nu = WATER_300K.kinematic_viscosity       # Kinematic viscosity of water (m²/s)
+rho = WATER_300K.density                  # Density (kg/m³)
+k_B = BOLTZMANN_CONSTANT                  # Boltzmann constant (J/K)
+T = 300.0                                 # Temperature (K)
+c_p_water = WATER_300K.isobaric_heat_capacity  # Specific heat capacity (J/(kg·K))
+mfp_water = WATER_300K.mean_free_path     # Intermolecular mean free path (m)
 
 # Anisotropy parameter (from the paper: h < 1/100)
-h = 0.005           # h = 1/200
+h = ANISOTROPY_H_DEFAULT                  # h = 1/200 = 0.005
 
 # ============================================================
 # Reference Scales
 # ============================================================
-# The OpenAI construction works in dimensionless units.
-# We must choose a physical reference scale.
-#
-# The vortex core has initial radial scale l_r(0) ~ tau(0)^{1/2}
-# At tau = 1 (t = 0), we set l_r ~ L_ref (some macroscopic length).
-# For a laboratory vortex: L_ref ~ 0.01 m (1 cm initial core radius)
-L_ref = 0.01  # meters
-
-# Reference velocity from the paper's scaling at tau = 1:
-# u_ref = nu / L_ref (viscous velocity scale)
-u_ref = nu / L_ref  # ~ 10^{-4} m/s (very slow initially)
+L_ref = L_REF_DEFAULT                     # Macroscopic reference length (0.01 m = 1 cm)
+u_ref = get_reference_velocity(WATER_300K, L_ref)  # ~ 10^{-4} m/s (viscous velocity scale)
 print("=" * 72)
 print("DIRECTIVE 5: MACH NUMBER DIVERGENCE — PHYSICAL SELF-INVALIDATION")
 print("=" * 72)
@@ -76,7 +78,7 @@ def temperature_rise(tau):
     |curl u| ~ u_theta / l_r
     c_p for water ~ 4186 J/(kg·K)
     """
-    c_p = 4186.0  # J/(kg·K)
+    c_p = c_p_water
     vorticity = velocity(tau) / core_radius(tau)
     dissipation_rate = nu * vorticity**2  # W/m³/rho
     delta_T = dissipation_rate * tau / c_p
@@ -90,15 +92,13 @@ def temperature_rise(tau):
 # tau^{-0.5-h} = 0.3 * c_s / u_ref
 # tau = (0.3 * c_s / u_ref)^{-1/(0.5+h)}
 
-Ma_threshold = 0.3
+Ma_threshold = MACH_INCOMPRESSIBILITY_LIMIT
 tau_break_Ma = (Ma_threshold * c_s / u_ref) ** (-1.0 / (0.5 + h))
 
 # Ma = 1.0 (sonic)
-tau_sonic = (1.0 * c_s / u_ref) ** (-1.0 / (0.5 + h))
+tau_sonic = (SONIC_MACH_LIMIT * c_s / u_ref) ** (-1.0 / (0.5 + h))
 
 # Knudsen number = mean_free_path / l_r = 1 (continuum breaks)
-# Mean free path in water ~ 3e-10 m (intermolecular distance)
-mfp_water = 3.0e-10  # meters
 tau_knudsen = (mfp_water / L_ref) ** (1.0 / 0.5)
 
 # Temperature: Delta_T > 100K (boiling)

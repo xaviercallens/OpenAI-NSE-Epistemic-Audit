@@ -10,6 +10,28 @@
         "enstrophy": 100000000.0,
         "entropy_production_rate": 10000.0
       },
+      "rational_bounds": {
+        "mach": {
+          "num": 450,
+          "den": 343,
+          "str": "450/343",
+          "limit_str": "3/10",
+          "valid": false
+        },
+        "knudsen": {
+          "num": 1000,
+          "den": 1,
+          "str": "1000",
+          "limit_str": "1/10",
+          "valid": false
+        },
+        "enstrophy": {
+          "num": 100000000,
+          "den": 1,
+          "str": "100000000",
+          "valid": true
+        }
+      },
       "admissibility_checks": {
         "mach_condition_passed": false,
         "knudsen_condition_passed": false,
@@ -25,6 +47,28 @@
         "knudsen_number": 0.001,
         "enstrophy": 120.0,
         "entropy_production_rate": 0.012
+      },
+      "rational_bounds": {
+        "mach": {
+          "num": 85,
+          "den": 343,
+          "str": "85/343",
+          "limit_str": "3/10",
+          "valid": true
+        },
+        "knudsen": {
+          "num": 1,
+          "den": 1000,
+          "str": "1/1000",
+          "limit_str": "1/10",
+          "valid": true
+        },
+        "enstrophy": {
+          "num": 120,
+          "den": 1,
+          "str": "120",
+          "valid": true
+        }
       },
       "admissibility_checks": {
         "mach_condition_passed": true,
