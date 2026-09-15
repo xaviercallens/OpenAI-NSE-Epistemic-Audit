@@ -162,7 +162,23 @@ def create_certified_zip(repo_root, output_zip):
     return manifest
 
 
-def push_to_zenodo(token, repo_root, publish=True):
+def confirm_publish():
+    """
+    Prompt user for confirmation before publishing to Zenodo.
+    This is a destructive action and cannot be easily undone.
+    """
+    print("\n" + "=" * 65)
+    print(" WARNING: Destructive Action - Publishing to Zenodo")
+    print("=" * 65)
+    print("This will publish the deposit to Zenodo, making it publicly")
+    print("accessible and permanently versioned. This action cannot be undone.")
+    print("=" * 65 + "\n")
+
+    response = input("Do you want to continue? (type 'yes' to confirm): ").strip().lower()
+    return response == "yes"
+
+
+def push_to_zenodo(token, repo_root, publish=False):
     headers = {"Authorization": f"Bearer {token}"}
     
     # 1. Check existing draft or create new version from RECORD_ID
@@ -270,10 +286,21 @@ def push_to_zenodo(token, repo_root, publish=True):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Zenodo Synchronizer & Certified Packager")
+    parser = argparse.ArgumentParser(
+        description="Zenodo Synchronizer & Certified Packager",
+        epilog="SAFETY: By default, this script uploads to a draft without publishing. Use --publish to publish (requires confirmation)."
+    )
     parser.add_argument("--token", default=get_token(), help="Zenodo Personal Access Token")
-    parser.add_argument("--publish", action="store_true", default=True, help="Publish deposit immediately (default: True)")
-    parser.add_argument("--draft-only", action="store_true", help="Upload files and metadata but do not call publish action")
+    parser.add_argument(
+        "--publish",
+        action="store_true",
+        help="DESTRUCTIVE: Publish deposit immediately after upload (requires confirmation prompt)"
+    )
+    parser.add_argument(
+        "--draft-only",
+        action="store_true",
+        help="Deprecated: Use without --publish instead. Upload files and metadata but do not publish."
+    )
     args = parser.parse_args()
 
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -291,7 +318,14 @@ def main():
         print("[-] Error: No Zenodo token found. Set ZENODO_TOKEN or save to ~/.zenodo_token", file=sys.stderr)
         sys.exit(1)
 
-    should_publish = not args.draft_only
+    # Determine publish action: --publish flag takes precedence, fall back to --draft-only
+    should_publish = args.publish and not args.draft_only
+
+    # If publishing, ask for confirmation
+    if should_publish and not confirm_publish():
+        print("[*] Publication cancelled by user. Draft is ready for manual review.")
+        sys.exit(0)
+
     push_to_zenodo(args.token, repo_root, publish=should_publish)
 
 
