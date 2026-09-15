@@ -12,9 +12,12 @@
 \usepackage{bm}
 \usepackage{microtype}
 \usepackage{amsthm}
+\usepackage{array}
+\usepackage{tabularx}
 
 \geometry{margin=1in}
 \newtheorem{proposition}{Proposition}[section]
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
 
 \title{\textbf{The OpenAI Navier--Stokes and Euler Blow-Up Proofs:\\ A Physical Reading, Not a Physical Refutation}}
 \author{The MechanicaFluidorum Program \\ \textit{SocrateAI Lab}}
@@ -88,24 +91,22 @@ Our purpose is not to contest the mathematics. A proof mapping $A \implies B$ is
 regardless of how physically realistic $A$ is, and the Millennium Prize problems were never framed as
 claims about physical fluids: Fefferman's statement~\cite{Fefferman2000} asks precise questions about
 a specific continuum model, chosen because it is tractable and physically motivated, not because it
-is physically exact. This is also
-the reading offered independently, and largely spontaneously, by the fluid-dynamics community when an
-early version of this audit was shared for discussion on \texttt{r/FluidMechanics}
-(quoted with usernames as posted publicly; see \S\ref{sec:outlook} for the full
-exchange)~\cite{RedditFluidMech2026}: commenters repeatedly made the point that Navier--Stokes ``has
-always been a useful approximation and not fully physical,'' that a blow-up result mainly tells us
-where a specific mathematical model runs out of validity, and that the more interesting question is
-what a genuinely physical admissibility criterion --- analogous to the entropy condition used to
-select physical weak solutions of the inviscid Burgers equation --- might look like.
+is physically exact. This is also the reading that emerged in an open discussion of an early
+version of this work among fluid dynamicists on the \texttt{r/FluidMechanics}
+forum~\cite{RedditFluidMech2026} (\S\ref{sec:outlook}): that Navier--Stokes has always been a useful
+approximation rather than an exact description, that a blow-up result mainly locates where a
+specific mathematical model runs out of validity, and that the more interesting question is what a
+genuinely physical admissibility criterion --- analogous to the entropy condition that selects
+physical weak solutions of the inviscid Burgers equation --- might look like.
 
 Since the Lean~4 kernel forecloses algebraic error, this paper's contribution is not a bug hunt in
 that sense. It is instead a quantitative account of how far OpenAI's specific constructed solution
-travels from the physical regime the Navier--Stokes model is normally used to describe, spanning
-formal verification, arbitrary-precision numerical analysis, and thermodynamic first principles ---
-followed by an outlook (\S\ref{sec:outlook}) that takes the community's framing seriously: we propose
-concrete physics-integration research directions, a neuro-symbolic-physical architecture for
-grounding future AI proof search in physical admissibility, and flag one untested,
-string-theory-motivated hypothesis for further investigation.
+travels from the physical regime the Navier--Stokes model is normally used to describe, built from
+scaling analysis, the dimensional structure of the proof's own lemmas, and constitutive physics
+(\S\S\ref{sec:syntax}--\ref{sec:numerics}). An outlook (\S\ref{sec:outlook}) then proposes research
+directions, an architecture for grounding AI proof search in physical admissibility, and one
+testable hypothesis on cutoff regularizations. A note on how this version differs from earlier
+public versions is given in Appendix~\ref{app:versions}.
 
 % ====================================================================
 \section{The Syntactic Health: Lean~4 Purity and Gevrey Cutoffs}
@@ -139,7 +140,7 @@ of the core proof.}
 \end{table}
 
 There are no opaque axioms, no weakened Sobolev norms, and the global $L^2$ kinetic energy is
-uniformly bounded. The AI did not ``cheat.''
+uniformly bounded: the formalization proves the statement the Prize asks for.
 
 \subsection{\texorpdfstring{The Gevrey Bypass: Satisfying $C^\infty$ Without Real-Analyticity}{The Gevrey Bypass: Satisfying C-infinity Without Real-Analyticity}}
 
@@ -164,8 +165,8 @@ the construction, which is the subject of \S\ref{sec:thermo}--\S\ref{sec:euler}.
 
 \subsection{The Proof Architecture: Internal Reynolds-Stress Cancellation}
 
-An earlier draft of this audit mischaracterized the proof's logical structure as a simple Method of
-Manufactured Solutions (MMS). In standard MMS, one merely picks an arbitrary smooth velocity field $u$ and
+The proof's logical structure is easily mistaken for a simple Method of Manufactured Solutions
+(MMS). In standard MMS, one merely picks an arbitrary smooth velocity field $u$ and
 \emph{defines} $f = \partial_t u + (u\cdot\nabla)u - \nu\Delta u + \nabla p$, which is
 automatically smooth because $u$ was smooth to begin with.
 
@@ -183,12 +184,12 @@ the divergent residual of the collapsing core. It is these \emph{internal} stres
 not the external force---that tame the singularity. Only after this Reynolds-stress cancellation
 homogenizes the residual is the remaining smooth remainder declared as $f \in C_c^\infty$.
 
-{\sloppy The Lean~4 code confirms this final assignment:
-\texttt{force := SpacetimeGluing.smoothExtension 1 (tracedResidual u p L) \ldots},
-where \texttt{tracedResidual} encodes the \emph{post-cancellation} smooth residual. The
-docstring reads: ``No force is an input to this definition.'' The force does not \emph{drive}
-the singularity; it is the mathematical artifact \emph{left over} after the singularity has been
-engineered by internal wave dynamics.\par}
+The Lean~4 code makes the final assignment explicit. In \texttt{CandidateFromLimits.lean} the force
+is defined as the smooth extension, past $t=1$, of the traced residual of the constructed velocity
+and pressure, with the docstring ``No force is an input to this definition''; the theorem
+\texttt{force\_eq\_activated\_residual} states that on $0\le t<1$ the force equals the
+Navier--Stokes residual of the final $(u,p)$. The force does not \emph{drive} the singularity; it is
+what is \emph{left over} once the internal wave dynamics have made that residual smooth.
 
 % ====================================================================
 \section{Matrix Scaling \& Non-Dimensionalization of the Moment System}
@@ -196,8 +197,8 @@ engineered by internal wave dynamics.\par}
 
 To seamlessly stitch the singular inner vortex to the smooth outer heat flow, the
 formalization matches five cumulative radial moments via a $5\times5$ linear system, which we write
-with matrix $A$ (Proposition~B.8 and the moment conditions (5.10)--(5.11) of~\cite{OpenAI2026}; an
-earlier draft of this audit cited ``Lemma~8.7'', which is a different lemma). A naive SVD of this unscaled $5 \times 5$ dimensional matrix yields a condition number scaling as $\kappa(A) \sim X_R^{7.75}$, which exceeds $10^{28}$ as $X_R \to 1000$.
+with matrix $A$ (Proposition~B.8 and the moment conditions (5.10)--(5.11) of~\cite{OpenAI2026}).
+A naive SVD of this unscaled $5 \times 5$ dimensional matrix yields a condition number scaling as $\kappa(A) \sim X_R^{7.75}$, which exceeds $10^{28}$ as $X_R \to 1000$.
 
 However, rigorous non-dimensionalization analysis reveals that this condition number explosion is a classical numerical linear algebra artifact. The entries of $A$ integrate polynomial basis functions $(x \cdot X_R)^{2i}$ and $(x \cdot X_R)^{2j}$, spanning physical dimensions from $X_R^0$ up to $X_R^8$. Mathematically, the matrix factors as:
 \begin{equation}
@@ -222,7 +223,7 @@ $X_R$ & $\kappa(A)$ (Raw Unscaled) & $\kappa(B)$ (Non-Dimensionalized) \\
 \label{tab:condition}
 \end{table}
 
-Applying the diagonal preconditioning matrix $D^{-1}$ removes the $X_R$ dependence entirely. The non-dimensionalized condition number $\kappa(B) \approx 4.11 \times 10^5$ is well-conditioned and uniform for all $X_R$. Consequently, the moment-matching system is not a source of fragility. Two further remarks are in order. Values of $\kappa$ above $\sim10^{16}$ computed in double precision are not reliable in any case; and the condition number of a linear system used to \emph{choose parameters in a proof} is not a dynamical instability of the flow --- an earlier draft of this audit conflated the two. The rigorous version of ``how fine-tuned is this singularity'' is the codimension question of \S\ref{sec:outlook}.
+Applying the diagonal preconditioning matrix $D^{-1}$ removes the $X_R$ dependence entirely. The non-dimensionalized condition number $\kappa(B) \approx 4.11 \times 10^5$ is well-conditioned and uniform for all $X_R$. Consequently, the moment-matching system is not a source of fragility. Two further remarks are in order. Values of $\kappa$ above $\sim10^{16}$ computed in double precision are not reliable in any case; and the condition number of a linear system used to \emph{choose parameters in a proof} is not a dynamical instability of the flow, and should not be read as a measure of fine-tuning. The rigorous version of ``how fine-tuned is this singularity'' is the codimension question of \S\ref{sec:outlook}.
 
 % ====================================================================
 \section{The Thermodynamic Picture: Divergent Local Quantities}
@@ -243,21 +244,23 @@ conversion).
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{lcc}
+\begin{tabular}{lccl}
 \toprule
-\textbf{Quantity} & \textbf{Exponent} ($\tau^x$) & \textbf{Behavior} ($\tau \to 0$) \\
+\textbf{Quantity} & \textbf{Exponent} ($\tau^x$) & \textbf{Limit} & \textbf{Prize-compatible?} \\
 \midrule
-Global Kinetic Energy $E$                  & $+0.4850$   & $\to 0$ \quad\checkmark \\
-Intensive Local Energy Density $e_{\text{local}}$ & $-1.0100$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-Enstrophy $\Omega(t)$                      & $-0.5150$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-$L^3$ norm $\|u\|_3$                        & $-0.0067$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-$H^{3/2}$ Sobolev norm $\|u\|_{H^{3/2}}$    & $-0.5075$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-Local temperature rise estimate $\Delta T$ & $-1.0100$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
+Global kinetic energy $E$                  & $+0.4850$   & $\to 0$        & yes \\
+Intensive local energy density $e_{\text{local}}$ & $-1.0100$   & $\to \infty$   & --- \\
+Enstrophy $\Omega(t)$                      & $-0.5150$   & $\to \infty$   & --- \\
+$L^3$ norm $\|u\|_3$                        & $-0.0067$   & $\to \infty$   & --- \\
+$H^{3/2}$ Sobolev norm $\|u\|_{H^{3/2}}$    & $-0.5075$   & $\to \infty$   & --- \\
+Local temperature rise estimate $\Delta T$ & $-1.0100$   & $\to \infty$   & (external estimate) \\
 \bottomrule
 \end{tabular}
 \caption{Asymptotic scaling of key physical quantities for the OpenAI blow-up construction
 ($h = 1/200$). The global $L^2$ energy---the sole quantity mandated by the Millennium Prize---is
-the only quantity that remains bounded. Intensive local energy density $e_{\text{local}} = \frac{1}{2}\rho|u|^2 \sim \tau^{-1-2h}$ scales as $\tau^{-1.010}$, while the Sobolev $H^{3/2}$ norm scales as $\tau^{-0.5075}$. $\Delta T$ is an external estimate (\S\ref{sec:thermo}), not a quantity solved for within incompressible Navier--Stokes.}
+the only quantity that remains bounded (last column: ``yes''); every other row diverging is
+consistent with the Prize's requirements, which impose nothing on local quantities (last column:
+``---''). Intensive local energy density $e_{\text{local}} = \frac{1}{2}\rho|u|^2 \sim \tau^{-1-2h}$ scales as $\tau^{-1.010}$, while the Sobolev $H^{3/2}$ norm scales as $\tau^{-0.5075}$. $\Delta T$ is an external estimate (\S\ref{sec:thermo}), not a quantity solved for within incompressible Navier--Stokes.}
 \label{tab:thermo}
 \end{table}
 
@@ -288,10 +291,8 @@ The contrast with turbulence is worth stating without a figure. In physical turb
 Kolmogorov cascade~\cite{Kolmogorov1941} ends at the microscale $\eta=(\nu^3/\varepsilon)^{1/4}$,
 which in every laboratory or geophysical flow exceeds the molecular length by orders of magnitude;
 the construction instead concentrates a vanishing fraction of the energy at a scale
-$\ell_r\to0$ with no dissipative floor. (An earlier draft of this audit included a figure comparing a
-JHTDB isotropic-turbulence spectrum with an ``OpenAI pre-singularity spectrum''; the latter was a
-schematic drawn by hand, not a computed spectrum --- no numerical realization of the construction
-exists --- and the figure has been removed; see \S\ref{sec:numerics}.)
+$\ell_r\to0$ with no dissipative floor (see \S\ref{sec:numerics} on why no spectral figure is given
+here).
 
 The $L^3$ norm also diverges, but only marginally ($\|u\|_{L^3}\sim\tau^{-4h/3}=\tau^{-0.0067}$ for
 $h=1/200$): the Escauriaza-Seregin-\v{S}ver\'{a}k criterion~\cite{ESS2003} proves a singularity
@@ -362,23 +363,40 @@ $\mathrm{Kn}=0.1$, beyond which slip and non-continuum effects appear) for three
 
 \begin{table}[htbp]
 \centering
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}lccccccc@{}}
+\small
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-Fluid (300\,K) & $\ell_*=\nu/c_s$ & $t_*=\nu/c_s^2$ & $t(\mathrm{Ma}{=}0.3)$ & $t(\mathrm{Kn}{=}0.1)$ & $t(\mathrm{Kn}{=}1)$ & $\Delta T$ at Ma $0.3$\,/\,$1$ & $|\omega|_{\max}=c_s^2/\nu$ \\
+Fluid (300\,K) & $\ell_*=\nu/c_s$ & $t_*=\nu/c_s^2$ & $\Delta T$ at Ma $0.3$\,/\,$1$ & $|\omega|_{\max}=c_s^2/\nu$ \\
 \midrule
-Water  & $0.67$\,nm & $0.44$\,ps & $5$--$7$\,ps     & $9$\,ps  & $90$\,fs  & $48$\,K\,/\,$540$\,K & $2.2\times10^{12}$\,s$^{-1}$ \\
-Air    & $45$\,nm   & $0.13$\,ns & $1.5$--$1.8$\,ns & $30$\,ns & $0.3$\,ns & $11$\,K\,/\,$120$\,K & $7.5\times10^{9}$\,s$^{-1}$ \\
-Helium & $121$\,nm  & $0.12$\,ns & $1.3$--$1.6$\,ns & $27$\,ns & $0.27$\,ns & $18$\,K\,/\,$195$\,K & $8.3\times10^{9}$\,s$^{-1}$ \\
+Water  & $0.67$\,nm & $0.44$\,ps & $48$\,K\,/\,$540$\,K & $2.2\times10^{12}$\,s$^{-1}$ \\
+Air    & $45$\,nm   & $0.13$\,ns & $11$\,K\,/\,$120$\,K & $7.5\times10^{9}$\,s$^{-1}$ \\
+Helium & $121$\,nm  & $0.12$\,ns & $18$\,K\,/\,$195$\,K & $8.3\times10^{9}$\,s$^{-1}$ \\
 \bottomrule
 \end{tabular}
-\caption{Validity limits from Proposition~\ref{prop:scales}. Inputs at 300\,K ($\nu$, $c_s$, $c_p$,
-$\lambda$): water $10^{-6}$\,m$^2$/s, 1500\,m/s, 4184\,J/(kg\,K), 0.3\,nm; air $1.56\times10^{-5}$,
-343, 1005, 68\,nm; helium $1.22\times10^{-4}$, 1007, 5193, 180\,nm. Time ranges span the unit-free
-estimate $\nu/(\mathrm{Ma}\,c_s)^2$ and the $\ell_0=1$\,cm value. The last column is the local
-vorticity bound of \S\ref{sec:admissibility}.}
+\caption{The one-scale content of Proposition~\ref{prop:scales}: length $\ell_*$, time $t_*$,
+viscous heating at the Mach limit, and the local admissibility bound of
+\S\ref{sec:admissibility}. Inputs at 300\,K ($\nu$, $c_s$, $c_p$): water $10^{-6}$\,m$^2$/s,
+1500\,m/s, 4184\,J/(kg\,K); air $1.56\times10^{-5}$, 343, 1005; helium $1.22\times10^{-4}$, 1007,
+5193.}
 \label{tab:limits}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Fluid (300\,K) & $t(\mathrm{Ma}=0.3)$ & $t(\mathrm{Kn}=0.1)$ & $t(\mathrm{Kn}=1)$ \\
+\midrule
+Water  & $5$--$7$\,ps     & $9$\,ps  & $90$\,fs  \\
+Air    & $1.5$--$1.8$\,ns & $30$\,ns & $0.3$\,ns \\
+Helium & $1.3$--$1.6$\,ns & $27$\,ns & $0.27$\,ns \\
+\bottomrule
+\end{tabular}
+\caption{Times before blow-up at which each threshold is crossed. Ranges span the unit-free
+estimate $\nu/(\mathrm{Ma}\,c_s)^2$ and the $\ell_0=1$\,cm value of \S\ref{sec:mach}; molecular
+length $\lambda$: water 0.3\,nm, air 68\,nm, helium 180\,nm.}
+\label{tab:limits-times}
 \end{table}
 
 \subsection{The Mach trajectory for a 1\,cm water vortex}
@@ -389,21 +407,21 @@ For liquid water at reference ambient conditions ($T_0 = 300$\,K, $c_s = 1500$\,
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}lcccc@{}}
+\begin{tabular}{@{}r r r r >{\raggedright\arraybackslash}p{3.4cm}@{}}
 \toprule
 \textbf{Time} $t=T\tau$\,(s) & \textbf{Velocity} $|u|$\,(m/s) & \textbf{Mach} $\text{Ma}$ & \textbf{Core Radius} $\ell_r$\,(m) & \textbf{Physical Regime} \\
 \midrule
-$1.00 \times 10^{2}$   & $1.00 \times 10^{-4}$ & $6.67 \times 10^{-8}$ & $1.00 \times 10^{-2}$ & Incompressible Continuum \\
-$1.00 \times 10^{-4}$  & $1.07 \times 10^{-1}$ & $7.14 \times 10^{-5}$ & $1.00 \times 10^{-5}$ & Incompressible Continuum \\
-$1.00 \times 10^{-10}$ & $1.15 \times 10^{2}$  & $7.65 \times 10^{-2}$ & $1.00 \times 10^{-8}$ & Laminar High-Speed Core \\
-$6.69 \times 10^{-12}$ & $4.50 \times 10^{2}$  & $\mathbf{0.30}$       & $2.59 \times 10^{-9}$ & \textbf{Incompressibility Limit Breached} \\
-$6.16 \times 10^{-13}$ & $1.50 \times 10^{3}$  & $\mathbf{1.00}$       & $7.85 \times 10^{-10}$ & \textbf{Transonic Shock Wave Formation} \\
-$9.00 \times 10^{-14}$ & $3.96 \times 10^{3}$  & $2.64$               & $3.00 \times 10^{-10}$ & \textbf{Molecular Mean Free Path Limit ($\mathrm{Kn}=1$)} \\
-$1.00 \times 10^{-16}$ & $1.23 \times 10^{5}$  & $82.0$               & $1.00 \times 10^{-11}$ & Sub-Molecular / Kinetic Regime \\
-$1.00 \times 10^{-23}$ & $4.22 \times 10^{8}$  & $2.81 \times 10^{5}$ & $3.16 \times 10^{-15}$ & Formally Superluminal ($|u| > c$) --- model has no meaning here \\
+$1.00 \times 10^{2}$   & $1.00 \times 10^{-4}$ & $6.67 \times 10^{-8}$ & $1.00 \times 10^{-2}$ & Incompressible continuum \\
+$1.00 \times 10^{-4}$  & $1.07 \times 10^{-1}$ & $7.14 \times 10^{-5}$ & $1.00 \times 10^{-5}$ & Incompressible continuum \\
+$1.00 \times 10^{-10}$ & $1.15 \times 10^{2}$  & $7.65 \times 10^{-2}$ & $1.00 \times 10^{-8}$ & Laminar high-speed core \\
+$6.69 \times 10^{-12}$ & $4.50 \times 10^{2}$  & $\mathbf{0.30}$       & $2.59 \times 10^{-9}$ & \textbf{Incompressibility limit breached} \\
+$6.16 \times 10^{-13}$ & $1.50 \times 10^{3}$  & $\mathbf{1.00}$       & $7.85 \times 10^{-10}$ & \textbf{Sonic barrier} \\
+$9.00 \times 10^{-14}$ & $3.96 \times 10^{3}$  & $2.64$               & $3.00 \times 10^{-10}$ & \textbf{Mean free path limit} ($\mathrm{Kn}=1$) \\
+$1.00 \times 10^{-16}$ & $1.23 \times 10^{5}$  & $82.0$               & $1.00 \times 10^{-11}$ & Sub-molecular regime \\
+$1.00 \times 10^{-23}$ & $4.22 \times 10^{8}$  & $2.81 \times 10^{5}$ & $3.16 \times 10^{-15}$ & Formally superluminal --- no longer meaningful \\
 \bottomrule
 \end{tabular}
-\caption{Trajectory of the OpenAI collapsing vortex core in water ($c_s = 1500$\,m/s, $T_0 = 300$\,K), with the time column corrected to physical seconds $t=T\tau$, $T=\ell_0^2/\nu=100$\,s. The incompressible model self-invalidates at $t \approx 6.69 \times 10^{-12}$\,s ($\approx6.7$\,picoseconds before the mathematical singularity), and crosses the sonic barrier at $t \approx 6.16 \times 10^{-13}$\,s. Velocity, Mach and radius columns are functions of the dimensionless $\tau$ only and are unaffected by the time-unit correction.}
+\caption{Trajectory of the OpenAI collapsing vortex core in water ($c_s = 1500$\,m/s, $T_0 = 300$\,K), with the time column corrected to physical seconds $t=T\tau$, $T=\ell_0^2/\nu=100$\,s. The incompressible model self-invalidates at $t \approx 6.69 \times 10^{-12}$\,s ($\approx6.7$\,picoseconds before the mathematical singularity), and crosses the sonic barrier at $t \approx 6.16 \times 10^{-13}$\,s. Velocity, Mach and radius columns are functions of the dimensionless $\tau$ only and are unaffected by the time-unit correction. The last two rows extrapolate the construction's own scaling law past the point (row 4 onward) where it has any physical referent; they illustrate the mathematics of the construction, not a physical trajectory.}
 \label{tab:mach}
 \end{table}
 
@@ -417,12 +435,10 @@ using Eq.~\eqref{eq:diffusive} for $U$, $\ell_r$ and $\ell_z\simeq\ell_r\,t^{-h}
 \begin{equation}
   \frac{P_{\text{ac}}\,t}{E_{\text{core}}}\;\sim\;\Big(\frac{U}{c_s}\Big)^{5}=\mathrm{Ma}^5
 \end{equation}
-up to $O(1)$ constants and factors $t^{-5h}$. An earlier draft of this audit presented the time at
-which this ratio reaches unity as an ``independent radiative energy-budget check'' that
-``lands within an order of magnitude'' of the Mach limit. It is not independent: it is the Mach
-criterion again, which is why it agreed with it. The correct reading is simply that the flow ceases
-to be an acoustically compact, subsonic source at $\mathrm{Ma}\sim1$ --- exactly where
-Eq.~\eqref{eq:lstar} says the incompressible model has ended.
+up to $O(1)$ constants and factors $t^{-5h}$. The time at which this ratio reaches unity is
+therefore not an independent check on the Mach limit: it is the Mach criterion again, expressed
+through the radiated power. The flow simply ceases to be an acoustically compact, subsonic source at
+$\mathrm{Ma}\sim1$ --- exactly where Eq.~\eqref{eq:lstar} says the incompressible model has ended.
 
 \subsection{Viscous heating: the temperature the model cannot see}
 
@@ -471,11 +487,12 @@ $L\gtrsim\nu/c_s$ (Knudsen, through $\ell_*$), hence
   \label{eq:admissible}
 \end{equation}
 about $2.2\times10^{12}$\,s$^{-1}$ ($\varepsilon\lesssim5\times10^{18}$\,W/kg) in water and
-$7.5\times10^{9}$\,s$^{-1}$ in air. This is the honest form of the ``bounded enstrophy''
-admissibility axiom proposed in earlier drafts of this project and in its companion work stream on
-entropy conditions: local, dimensionally derived and material-specific, rather than a global
-integral bound --- which scales with the volume of fluid considered, and for which no derivation was
-ever given. It also turns the admissibility statement from a definition into a theorem. By
+$7.5\times10^{9}$\,s$^{-1}$ in air. This local, dimensionally derived, material-specific bound is
+deliberately distinct from a \emph{global} integral enstrophy bound, which scales with the volume of
+fluid considered and is not dimensionally forced the way Eq.~\eqref{eq:admissible} is (see
+\texttt{05\_Community\_Research\_Directions/WorkStream1\_EntropyCondition} for the companion
+admissibility discussion). It also turns the admissibility statement from a definition into a
+theorem. By
 Beale--Kato--Majda~\cite{BKM1984}, which holds for Navier--Stokes as well as Euler, a solution with
 $\int_0^T\|\omega(t)\|_{L^\infty}\,dt<\infty$ is smooth on $[0,T]$; a solution that satisfies
 Eq.~\eqref{eq:admissible} on $[0,T)$ therefore does not blow up at $T$, and any blow-up must first
@@ -558,41 +575,50 @@ as ``sub-Planckian''; the Planck length is irrelevant here --- the cutoff is mol
 % ====================================================================
 
 Table~\ref{tab:vulnerabilities} collects properties of the particular solution built. They are
-properties of that solution, not defects in the proof, and none of them is a ``vulnerability'' in
-the sense earlier drafts of this audit used the word.
+properties of that solution, not defects in the proof.
 
 \begin{table}[htbp]
 \centering
 \small
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}p{3.2cm}p{4.6cm}p{7.2cm}@{}}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{2.6cm} L L@{}}
 \toprule
-\textbf{Property} & \textbf{OpenAI Formalization} & \textbf{Reading} \\
+\textbf{Property} & \textbf{OpenAI formalization} & \textbf{Reading} \\
 \midrule
-1. Backward-specified residual & \texttt{force := SpacetimeGluing.\allowbreak smoothExtension 1 (tracedResidual u p L)} (\texttt{CandidateFromLimits.lean}) & The force is the smooth remainder of a co-designed $(u,p)$ (\S\ref{sec:causality}); initial data is $u_0 \equiv 0$ for the forced case. \\
-2. One explicit datum & \texttt{$\exists u_0$, ContDiff $\mathbb{R}$ $\infty$ $u_0$} & A single point of $C^\infty_{c,\sigma}$. Its codimension --- the number of unstable directions of the linearized self-similar profile beyond the symmetry modes --- is the rigorous measure of ``non-generic'' and is not established by this audit (\S\ref{sec:outlook}). \\
-3. Axisymmetric swirl & \texttt{AxisymmetricFields.lean} & A 2D similarity profile with swirl; it need not represent generic three-dimensional turbulence. \\
-4. No dissipative floor & Corrections summed ``with shrinking cutoffs'' down to $\ell_r\to0$ & There is no Kolmogorov scale $\eta$; a physical cutoff enforcing Eq.~\eqref{eq:admissible} would prevent blow-up by Beale--Kato--Majda. \\
-5. Engineered lifetime & \texttt{SmoothCutoffs.lean} time switch & Forcing is compactly supported in time; the lifespan $T^*=1$ is a choice, not a feature of the equations. \\
+1. Backward-specified residual &
+  \texttt{force} defined via \texttt{SpacetimeGluing.smoothExtension} of \texttt{tracedResidual} (\texttt{CandidateFromLimits.lean}) &
+  The force is the smooth remainder of a co-designed $(u,p)$ (\S\ref{sec:causality}); initial data is $u_0 \equiv 0$ for the forced case. \\
+2. One explicit datum &
+  \texttt{$\exists\,u_0$}, \texttt{ContDiff} $\mathbb{R}\,\infty\,u_0$ &
+  A single point of $C^\infty_{c,\sigma}$. Its codimension --- the number of unstable directions of the linearized self-similar profile beyond the symmetry modes --- is the rigorous measure of ``non-generic'' and is not established by this audit (\S\ref{sec:outlook}). \\
+3. Axisymmetric swirl &
+  \texttt{AxisymmetricFields.lean} &
+  A 2D similarity profile with swirl; it need not represent generic three-dimensional turbulence. \\
+4. No dissipative floor &
+  Corrections summed with shrinking cutoffs down to $\ell_r\to0$ &
+  There is no Kolmogorov scale $\eta$; a physical cutoff enforcing Eq.~\eqref{eq:admissible} would prevent blow-up by Beale--Kato--Majda. \\
+5. Engineered lifetime &
+  \texttt{SmoothCutoffs.lean} time switch &
+  Forcing is compactly supported in time; the lifespan $T^*=1$ is a choice, not a feature of the equations. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Properties of the constructed solution, with the Lean locations that encode them.}
 \label{tab:vulnerabilities}
 \end{table}
 
-\subsection{Numerical material removed from this version}
+\subsection{What this paper does not contain, and why}
 
-Earlier drafts of this audit included Taylor--Green-vortex runs from an in-house pseudo-spectral
-solver, a ``Banach contraction-rate certificate'', and a figure contrasting a JHTDB
-isotropic-turbulence spectrum with an ``OpenAI pre-singularity spectrum''. We have removed them.
-The TGV numbers were not reported with resolution and normalization sufficient for independent
-reproduction; the certificate checked the internal consistency of a software pipeline, not any
-property of the construction; and the ``OpenAI spectrum'' was a schematic Gaussian spike drawn by
-hand, not a computed spectrum --- no numerical realization of the 166-page construction exists, in
-this project or, to our knowledge, elsewhere. What a genuine numerical companion should contain is
-listed in \S\ref{sec:outlook}: the cutoff law, the codimension count and the fluctuating-hydrodynamics
-questions. The scripts distributed with this repository are exponent, unit and consistency checks,
-and are labelled as such.
+No numerical realization of the 166-page OpenAI construction exists, in this project or, to our
+knowledge, elsewhere; the scripts distributed with this repository are exponent, unit and
+consistency checks on the scaling laws above, and are labelled as such --- not simulations of the
+construction itself. Two figures that appeared in earlier public drafts of this audit are
+deliberately absent here: a Taylor--Green-vortex comparison whose resolution and normalization were
+not documented to a reproducible standard, and a spectrum plot contrasting real turbulence data with
+a hand-drawn schematic of an ``OpenAI pre-singularity spectrum'' rather than a computed one. Neither
+met the standard we hold the rest of this paper to, so neither is reproduced. Appendix~\ref{app:versions}
+records this and the other differences from earlier versions in one place. What a genuine numerical
+companion should contain instead is listed in \S\ref{sec:outlook}: the cutoff law, the codimension
+count and the fluctuating-hydrodynamics questions.
 
 % ====================================================================
 \section{Discussion}
@@ -643,23 +669,19 @@ a mark against their mathematical content. Three implications follow:
 
 Section~\ref{sec:intro} already previewed the position we think the evidence supports, and which
 was arrived at independently by much of the fluid-dynamics community when an early version of this
-audit was first posted for feedback on \texttt{r/FluidMechanics} by one of the present
-authors~\cite{RedditFluidMech2026}: the Millennium Prize problems, Navier--Stokes existence and
-smoothness included, were set as precise tests of mathematical technique against a specific,
-well-defined continuum model --- not as referenda on whether that model perfectly describes real
-fluids. As one commenter (\texttt{Leodip}) put it, ``the point of the millennium prize problem was
-never to figure out anything with regards to real world fluids$\ldots$ finite-time blowup is
-totally unphysical either way and just a result of the N-S model.'' Another (\texttt{mrbiguri})
-added that a blow-up result ``suggests that it's not fully descriptive of real world physics,''
-and a third (\texttt{Dihedralman}) compared this to other well-known breakdowns of continuum
-models, noting simply that ``Ohm's law breaks down$\ldots$ Navier Stokes has always been a useful
-approximation and not fully physical.''
-
-A fourth exchange, prompted by a question (\texttt{brokebeany}) about whether the incompressibility
-breakdown identified in \S\ref{sec:mach} invalidates the OpenAI proof, produced what we think is
-the cleanest statement of the right frame (\texttt{Fluid\_Substance5132}): ``In the real world[,]
-the incompressible approximation fails to capture what actually happens. Within the (non physical)
-incompressible world[,] the o[pen]ai proof remains valid.''
+audit was first posted for feedback on \texttt{r/FluidMechanics}~\cite{RedditFluidMech2026}
+(participants acknowledged individually in Acknowledgments): the Millennium Prize problems,
+Navier--Stokes existence and smoothness included, were set as precise tests of mathematical
+technique against a specific, well-defined continuum model --- not as referenda on whether that
+model perfectly describes real fluids. The consensus of that discussion, repeated in different
+words by several commenters, was that Navier--Stokes ``has always been a useful approximation and
+not fully physical,'' comparable to other continuum relations (Ohm's law was cited) with known
+breakdown regimes; that a blow-up result mainly tells us where the model runs out of validity rather
+than anything about real fluids; and, on the specific question of whether the incompressibility
+breakdown identified in \S\ref{sec:mach} invalidates the OpenAI proof, that it does not --- in the
+words of one exchange, the incompressible approximation fails to capture what a real fluid does, but
+\emph{within} the (non-physical) incompressible world the OpenAI proof remains valid. The full
+quotations, with usernames, are preserved in Appendix~\ref{app:reddit} for the historical record.
 
 We agree with that statement without qualification. Everything in
 \S\ref{sec:syntax}--\S\ref{sec:euler} should be read accordingly: not as claims that the Lean proof
@@ -675,34 +697,32 @@ in this project's companion directory, \texttt{05\_Community\_Research\_Directio
 the same discussion:
 
 \begin{enumerate}
-  \item \textbf{An admissibility, or entropy, condition for 3D Navier--Stokes.}
-        \texttt{cowgod42} proposed that 3D Navier--Stokes may need an augmented admissibility
-        condition, analogous to the Lax entropy condition used to select the physically correct
-        weak solution of the inviscid Burgers equation, to filter out unphysical weak solutions
-        such as this one; they noted the blow-up result tells us ``the `correct' equations of
-        fluids should not allow this to happen$\ldots$ we need to change the equations, or augment
-        them in some way.'' \texttt{tlmbot} independently suggested the problem itself may need
-        restatement so that it pertains only to physical fluids. This direction is being developed
-        in \texttt{WorkStream1\_EntropyCondition}.
-  \item \textbf{The pre-singularity trajectory as a turbulence-modeling resource.}
-        \texttt{babainottawa} and \texttt{Cute\_Presence\_2861} both noted that even though the
-        endpoint is unphysical, the approach to it --- before the Mach or Knudsen thresholds in
-        Table~\ref{tab:mach} are crossed --- may still carry information relevant to subgrid-scale
-        closure modeling (LES/RANS). This direction is being developed in
+  \item \textbf{An admissibility, or entropy, condition for 3D Navier--Stokes.} Part of the
+        discussion proposed that 3D Navier--Stokes may need an augmented admissibility condition,
+        analogous to the Lax entropy condition used to select the physically correct weak solution
+        of the inviscid Burgers equation, to filter out unphysical weak solutions such as this one
+        --- the blow-up result tells us that the equations, unaugmented, allow something a physical
+        theory should not; a related suggestion was that the Prize problem itself might need
+        restatement so that it pertains only to physical fluids. This direction is developed in
+        \texttt{WorkStream1\_EntropyCondition}.
+  \item \textbf{The pre-singularity trajectory as a turbulence-modeling resource.} Other comments
+        noted that even though the endpoint is unphysical, the approach to it --- before the Mach
+        or Knudsen thresholds in Table~\ref{tab:mach} are crossed --- may still carry information
+        relevant to subgrid-scale closure modeling (LES/RANS). This direction is developed in
         \texttt{WorkStream3\_Turbulence}.
-  \item \textbf{Deriving, rather than assuming, the thermal response.} \texttt{vibe0009} correctly
-        pointed out that incompressible Navier--Stokes has no energy equation, so any
-        thermal-shock argument built on top of it (including ours in \S\ref{sec:thermo}) is an
-        external estimate, not a derived consequence. A genuine energy/temperature-coupled
-        extension, or a cavitation/boiling model, is needed before the thermal argument can be
-        sharpened past an order-of-magnitude check. This direction is being developed in
-        \texttt{WorkStream2\_ThermalEquation} and \texttt{WorkStream4\_MechanicalCavitation}.
-  \item \textbf{Teaching proof-search AI systems basic thermodynamics.} In a follow-up post
-        summarizing the initial round of feedback, the audit's authors distilled the most
-        actionable community suggestion as: ``Figuring out how to teach AI proof assistants basic
-        thermodynamics so they catch these edge cases.'' That suggestion is the direct motivation
-        for \S\ref{sec:architecture}.
+  \item \textbf{Deriving, rather than assuming, the thermal response.} A further comment correctly
+        pointed out that incompressible Navier--Stokes has no energy equation, so any thermal-shock
+        argument built on top of it (including ours in \S\ref{sec:thermo}) is an external estimate,
+        not a derived consequence. A genuine energy/temperature-coupled extension, or a
+        cavitation/boiling model, is needed before the thermal argument can be sharpened past an
+        order-of-magnitude check. This direction is developed in \texttt{WorkStream2\_ThermalEquation}
+        and \texttt{WorkStream4\_MechanicalCavitation}.
+  \item \textbf{Teaching proof-search AI systems basic thermodynamics.} The most actionable
+        suggestion distilled from the discussion was, in essence, to teach AI proof assistants
+        basic thermodynamics so they catch these edge cases. That suggestion directly motivates
+        \S\ref{sec:architecture}.
 \end{enumerate}
+Full attribution for each of these points is given in Appendix~\ref{app:reddit}.
 
 None of these four directions is resolved by this paper; we record them as open invitations,
 consistent with the standing call for contributions in
@@ -795,19 +815,19 @@ and D are, as mathematical statements about the continuum incompressible model, 
 Nothing in this paper disputes that, and nothing in it could: the Lean kernel already settled the
 question of syntactic correctness before we started.
 
-What this paper adds is a physical reading, corrected in several places from earlier drafts of this
-audit: a scaling table for locally divergent quantities that respects the Prize's global energy
-bound; a unit-free validity scale $\ell_*=\nu/c_s$ at which compressibility, rarefaction and heating
-enter together, with the earlier fluid-specific timelines recovered as special cases; the
-observation that in liquids cavitation comes first; a single local admissibility condition
-$|\omega|\lesssim c_s^2/\nu$ that Beale--Kato--Majda turns into a theorem; a demonstration that the
-moment-matching system's apparent ill-conditioning is a non-dimensionalization artifact, and that
-the acoustic ``check'' of earlier drafts was the Mach criterion in disguise; an honest accounting of
-the backward-specified force; and a description of the Euler datum's dependence on coherent structure
-below the molecular length. None of these observations makes the mathematics wrong, and none of
-them, on their own, proves that real turbulent fluids cannot develop extreme, short-lived, localized
-events resembling a scaled-down piece of this construction --- that remains a genuinely open
-empirical and theoretical question, not one this audit resolves. What they do establish is that
+What this paper adds is a physical reading: a scaling table for locally divergent quantities that
+respects the Prize's global energy bound; a unit-free validity scale $\ell_*=\nu/c_s$ at which
+compressibility, rarefaction and heating enter together; the observation that in liquids cavitation
+comes first; a single local admissibility condition $|\omega|\lesssim c_s^2/\nu$ that
+Beale--Kato--Majda turns into a theorem; a demonstration that the moment-matching system's apparent
+ill-conditioning is a non-dimensionalization artifact, and that the radiated-acoustic-energy check
+is the Mach criterion in disguise; an honest accounting of the backward-specified force; and a
+description of the Euler datum's dependence on coherent structure below the molecular length. None
+of these observations makes the mathematics wrong, and none of them, on their own, proves that real
+turbulent fluids cannot develop extreme, short-lived, localized events resembling a scaled-down
+piece of this construction --- that remains a genuinely open empirical and theoretical question, not
+one this audit resolves. (Readers of earlier public drafts of this audit will find a full account of
+what changed, and why, in Appendix~\ref{app:versions}.) What they do establish is that
 \emph{this particular} construction is not a description of anything a real fluid does; it is a
 demonstration of what the continuum model, pushed to the exact edge of its own internal
 consistency, is mathematically capable of.
@@ -820,6 +840,108 @@ PDEs honestly labeled as mathematical or physical results, and one explicitly sp
 hypothesis for anyone who wants to push the dual-scale idea further than we have. The AI solved the
 mathematician's problem. Whether, and how, that result connects to the physicist's problem is still
 an open question, and, we think, a more interesting one.
+
+% ====================================================================
+\section*{Acknowledgments}
+% ====================================================================
+
+This paper was substantially improved by an open peer review received 15 September 2026, which
+recommended, among other changes, that specific Reddit pseudonyms be moved out of the main text and
+into this section, and that differences from earlier public drafts be consolidated rather than
+scattered through the text; both recommendations are implemented here and in
+Appendix~\ref{app:versions}. We also thank the participants of the \texttt{r/FluidMechanics}
+discussion of an early version of this audit~\cite{RedditFluidMech2026}, whose contributions are
+quoted in full in Appendix~\ref{app:reddit}: \texttt{Leodip}, \texttt{mrbiguri},
+\texttt{Dihedralman}, \texttt{brokebeany}, \texttt{Fluid\_Substance5132}, \texttt{cowgod42},
+\texttt{tlmbot}, \texttt{babainottawa}, \texttt{Cute\_Presence\_2861}, and \texttt{vibe0009}. Their
+objections and suggestions are the direct origin of \S\ref{sec:outlook} and of the
+\texttt{05\_Community\_Research\_Directions} work streams.
+
+\appendix
+
+% ====================================================================
+\section{Note on Previous Versions}
+\label{app:versions}
+% ====================================================================
+
+This paper has circulated in several public drafts since its first posting. In the interest of a
+main text that stands on its own, differences from those drafts are consolidated here rather than
+noted inline.
+
+\paragraph{Claims withdrawn.} Three prior claims do not appear in this version and should be
+treated as withdrawn, not merely superseded: (i) that the constructed singularity reaches ``plasma
+temperatures'' (the correct estimate, $\Delta T\simeq u^2/c_p$, gives hundreds of kelvin at the Mach
+limit in water, not $10^4$\,K; \S\ref{sec:mach}); (ii) that a Lighthill acoustic radiative-energy
+check independently corroborates the Mach breakdown time (it is dimensionally $\mathrm{Ma}^5$, i.e.\
+the Mach criterion restated, not an independent check; \S\ref{sec:mach}); (iii) that the
+moment-matching Jacobian's raw condition number $\kappa\sim10^{28}$ measures physical fine-tuning or
+fragility of the singularity (it is an artifact of unscaled physical dimensions in the matrix
+entries, $\kappa(B)\approx4.1\times10^5$ once non-dimensionalized; \S3). A fourth item, a
+``bounded-enstrophy'' admissibility axiom stated as a global integral bound with a numerical
+constant $\Omega_{\max}\approx1.13\times10^{13}\,\text{s}^{-2}$, has been replaced outright by the
+local, dimensionally derived bound of Eq.~\eqref{eq:admissible}; the global form is not used in this
+paper.
+
+\paragraph{Material removed.} Two figures --- a Taylor--Green-vortex comparison whose resolution
+and normalization were not documented to a reproducible standard, and a spectrum plot in which the
+``OpenAI'' curve was a hand-drawn schematic rather than a computed result --- are not reproduced
+here; see \S\ref{sec:numerics}.
+
+\paragraph{Citations corrected.} The moment-matching system referenced in \S3 is
+Proposition~B.8 and the moment conditions (5.10)--(5.11) of~\cite{OpenAI2026}, not ``Lemma~8.7,''
+which is a distinct lemma addressing a different step of the construction. The figure of
+``10{,}000 agents'' collaborating for ``88 hours,'' which circulated in secondary press coverage, is
+not stated in either OpenAI paper and is not repeated here as fact (\S\ref{sec:intro}).
+
+\paragraph{Reframed, not retracted.} The ``dual-scale'' effective-wavenumber cutoff of
+\S\ref{sec:outlook} was previously motivated by an asserted physical connection to string-theoretic
+T-duality; that physical claim was independently reviewed and withdrawn (the relevant Lean theorem's
+load-bearing conjunct was a bare \texttt{True} placeholder, and its supporting vorticity-transport
+equation was missing a term). The mathematical content --- a saturating regularization in the
+Leray-$\alpha$ family with a testable cutoff law --- survives with the physical motivation removed;
+see~\cite{Callens2026v2} for the full account of what was found and corrected.
+
+% ====================================================================
+\section{The \texttt{r/FluidMechanics} Discussion, in Full}
+\label{app:reddit}
+% ====================================================================
+
+An early version of this audit was posted for open discussion on \texttt{r/FluidMechanics} by one
+of the present authors~\cite{RedditFluidMech2026}. The exchange materially shaped this paper
+(\S\ref{sec:outlook}), and the full quotations, with the usernames under which they were publicly
+posted, are preserved here.
+
+On whether the Millennium Prize problems were ever claims about physical fluids, \texttt{Leodip}
+wrote: ``the point of the millennium prize problem was never to figure out anything with regards to
+real world fluids$\ldots$ finite-time blowup is totally unphysical either way and just a result of
+the N-S model.'' \texttt{mrbiguri} added that a blow-up result ``suggests that it's not fully
+descriptive of real world physics,'' and \texttt{Dihedralman} placed this alongside other familiar
+breakdowns of continuum models: ``Ohm's law breaks down$\ldots$ Navier Stokes has always been a
+useful approximation and not fully physical.''
+
+Asked by \texttt{brokebeany} whether the incompressibility breakdown identified in
+\S\ref{sec:mach} invalidates the OpenAI proof, \texttt{Fluid\_Substance5132} gave what we think is
+the cleanest statement of the right frame: ``In the real world[,] the incompressible approximation
+fails to capture what actually happens. Within the (non physical) incompressible world[,] the
+o[pen]ai proof remains valid.'' We agree with that statement without qualification.
+
+On what should replace a bare unphysicality verdict, \texttt{cowgod42} proposed that 3D
+Navier--Stokes may need an augmented admissibility condition, analogous to the Lax entropy
+condition used to select the physically correct weak solution of the inviscid Burgers equation:
+``the `correct' equations of fluids should not allow this to happen$\ldots$ we need to change the
+equations, or augment them in some way.'' \texttt{tlmbot} independently suggested that the Prize
+problem itself might need restatement so that it pertains only to physical fluids.
+\texttt{babainottawa} and \texttt{Cute\_Presence\_2861} both noted that even though the endpoint is
+unphysical, the pre-singularity trajectory --- before the Mach or Knudsen thresholds of
+Table~\ref{tab:mach} are crossed --- may still carry information relevant to subgrid-scale closure
+modeling. \texttt{vibe0009} correctly pointed out that incompressible Navier--Stokes has no energy
+equation, so any thermal-shock argument built on top of it, including an earlier version of ours, is
+an external estimate rather than a derived consequence --- the point that motivated the sharper
+treatment of \S\ref{sec:mach} in this version.
+
+In a follow-up post summarizing the initial round of feedback, the audit's authors distilled the
+most actionable suggestion as teaching AI proof assistants basic thermodynamics so that they catch
+edge cases like this one; that suggestion is the direct motivation for \S\ref{sec:architecture}.
 
 \begin{thebibliography}{99}
 \bibitem{Fefferman2000}

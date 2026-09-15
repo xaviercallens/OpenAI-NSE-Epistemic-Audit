@@ -7,7 +7,9 @@
 
 ![Neuro-Symbolic AI](assets/neuro_symbolic_brain_1789311430590.jpg)
 
-> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+> **Note (mise à jour v5.0.0, 2026-09-15) :** ce mémo a été corrigé lors de la révision générale du projet, qui a abandonné le cadrage « vacuité physique »/« censure » ainsi que les prétentions liées à la théorie des cordes (T-dualité, K3×T²), après retours de la communauté et relecture scientifique. Position actuelle : `01_Verification_Paper/OpenAI_NSE_Verification.tex` et `paper/where_the_continuum_ends.tex` ; liste complète des corrections et retraits : `CHANGELOG.md` ; version publiée : [v5.0.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.0.0).
+>
+> *(EN) This memo was updated for the v5.0.0 release. Earlier claims — plasma temperatures, a "censorship" principle, the condition-number figure read as physical fragility, and the string-theory material — have been corrected or withdrawn; see `CHANGELOG.md`.*
 
 ### 🇫🇷 1. L'Héritage Français & Origine des Équations
 Les équations de Navier-Stokes décrivent le mouvement de tous les fluides (eau, air, gaz) :
@@ -24,8 +26,11 @@ Les équations de Navier-Stokes décrivent le mouvement de tous les fluides (eau
 
 ### ❓ 3. Le Problème du Prix du Millénaire & L'Annonce d'OpenAI
 - En 2000, le *Clay Mathematics Institute* a classé la régularité de Navier-Stokes parmi les 7 **Problèmes du Prix du Millénaire** (1 million $).
-- En septembre 2026, **OpenAI** a déployé un nombre rapporté d'environ 10 000 agents IA (chiffre rapporté, non confirmé dans les publications techniques d'OpenAI elles-mêmes) pour prouver dans Lean 4 qu'un fluide peut créer une "singularité" (une vitesse infinie en un point, $\vec{u} \to \infty$, alors que l'énergie totale reste bornée).
-- **Notre Audit Épistémique en Mots Simples** : La preuve d'OpenAI est valide en mathématiques pures (espaces de Sobolev), mais elle repose sur des hypothèses de constitutivité/incompressibilité qui ne tiennent plus physiquement. Dans la réalité, la compressibilité (Mach > 0.3, seuil des effets de compressibilité — pas le seuil sonique, qui est Mach 1.0) joue un rôle ; le rôle exact du bruit thermique reste une question ouverte à l'étude (voir `REVIEW_AND_NEW_DIRECTION.md`), pas un fait établi. Les trois limites du modèle — compressibilité, raréfaction et échauffement visqueux ($\Delta T = u^2/c_p$, quelques centaines de kelvins au plus, pas un plasma) — apparaissent ensemble à une même échelle $\ell_* \approx \nu/c \approx 0{,}7$ nm dans l'eau, quelques picosecondes avant la singularité ; à pression ambiante, l'eau cavite même avant (vers 14 m/s, ~5 ns avant).
+- En septembre 2026, **OpenAI** a annoncé une preuve formalisée en Lean 4 (produite par un système multi-agents ; les chiffres circulant sur sa taille, « 10 000 agents », n'apparaissent dans aucune des deux publications techniques et ne sont donc pas repris ici) : un fluide peut développer une « singularité », c'est-à-dire une vitesse qui devient infinie en un point ($\vec{u} \to \infty$) alors que l'énergie totale reste bornée.
+- **Notre lecture physique, en mots simples** : la preuve d'OpenAI est mathématiquement correcte, et l'énoncé du Clay autorise explicitement la force lisse qu'elle utilise. La question intéressante n'est donc pas « est-ce faux ? » mais « où le modèle continu cesse-t-il de décrire un vrai fluide ? ». Réponse : à *une seule* échelle. Comme le cœur du tourbillon garde un nombre de Reynolds d'ordre 1, sa taille suit $\ell_r \simeq \sqrt{\nu t}$ et sa vitesse $u \simeq \sqrt{\nu/t}$ ; les trois limites du modèle — compressibilité (Mach), raréfaction (Knudsen) et échauffement visqueux — deviennent importantes **ensemble** à $\ell_* = \nu/c_s$, soit $\approx 0{,}67$ nm dans l'eau et $\approx 45$ nm dans l'air. Cela arrive quelques picosecondes avant la singularité dans l'eau, quelques nanosecondes dans l'air, et *presque indépendamment de la taille initiale du tourbillon*.
+- **L'échauffement** vaut exactement $\Delta T = u^2/c_p$ : environ 48 K à Mach 0,3 et 540 K à Mach 1. L'eau bout vers Mach 0,37, environ 4 ps avant la singularité — c'est chaud, ce n'est pas un plasma. Aucune loi de la thermodynamique n'est violée : c'est l'hypothèse de température découplée qui tombe.
+- **Dans un liquide, la cavitation arrive en premier** : la dépression au cœur du tourbillon atteint la pression de vapeur dès $u \approx 14$ m/s, soit environ 5–6 ns avant la singularité, alors que le cœur mesure encore 70–80 nm — trois décades avant la limite de Mach. (Même la résistance à la traction de l'eau, ~30 MPa, est atteinte vers 20 ps.)
+- **Une seule condition d'admissibilité** résume tout cela : $|\omega| \lesssim c_s^2/\nu$ (soit $\approx 2{,}2 \times 10^{12}\ \mathrm{s^{-1}}$ dans l'eau), ce qui équivaut à Mach $\lesssim 1$ *et* Knudsen $\lesssim 1$. Avec cette borne, « rester admissible $\Rightarrow$ rester régulier » n'est pas un axiome mais le théorème de Beale–Kato–Majda.
 
 ---
 
@@ -44,13 +49,13 @@ Les équations de Navier-Stokes décrivent le mouvement de tous les fluides (eau
 
 ### 🧠 The Neuro-Symbolic AI & LeanFlow / L'IA Neuro-Symbolique et LeanFlow / 神经符号人工智能与 LeanFlow
 
-![Thermodynamic Censorship Portal](assets/thermo_censorship_portal_1789311439557.jpg)
+![Neuro-symbolic gateway illustration](assets/thermo_censorship_portal_1789311439557.jpg)
 
-**🇺🇸 Our Proposal:** We must evolve AI into a Neuro-Symbolic architecture that respects physical laws. To achieve this, we are promoting **[LeanFlow](https://github.com/xaviercallens/SocrateAI-Numeric-DualScale-Solver)**, a new generation of Dual-Scale solver that grounds AI in thermodynamic reality!
+**🇺🇸 Our Proposal:** proof assistants that handle physically motivated equations should carry an explicit *model-validity* layer, so that a kernel-checked result is labelled as a theorem about a model rather than a statement about fluids. The predicates are simple and dimensionally derived (Mach, Knudsen, Eckert, and the vorticity bound above). We are developing this alongside **[LeanFlow](https://github.com/xaviercallens/SocrateAI-Numeric-DualScale-Solver)**, a two-scale solver. To be clear about status: in this repository only one small model-validity bridge currently compiles against OpenAI's own definitions — the rest is a proposal, not a built system.
 
-**🇫🇷 Notre Proposition :** Nous devons faire évoluer l'IA vers une architecture Neuro-Symbolique qui respecte la physique. Pour cela, nous promouvons **[LeanFlow](https://github.com/xaviercallens/SocrateAI-Numeric-DualScale-Solver)**, un solveur multi-échelle de nouvelle génération qui ancre l'IA dans la réalité thermodynamique !
+**🇫🇷 Notre Proposition :** les assistants de preuve qui manipulent des équations issues de la physique devraient embarquer une couche explicite de *validité du modèle*, afin qu'un résultat vérifié par le noyau soit étiqueté comme un théorème *sur un modèle*, et non comme un énoncé sur les fluides. Les prédicats sont simples et obtenus par analyse dimensionnelle (Mach, Knudsen, Eckert, et la borne de vorticité ci-dessus). Nous développons cela en parallèle de **[LeanFlow](https://github.com/xaviercallens/SocrateAI-Numeric-DualScale-Solver)**, un solveur bi-échelle. Précision honnête : dans ce dépôt, un seul petit pont de validité compile aujourd'hui contre les définitions d'OpenAI ; le reste est une proposition, pas un système achevé.
 
-**🇨🇳 我们的建议：** 我们必须将人工智能发展为尊重物理定律的神经符号架构。为此，我们正在推广 **[LeanFlow](https://github.com/xaviercallens/SocrateAI-Numeric-DualScale-Solver)**，这是新一代双尺度求解器，将 AI 奠基于热力学现实！
+**🇨🇳 我们的建议：** 处理物理方程的证明助手应当包含明确的**模型有效性**层，使经内核验证的结果被标注为关于某个模型的定理，而非关于真实流体的陈述。相关判据简单且可由量纲分析导出（马赫数、克努森数、埃克特数，以及上述涡量上界）。我们正与双尺度求解器 **[LeanFlow](https://github.com/xaviercallens/SocrateAI-Numeric-DualScale-Solver)** 一同推进。需要说明：本仓库目前仅有一个小型有效性桥接可对 OpenAI 的定义编译通过，其余仍属提案。
 
 ---
 
@@ -63,3 +68,12 @@ Les équations de Navier-Stokes décrivent le mouvement de tous les fluides (eau
 **🇺🇸 Experiment:** We created an interactive Google Colab Notebook (link above). Test our small numerical solver and understand physical limits yourself!
 **🇫🇷 Expérimentez :** Nous avons créé un Notebook Colab interactif (lien ci-dessus). Testez notre petit solveur numérique !
 **🇨🇳 实验：** 我们创建了一个交互式 Google Colab 笔记本（上方链接）。测试我们的小型数值求解器！
+
+---
+
+### 📌 Où en est le projet ? / Project status
+
+- **Version publiée : v5.0.0** (15 septembre 2026) — [notes de version](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.0.0). Cette version est une révision scientifique complète : chaque affirmation est soit dérivée, soit vérifiée contre les publications d'OpenAI et leur code Lean, soit explicitement étiquetée comme hypothèse. Les retraits sont listés dans `CHANGELOG.md`.
+- **Relecture externe reçue le 15 septembre 2026** (texte intégral : `01_Verification_Paper/PEER_REVIEW_2026-09-15.md`). Le relecteur retient comme points forts l'unification des limites à l'échelle $\ell_*$ et la borne locale reliée au critère de Beale–Kato–Majda, le seuil de cavitation, la requalification de l'argument acoustique (qui n'est qu'une reformulation du critère de Mach), et la transparence sur les éléments retirés. Il demande des changements de présentation — commentaires sur les versions antérieures déplacés en annexe, pseudonymes de la communauté déplacés dans les remerciements, tableaux reconstruits : **ces révisions sont en cours**.
+- **Merci à la discussion r/FluidMechanics**, dont les objections ont directement façonné plusieurs sections du projet. / *Thanks to the r/FluidMechanics discussion, whose objections shaped several parts of this work.*
+- Pour écrire au projet : `06_Communication_Kit/CONTACT.md`. Pour une présentation audio (NotebookLM) : `06_Communication_Kit/NOTEBOOKLM_DEMO_SCRIPT.md`.

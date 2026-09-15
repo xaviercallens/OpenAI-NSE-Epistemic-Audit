@@ -2,13 +2,23 @@
 """
 zenodo_push.py
 ==============
-Physical Verification of the OpenAI Navier-Stokes/Euler Singularity
+A Physical Reading of the OpenAI Navier-Stokes/Euler Blow-Up Proofs
 MechanicaFluidorum Program | Socrate AI Lab (French Association Loi 1901)
 
-Automated Zenodo synchronizer and bundle packager for Record 22696718 (Version 2).
+Automated Zenodo synchronizer and bundle packager for Record 22696718.
 - Validates SHA-256 integrity of all certified assets.
-- Packages distribution archive (zenodo_bundle_v2.zip).
+- Packages distribution archive (zenodo_bundle_v5.zip).
 - Synchronizes with Zenodo REST API and publishes the updated deposit.
+
+NOTE (2026-09-15 remediation): the file list and metadata below were rewritten
+from scratch. The version this script previously pushed (labelled "2.0.0")
+asserted claims -- a 10^28-digit "structural instability", a global
+enstrophy-censorship axiom, "vacuous" physics, femtosecond-scale timings --
+that this project's own scientific review subsequently withdrew (see
+CHANGELOG.md and 01_Verification_Paper/PEER_REVIEW_2026-09-15.md). Anyone
+re-running this script should re-check FILES_TO_PACKAGE and METADATA against
+the current paper before publishing; do not assume this note stays accurate
+indefinitely.
 """
 
 import os
@@ -23,55 +33,70 @@ RECORD_ID = "22696718"
 ZENODO_BASE_URL = "https://zenodo.org/api"
 
 FILES_TO_PACKAGE = [
-    ("01_Challenger_Paper/OpenAI_NSE_Verification.pdf", "OpenAI_NSE_Verification.pdf"),
-    ("01_Challenger_Paper/OpenAI_NSE_Verification.tex", "OpenAI_NSE_Verification.tex"),
-    ("01_Challenger_Paper/REPRODUCTION_PROTOCOL.md", "REPRODUCTION_PROTOCOL.md"),
-    ("01_Challenger_Paper/README.md", "README.md"),
-    ("01_Challenger_Paper/audit_openai.py", "audit_openai.py"),
-    ("01_Challenger_Paper/verify-physical-vacuity.sh", "verify-physical-vacuity.sh"),
-    ("03_Lean4_Topological_Censorship/src/ThermodynamicCensorship.lean", "ThermodynamicCensorship.lean"),
-    ("dataset/audit_results.json", "audit_results.json"),
-    ("scripts/academic_outreach_campaign.json", "academic_outreach_campaign.json"),
-    ("scripts/directive2_thermodynamic_paradox.py", "directive2_thermodynamic_paradox.py"),
-    ("scripts/directive3_jacobian_instability.py", "directive3_jacobian_instability.py"),
-    ("scripts/directive4_gevrey_regularity.py", "directive4_gevrey_regularity.py"),
+    ("01_Verification_Paper/OpenAI_NSE_Verification.pdf", "OpenAI_NSE_Verification.pdf"),
+    ("01_Verification_Paper/OpenAI_NSE_Verification.tex", "OpenAI_NSE_Verification.tex"),
+    ("01_Verification_Paper/PEER_REVIEW_2026-09-15.md", "PEER_REVIEW_2026-09-15.md"),
+    ("CHANGELOG.md", "CHANGELOG.md"),
+    ("README.md", "README.md"),
+    ("04_Thermodynamic_Censorship_Paper/Thermodynamic_Censorship_Navier_Stokes.pdf",
+     "SUPERSEDED_Thermodynamic_Censorship_Navier_Stokes.pdf"),
+    ("05_Community_Research_Directions/WorkStream1_EntropyCondition/WorkStream1_EntropyCondition.pdf",
+     "WorkStream1_EntropyCondition.pdf"),
+    ("05_Community_Research_Directions/WorkStream2_ThermalEquation/WorkStream2_ThermalEquation.pdf",
+     "WorkStream2_ThermalEquation.pdf"),
+    ("05_Community_Research_Directions/WorkStream3_Turbulence/WorkStream3_Turbulence.pdf",
+     "WorkStream3_Turbulence.pdf"),
+    ("05_Community_Research_Directions/WorkStream4_MechanicalCavitation/WorkStream4_MechanicalCavitation.pdf",
+     "WorkStream4_MechanicalCavitation.pdf"),
+    ("05_Community_Research_Directions/WorkStream5_DivergenceFree/WorkStream5_DivergenceFree.pdf",
+     "WorkStream5_DivergenceFree.pdf"),
+    ("05_Community_Research_Directions/WorkStream6_MeasureTheory/WorkStream6_MeasureTheory.pdf",
+     "WorkStream6_MeasureTheory.pdf"),
     ("scripts/directive5_mach_divergence.py", "directive5_mach_divergence.py"),
-    ("scripts/directive6_thermal_instability.py", "directive6_thermal_instability.py"),
+    ("scripts/directive2_thermodynamic_paradox.py", "directive2_thermodynamic_paradox.py"),
+    ("dataset/README.md", "dataset_README.md"),
 ]
 
 METADATA = {
     "metadata": {
-        "title": "On the Physical Vacuity of Manufactured Singularities: A Comprehensive Physical Verification of the OpenAI Navier-Stokes Formalization (Version 2)",
+        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.0.0)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
-            "<p>In September 2026, an OpenAI multi-agent system formalized finite-time blow-up proofs "
-            "for the forced 3D Navier-Stokes equations (Millennium Prize Alternatives C and D) and the "
-            "unforced Euler equations within Lean 4. While this represents a landmark achievement in "
-            "automated theorem proving and syntactic mathematics, a rigorous Physical Verification reveals "
-            "that these singularities are driven by pathological mathematics rather than natural fluid dynamics.</p>"
-            "<p>We confirm the Lean 4 proof contains no axiomatic hallucinations and legally satisfies "
-            "the Clay Mathematics Institute criteria via Gevrey-2 class cutoffs. However, this mathematical "
-            "ingenuity exposes five profound epistemic disconnects:</p>"
-            "<ol>"
-            "<li><strong>Structural Instability:</strong> requiring 10<sup>28</sup>-digit precision to "
-            "maintain Reynolds stress cancellation against 300K thermal fluctuations;</li>"
-            "<li><strong>Thermodynamic Paradox:</strong> local enstrophy diverges as &tau;<sup>-0.515</sup>, "
-            "generating infinite viscous dissipation and violating incompressibility;</li>"
-            "<li><strong>Mach Number Self-Invalidation:</strong> local Mach number exceeds 0.3 at "
-            "&tau; &approx; 6.7 &times; 10<sup>-14</sup> seconds before blow-up;</li>"
-            "<li><strong>Teleological Reversal:</strong> Newtonian causality is inverted, with the external "
-            "force reverse-engineered from the desired singularity;</li>"
-            "<li><strong>Ultraviolet Bomb:</strong> in unforced Euler, active kinetic energy is injected at "
-            "infinite spatial frequencies, violating the continuum hypothesis at t = 0.</li>"
-            "</ol>"
-            "<p>We formalize the <em>Thermodynamic Censorship Principle</em>: physically admissible "
-            "solutions must satisfy uniform bounded enstrophy. Under this axiom, Gevrey-2 vortex collapse "
-            "blow-ups are provably censored. We conclude that autonomous, naturally occurring 3D fluids "
-            "do not blow up in finite time.</p>"
-            "<p>This certified distribution includes the full publication manuscript (PDF and LaTeX), "
-            "the Lean 4 formalization (ThermodynamicCensorship.lean), 6 Python verification scripts, "
-            "pre-computed output logs, and the complete academic outreach campaign.</p>"
+            "<p>In September 2026, an OpenAI multi-agent system produced Lean 4-verified proofs of "
+            "finite-time blow-up for the forced 3D Navier-Stokes equations (Millennium Prize "
+            "Alternatives C and D) and for the unforced Euler equations. The proofs are syntactically "
+            "flawless: zero <code>sorry</code>s, zero custom axioms, no weakened norms. This is not a "
+            "refutation of that result. The Clay Millennium Prize problems ask precise questions about "
+            "a specific continuum model; they were never claims about how real fluids behave.</p>"
+            "<p>This paper is a physical reading. Because the collapsing core keeps a radial Reynolds "
+            "number of order one, its scales are diffusive (&#8467;<sub>r</sub> &#8776; &radic;(&nu;t), "
+            "u &#8776; &radic;(&nu;/t)), essentially independent of the initial vortex size or choice "
+            "of units. Compressibility, rarefaction and viscous heating all become order-one effects at "
+            "a single length &#8467;* = &nu;/c<sub>s</sub> (0.7 nm in water, 45 nm in air), a few "
+            "picoseconds (water) or nanoseconds (air) before the mathematical singularity -- one scale, "
+            "expressible as a single local vorticity bound |&omega;| &lesssim; c<sub>s</sub><sup>2</sup>/&nu; "
+            "that the Beale-Kato-Majda theorem turns into a genuine admissibility criterion. For liquids "
+            "at ambient pressure, cavitation is reached three decades earlier still. Also shown: the "
+            "moment-matching system's apparent 10<sup>28</sup> condition number is a non-dimensionalization "
+            "artifact (&kappa; &asymp; 4.1&times;10<sup>5</sup> once properly scaled); the acoustic "
+            "radiation \"check\" used in earlier drafts is the Mach criterion in disguise, not an "
+            "independent one; the external force has no independent physical origin, by construction; "
+            "and the Euler datum requires coherent structure below the molecular length, where the "
+            "missing physics is viscosity itself, not any exotic short-distance cutoff.</p>"
+            "<p>This version (v5.0.0) supersedes all previous public drafts of this project, including "
+            "one previously deposited under this same Zenodo record. Claims withdrawn in this revision "
+            "-- \"plasma temperatures\", a global enstrophy-censorship axiom with no stated derivation, "
+            "the acoustic check treated as independent, femtosecond-scale timings, and the framing of "
+            "this result as \"physically vacuous\" -- are documented individually in the accompanying "
+            "CHANGELOG.md and in Appendix A of the main paper. The bundle also includes an open peer "
+            "review received 2026-09-15 and the authors' point-by-point response "
+            "(PEER_REVIEW_2026-09-15.md), and the six community-authored WorkStream notes developing "
+            "specific follow-on research directions (an admissibility condition, subgrid-scale closure "
+            "benchmarking, a derived thermal response, mechanical cavitation, the divergence-free/"
+            "incompressible distinction, and measure-theoretic genericity). The earlier "
+            "\"Thermodynamic Censorship\" paper is included for the historical record with an inline "
+            "withdrawal notice; it should not be cited for its original claims.</p>"
         ),
         "creators": [
             {
@@ -89,14 +114,14 @@ METADATA = {
             "Millennium Prize Problem",
             "Lean 4",
             "Formal Verification",
-            "Physical Verification",
             "Fluid Dynamics",
-            "Thermodynamic Censorship",
-            "Gevrey Regularity",
-            "Structural Instability",
+            "Beale-Kato-Majda",
+            "Model Validity",
+            "Continuum Mechanics",
+            "Cavitation",
             "Neuro-Symbolic AI"
         ],
-        "version": "2.0.0",
+        "version": "5.0.0",
         "license": "cc-by-4.0",
         "access_right": "open",
         "related_identifiers": [
@@ -106,8 +131,8 @@ METADATA = {
                 "scheme": "url"
             },
             {
-                "identifier": "https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship",
-                "relation": "isSupplementTo",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.0.0",
+                "relation": "isIdenticalTo",
                 "scheme": "url"
             },
             {
@@ -251,11 +276,11 @@ def push_to_zenodo(token, repo_root, publish=False):
                 sys.exit(1)
     
     # Upload zip bundle as well
-    zip_path = os.path.join(repo_root, "01_Challenger_Paper", "zenodo_bundle_v2.zip")
+    zip_path = os.path.join(repo_root, "01_Verification_Paper", "zenodo_bundle_v5.zip")
     if os.path.exists(zip_path):
-        print(f"  -> Uploading zenodo_bundle_v2.zip ({os.path.getsize(zip_path):,} bytes)...")
+        print(f"  -> Uploading zenodo_bundle_v5.zip ({os.path.getsize(zip_path):,} bytes)...")
         with open(zip_path, "rb") as f:
-            up_r = requests.put(f"{bucket_url}/zenodo_bundle_v2.zip", data=f, headers=headers)
+            up_r = requests.put(f"{bucket_url}/zenodo_bundle_v5.zip", data=f, headers=headers)
             if up_r.status_code not in (200, 201):
                 print(f"  [-] Error uploading zip bundle: {up_r.status_code} {up_r.text}", file=sys.stderr)
                 sys.exit(1)
@@ -304,7 +329,7 @@ def main():
     args = parser.parse_args()
 
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    output_zip = os.path.join(repo_root, "01_Challenger_Paper", "zenodo_bundle_v2.zip")
+    output_zip = os.path.join(repo_root, "01_Verification_Paper", "zenodo_bundle_v5.zip")
 
     print("=" * 65)
     print(" ZENODO SYNCHRONIZER & CERTIFIED PACKAGER (VERSION 2)")

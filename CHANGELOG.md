@@ -1,5 +1,31 @@
 # Changelog
 
+## v5.1.0 — 2026-09-15 — Peer review response, table fixes, Zenodo record corrected
+
+- Addressed an open peer review of the flagship paper (recorded verbatim in
+  `01_Verification_Paper/PEER_REVIEW_2026-09-15.md`, with a point-by-point authors'
+  response): consolidated "earlier drafts" meta-commentary out of the running text into
+  a new Appendix A; moved individually-named Reddit commenters out of the main text
+  into Acknowledgments and a new Appendix B preserving the full quotations; fixed a
+  genuine LaTeX table overflow (Table 5, 106.7pt overfull hbox that was merging rows
+  and truncating text) and rebuilt two other tables (`tabularx`, split columns) for
+  robustness rather than relying on manually-sized `p{}` columns.
+- **`zenodo_push.py` rewritten.** The script still targeted Zenodo record 22696718 with
+  metadata and a file list from the withdrawn "Version 2" / Thermodynamic Censorship
+  framing — a "10²⁸-digit structural instability", a global enstrophy-censorship axiom,
+  "vacuous" physics, femtosecond-scale timings, and paths (`01_Challenger_Paper/...`)
+  that no longer exist. Had this been run unmodified, it would have re-published
+  already-withdrawn claims under a permanent DOI. Rewrote the title, description and
+  `FILES_TO_PACKAGE` to match the current v5.0.0 paper, corrected the archive paths,
+  and uploaded a corrected **draft** (record 22777467) for manual review; it has
+  **not** been published (no DOI minted) — see the release notes for the review link.
+- HuggingFace publishing (`deploy_huggingface.sh`) was found to have the same problem
+  at a larger scale (it packages the withdrawn Bi-Helmholtz/T-duality paper and
+  `EulerCensorship.lean`, which has 7 `sorry`s and a vacuous `True` conclusion per the
+  v2 paper's own errata table) and was not run: no `HF_TOKEN` was available in this
+  environment, and the script needs the same kind of full content rewrite `zenodo_push.py`
+  received before it is safe to run at all.
+
 ## v5.0.0 — 2026-09-15 — Scientific review and remediation
 
 This release is a full pass over every paper, script, Lean file and article in the

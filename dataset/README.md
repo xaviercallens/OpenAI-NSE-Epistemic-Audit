@@ -39,7 +39,7 @@ This dataset accompanies the publication:
 | **2. Thermodynamic Paradox** | Asymptotic scaling | $e_{\text{local}} \sim \tau^{-1.010} \to \infty$, Enstrophy $\sim \tau^{-0.515} \to \infty$, $L^3 \sim \tau^{-0.0067} \to \infty$ | 🔴 Intensive Energy & Enstrophy Divergence |
 | **3. Moment Matrix Scaling** | 5-moment non-dimensionalization | $A = D B D \implies \kappa(B) \approx 4.11 \times 10^5$ (bounded) | ✅ Scale-Invariant & Stable |
 | **4. Gevrey Regularity** | Cutoff smoothness | Theoretical Gevrey index $s = 1.5$, all derivative limits 0 | ✅ Legally $C^\infty$, Non-Analytic |
-| **5. Mach Number Divergence** | Incompressible validity | $\text{Ma} > 0.3$ at $\tau \approx 6.7 \times 10^{-14}$ s, sonic at $6.2 \times 10^{-15}$ s | 🔴 Physical Self-Invalidation |
+| **5. Mach Number Divergence** | Incompressible validity | $\text{Ma} > 0.3$ at dimensionless $\tau \approx 6.7 \times 10^{-14}$, sonic at $6.2 \times 10^{-15}$; physical time $t = T\tau$ with $T = \ell_0^2/\nu$ (100 s for a 1 cm water vortex), i.e. $\approx 5$–$7$ ps and $0.6$ ps before blow-up | 🔴 Model leaves its validity range |
 | **6. Non-Dimensional Response** | Physical stability | Matrix preconditioning confirms structural stability under 300K noise | ✅ Structurally Stable |
 
 ## Dataset Contents
@@ -49,7 +49,10 @@ This dataset accompanies the publication:
 - `outputs/`: Complete console logs and raw numerical outputs.
 - `paper/`: Complete 6-page publication PDF and LaTeX source.
 - `lean4/`: Formal Lean 4 implementation of the Thermodynamic Censorship Principle (`ThermodynamicCensorship.lean`).
-- `communication/`: Academic outreach campaign files with personalized scientific correspondence and the 8-minute explainer audio script.
+- `communication/`: Academic outreach files and the explainer audio script. Current versions of this
+  material live in the repository under `06_Communication_Kit/` — see `CONTACT.md` (channels and
+  outreach template) and `NOTEBOOKLM_DEMO_SCRIPT.md` (sources, framing and segment outline for a
+  ~10–12 min NotebookLM Audio Overview), both updated for release v5.0.0.
 
 ## Citation
 
