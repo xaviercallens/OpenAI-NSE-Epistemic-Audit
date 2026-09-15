@@ -49,6 +49,8 @@ site-src/
 
 # Test and benchmark scratch files
 .pytest_cache/
+.coverage
+.coverage.*
 scratch_test_certificate.json
 
 # Release exclusions: communication, social media, agents, skills
