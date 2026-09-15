@@ -19,12 +19,26 @@
   `FILES_TO_PACKAGE` to match the current v5.0.0 paper, corrected the archive paths,
   and uploaded a corrected **draft** (record 22777467) for manual review; it has
   **not** been published (no DOI minted) — see the release notes for the review link.
-- HuggingFace publishing (`deploy_huggingface.sh`) was found to have the same problem
-  at a larger scale (it packages the withdrawn Bi-Helmholtz/T-duality paper and
-  `EulerCensorship.lean`, which has 7 `sorry`s and a vacuous `True` conclusion per the
-  v2 paper's own errata table) and was not run: no `HF_TOKEN` was available in this
-  environment, and the script needs the same kind of full content rewrite `zenodo_push.py`
-  received before it is safe to run at all.
+- **HuggingFace dataset corrected.** The live dataset repo
+  `callensxavier/OpenAI-NSE-Thermodynamic-Censorship` was found serving the withdrawn
+  "Version 2" paper, an uncontextualized copy of `ThermodynamicCensorship.lean`, and a
+  directive-5 output log with the exact femtosecond/picosecond unit bug this project's
+  review caught (`Ma > 0.3 at tau ~ 6.7e-14 s`, twelve orders of magnitude off) --
+  publicly live under a real name. Rewrote `scripts/huggingface_upload.py` (file list,
+  dataset card, abort-before-upload safety check) and ran it: current paper,
+  WorkStreams, CHANGELOG, peer review, regenerated directive outputs, and a corrected
+  README are now live; the retracted paper and Lean file are kept under `superseded/`
+  with the same withdrawal context as the Zenodo bundle.
+  **Manual cleanup still needed:** a few stale duplicates remain live alongside the
+  corrected files -- `REPO_README.md` (old card, still says "vacuity"), an old
+  `paper/OpenAI_NSE_EpistemicAudit.pdf`/`.tex` copy, and an uncontextualized root-level
+  `lean4/ThermodynamicCensorship.lean` -- because file deletion on that host was outside
+  this session's permitted actions; delete them via the HuggingFace web UI or
+  `huggingface_hub.HfApi.delete_file`.
+- `deploy_huggingface.sh` (a *different*, unused script targeting a separate HF repo for
+  the withdrawn Bi-Helmholtz/T-duality paper and `EulerCensorship.lean`, which has 7
+  `sorry`s and a vacuous `True` conclusion per the v2 paper's own errata table) was left
+  untouched and was not run.
 
 ## v5.0.0 — 2026-09-15 — Scientific review and remediation
 
