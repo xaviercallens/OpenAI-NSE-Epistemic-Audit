@@ -5,6 +5,7 @@ package «nse-topological-censorship» {}
 
 lean_lib «NSECensorship» {
   srcDir := "src"
+  roots := #[`NSECensorship, `LeanMasterBridge, `TopologicalCensorship]
 }
 
 require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "v4.34.0-rc2"
