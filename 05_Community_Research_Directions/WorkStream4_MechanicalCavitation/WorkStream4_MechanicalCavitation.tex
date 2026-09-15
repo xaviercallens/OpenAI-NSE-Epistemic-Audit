@@ -1,8 +1,8 @@
 \documentclass[11pt]{article}
-\usepackage{amsmath, amssymb, geometry, hyperref}
+\usepackage{amsmath, amssymb, geometry, hyperref, booktabs}
 \geometry{a4paper, margin=1in}
 
-\title{Work Stream 4: Mechanically Driven Cavitation}
+\title{Work Stream 4: Cavitation as the First Constitutive Limit in Liquids}
 \author{MechanicaFluidorum Program \& Community Contributors (esp. \texttt{u/Little-Name9809})}
 \date{September 2026}
 
@@ -10,18 +10,38 @@
 \maketitle
 
 \section{Introduction}
-A fascinating question posed by \texttt{u/Little-Name9809} is whether the mathematical construction of the OpenAI singularity suggests a physical mechanism to vaporize a fluid into plasma using \emph{only mechanical force} (with no external heat).
+\texttt{u/Little-Name9809} asked whether the OpenAI construction suggests a way to drive a liquid to extreme states using \emph{only mechanical force}. Working through the question gives a sharper result than the one originally anticipated: for a liquid at ordinary pressure, the first physical assumption of the incompressible model to fail is not incompressibility, not the continuum hypothesis, and not viscous heating, but the liquid's inability to sustain tension. Cavitation comes first, and by a wide margin.
 
 \section{Hydrodynamic Cavitation}
-In the OpenAI proof, the internal wave packets transfer energy into the vortex core at a rate that diverges as $\tau \to 0$. By evaluating the local cavitation number $\sigma$:
+In the OpenAI proof, the collapsing core has velocity $|u(\tau)| \sim \tau^{-1/2-h}$ with $h = 1/200$, and radius $\ell_r \sim \tau^{1/2}$. Because the core keeps a radial Reynolds number of order one, these scales are diffusive in any units, $\ell_r \simeq \sqrt{\nu t}$ and $u \simeq \sqrt{\nu/t}$, essentially independent of the initial vortex size. The static pressure at the centre of a vortex lies below the ambient pressure by roughly the dynamic pressure, $\Delta p \sim \rho u^2$ (exactly $\rho u_{\max}^2$ for a Rankine vortex). The local cavitation number
 \begin{equation}
-    \sigma(\tau) = \frac{p_\infty - p_v}{\frac{1}{2}\rho |u(\tau)|^2}
+    \sigma(\tau) = \frac{p_\infty - p_v}{\tfrac{1}{2}\rho |u(\tau)|^2}
 \end{equation}
-where $p_v$ is the vapor pressure. As the core velocity $|u(\tau)| \sim \tau^{-1/2} \to \infty$, the cavitation number rapidly approaches zero. 
+therefore falls to order one when $\rho u^2 \sim p_\infty - p_v$.
 
-Before the thermal shock discussed in Work Stream 2 boils the fluid, the extreme drop in local static pressure (due to Bernoulli effects in the vortex core) induces \emph{mechanical cavitation}. This is analogous to sonoluminescence, where violent bubble collapse generates localized plasma. The mathematical singularity provides a theoretical blueprint for maximizing this acoustic concentration of energy.
+\begin{table}[h]
+\centering
+\caption{Where the liquid fails first: water at 300\,K, $\nu = 10^{-6}$\,m$^2$/s, $c = 1500$\,m/s. Times are physical times before blow-up, $t \simeq \nu/u^2$; the $\tau^{-h}$ corrections change them by a factor $\lesssim 1.3$.}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Limit & $u$ (m/s) & Ma & $t$ before blow-up & $\ell_r$ \\
+\midrule
+Cavitation, $p_\infty - p_v \approx 0.1$\,MPa (water with nuclei) & 14 & 0.009 & $5$\,ns & 70\,nm \\
+Tensile strength $\approx 30$\,MPa (clean samples) & 245 & 0.16 & $17$\,ps & 4\,nm \\
+Tensile strength $\approx 140$\,MPa (inclusions, near spinodal) & 530 & 0.35 & $3.6$\,ps & 2\,nm \\
+Compressibility, $\mathrm{Ma} = 0.3$ & 450 & 0.3 & $5$--$7$\,ps & 3\,nm \\
+Viscous heating to boiling, $\Delta T = u^2/c_p = 73$\,K & 550 & 0.37 & $3$--$4.5$\,ps & 2\,nm \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For ordinary water containing nucleation sites, cavitation sets in at $u \approx 14$\,m/s, about $5$\,ns before the mathematical blow-up, when the core is still $\approx 70$\,nm across: three orders of magnitude in time before the Mach limit and while the continuum description is unquestionably valid. Even the metastable tensile limits of very clean water are reached before, or together with, $\mathrm{Ma} = 0.3$. The Bernoulli pressure drop, not thermal shock, is the mechanism that removes a real liquid from the incompressible model.
+
+\paragraph{Caveats.} The core at these times is tens of nanometres wide and lives for nanoseconds, so nucleation kinetics (the number of nuclei in a $70$\,nm region, the time to grow a critical bubble) matter and can delay cavitation toward the tensile-strength rows of the table. The comparison with the thermal estimate of Work Stream~2 is consistent: viscous heating gives $\Delta T = u^2/c_p$, which is only $48$\,K at $\mathrm{Ma} = 0.3$; there is no ``plasma by pure force''---temperatures of order $10^4$\,K would require $\mathrm{Ma} \gtrsim 4$, far outside the model's validity.
+
+\paragraph{Speculative remark.} One might ask whether the violent collapse of the resulting cavity could concentrate energy in the manner of sonoluminescence. We record this as an unsupported analogy only: nothing in the present analysis establishes it, and the construction provides no blueprint for it.
 
 \section{Acknowledgments}
-Thank you to \texttt{u/Little-Name9809} for connecting the pure math PDE construction to the physics of sonoluminescence and phase transitions.
+Thank you to \texttt{u/Little-Name9809} for connecting the pure-mathematics PDE construction to the physics of phase transitions; the question led to a cleaner ordering of the validity limits than the thermal argument alone.
 
 \end{document}

@@ -2,7 +2,7 @@
 
 # 🌊 OpenAI NSE / Euler Physical Verification
 
-### *On the Physical Vacuity of Manufactured Singularities*
+### *A Physical Reading, Not a Physical Refutation*
 
 [![CI Pipeline](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/audit-pipeline.yml/badge.svg)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/audit-pipeline.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22727801.svg)](https://doi.org/10.5281/zenodo.22727801)
@@ -21,6 +21,8 @@
 
 </div>
 
+> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+
 ---
 
 ## 📌 TL;DR
@@ -38,7 +40,7 @@ This project presents a comprehensive physical verification, demonstrating how t
 **Welcome!** If you are not a physicist or mathematician, start here. We have translated this complex scientific audit into accessible, highly visual materials to help everyone understand the clash between abstract AI mathematics and physical reality.
 
 - 🌌 **[Read the "Tout Public" Memo](07_Tout_Public_Memo/MEMO.md):** An accessible, cyberpunk-styled visual memo explaining the mathematical singularity vs. physical turbulence, our claims, and our proposals for Neuro-Symbolic AI.
-- 💻 **[Launch the Google Colab Notebook](07_Tout_Public_Memo/Citizen_Science_Exploration.ipynb):** A fully interactive environment where you can visualize the "Thermodynamic Censorship" and see how physical reality stops infinite mathematical blow-ups. No installation required!
+- 💻 **[Launch the Google Colab Notebook](07_Tout_Public_Memo/Citizen_Science_Exploration.ipynb):** A fully interactive environment where you can visualize where the continuum model stops describing a real fluid, and why a mathematical blow-up is not a physical event. No installation required!
 
 ![Cyberpunk Singularity & Turbulence](07_Tout_Public_Memo/assets/cyber_singularity_turbulence_1789311421687.jpg)
 
@@ -48,17 +50,17 @@ This project presents a comprehensive physical verification, demonstrating how t
 
 | # | Finding | Key Metric / Exponent |
 |---|---|---|
-| **1** | **Intensive Local Energy Density Divergence**: $e_{\text{local}} = \frac{1}{2}\rho\|u\|^2 \sim \tau^{-1.010}$ and global enstrophy $\Omega \sim \tau^{-0.515}$ diverge without bound | **$\Delta T \sim \tau^{-1.010}$** — thermal shock violates Boussinesq isothermal assumptions |
-| **2** | **Mach Number Self-Invalidation**: incompressible NSE invalidate themselves when $Ma \ge 0.3$ | **67 femtoseconds** ($\tau \approx 6.7 \times 10^{-14}$ s) before mathematical blow-up |
+| **1** | **Intensive Local Energy Density Divergence**: $e_{\text{local}} = \frac{1}{2}\rho\|u\|^2 \sim \tau^{-1.010}$ and global enstrophy $\Omega \sim \tau^{-0.515}$ diverge without bound | **$\Delta T = u^2/c_p \sim \tau^{-1.010}$** — about 48 K at $Ma = 0.3$ and 540 K at $Ma = 1$ (not plasma): the decoupled-temperature assumption fails, no thermodynamic law is violated |
+| **2** | **Mach Number Self-Invalidation**: incompressible NSE invalidate themselves when $Ma \ge 0.3$ | about **6.7 picoseconds** before mathematical blow-up (dimensionless $\tau \approx 6.7 \times 10^{-14}$, physical $t = T\tau$ with $T = \ell_0^2/\nu = 100$ s; unit-free estimate $\nu/(0.3\,c)^2 \approx 5$ ps). Compressibility, rarefaction and heating all become order one at a single scale $\ell_* = \nu/c \approx 0.7$ nm in water |
 | **3** | **Teleological Causality Reversal**: force $f$ is reverse-engineered from a pre-specified singular similarity profile | **MMS inversion** — shooting an arrow and painting a bullseye around it |
 | **4** | **Matrix Scaling & Non-Dimensionalization**: moment-matching matrix $A = D B D$ has bounded non-dimensional condition number $\kappa(B) \approx 4.11 \times 10^5$ | **$\kappa(B) \sim O(10^5)$** — raw $\kappa \sim 10^{28}$ was an unscaled dimensional artifact |
-| **5** | **Sub-Planckian Coherent Fine-Tuning**: Euler initial conditions require unphysically fine-tuned sub-Planckian coherence | Phased fluctuations below $10^{-35}$ m destroyed by atomic thermal noise |
+| **5** | **Sub-Molecular Coherent Fine-Tuning** *(open question, see pivot note)*: Euler initial conditions would require implausibly fine-tuned coherence far below the molecular mean-free-path scale (~10⁻¹⁰–10⁻⁷ m), i.e. far below anything physically meaningful — not, as earlier drafts claimed, at the Planck scale (~10⁻³⁵ m, a quantum-gravity scale unrelated to fluid discreteness) | Whether such phased fluctuations survive molecular/thermal noise is an open question, not a demonstrated result |
 
 ### The Proposed Resolution: Dual-Framework
 
-> **Thermodynamic Censorship Principle** — A physically admissible NSE solution must satisfy uniform bounded enstrophy: $\sup_t \int |\nabla \times u|^2 dx \le \Omega_{\max}$ and respect the continuum limit (Knudsen number $Kn \le 0.1$). For standard fluids like water at 300K, $\Omega_{\max} \approx 1.13 \times 10^{13}\text{ s}^{-2}$. The AI's construction requires $\Omega(t) \to \infty$, violating this bound before the singularity occurs.
+> **Model-validity (admissibility) condition** — The continuum, incompressible description of a real fluid holds only while the *local* vorticity stays below $|\omega| \lesssim c^2/\nu$ (about $2 \times 10^{12}\ \text{s}^{-1}$ in water, $8 \times 10^{9}\ \text{s}^{-1}$ in air): this single bound is equivalent to $Ma \lesssim 1$ together with $Kn \lesssim 1$. A solution that satisfies it on $[0,T)$ cannot blow up at $T$ — that is the Beale–Kato–Majda theorem, not a new axiom. The AI's construction has $|\omega| \sim \tau^{-1.005} \to \infty$ and crosses this bound a few picoseconds before the singularity. (An earlier version of this README quoted a global enstrophy ceiling "$\Omega_{\max} \approx 1.13 \times 10^{13}$"; that constant has no derivation and has been withdrawn.)
 
-This analysis relies on a novel **Dual-Framework** utilizing `physlib` in Lean 4 to strictly enforce physical boundaries (Mach limits, Knudsen limits, and thermal diffusion limits). We demonstrate that while the syntactic topological derivation is flawless, the fluid flow modeled breaks foundational laws of physical reality (violating Boussinesq isothermal models) $67$ femtoseconds before the abstract topological blow-up time.
+This analysis uses a **Dual-Framework**: Lean 4 for the mathematics, and explicit physical-validity predicates (Mach, Knudsen, Eckert bounds) for the physics. While the formal derivation is flawless, the flow it describes leaves the constitutive assumptions of the incompressible model (low Mach, continuum, decoupled temperature) a few picoseconds before the blow-up time.
 
 ---
 
@@ -95,7 +97,7 @@ OpenAI-NSE-Epistemic-Audit/
 │       ├── ThermodynamicCensorship.lean
 │       ├── TopologicalCensorship.lean
 │       └── NSECensorship.lean
-├── 04_Thermodynamic_Censorship_Paper/   # Nature Physics draft
+├── 04_Thermodynamic_Censorship_Paper/   # Sept-12 draft, SUPERSEDED (see 01_Verification_Paper and paper/where_the_continuum_ends.tex)
 ├── 05_Community_Research_Directions/    # Extensible Workstreams & Terence Tao Manifesto
 │   ├── POSITIVE_FUTURE_DIRECTIONS.md
 │   └── TAO_NEUROSYMBOLIC_SCIENTIFIC_AI_MANIFESTO.md # The Neuro-Symbolic Scientific AI Modus Operandi
@@ -129,7 +131,7 @@ OpenAI-NSE-Epistemic-Audit/
 git clone https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit
 cd OpenAI-NSE-Epistemic-Audit/scripts
 pip install numpy scipy sympy mpmath matplotlib
-python directive5_mach_divergence.py             # Mach number trajectory (67 fs)
+python directive5_mach_divergence.py             # Mach number trajectory (Ma = 0.3 about 6.7 ps before blow-up)
 python directive2_thermodynamic_paradox.py       # Intensive scaling (-1.010 exponent)
 python directive3_jacobian_instability.py        # Non-dimensionalization (kappa ~ 4.11e5)
 python directive4_gevrey_regularity.py           # Analytical Gevrey index (s = 1.5)
@@ -152,13 +154,15 @@ lake build  # Requires Lean 4 + Mathlib
 </div>
 
 ### Mach Number Self-Invalidation
-| Time τ (s) | Velocity |u| (m/s) | Mach Ma | Regime |
+| Dimensionless τ (physical time $t = T\tau$, $T = \ell_0^2/\nu = 100$ s for water, $\ell_0 = 1$ cm) | Velocity |u| (m/s) | Mach Ma | Regime |
 |---|---|---|---|
-| 10⁰ | 10⁻⁴ | 6.7×10⁻⁸ | ✅ Incompressible |
-| 10⁻¹² | 115 | 0.077 | ✅ Incompressible |
-| **6.7×10⁻¹⁴** | **450** | **0.30** | ❌ **Limit breached** |
-| 6.2×10⁻¹⁵ | 1500 | 1.00 | ❌ Transonic |
-| 9.0×10⁻¹⁶ | 4100 | 2.73 | ❌ Sub-molecular |
+| 10⁰ (t = 100 s) | 10⁻⁴ | 6.7×10⁻⁸ | ✅ Incompressible |
+| 10⁻¹² (t = 100 ps) | 115 | 0.077 | ✅ Incompressible |
+| **6.7×10⁻¹⁴ (t ≈ 6.7 ps)** | **450** | **0.30** | ❌ **Limit breached** |
+| 6.2×10⁻¹⁵ (t ≈ 0.6 ps) | 1500 | 1.00 | ❌ Transonic |
+| 9.0×10⁻¹⁶ (t ≈ 90 fs) | 4100 | 2.73 | ❌ Core radius ≈ molecular spacing (Kn ≈ 1) |
+
+The velocity and Mach columns depend on $\ell_0$ only through a factor $(\ell_0^2/\nu t)^{1/200} \approx 1.2$; in unit-free form $u \simeq \sqrt{\nu/t}$, so $Ma = 0.3$ is reached at $t \simeq \nu/(0.3\,c)^2 \approx 5$ ps whatever the initial vortex size.
 
 ### Moment Matrix Non-Dimensionalization
 | X_R | κ(A) [Raw Unscaled] | κ(B) [Non-Dimensionalized] | Status |
@@ -169,7 +173,7 @@ lake build  # Requires Lean 4 + Mathlib
 
 ### 🌪️ DNS & Empirical CFD Verification: The Ultraviolet Bomb vs. Real Turbulence
 
-To computationally anchor this dual-framework, we run the AI's synthetic limits against high-fidelity physical datasets and arbitrary-precision CFD solvers. The abstract mathematical blow-up fails catastrophically when subjected to real fluid mechanics.
+To illustrate the dual-framework, we contrast the AI's scaling limits with a physical turbulence spectrum. The figures below are schematic: the "OpenAI snapshot" curve is a hand-placed spike drawn from the scaling exponents, not a computed spectrum of the construction (no numerical implementation of the 166-page construction exists).
 
 <div align="center">
   <img src="dataset/animations/turbulence_energy_cascade.jpg" alt="Energy Spectrum Comparison" width="48%">
@@ -178,11 +182,11 @@ To computationally anchor this dual-framework, we run the AI's synthetic limits 
 
 #### 1. The Ultraviolet Bomb vs. The Kolmogorov Cascade (Left)
 * **The Physics:** Real physical turbulence (JHTDB DNS, blue line) adheres strictly to the classical Kolmogorov $k^{-5/3}$ cascade, smoothly dissipating kinetic energy at the viscous microscale. 
-* **The AI Singularity:** The OpenAI snapshot (red curve) illegally bypasses viscosity, concentrating massive amounts of kinetic energy into diverging, sub-Planckian wavenumbers—a mathematical anomaly we term the **"Ultraviolet Bomb."**
+* **The AI Singularity (schematic):** The red curve sketches where the construction's energy sits as $\tau \to 0$: at ever higher wavenumbers ($k_{\text{peak}} \sim \tau^{-1/2}$), eventually below the molecular scale. Note that the *total* kinetic energy of the core actually vanishes ($E \sim \tau^{+0.485}$); what diverges is the velocity and the energy *density*, not the amount of energy. (Earlier drafts called this an "Ultraviolet Bomb" at "sub-Planckian" scales; both phrasings were wrong — the relevant physical cutoff is the molecular scale, about $\ell_* = \nu/c \approx 0.7$ nm in water, not the Planck length.)
 
-#### 2. Phase Fragility and Structural Instability (Right)
-* **The Thermal Noise Test:** The AI's Euler singularity requires sub-Planckian "Forced Coherence" between interacting wave packets. 
-* **The Reality:** The moment empirical microscopic thermal noise ("Turbulent Phase Jitter") is introduced to the solver (simulating 300K Brownian motion), the mathematical wave-cancellation shatters. The Reynolds-stress cancellation decouples, and the enstrophy explosion is instantly arrested. This proves the singularity is a fragile topological phantom that collapses under atomic jitter.
+#### 2. Phase Fragility and Structural Instability (Right) *(hypothesis, not an established result — see pivot note)*
+* **The Thermal Noise Test (open question):** Whether the AI's Euler singularity requires "Forced Coherence" between interacting wave packets that could not survive real molecular/thermal noise is one of the open questions identified in `REVIEW_AND_NEW_DIRECTION.md` (Q3: thermal noise survival), not a settled result.
+* **The Hypothesis:** In a 1D dyadic *toy* model (`simu_sign_fragility_1D.py`), wide random phase jitter *delays* the cascade but does not arrest it; only a complete local decoupling of one shell arrests it. So the toy model does not, by itself, support the claim that thermal noise destroys the mechanism. Whether it does in the real construction (under Landau–Lifshitz fluctuating hydrodynamics) remains open and is not yet established.
 
 ---
 
@@ -190,7 +194,7 @@ To computationally anchor this dual-framework, we run the AI's synthetic limits 
 
 OpenAI's multi-agent formalization of the Navier-Stokes blow-up is a staggering computational achievement. It proves that Reinforcement Learning (RL) agents can navigate hyper-dimensional combinatorial search spaces and act as flawless syntactic compilers in Lean 4. **They brilliantly solved the mathematician's problem.**
 
-However, unconstrained optimization in abstract mathematics inevitably exploits pathological edge-cases—achieving syntactic victory at the cost of physical vacuity. To advance from **Automated Mathematics** to true **Scientific AI**, we must anchor these massive theorem solvers to the phenomenological constraints of physical reality. 
+However, unconstrained optimization in abstract mathematics will happily explore the edges of a model — producing theorems that hold for the equations while lying outside the equations' domain of physical validity. To advance from **Automated Mathematics** to true **Scientific AI**, we must anchor these massive theorem solvers to the phenomenological constraints of physical reality. 
 
 Inspired by Fields Medalist **Terence Tao's vision of AI as a collaborative "gadgeteer"** rather than an infallible oracle, we propose upgrading the current *Bipartite* (Neural ↔ Symbolic) loop to a **Tripartite Neuro-Symbolic Architecture**:
 
@@ -198,13 +202,13 @@ Inspired by Fields Medalist **Terence Tao's vision of AI as a collaborative "gad
 2. **Symbolic (The Logic Engine):** Lean 4 (`mathlib`) verifies topological limits, norm bounds, and $C^\infty$ syntax.
 3. **Empirical (The Physics Engine):** A deterministic CFD kernel (`physlib` / `LeanFlow`) acts as a strict semantic grounding node.
 
-**The Modus Operandi:** If a proposed mathematical step compiles in Lean 4 but violates Boussinesq isothermal limits or structural stability against Brownian noise, the Empirical Engine flags the proof state as **"Physically Ill-Typed,"** forcing the AI to search for *physically admissible* mathematics. 
+**The Modus Operandi:** If a proposed mathematical step compiles in Lean 4 but leaves the validity range of the model (Mach, Knudsen or Eckert bounds — equivalently $|\omega| \lesssim c^2/\nu$), the Empirical Engine flags the proof state as **"Physically Ill-Typed,"** forcing the AI to search for *physically admissible* mathematics. 
 
 ### 🔭 Open Research Directions for Frontier AI Labs
 We invite OpenAI, DeepMind, and the open-source community to pivot these massive multi-agent swarms toward physically grounded challenges:
 
 * **Direction A (Automated Epistemic "Red Teaming"):** Deploy specialized AI swarms to automatically audit abstract proofs for thermodynamic and physical loopholes (automating the exact epistemic audit performed in this repository).
-* **Direction B (Global Regularity via Censorship):** Task the 10,000-agent swarm to prove Millennium Prize Alternative A (Global Regularity) under the strict constraint of the *Thermodynamic Censorship Axioms*. Prove that *physical* fluids cannot blow up.
+* **Direction B (Global Regularity via Censorship):** Task the "10,000-agent" swarm (reported figure, not confirmed in OpenAI's own technical writeup) to attack Millennium Prize Alternative A (Global Regularity), which remains open. Note what is *not* a research problem: under the local admissibility bound $|\omega| \lesssim c^2/\nu$ on $[0,T)$, regularity on $[0,T]$ is already the Beale–Kato–Majda theorem. The real questions are the codimension of the blow-up, the cutoff law $u_{\max} \sim \nu/\sqrt{\alpha'}$, and thermal noise (see `REVIEW_AND_NEW_DIRECTION.md`).
 * **Direction C (AI-Generated Turbulence Closures):** Invert the Method of Manufactured Solutions (MMS). Instead of reverse-engineering a singular residual into a phantom force, prompt the AI to discover exact, non-linear subgrid-scale (SGS) closure relationships for CFD, revolutionizing aerospace engineering and climate modeling.
 
 *(Read our full strategic manifesto: [TAO_NEUROSYMBOLIC_SCIENTIFIC_AI_MANIFESTO.md](05_Community_Research_Directions/TAO_NEUROSYMBOLIC_SCIENTIFIC_AI_MANIFESTO.md))*
@@ -220,9 +224,9 @@ To make our scientific audit more tangible (and entertaining), we've built a sui
 * **Proposed Solution (Neuro-Symbolic Engine & Lean 4 Interception):** Read our technical demonstration showing how physical predicates in Lean 4 intercept and refuse OpenAI unphysical blowup proofs: **[The Neuro-Symbolic Engine (LeanFlow)](11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md)**.
 * **OpenAI PoC Proposal (Physics-Informed Proof Search):** Explore our working Proof of Concept designed for OpenAI research & reasoning teams: **[OpenAI PoC Proposal](10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md)**. Demonstrating how to embed physical domain tactics (`physlib`) into Lean 4 multi-agent proof search architectures.
 * **Empirical DNS and OpenFOAM Telemetry:** Analyze full direct numerical simulations and Taylor-Green Vortex benchmarks comparing LeanFlow and OpenFOAM against mathematical blow-up profiles in **[Section 1: Investigation & Physics Audit](02_Empirical_Observation/SECTION_1_INVESTIGATION_PHYSICS_AUDIT.md)**.
-* **Dual-Scale Regularization Framework:** Review the mathematical foundation showing why infinite-density singularities are regularized by thermodynamic limits: **[Thermodynamic Censorship Paper](04_Thermodynamic_Censorship_Paper/Thermodynamic_Censorship_Navier_Stokes.pdf)**.
+* **Superseded draft (historical record):** the Sept-12 **[Thermodynamic Censorship Paper](04_Thermodynamic_Censorship_Paper/Thermodynamic_Censorship_Navier_Stokes.pdf)** has been superseded by the current paper and by `paper/where_the_continuum_ends.tex`; it is kept for the record and should not be cited for its "censorship" or "plasma" claims. The dual-scale idea survives only as a Leray-α/Bessel-filter regularization with a testable cutoff law $u_{\max} \sim \nu/\sqrt{\alpha'}$ — no string-theory claim.
 * **PyFR & CFD Integration:** We advocate for using awesome Python CFD libraries like **[PyFR](https://www.linkedin.com/pulse/pyfr-awesome-python-cdf-library-dmitry-buzolin/)** to act as the "Empirical Engine." See our visualization scripts (e.g., `scripts/pyfr_lobster_visualization.py`) demonstrating how the physics engine shields reality from infinite mathematical blow-ups.
-* **Navier-Stokes Masterclass (2-Hour Training):** Dive deep into the fluid equations with our interactive Jupyter Notebook course. Learn the math, write a CFD solver in Python, and visualize why the OpenAI singularity is physically impossible using the LeanFlow dual-scale approach. Available in **[English](08_Training_Course/Navier_Stokes_Training_EN.ipynb)**, **[Français](08_Training_Course/Navier_Stokes_Training_FR.ipynb)**, and **[中文](08_Training_Course/Navier_Stokes_Training_ZH.ipynb)**.
+* **Navier-Stokes Masterclass (2-Hour Training):** Dive deep into the fluid equations with our interactive Jupyter Notebook course. Learn the math, write a CFD solver in Python, and visualize where the incompressible model stops describing a real fluid, using the LeanFlow dual-scale approach. Available in **[English](08_Training_Course/Navier_Stokes_Training_EN.ipynb)**, **[Français](08_Training_Course/Navier_Stokes_Training_FR.ipynb)**, and **[中文](08_Training_Course/Navier_Stokes_Training_ZH.ipynb)**.
 
 ---
 

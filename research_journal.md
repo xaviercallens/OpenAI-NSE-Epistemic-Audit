@@ -4,6 +4,8 @@
 **Context:** Community Feedback & Research Roadmapping following the 30K-view discussion on r/FluidMechanics  
 **Status:** Living Research Document  
 
+> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+
 ---
 
 ## 1. Executive Summary of Public Dialogue

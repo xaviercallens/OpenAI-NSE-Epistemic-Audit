@@ -6,6 +6,8 @@
 **Date:** September 2026  
 **Repository:** `xaviercallens/OpenAI-NSE-Epistemic-Audit`
 
+> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+
 ---
 
 ## 1. Executive Summary
@@ -32,8 +34,8 @@ This audit evaluates the current state of the codebase, identifies technical vul
    This satisfies CMI Alternative C ($f \in C_c^\infty(\mathbb{R}^3 \times [0, \infty))$), but reverses physical causality.
 2. **5-Moment Jacobian Matching (Lemma 8.7):**  
    To stitch the singular inner core to the smooth outer flow, the proof solves an algebraic moment-matching system $A \cdot c = b$. The raw dimensional condition number explodes as $\kappa(A) \sim \lambda^{-3.0} X_R^{7.75} \sim 10^{28}$. Non-dimensional preconditioning reduces this to $\kappa(B) \approx 4.11 \times 10^5$, but the physical sensitivity to microscopic thermal perturbations remains an unstable repeller.
-3. **Euler Sub-Planckian Spatial Frequencies:**  
-   The unforced Euler blow-up relies on vortex packets with spatial frequencies $\kappa_n = \kappa_0 \lambda^n \to \infty$. Coherence is mathematically preserved via Gevrey-2 cutoffs, but physically requires sub-Planckian ($< 10^{-35}\text{ m}$) phase synchronization.
+3. **Euler Sub-Molecular Spatial Frequencies (open question):**  
+   The unforced Euler blow-up relies on vortex packets with spatial frequencies $\kappa_n = \kappa_0 \lambda^n \to \infty$. Coherence is mathematically preserved via Gevrey-2 cutoffs, but physically would require phase synchronization far below the molecular mean-free-path scale (~$10^{-10}$–$10^{-7}\text{ m}$) — i.e. far below anything physically meaningful. (Earlier drafts cited the Planck length, $10^{-35}\text{ m}$, here; that is a quantum-gravity scale unrelated to fluid discreteness and is not the relevant cutoff.) Whether such coherence can survive molecular/thermal noise is an open question, not a demonstrated fact.
 
 #### B. MechanicaFluidorum Lean 4 Repository Audit
 Our Lean 4 implementation (`03_Lean4_Topological_Censorship/`) was thoroughly audited:
@@ -64,7 +66,7 @@ Our Lean 4 implementation (`03_Lean4_Topological_Censorship/`) was thoroughly au
 | **Incompressibility ($\nabla \cdot u = 0$)** | Enforced syntactically for all $t < 1$ | $Ma = \|u\|/c_s \ge 0.3$ ($u \ge 450\text{ m/s}$ in water) | **$\tau \approx 6.7 \times 10^{-14}\text{ s}$** (67 femtoseconds before $T^*=1$) |
 | **Continuum Hypothesis** | Continuous manifold $\mathbb{R}^3$ ad infinitum | Knudsen number $Kn = \ell_{\text{mfp}} / \ell_r \ge 0.1$ | **$\tau \approx 9.0 \times 10^{-16}\text{ s}$**; PDE continuum assumption fails |
 | **Hydrodynamic Cavitation** | Single-phase liquid assumed throughout | Cavitation index $\sigma(\tau) = \frac{p_\infty - p_v}{\frac{1}{2}\rho \|u\|^2} \to 0$ | Local pressure drops below vapor pressure; phase transition to vapor/plasma |
-| **Perturbation Stability** | Single contrived initial point in $H^s(\mathbb{R}^3)$ | Hunt-Sauer-Yorke "shy set" (infinite-dimensional measure zero) | Thermal noise ($\delta u \approx 10^{-9}\text{ m/s}$) misaligns packets instantly |
+| **Perturbation Stability** | Single contrived initial point in $H^s(\mathbb{R}^3)$ | Hunt-Sauer-Yorke "shy set" (infinite-dimensional measure zero) | *Open question*: whether thermal noise ($\delta u \approx 10^{-9}\text{ m/s}$) misaligns packets fast enough to prevent the construction — not yet demonstrated (see `REVIEW_AND_NEW_DIRECTION.md` Q3) |
 
 ---
 

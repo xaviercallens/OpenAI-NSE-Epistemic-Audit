@@ -4,13 +4,15 @@
 
 *MechanicaFluidorum Program · SocrateAI Lab · September 2026*
 
+> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+
 ---
 
 ## 📌 1. Executive Summary
 
-In September 2026, an OpenAI multi-agent system deployed 10,000 reinforcement learning agents over 88 hours to construct a Lean 4 formal proof claiming finite-time blowup ($\vec{u} \to \infty$) for the forced 3D incompressible Navier-Stokes equations.
+In September 2026, an OpenAI multi-agent system deployed a reported ~10,000 reinforcement learning agents (figure not confirmed in OpenAI's own technical writeup) over 88 hours to construct a Lean 4 formal proof claiming finite-time blowup ($\vec{u} \to \infty$) for the forced 3D incompressible Navier-Stokes equations.
 
-While syntactically flawless within abstract Sobolev space mathematics ($H^s$), the proof relies on unconstrained continuum assumptions that violate physical laws—specifically breaching the speed of sound ($\text{Ma} > 0.3$), breaking the Knudsen continuum limit ($\text{Kn} > 0.1$), and violating the Second Law of Thermodynamics.
+While syntactically flawless within abstract Sobolev space mathematics ($H^s$), the proof relies on unconstrained continuum assumptions that break down physically before the singularity—specifically passing Mach 0.3 (the onset of compressibility effects, not the sonic threshold itself, which is Ma = 1.0), breaking the Knudsen continuum limit ($\text{Kn} > 0.1$), and relying on constitutive/incompressibility assumptions that no longer hold at that point. (Inside the idealized model, energy balance and dissipation ≥ 0 still hold — no law of thermodynamics is violated; what fails is the constitutive modeling, not the Second Law. See `REVIEW_AND_NEW_DIRECTION.md`.)
 
 Here, we present our **Proposed Solution: The Neuro-Symbolic Physics Engine (LeanFlow)**. We demonstrate with **real, kernel-verified Lean 4 code** (0 `sorry` keywords) how embedding physical admissibility predicates directly into the Lean 4 tactic search engine intercepts and **blocks unphysical proofs from being accepted**.
 
@@ -22,13 +24,13 @@ Here, we present our **Proposed Solution: The Neuro-Symbolic Physics Engine (Lea
 ===================================================================================
 A. UNCONSTRAINED AI THEOREM PROVER (OpenAI 2026 Pipeline)
 ===================================================================================
-[10,000 RL Agents] ---> [Lean 4 Pure Logic Engine] ---> ❌ ACCEPTS Unphysical Sobolev Blowup
-                                                            (Ma > 0.3, Energy -> ∞)
+[~10,000 RL Agents*] ---> [Lean 4 Pure Logic Engine] ---> ❌ ACCEPTS Unphysical Sobolev Blowup
+                                                            (Ma > 0.3 compressibility onset, Energy -> ∞)
 
 ===================================================================================
 B. PROPOSED NEURO-SYMBOLIC ENGINE (LeanFlow / PhysLib)
 ===================================================================================
-[10,000 RL Agents] ---> [Lean 4 Pure Logic Engine]
+[~10,000 RL Agents*] ---> [Lean 4 Pure Logic Engine]
                                |
                                v
                [NEURO-SYMBOLIC ADMISSIBILITY GATEWAY]
@@ -37,12 +39,14 @@ B. PROPOSED NEURO-SYMBOLIC ENGINE (LeanFlow / PhysLib)
                +---------------+---------------+
                |                               |
         [Violates Physical Limits]      [Physically Admissible]
-       (Ma > 0.3, Kn > 0.1, dS/dt < 0)  (Entropy Production >= 0)
+       (Ma > 0.3, Kn > 0.1, constitutive  (Entropy Production >= 0,
+        assumptions break down)            model stays thermodynamically consistent)
                |                               |
                v                               v
        🔴 REFUSED & BLOCKED           ✅ ACCEPTED & CERTIFIED
    `openai_physical_invalidation`    `leanflow_global_smoothness`
 ```
+\* Reported agent-count figure, not confirmed in OpenAI's own technical writeup.
 
 ---
 
@@ -120,10 +124,12 @@ $$\tau_{ij}^{\text{dual}} = \nu \left( \frac{\partial u_i}{\partial x_j} + \frac
 /-- LeanFlow Dual-Scale Regularized Flow is Globally Smooth for all t > 0. -/
 theorem leanflow_dual_scale_global_smoothness
     (u_dual : ℝ³ → ℝ → ℝ³) (h_regularized : DualScaleStressTensor u_dual) :
-    ∀ t > 0, ContDiff ℝ ∞ (u_dual · t) ∧ ThermodynamicallyAdmissibleFlow u_dual t soundSpeedWater 1.13e13 := by
+    ∀ t > 0, ContDiff ℝ ∞ (u_dual · t) ∧ LocallyAdmissibleFlow u_dual t (maxLocalVorticity soundSpeedWater nuWater) := by
   intro t ht
   exact ⟨dual_scale_smoothness u_dual t, dual_scale_admissibility u_dual t⟩
 ```
+
+> **Note (accuracy):** this block is a *sketch of a target statement*, not compiled Lean. An earlier version passed the constant `1.13e13` as an "enstrophy ceiling"; that constant had no derivation and has been withdrawn. The admissibility predicate now takes the local vorticity bound $|\omega| \lesssim c_s^2/\nu$ (about $2.2\times10^{12}\ \mathrm{s^{-1}}$ for water), which encodes $Ma \lesssim 1$ and $Kn \lesssim 1$ together — see the main paper, §5.6.
 
 ---
 

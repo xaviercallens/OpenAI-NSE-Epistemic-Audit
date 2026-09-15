@@ -2,14 +2,14 @@
 \centering
 \begin{tabular}{|l|c|}
 \hline
-\textbf{Physical Parameter} & \textbf{Censorship Limit} \\
+\textbf{Physical Parameter} & \textbf{Validity Threshold} \\
 \hline
 Mach Threshold ($Ma$) & 0.3 \\
-Max Enstrophy ($\Omega_{max}$) & 1.13e13 \\
-Mean Free Path ($\lambda$) & 0.3e-9 m \\
+Max local vorticity ($|\omega|_{\max} = c_s^2/\nu$, water) & 2.2e+12 s$^{-1}$ \\
+Molecular length ($\lambda$, water: intermolecular spacing) & 0.3e-9 m \\
 Knudsen Threshold ($Kn$) & 0.1 \\
 \hline
 \end{tabular}
-\caption{Automated extraction of physical censorship boundaries from Lean 4 kernel.}
+\caption{Reference validity thresholds used in this project. Values are hand-chosen constants read by a text scan of the draft Lean file (not extracted from the Lean kernel); the vorticity bound is computed as $c_s^2/\nu$ and is equivalent to $Ma \lesssim 1$ and $Kn \lesssim 1$ together. The former ``Max Enstrophy $\Omega_{max} = 1.13\times10^{13}$'' row had no derivation and is no longer tabulated.}
 \label{tab:physlib_limits}
 \end{table}

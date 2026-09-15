@@ -60,7 +60,7 @@ Based on our verification audit and Terence Tao's collaborative framework, we pr
 
 ### Recommendation 1: Embed World Models (`physlib`) into Formal Proof Search
 - **Action**: When training multi-agent theorem provers (like OpenAI's Lean agent or DeepMind's AlphaProof) on physical systems (PDEs, Quantum Mechanics, General Relativity), equip the environment with **physical domain libraries**.
-- **Result**: The AI will automatically discard candidate proofs that require sub-Planckian fine-tuning, infinite viscous shear heating, or unphysical boundary shielding.
+- **Result**: The AI will automatically discard candidate proofs that require implausible fine-tuning at scales far below the molecular mean-free-path (not "sub-Planckian" — the Planck length is a quantum-gravity scale unrelated to fluid discreteness), infinite viscous shear heating, or unphysical boundary shielding.
 
 ### Recommendation 2: Adopt Human-AI Interactive Co-Pilot Workflows
 - **Action**: Move away from black-box autonomous proof generation toward **interactive dialogic formalization**.

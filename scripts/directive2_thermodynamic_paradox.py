@@ -48,8 +48,12 @@ def get_scaling_exponents(h_val=None):
     # Enstrophy: Omega ~ tau^(-1/2 - 3h)
     enstrophy_exp = Rational(-1, 2) - 3 * h_val
 
-    # Critical p* where L^p norm diverges
-    p_critical = Rational(3, 1) / (1 + 2 * h_val)
+    # Critical p* where L^p norm diverges: ||u||_p ~ tau^(-1/2-h+(3/2-h)/p),
+    # zero-crossing at p* = (3-2h)/(1+2h). (A previous version used 3/(1+2h),
+    # which does not solve this zero-crossing condition; at h=0 both forms
+    # happen to agree, at 3, which is why the ~0.3% discrepancy for h=1/200
+    # was easy to miss.)
+    p_critical = (Rational(3, 1) - 2 * h_val) / (1 + 2 * h_val)
 
     # L^3 norm exponent: (3/2 - 3/2 - 4h)/3 = -4h/3
     L3_exp = -4 * h_val / 3
@@ -116,8 +120,8 @@ def run_audit():
         behavior = "-> 0 (bounded)" if norm_exponent > 0 else "-> ∞ (DIVERGES)"
         print(f"  p = {p_val:2d}: norm exponent = {float(norm_exponent):+.6f}  {behavior}")
 
-    p_critical = Rational(3, 1) / (1 + 2*h_val)
-    print(f"  Critical p* = {p_critical} ≈ {float(p_critical):.4f}")
+    p_critical = (Rational(3, 1) - 2 * h_val) / (1 + 2 * h_val)
+    print(f"  Critical p* = (3-2h)/(1+2h) = {p_critical} ≈ {float(p_critical):.4f}")
 
     print(f"\n--- Fractional Sobolev Norm H^s ---")
     for s_val in [Rational(0,1), Rational(1,2), Rational(1,1), Rational(3,2), Rational(2,1)]:

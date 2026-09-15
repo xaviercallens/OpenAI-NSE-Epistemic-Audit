@@ -1,3 +1,9 @@
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+import Mathlib.Topology.ContinuousMap.Basic
+
 /-!
 # Meta ATLAS Reference Verification for Navier-Stokes Equations
 
@@ -11,12 +17,6 @@ Formalized using Meta Research ATLAS and AutoformBot Principles.
 4. **Tao (2016)**: Averaged 3D Navier-Stokes Blowup Construction.
 5. **Leray (1934)**: Viscous Energy Inequality.
 -/
-
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import Mathlib.Topology.ContinuousFunction.Basic
 
 open Set MeasureTheory Filter
 open scoped Topology ContDiff BigOperators ENNReal

@@ -3,10 +3,13 @@
   ════════════════════════════════════════════════════════════════════════════════
   MODULE: Dual-Scale Topological Metric & Beale-Kato-Majda (BKM) Regularity
   
-  Imports the OpenAI Euler/Navier-Stokes definitions and sets up the open axioms 
-  for proving that under the physical Dual-Scale metric:
+  Does NOT import or reference OpenAI's real Euler/Navier-Stokes definitions;
+  this file only imports Mathlib. It proves elementary bounds about a
+  free-standing, self-contained formula:
     k_eff(k) = min(|k|, 1 / (alpha' * |k|))
-  the manufactured ultraviolet cascade is strictly censored in L^\infty.
+  These are not physical claims about the OpenAI construction, and no
+  connection to any real PDE or to OpenAI's VelocityField/CandidateProperties
+  types is established here.
   ════════════════════════════════════════════════════════════════════════════════
 -/
 
@@ -47,11 +50,12 @@ theorem dual_scale_wavenumber_bounded (h_alpha : 0 < alpha') (k : ℝ) :
         one_div_le_one_div_of_le h_sq_pos (le_of_lt h_mult)
       exact le_trans h_min_right h_inv
 
-/-- [CHALLENGE 2] CONTRA-POSITIVE BEALE-KATO-MAJDA (BKM) REGULARITY THEOREM:
-    If the Dual-Scale regularized vorticity satisfies:
-      ∫_0^T ‖ω(·, t)‖_{L^∞} dt < ∞,
-    then the velocity field u(·, t) remains smooth across [0, T],
-    and no finite-time singularity can form. -/
+/-- [CHALLENGE 2] NOT an application of the Beale-Kato-Majda theorem, despite
+    the name: the proof (`exact ⟨M, h_bound⟩`) merely restates the hypothesis
+    `h_bound` as the conclusion. It does NOT invoke BKM's actual content, and
+    it proves nothing about velocity smoothness or the absence of finite-time
+    singularities. It only records that an assumed pointwise bound M on
+    `vorticity_linf` over [0, _T] is itself a valid bound. -/
 theorem bkm_regularity_censorship
     (_T : ℝ) (_hT : 0 < _T)
     (vorticity_linf : ℝ → ℝ)

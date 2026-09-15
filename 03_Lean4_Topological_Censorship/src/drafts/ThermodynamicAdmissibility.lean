@@ -1,3 +1,9 @@
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+import Mathlib.Topology.ContinuousMap.Basic
+
 /-!
 # Thermodynamic Admissibility for 3D Incompressible Navier-Stokes
 
@@ -18,12 +24,6 @@ We prove/state:
    Entropy Production), Beale-Kato-Majda (BKM) regularity holds, strictly censoring
    manufactured finite-time singularities.
 -/
-
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import Mathlib.Topology.ContinuousFunction.Basic
 
 open Set MeasureTheory Filter
 open scoped Topology ContDiff BigOperators ENNReal

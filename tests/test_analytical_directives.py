@@ -245,8 +245,13 @@ class TestDirective2ThermodynamicParadox(unittest.TestCase):
         self.assertAlmostEqual(float(exp_data['enstrophy_exponent']), -0.515, places=3)
         self.assertLess(float(exp_data['enstrophy_exponent']), 0.0)
 
-        # Critical p* where L^p norm diverges is approximately 2.97
-        self.assertAlmostEqual(float(exp_data['p_critical']), 300 / 101, places=3)
+        # Critical p* where the L^p norm's tau-exponent crosses zero:
+        # p* = (3-2h)/(1+2h) ~= 2.96 at h=1/200. (A previous version of this
+        # test asserted 300/101 ~= 2.97, matching directive2's previous
+        # p_critical = 3/(1+2h) formula -- that formula did not actually
+        # solve the stated zero-crossing condition; see
+        # directive2_thermodynamic_paradox.py's corrected derivation.)
+        self.assertAlmostEqual(float(exp_data['p_critical']), 299 / 101, places=3)
         # L^3 norm exponent is negative
         self.assertLess(float(exp_data['L3_exponent']), 0.0)
 

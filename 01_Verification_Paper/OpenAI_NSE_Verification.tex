@@ -11,10 +11,12 @@
 \usepackage{xcolor}
 \usepackage{bm}
 \usepackage{microtype}
+\usepackage{amsthm}
 
 \geometry{margin=1in}
+\newtheorem{proposition}{Proposition}[section]
 
-\title{\textbf{On the Physical Vacuity of Manufactured Singularities:\\ A Comprehensive Physical Verification of the OpenAI Navier-Stokes Formalization}}
+\title{\textbf{The OpenAI Navier--Stokes and Euler Blow-Up Proofs:\\ A Physical Reading, Not a Physical Refutation}}
 \author{The MechanicaFluidorum Program \\ \textit{SocrateAI Lab}}
 \date{September 2026}
 
@@ -23,54 +25,91 @@
 \maketitle
 
 \begin{abstract}
-In September 2026, an OpenAI multi-agent system formalized finite-time blow-up proofs for the
-forced 3D Navier-Stokes equations (Millennium Prize Alternatives C and D) and the unforced Euler
-equations within Lean~4. While this represents a landmark achievement in automated theorem proving
-and syntactic mathematics, a rigorous physical verification reveals that these singularities are driven
-by pathological mathematics rather than natural fluid dynamics. We confirm that the Lean~4 proof
-contains no axiomatic hallucinations and legally satisfies the Clay Mathematics Institute's
-$C^\infty$ smoothness criterion via non-analytic Gevrey-class cutoffs---a legitimate but
-physically unrealizable construction. Our verification exposes five profound epistemic disconnects between
-the mathematical result and physical reality: (1) intensive local kinetic energy density diverges as $\tau^{-1.010}$
-and local enstrophy diverges as $\tau^{-0.515}$, generating a thermal shock that violates the Boussinesq
-isothermal assumption long before $t=1$; (2) Mach number self-invalidation occurs at $\tau \approx 6.7 \times 10^{-14}$\,s,
-67~femtoseconds before the mathematical singularity; (3) the construction reverses Newtonian causality via a teleological
-methodology (Method of Manufactured Solutions); (4) the moment-matching system, while structurally stable under proper
-non-dimensionalization ($\kappa(B) \approx 4.11 \times 10^5$), relies on an unphysical similarity profile; and
-(5) the Euler initial condition injects energy at sub-Planckian scales. We propose a \emph{Thermodynamic Censorship Principle}:
-physically admissible NSE solutions must satisfy uniform bounded enstrophy. Under this axiom, the Gevrey collapsing-vortex
-mechanism is provably censored. We conclude that the proof inadvertently provides overwhelming epistemic evidence that
-autonomous, naturally occurring 3D fluids do not blow up in finite time.
+In September 2026, an OpenAI multi-agent system produced a Lean~4-verified proof of finite-time
+blow-up for the forced 3D Navier--Stokes equations (Millennium Prize Alternatives C and D) and for
+the unforced Euler equations. The proof is syntactically flawless: zero \texttt{sorry}s, zero custom
+axioms, no weakened norms. The Clay Millennium Prize problems, Navier--Stokes existence and
+smoothness included, are precise questions about a specific mathematical model; they were never
+framed, and are not understood by working mathematicians, as claims about how real fluids behave
+--- the model is already known to break down under compressibility, cavitation, molecular
+discreteness, and other effects well before any putative singularity. Read that way, OpenAI's
+result is exactly what it claims to be: a rigorous statement about the continuum incompressible
+Navier--Stokes system on $\mathbb{R}^3$.
+
+Our contribution is not a refutation but a physical reading. Because the collapsing core keeps a
+radial Reynolds number of order one, its scales are diffusive, $\ell_r\simeq\sqrt{\nu t}$ and
+$u\simeq\sqrt{\nu/t}$ up to factors $t^{\mp h}$ with $h<1/100$, so the reading is essentially
+independent of the initial vortex size and of the choice of units. Compressibility, rarefaction and
+viscous heating then become order-one effects at a single length $\ell_*=\nu/c_s$ ($0.7$\,nm in
+water, $45$\,nm in air), reached a few picoseconds (water) or nanoseconds (air) before the
+mathematical singularity: the three validity limits are one limit, and it can be written as a local
+vorticity bound $|\omega|\lesssim c_s^2/\nu$. For liquids at ambient pressure a fourth limit,
+cavitation, is reached three decades earlier, when the core is still $\sim70$\,nm wide. We also show
+that (i) intensive local energy density and enstrophy diverge ($\sim\tau^{-1.010}$,
+$\sim\tau^{-0.515}$) while the Prize's global $L^2$ bound is respected; (ii) the apparent $10^{28}$
+condition number of the proof's moment-matching system is a non-dimensionalization artifact
+($\kappa\approx4.1\times10^5$ once scaled); (iii) the force is specified by working backward from
+the singularity, a legitimate existence-proof technique that leaves it without independent physical
+origin; and (iv) the Euler datum requires coherent oscillatory structure at scales below any
+molecular cutoff, where the missing physics is viscosity itself. None of this makes the Lean proofs
+wrong, and none of it proves anything about turbulence in real fluids --- both points made
+forcefully by the fluid-dynamics community when an early version of this audit was shared publicly
+(\S\ref{sec:outlook}). We close with the research directions raised in that discussion, a
+neuro-symbolic-physical architecture for keeping AI-generated proofs labelled as mathematical or
+physical results, and one clearly-labelled hypothesis on cutoff regularizations.
 \end{abstract}
 
 % ====================================================================
-\section{Introduction: Syntax vs.\ Semantics in Formal Proofs}
+\section{Introduction}
+\label{sec:intro}
 % ====================================================================
 
-The application of large-scale AI agents to formalize mathematics in Lean~4 guarantees absolute
-logical consistency. If the proof compiles, the chain $A \implies B$ is syntactically flawless: no
-sign errors, no algebraic mistakes, no hidden logical gaps. The OpenAI
-repository~\cite{OpenAI2026} verifies that under highly engineered mathematical constraints, the
-fluid equations can develop singularities.
+The application of large-scale AI agents to formalize mathematics in Lean~4 guarantees logical
+consistency: if the proof compiles, the chain $A \implies B$ is syntactically flawless. On September
+8, 2026, OpenAI announced that an internal multi-agent system had produced such a proof of
+finite-time blow-up for the forced 3D Navier--Stokes equations and, separately, for the unforced
+Euler equations~\cite{OpenAI2026,OpenAIEuler2026,OpenAIAnnouncement2026}. (Figures for the size of
+that system --- ``10{,}000 agents'' --- circulated in secondary coverage but appear in neither
+paper; we do not repeat them as fact.) The announcement was accompanied by a public discussion of
+priority with other groups working on the Euler problem. We do not adjudicate it, and it plays no
+role in what follows, except as a reminder that a result produced under competitive pressure, however
+impeccably kernel-checked, still benefits from independent, unhurried scrutiny of what it actually
+establishes --- which is the purpose of this paper.
 
-However, in mathematical physics, a formal proof is only as physically relevant as the
-phenomenological realism of its hypotheses. A proof mapping $A \implies B$ is syntactically true,
-but if hypothesis $A$ requires infinite molecular divisibility and omniscient fine-tuning, the
-conclusion $B$ is semantically vacuous for physical reality.
+The result does not arrive in a vacuum. Finite-time blow-up was known for an averaged
+Navier--Stokes model~\cite{Tao2016}, for $C^{1,\alpha}$ Euler data~\cite{Elgindi2021}, and, with
+computer assistance, for smooth Euler and Boussinesq data in domains with
+boundary~\cite{ChenHou2022} following numerical evidence~\cite{HouLuo2014}; non-uniqueness of Leray
+solutions of the \emph{forced} Navier--Stokes equations~\cite{ABC2022} had already shown how much a
+well-chosen force can do. What is new is smooth, compactly supported data on $\mathbb{R}^3$ (Euler)
+and a smooth force acting on a fluid at rest (Navier--Stokes), with kernel-checked proofs.
 
-Since the Lean~4 kernel does not permit algebraic mistakes, our check targets a fundamentally
-different class of vulnerabilities: \emph{definitional weaknesses}, \emph{axiomatic cheats}, and
-\emph{asymptotic pathologies}. We search for where the formalization might have ``moved the
-goalposts''---weakening a norm, altering a topological space, introducing a hidden axiom---or
-where the mathematical construction becomes so ill-conditioned that it represents a non-physical,
-measure-zero anomaly.
+Our purpose is not to contest the mathematics. A proof mapping $A \implies B$ is syntactically true
+regardless of how physically realistic $A$ is, and the Millennium Prize problems were never framed as
+claims about physical fluids: Fefferman's statement~\cite{Fefferman2000} asks precise questions about
+a specific continuum model, chosen because it is tractable and physically motivated, not because it
+is physically exact. This is also
+the reading offered independently, and largely spontaneously, by the fluid-dynamics community when an
+early version of this audit was shared for discussion on \texttt{r/FluidMechanics}
+(quoted with usernames as posted publicly; see \S\ref{sec:outlook} for the full
+exchange)~\cite{RedditFluidMech2026}: commenters repeatedly made the point that Navier--Stokes ``has
+always been a useful approximation and not fully physical,'' that a blow-up result mainly tells us
+where a specific mathematical model runs out of validity, and that the more interesting question is
+what a genuinely physical admissibility criterion --- analogous to the entropy condition used to
+select physical weak solutions of the inviscid Burgers equation --- might look like.
 
-In this communication, we expose the ``manufactured'' nature of these singularities through eight
-independent verification directives spanning formal verification, arbitrary-precision numerical analysis,
-and thermodynamic first principles.
+Since the Lean~4 kernel forecloses algebraic error, this paper's contribution is not a bug hunt in
+that sense. It is instead a quantitative account of how far OpenAI's specific constructed solution
+travels from the physical regime the Navier--Stokes model is normally used to describe, spanning
+formal verification, arbitrary-precision numerical analysis, and thermodynamic first principles ---
+followed by an outlook (\S\ref{sec:outlook}) that takes the community's framing seriously: we propose
+concrete physics-integration research directions, a neuro-symbolic-physical architecture for
+grounding future AI proof search in physical admissibility, and flag one untested,
+string-theory-motivated hypothesis for further investigation.
 
 % ====================================================================
 \section{The Syntactic Health: Lean~4 Purity and Gevrey Cutoffs}
+\label{sec:syntax}
 % ====================================================================
 
 \subsection{AST Verification Results}
@@ -93,7 +132,7 @@ Energy bound & $L^\infty_t L^2_x$ (uniform) & $\exists E,\, \forall t,\; \text{k
 Sobolev weakening detected & None & None \\
 \bottomrule
 \end{tabular}
-\caption{Lean~4 formal verification results. Four \texttt{sorry} instances exist in
+\caption{Lean~4 formal verification results. \texttt{sorry} instances exist in
 \texttt{ComparatorChallenges/}, a separate module containing intentional open problems---not part
 of the core proof.}
 \label{tab:lean-verification}
@@ -102,30 +141,31 @@ of the core proof.}
 There are no opaque axioms, no weakened Sobolev norms, and the global $L^2$ kinetic energy is
 uniformly bounded. The AI did not ``cheat.''
 
-\subsection{\texorpdfstring{The Gevrey Bypass: Satisfying $C^\infty$ with Physically Impossible Gradients}{The Gevrey Bypass: Satisfying C-infinity with Physically Impossible Gradients}}
+\subsection{\texorpdfstring{The Gevrey Bypass: Satisfying $C^\infty$ Without Real-Analyticity}{The Gevrey Bypass: Satisfying C-infinity Without Real-Analyticity}}
 
-The Millennium Prize requires a perfectly smooth ($C^\infty$) external force. Were the force
-required to be real-analytic ($C^\omega$), it would be completely rigid: a function zero outside a
-localized region must be identically zero everywhere by the identity theorem. The formalization
-bypasses this rigidity by employing Gevrey-class cutoffs of the form
-$\chi(q) \sim \exp(-1/q^2)$.
+The Millennium Prize requires a perfectly smooth ($C^\infty$) external force. Were the force required
+to be real-analytic ($C^\omega$), the construction would be impossible outright: a function that is
+real-analytic and vanishes outside a bounded region must be identically zero everywhere (the identity
+theorem), so no nontrivial compactly supported force could exist at all. The formalization sidesteps
+this rigidity with Gevrey-class cutoffs of the form $\chi(q) \sim \exp(-1/q^2)$, which are
+$C^\infty$ but not real-analytic.
 
-By classical analysis, the function $\exp(-1/q^k)$ has an exact theoretical asymptotic Gevrey index of $s = 1 + 1/k$.
-For $k = 2$, the true theoretical Gevrey index is $s = 1.5$ (symbolic finite-sample fits with $N \le 15$ yield an empirical pre-asymptotic slope $\approx 2.22$).
-This is the precise mathematical signature distinguishing Gevrey functions from analytic ones:
-\begin{equation}
-  \text{Gevrey-1.5} \;\subset\; C^\infty \setminus C^\omega.
-\end{equation}
-All flat limits $\lim_{q \to 0^+} d^N [q^{-A} \exp(-1/q^2)] / dq^N = 0$ hold for every $N$ and
-$A$---confirmed by SymPy---so the function possesses infinitely many derivatives and legally
-satisfies the Clay $C^\infty$ requirement.
-
-However, this mathematical legality conceals a physical impossibility. The physical vulnerability of Gevrey cutoffs lies in their \emph{non-analyticity}. In true incompressible fluids, the pressure Poisson equation ($\nabla^2 p = -\rho \nabla \cdot (u \cdot \nabla u)$) requires global, instantaneous pressure communication. Gevrey compact cutoffs allow the artificial creation of compactly supported fluid ``bubbles'' that do not analytically communicate pressure with the surrounding domain, mathematically shielding the blow-up profile from global boundary relaxation. The formalization exploits the exact boundary between $C^\infty$ and $C^\omega$---mathematically impeccable, physically unrealizable.
+By classical asymptotic analysis, $\exp(-1/q^k)$ has Gevrey index $s = 1 + 1/k$; for $k=2$ this gives
+$s = 1.5$ (finite-sample \texttt{SymPy} fits with $N \le 15$ show an empirical pre-asymptotic slope
+near $2.22$, reflecting the fact that the true asymptotic regime is only reached for larger $N$). This
+specific cutoff therefore lies in $G^{1.5} \setminus C^\omega$: infinitely differentiable, with all
+flat limits $\lim_{q \to 0^+} d^N [q^{-A}\exp(-1/q^2)]/dq^N = 0$ holding for every $N$ and $A$
+(confirmed symbolically), yet not real-analytic. That gap between $C^\infty$ and $C^\omega$ is exactly
+what a compactly supported, nontrivial smooth force requires --- there is nothing improper or exotic
+about invoking it; every physically standard ``bump function'' construction relies on the same gap.
+What is worth flagging is not that the cutoff is Gevrey rather than analytic (that is necessary, not
+suspicious), but how the resulting velocity profile behaves physically once combined with the rest of
+the construction, which is the subject of \S\ref{sec:thermo}--\S\ref{sec:euler}.
 
 \subsection{The Proof Architecture: Internal Reynolds-Stress Cancellation}
 
-The proof's logical structure is often mischaracterized as a simple Method of Manufactured
-Solutions (MMS). In standard MMS, one merely picks an arbitrary smooth velocity field $u$ and
+An earlier draft of this audit mischaracterized the proof's logical structure as a simple Method of
+Manufactured Solutions (MMS). In standard MMS, one merely picks an arbitrary smooth velocity field $u$ and
 \emph{defines} $f = \partial_t u + (u\cdot\nabla)u - \nu\Delta u + \nabla p$, which is
 automatically smooth because $u$ was smooth to begin with.
 
@@ -144,7 +184,7 @@ not the external force---that tame the singularity. Only after this Reynolds-str
 homogenizes the residual is the remaining smooth remainder declared as $f \in C_c^\infty$.
 
 {\sloppy The Lean~4 code confirms this final assignment:
-\texttt{force := SpacetimeGluing.smoothExtension(tracedResidual u p L)},
+\texttt{force := SpacetimeGluing.smoothExtension 1 (tracedResidual u p L) \ldots},
 where \texttt{tracedResidual} encodes the \emph{post-cancellation} smooth residual. The
 docstring reads: ``No force is an input to this definition.'' The force does not \emph{drive}
 the singularity; it is the mathematical artifact \emph{left over} after the singularity has been
@@ -155,8 +195,9 @@ engineered by internal wave dynamics.\par}
 % ====================================================================
 
 To seamlessly stitch the singular inner vortex to the smooth outer heat flow, the
-formalization matches 5 radial moments via a Jacobian matrix $A$ (Lemma~8.7, Appendix~B.8
-of~\cite{OpenAI2026}). A naive SVD of this unscaled $5 \times 5$ dimensional matrix yields a condition number scaling as $\kappa(A) \sim X_R^{7.75}$, which exceeds $10^{28}$ as $X_R \to 1000$.
+formalization matches five cumulative radial moments via a $5\times5$ linear system, which we write
+with matrix $A$ (Proposition~B.8 and the moment conditions (5.10)--(5.11) of~\cite{OpenAI2026}; an
+earlier draft of this audit cited ``Lemma~8.7'', which is a different lemma). A naive SVD of this unscaled $5 \times 5$ dimensional matrix yields a condition number scaling as $\kappa(A) \sim X_R^{7.75}$, which exceeds $10^{28}$ as $X_R \to 1000$.
 
 However, rigorous non-dimensionalization analysis reveals that this condition number explosion is a classical numerical linear algebra artifact. The entries of $A$ integrate polynomial basis functions $(x \cdot X_R)^{2i}$ and $(x \cdot X_R)^{2j}$, spanning physical dimensions from $X_R^0$ up to $X_R^8$. Mathematically, the matrix factors as:
 \begin{equation}
@@ -181,19 +222,24 @@ $X_R$ & $\kappa(A)$ (Raw Unscaled) & $\kappa(B)$ (Non-Dimensionalized) \\
 \label{tab:condition}
 \end{table}
 
-Applying the diagonal preconditioning matrix $D^{-1}$ removes the $X_R$ dependence entirely. The non-dimensionalized condition number $\kappa(B) \approx 4.11 \times 10^5$ is well-conditioned and uniform for all $X_R$. Consequently, the moment-matching system itself is mathematically stable and does not suffer from thermal noise decoupling when solved in proper dimensionless units.
+Applying the diagonal preconditioning matrix $D^{-1}$ removes the $X_R$ dependence entirely. The non-dimensionalized condition number $\kappa(B) \approx 4.11 \times 10^5$ is well-conditioned and uniform for all $X_R$. Consequently, the moment-matching system is not a source of fragility. Two further remarks are in order. Values of $\kappa$ above $\sim10^{16}$ computed in double precision are not reliable in any case; and the condition number of a linear system used to \emph{choose parameters in a proof} is not a dynamical instability of the flow --- an earlier draft of this audit conflated the two. The rigorous version of ``how fine-tuned is this singularity'' is the codimension question of \S\ref{sec:outlook}.
 
 % ====================================================================
-\section{The Thermodynamic Paradox: Divergent Enstrophy}
+\section{The Thermodynamic Picture: Divergent Local Quantities}
+\label{sec:thermo}
 % ====================================================================
 
 Alternative~C of the Millennium Prize requires only that total kinetic energy remains uniformly
 bounded. The authors achieve this by ensuring the volume of the collapsing vortex core shrinks
-faster than the velocity-squared diverges. This is the proof's key thermodynamic maneuver.
+faster than the velocity-squared diverges. This is a scaling feature, not a thermodynamic one, and
+it is exactly what the Prize permits.
 
 With velocity scales $u_\theta, u_z \sim \tau^{-1/2-h}$ ($h < 1/100$), radial scale
 $\ell_r \sim \tau^{1/2}$, and axial scale $\ell_z \sim \tau^{1/2-h}$, a SymPy asymptotic
-analysis yields the scaling exponents in Table~\ref{tab:thermo}.
+analysis yields the scaling exponents in Table~\ref{tab:thermo}. Here $\tau$ denotes the
+dimensionless self-similar time-to-blow-up parameter used throughout the OpenAI construction
+(not, in this table, a value in seconds --- see \S\ref{sec:mach} for the physical time
+conversion).
 
 \begin{table}[ht]
 \centering
@@ -206,52 +252,138 @@ Intensive Local Energy Density $e_{\text{local}}$ & $-1.0100$   & $\to \infty$ \
 Enstrophy $\Omega(t)$                      & $-0.5150$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
 $L^3$ norm $\|u\|_3$                        & $-0.0067$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
 $H^{3/2}$ Sobolev norm $\|u\|_{H^{3/2}}$    & $-0.5075$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
-Local temperature rise $\Delta T$          & $-1.0100$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
+Local temperature rise estimate $\Delta T$ & $-1.0100$   & $\to \infty$ \quad{\color{red}$\boldsymbol{\times}$} \\
 \bottomrule
 \end{tabular}
 \caption{Asymptotic scaling of key physical quantities for the OpenAI blow-up construction
 ($h = 1/200$). The global $L^2$ energy---the sole quantity mandated by the Millennium Prize---is
-the only quantity that remains bounded. Intensive local energy density $e_{\text{local}} = \frac{1}{2}\rho|u|^2 \sim \tau^{-1-2h}$ scales as $\tau^{-1.010}$, while Sobolev $H^{3/2}$ norm scales as $\tau^{-0.5075}$.}
+the only quantity that remains bounded. Intensive local energy density $e_{\text{local}} = \frac{1}{2}\rho|u|^2 \sim \tau^{-1-2h}$ scales as $\tau^{-1.010}$, while the Sobolev $H^{3/2}$ norm scales as $\tau^{-0.5075}$. $\Delta T$ is an external estimate (\S\ref{sec:thermo}), not a quantity solved for within incompressible Navier--Stokes.}
 \label{tab:thermo}
 \end{table}
 
 The viscous dissipation rate is $\varepsilon(t) = \nu \int_{\mathbb{R}^3} |\nabla \times u|^2\,dx
 \sim \tau^{-0.515}$. The Prize requires only that total dissipated energy remain finite, and
 indeed $\int_0^1 \tau^{-0.515}\,d\tau < \infty$---so this constraint is satisfied. But this
-mathematical concession obscures the physical catastrophe: the \emph{instantaneous} dissipation
+mathematical concession obscures the physical picture: the \emph{instantaneous} dissipation
 rate ($\sim\tau^{-0.515}$) and the \emph{intensive local energy density} ($e_{\text{local}} \sim\tau^{-1.010}$) both
-diverge without bound. It is this divergence of local dissipation density---not the bounded
-integral---that drives the thermal shock.
+diverge without bound, and the \emph{local} enstrophy density $|\omega|^2\sim\tau^{-2-2h}=\tau^{-2.010}$
+diverges much faster than its spatial integral. It is this divergence of local dissipation
+density---not the bounded integral---that controls the heating estimate of \S\ref{sec:mach}.
 
-An infinite instantaneous enstrophy implies infinite localized viscous shear heating. Long before
-the singular time $t = 1$, the shear-generated temperatures would far exceed the plasma transition
-threshold, vaporizing the fluid into a supersonic, highly compressible flow. This irreversibly
-violates both the divergence-free condition $\nabla \cdot u = 0$ and the isothermal Boussinesq
-approximation---the two foundational assumptions of the NSE model.
+Incompressible Navier--Stokes carries no energy or temperature equation of its own: viscous
+dissipation is simply removed from the kinetic-energy budget, on the implicit assumption that the
+resulting heating is negligible (formally, that the relevant Eckert number stays small). That
+assumption is external to the model and has to be checked separately, not derived from it.
+Diverging local enstrophy means a diverging local viscous heating \emph{rate}; \S\ref{sec:mach}
+makes this quantitative for a specific fluid (water) and shows that the resulting heating estimate,
+together with the velocity itself, invalidates the small-Eckert-number and incompressibility
+assumptions well before the mathematical singularity. This point was raised independently in
+community discussion of an early version of this audit (\S\ref{sec:outlook}), where a commenter
+correctly noted that the thermal argument is an estimate built on top of the incompressible model
+from outside, not a consequence derivable within it --- we agree, and flag deriving it properly
+(coupling an actual energy/temperature equation, or a cavitation/phase-change model) as an open
+direction in \S\ref{sec:outlook}.
 
-To provide an empirical anchor for this divergence, we compared the pathological energy spectrum of the OpenAI pre-singularity trajectory against high-fidelity isotropic turbulence benchmarks from the Johns Hopkins Turbulence Database (JHTDB), resolved using the LeanFlow pseudo-spectral solver. As shown in Figure~\ref{fig:spectrum}, real physical turbulence adheres to the classic Kolmogorov $k^{-5/3}$ energy cascade, smoothly dissipating kinetic energy at the Kolmogorov microscale. In contrast, the Lean~4 constructed singularity shifts energy unphysically to diverging wavenumbers (driven by the Gevrey-class wave packets), departing entirely from any realizable fluid-dynamic regime.
+The contrast with turbulence is worth stating without a figure. In physical turbulence the
+Kolmogorov cascade~\cite{Kolmogorov1941} ends at the microscale $\eta=(\nu^3/\varepsilon)^{1/4}$,
+which in every laboratory or geophysical flow exceeds the molecular length by orders of magnitude;
+the construction instead concentrates a vanishing fraction of the energy at a scale
+$\ell_r\to0$ with no dissipative floor. (An earlier draft of this audit included a figure comparing a
+JHTDB isotropic-turbulence spectrum with an ``OpenAI pre-singularity spectrum''; the latter was a
+schematic drawn by hand, not a computed spectrum --- no numerical realization of the construction
+exists --- and the figure has been removed; see \S\ref{sec:numerics}.)
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{spectrum_comparison.png}
-    \caption{Energy spectrum comparison: Real isotropic turbulence (JHTDB data resolved via LeanFlow) exhibiting the expected Kolmogorov $k^{-5/3}$ decay, contrasted against the pathological energy spike of the OpenAI constructed singularity near $\tau \approx 10^{-6}$. The singularity unphysically concentrates energy at diverging wavenumbers.}
-    \label{fig:spectrum}
-\end{figure}
-
-The $L^3$ divergence (exponent $-0.020$) provides a supplementary confirmation: it is a borderline
-violation of the Escauriaza-Seregin-\v{S}ver\'{a}k~\cite{ESS2003} criterion, which proves that a
-singularity \emph{cannot} form if $\|u\|_{L^3}$ remains bounded. The construction threads the
-needle at the critical Serrin regularity threshold, underscoring its extreme mathematical fragility.
+The $L^3$ norm also diverges, but only marginally ($\|u\|_{L^3}\sim\tau^{-4h/3}=\tau^{-0.0067}$ for
+$h=1/200$): the Escauriaza-Seregin-\v{S}ver\'{a}k criterion~\cite{ESS2003} proves a singularity
+\emph{cannot} form while $\|u\|_{L^3}$ stays bounded, so this divergence --- however small its
+exponent --- is not a violation of anything; it is a necessary, and here barely satisfied,
+condition for the blow-up to be admissible at all. That the construction sits so close to the
+critical Serrin threshold is itself informative: it shows how little room the similarity ansatz
+leaves, and how sensitive the construction is to the precise value of $h$.
 
 % ====================================================================
-\section{Mach Number Self-Invalidation, Acoustic Radiation \& Multi-Fluid Breakdown}
+\section{Where the Continuum Model Ends: One Scale, Four Limits}
+\label{sec:mach}
 % ====================================================================
 
-\subsection{Local Mach Divergence \& Incompressibility Breakdown}
+\subsection{Unit-free core scales}
 
-The incompressible Navier-Stokes equations mathematically presume a divergence-free velocity field ($\nabla \cdot u = 0$) and uniform fluid density $\rho = \text{const}$. In continuum mechanics, this idealization is valid if and only if density variations induced by dynamic pressure fluctuations remain negligible, requiring that the local Mach number strictly obeys $\text{Ma}(x,t) = |u(x,t)|/c_s \le 0.3$ across the entire spatial domain~\cite{LandauLifshitz1987,Batchelor1967}.
+The core of the construction keeps a radial Reynolds number of order one: with
+$\ell_r\asymp\tau^{1/2}$, $u\asymp\tau^{-1/2-h}$ and radial diffusion $\nu/\ell_r^2\asymp\tau^{-1}$
+in the leading balance~\cite[\S2.1]{OpenAI2026}, the proof is written at viscosity one and $\tau$ is
+the dimensionless time-to-blow-up. Restoring units with an initial core radius $\ell_0$ introduces
+the viscous time unit $T=\ell_0^2/\nu$ and the physical time-to-blow-up $t=T\tau$, and gives
+\begin{equation}
+  \ell_r \simeq \sqrt{\nu t},\qquad
+  u \simeq \sqrt{\nu/t}\,\Big(\frac{\ell_0^2}{\nu t}\Big)^{h},\qquad 0<h<\tfrac1{100},
+  \label{eq:diffusive}
+\end{equation}
+with order-one prefactors that the paper does not make explicit. The initial size enters only through
+the factor $(\ell_0^2/\nu t)^h$, which for $h=1/200$ lies between $1.2$ and $1.3$ over the whole range
+of interest and changes by a factor $1.3$ when $\ell_0$ changes by $10^6$. \emph{The physical reading
+below is therefore essentially independent of how large the vortex was to begin with, and of the
+choice of units.} Earlier drafts of this audit reported numbers for $\ell_0=1$\,cm ($T=100$\,s) and,
+at one point, read the dimensionless $\tau$ directly as seconds; Table~\ref{tab:mach} keeps the
+$\ell_0=1$\,cm convention for continuity and reports $t=T\tau$.
 
-For liquid water at reference ambient conditions ($T_0 = 300$\,K, $c_s = 1500$\,m/s, $\nu = 10^{-6}$\,m$^2$/s), initialized with macroscopic vortex radius $\ell_0 = 1$\,cm and reference viscous velocity $u_0 = \nu/\ell_0 = 10^{-4}$\,m/s, the self-similar collapse profile ($u_\theta \sim u_0 \tau^{-1/2-h}$ with $h = 1/200$) yields the velocity and Mach trajectories displayed in Table~\ref{tab:mach}.
+\subsection{Three validity limits are one}
+
+\begin{proposition}[Scaling estimates, $O(1)$ prefactors]\label{prop:scales}
+Let $c_s$ be the sound speed, $c_p$ the specific heat, $\lambda$ the molecular length (mean free
+path in a gas, intermolecular spacing in a liquid), and neglect the factor $(\ell_0^2/\nu t)^h$.
+Along the core:
+\begin{enumerate}
+  \item \emph{Compressibility.} $\mathrm{Ma}=u/c_s$ reaches a prescribed value at
+        $t_{\mathrm{Ma}}\simeq\nu/(\mathrm{Ma}^2c_s^2)$, when $\ell_r\simeq\nu/(\mathrm{Ma}\,c_s)$.
+  \item \emph{Rarefaction.} $\mathrm{Kn}=\lambda/\ell_r$ reaches a prescribed value at
+        $t_{\mathrm{Kn}}\simeq\lambda^2/(\mathrm{Kn}^2\nu)$.
+  \item \emph{Viscous heating.} The dissipation per unit mass is $\varepsilon\simeq\nu(u/\ell_r)^2$;
+        since $\ell_r^2\simeq\nu t$, its action over the remaining time $t$ gives
+        $\Delta T\simeq\varepsilon t/c_p\simeq u^2/c_p$, i.e.\ the Eckert number of the core is of
+        order one.
+\end{enumerate}
+For a gas, kinetic theory gives $\nu\simeq\tfrac12\bar c\lambda$ with $\bar c\sim c_s$, so that
+$\mathrm{Ma}\simeq\mathrm{Kn}\cdot\mathrm{Re}_r$ (von K\'arm\'an's relation); with
+$\mathrm{Re}_r=O(1)$ all three effects become order one at the same length and time,
+\begin{equation}
+  \ell_*\simeq\nu/c_s,\qquad t_*\simeq\nu/c_s^2 .
+  \label{eq:lstar}
+\end{equation}
+\end{proposition}
+
+Equation~\eqref{eq:lstar} is the one-line physical content of this audit. In water,
+$\ell_*\approx0.67$\,nm (about two molecular diameters) and $t_*\approx0.44$\,ps; in air,
+$\ell_*\approx45$\,nm (essentially the mean free path) and $t_*\approx0.13$\,ns. The statement is
+generic: it uses only $\mathrm{Re}_r=O(1)$, i.e.\ Leray-type self-similar scaling, and would apply to
+any Navier--Stokes singularity of this type, not only to OpenAI's construction.
+Table~\ref{tab:limits} evaluates the conventional thresholds ($\mathrm{Ma}=0.3$, where density
+variations $\Delta\rho/\rho\approx\mathrm{Ma}^2/2$ reach a few percent~\cite{LandauLifshitz1987,Batchelor1967};
+$\mathrm{Kn}=0.1$, beyond which slip and non-continuum effects appear) for three fluids.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Fluid (300\,K) & $\ell_*=\nu/c_s$ & $t_*=\nu/c_s^2$ & $t(\mathrm{Ma}{=}0.3)$ & $t(\mathrm{Kn}{=}0.1)$ & $t(\mathrm{Kn}{=}1)$ & $\Delta T$ at Ma $0.3$\,/\,$1$ & $|\omega|_{\max}=c_s^2/\nu$ \\
+\midrule
+Water  & $0.67$\,nm & $0.44$\,ps & $5$--$7$\,ps     & $9$\,ps  & $90$\,fs  & $48$\,K\,/\,$540$\,K & $2.2\times10^{12}$\,s$^{-1}$ \\
+Air    & $45$\,nm   & $0.13$\,ns & $1.5$--$1.8$\,ns & $30$\,ns & $0.3$\,ns & $11$\,K\,/\,$120$\,K & $7.5\times10^{9}$\,s$^{-1}$ \\
+Helium & $121$\,nm  & $0.12$\,ns & $1.3$--$1.6$\,ns & $27$\,ns & $0.27$\,ns & $18$\,K\,/\,$195$\,K & $8.3\times10^{9}$\,s$^{-1}$ \\
+\bottomrule
+\end{tabular}
+\caption{Validity limits from Proposition~\ref{prop:scales}. Inputs at 300\,K ($\nu$, $c_s$, $c_p$,
+$\lambda$): water $10^{-6}$\,m$^2$/s, 1500\,m/s, 4184\,J/(kg\,K), 0.3\,nm; air $1.56\times10^{-5}$,
+343, 1005, 68\,nm; helium $1.22\times10^{-4}$, 1007, 5193, 180\,nm. Time ranges span the unit-free
+estimate $\nu/(\mathrm{Ma}\,c_s)^2$ and the $\ell_0=1$\,cm value. The last column is the local
+vorticity bound of \S\ref{sec:admissibility}.}
+\label{tab:limits}
+\end{table}
+
+\subsection{The Mach trajectory for a 1\,cm water vortex}
+
+For liquid water at reference ambient conditions ($T_0 = 300$\,K, $c_s = 1500$\,m/s, $\nu = 10^{-6}$\,m$^2$/s), initialized with vortex radius $\ell_0 = 1$\,cm and reference viscous velocity $u_0 = \nu/\ell_0 = 10^{-4}$\,m/s, the collapse profile $u_\theta \sim u_0 \tau^{-1/2-h}$ with $h = 1/200$ yields the trajectory in Table~\ref{tab:mach}; the constant-density idealization is used, by convention, while $\mathrm{Ma}\lesssim0.3$. The time column is $t=T\tau$ with $T=\ell_0^2/\nu=100$\,s.
 
 \begin{table}[htbp]
 \centering
@@ -259,104 +391,118 @@ For liquid water at reference ambient conditions ($T_0 = 300$\,K, $c_s = 1500$\,
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Time} $\tau$\,(s) & \textbf{Velocity} $|u|$\,(m/s) & \textbf{Mach} $\text{Ma}$ & \textbf{Core Radius} $\ell_r$\,(m) & \textbf{Physical Regime} \\
+\textbf{Time} $t=T\tau$\,(s) & \textbf{Velocity} $|u|$\,(m/s) & \textbf{Mach} $\text{Ma}$ & \textbf{Core Radius} $\ell_r$\,(m) & \textbf{Physical Regime} \\
 \midrule
-$1.0 \times 10^{0}$   & $1.00 \times 10^{-4}$ & $6.67 \times 10^{-8}$ & $1.00 \times 10^{-2}$ & Incompressible Continuum \\
-$1.0 \times 10^{-6}$  & $1.07 \times 10^{-1}$ & $7.14 \times 10^{-5}$ & $1.00 \times 10^{-5}$ & Incompressible Continuum \\
-$1.0 \times 10^{-12}$ & $1.15 \times 10^{2}$  & $7.65 \times 10^{-2}$ & $1.00 \times 10^{-8}$ & Laminar High-Speed Core \\
-$6.69 \times 10^{-14}$ & $4.50 \times 10^{2}$  & $\mathbf{0.30}$       & $2.59 \times 10^{-9}$ & \textbf{Incompressibility Limit Breached} \\
-$6.16 \times 10^{-15}$ & $1.50 \times 10^{3}$  & $\mathbf{1.00}$       & $7.85 \times 10^{-10}$ & \textbf{Transonic Shock Wave Formation} \\
-$9.00 \times 10^{-16}$ & $3.96 \times 10^{3}$  & $2.64$               & $3.00 \times 10^{-10}$ & \textbf{Molecular Mean Free Path Limit} \\
-$1.00 \times 10^{-18}$ & $1.23 \times 10^{5}$  & $82.0$               & $1.00 \times 10^{-11}$ & Sub-Molecular / Kinetic Regime \\
-$1.00 \times 10^{-25}$ & $4.22 \times 10^{8}$  & $2.81 \times 10^{5}$ & $3.16 \times 10^{-15}$ & Superluminal Unphysicality ($|u| > c$) \\
+$1.00 \times 10^{2}$   & $1.00 \times 10^{-4}$ & $6.67 \times 10^{-8}$ & $1.00 \times 10^{-2}$ & Incompressible Continuum \\
+$1.00 \times 10^{-4}$  & $1.07 \times 10^{-1}$ & $7.14 \times 10^{-5}$ & $1.00 \times 10^{-5}$ & Incompressible Continuum \\
+$1.00 \times 10^{-10}$ & $1.15 \times 10^{2}$  & $7.65 \times 10^{-2}$ & $1.00 \times 10^{-8}$ & Laminar High-Speed Core \\
+$6.69 \times 10^{-12}$ & $4.50 \times 10^{2}$  & $\mathbf{0.30}$       & $2.59 \times 10^{-9}$ & \textbf{Incompressibility Limit Breached} \\
+$6.16 \times 10^{-13}$ & $1.50 \times 10^{3}$  & $\mathbf{1.00}$       & $7.85 \times 10^{-10}$ & \textbf{Transonic Shock Wave Formation} \\
+$9.00 \times 10^{-14}$ & $3.96 \times 10^{3}$  & $2.64$               & $3.00 \times 10^{-10}$ & \textbf{Molecular Mean Free Path Limit ($\mathrm{Kn}=1$)} \\
+$1.00 \times 10^{-16}$ & $1.23 \times 10^{5}$  & $82.0$               & $1.00 \times 10^{-11}$ & Sub-Molecular / Kinetic Regime \\
+$1.00 \times 10^{-23}$ & $4.22 \times 10^{8}$  & $2.81 \times 10^{5}$ & $3.16 \times 10^{-15}$ & Formally Superluminal ($|u| > c$) --- model has no meaning here \\
 \bottomrule
 \end{tabular}
-\caption{Trajectory of the OpenAI collapsing vortex core in water ($c_s = 1500$\,m/s, $T_0 = 300$\,K). The incompressible model physically invalidates itself at $\tau \approx 6.69 \times 10^{-14}$\,s ($67$\,femtoseconds before the mathematical singularity), and crosses the sonic barrier at $\tau \approx 6.16 \times 10^{-15}$\,s.}
+\caption{Trajectory of the OpenAI collapsing vortex core in water ($c_s = 1500$\,m/s, $T_0 = 300$\,K), with the time column corrected to physical seconds $t=T\tau$, $T=\ell_0^2/\nu=100$\,s. The incompressible model self-invalidates at $t \approx 6.69 \times 10^{-12}$\,s ($\approx6.7$\,picoseconds before the mathematical singularity), and crosses the sonic barrier at $t \approx 6.16 \times 10^{-13}$\,s. Velocity, Mach and radius columns are functions of the dimensionless $\tau$ only and are unaffected by the time-unit correction.}
 \label{tab:mach}
 \end{table}
 
-\subsection{Lighthill Acoustic Radiation Catastrophe}
+\subsection{Acoustic radiation is not an independent check}
 
-When an unsteady fluid flow accelerates in a physical medium, fluid compressibility produces acoustic quadrupole radiation. According to Sir James Lighthill's acoustic analogy and eighth-power law~\cite{Lighthill1952,Proudman1952}, the total acoustic power radiated by a localized turbulent eddy of characteristic velocity $U$ and length scale $L$ is given by:
+Lighthill's acoustic analogy~\cite{Lighthill1952,Proudman1952} gives, for a compact
+\emph{subsonic} source of velocity $U$ and size $L$, a radiated power
+$P_{\text{ac}}\sim\rho_0U^8L^2/c_s^5$. Comparing the energy this would radiate over the remaining
+time $t$ with the kinetic energy of the core, $E_{\text{core}}\sim\rho_0U^2\ell_r^2\ell_z$, and
+using Eq.~\eqref{eq:diffusive} for $U$, $\ell_r$ and $\ell_z\simeq\ell_r\,t^{-h}$, one finds
 \begin{equation}
-  P_{\text{ac}} = C_{\text{quad}} \frac{\rho_0}{c_s^5} U^8 L^2,
-  \label{eq:lighthill}
+  \frac{P_{\text{ac}}\,t}{E_{\text{core}}}\;\sim\;\Big(\frac{U}{c_s}\Big)^{5}=\mathrm{Ma}^5
 \end{equation}
-where $C_{\text{quad}} \sim \mathcal{O}(1)$ is the aerodynamic quadrupole efficiency tensor factor and $\rho_0$ is fluid mass density. In the OpenAI self-similar vortex scaling, $U(\tau) = u_0 \tau^{-1/2-h}$ and $L(\tau) = \ell_r(\tau) = \ell_0 \tau^{1/2}$. Substituting these scalings into Eq.~\eqref{eq:lighthill} reveals the exact asymptotic power law:
+up to $O(1)$ constants and factors $t^{-5h}$. An earlier draft of this audit presented the time at
+which this ratio reaches unity as an ``independent radiative energy-budget check'' that
+``lands within an order of magnitude'' of the Mach limit. It is not independent: it is the Mach
+criterion again, which is why it agreed with it. The correct reading is simply that the flow ceases
+to be an acoustically compact, subsonic source at $\mathrm{Ma}\sim1$ --- exactly where
+Eq.~\eqref{eq:lstar} says the incompressible model has ended.
+
+\subsection{Viscous heating: the temperature the model cannot see}
+
+Incompressible Navier--Stokes carries no temperature equation (\S\ref{sec:thermo}), so the heating
+is an external estimate; Proposition~\ref{prop:scales}(3) makes it a sharp one. Because the core
+radius is the viscous length $\sqrt{\nu t}$, the heat released by viscous dissipation over the
+remaining time equals the local kinetic energy: $\Delta T\simeq u^2/c_p$. For water this is $48$\,K
+at $\mathrm{Ma}=0.3$ and $540$\,K at $\mathrm{Ma}=1$; the boiling point ($\Delta T=73$\,K) is
+reached at $\mathrm{Ma}\approx0.37$, about $3$--$4.5$\,ps before blow-up. Earlier drafts of this
+audit spoke of ``plasma temperatures''; a rise of $10^4$\,K would require $\mathrm{Ma}\approx4$, far
+past the point where the model has ended, and the $\tau^{-1.010}$ law of Table~\ref{tab:thermo}
+must not be extrapolated there. Two caveats: the estimate assumes the heat stays in the core over
+the collapse time, which holds when the thermal diffusion length $\sqrt{\alpha t}=\mathrm{Pr}^{-1/2}\ell_r$
+does not exceed $\ell_r$ --- true for water ($\mathrm{Pr}\approx7$), marginal for air
+($\mathrm{Pr}\approx0.7$), where $\Delta T$ is an upper estimate; and the model's own energy balance
+is exact and its dissipation is positive, so \emph{no thermodynamic law is violated} --- what fails
+is the constitutive assumption of a decoupled, constant temperature.
+
+\subsection{Liquids: cavitation comes first}
+
+For a liquid at ambient pressure the first constitutive assumption to fail is neither
+incompressibility nor the continuum but the absence of a vapour phase. The pressure at the centre
+of a vortex core lies below the ambient pressure by roughly $\rho u^2$ (Bernoulli), so the local
+pressure reaches the vapour pressure when $\tfrac12\rho u^2\approx p_\infty-p_v\approx0.1$\,MPa,
+i.e.\ at $u\approx14$\,m/s ($\mathrm{Ma}\approx0.01$). By Eq.~\eqref{eq:diffusive} this happens
+$t\simeq\nu/u^2\approx5$\,ns before blow-up, when the core radius is $\approx70$\,nm --- three
+orders of magnitude earlier in time than the Mach limit, in a core still a hundred molecules wide.
+A nanometre-scale core that lives for picoseconds may not nucleate at $p_v$: the measured tensile
+strength of clean water is $\sim30$\,MPa, and $\sim140$\,MPa has been reached in mineral
+inclusions~\cite{ZhengAngell1991,CaupinHerbert2006}. Those tensions correspond to
+$u\approx245$--$530$\,m/s, $t\approx17$--$4$\,ps and $\ell_r\approx4$--$2$\,nm --- before or
+together with $\mathrm{Ma}=0.3$. Whether the liquid cavitates at $5$\,ns or holds tension to
+$5$\,ps, it stops being the fluid the incompressible model describes before, or at, the limits of
+Proposition~\ref{prop:scales}. For gases there is no such limit and Eq.~\eqref{eq:lstar} stands
+alone.
+
+\subsection{A single admissibility condition}
+\label{sec:admissibility}
+
+The limits of Proposition~\ref{prop:scales} combine into one local condition. A vortex of velocity
+$U$ and size $L$ has $|\omega|\sim U/L$; validity requires $U\lesssim c_s$ (Mach) and
+$L\gtrsim\nu/c_s$ (Knudsen, through $\ell_*$), hence
 \begin{equation}
-  P_{\text{ac}}(\tau) \sim \frac{\rho_0}{c_s^5} \left(u_0 \tau^{-1/2-h}\right)^8 \left(\ell_0 \tau^{1/2}\right)^2 = \frac{\rho_0 u_0^8 \ell_0^2}{c_s^5} \tau^{-4 - 8h + 1} = \frac{\rho_0 u_0^8 \ell_0^2}{c_s^5} \tau^{-3 - 8h}.
+  |\omega|\;\lesssim\;\frac{c_s^2}{\nu},\qquad\text{equivalently}\qquad
+  \varepsilon=\nu|\omega|^2\;\lesssim\;\frac{c_s^4}{\nu},
+  \label{eq:admissible}
 \end{equation}
-For the parameter $h = 1/200 = 0.005$, the instantaneous radiated acoustic power diverges with exponent:
-\begin{equation}
-  P_{\text{ac}}(\tau) \propto \tau^{-3.0400} \;\to\; \infty \quad (\text{as } \tau \to 0).
-\end{equation}
-Even more destructive is the intensive acoustic power \emph{density} $p_{\text{ac}} = P_{\text{ac}} / V_{\text{core}}$, where the cylindrical core volume is $V_{\text{core}} = \pi \ell_r^2 \ell_z = \pi \ell_0^3 \tau^{1/2 + 1/2 + 1/2 - h} = \pi \ell_0^3 \tau^{3/2 - h}$:
-\begin{equation}
-  p_{\text{ac}}(\tau) = \frac{P_{\text{ac}}}{V_{\text{core}}} \propto \tau^{-3 - 8h - (3/2 - h)} = \tau^{-9/2 - 7h} = \tau^{-4.5350} \;\to\; \infty.
-\end{equation}
-Integrating $P_{\text{ac}}(\tau)$ over time proves that the cumulative radiated acoustic energy diverges:
-\begin{equation}
-  E_{\text{ac}}(\tau) = \int_\tau^{\tau_0} P_{\text{ac}}(\tau')\,d\tau' \sim \tau^{-2.0400} \;\to\; \infty.
-\end{equation}
-As shown in Table~\ref{tab:acoustic}, at the sonic transition $\tau \approx 6.16 \times 10^{-15}$\,s, the volumetric acoustic power density reaches $1.17 \times 10^{21}$\,W/m$^3$. At $\tau = 10^{-18}$\,s, the radiated acoustic power inside the sub-nanometer vortex exceeds $6.91 \times 10^5$\,W (nearly a megawatt), generating a local power density of $1.79 \times 10^{38}$\,W/m$^3$. This intense acoustic back-reaction radiation acts as an impenetrable radiative barrier, draining the vortex of kinetic energy and generating shocklets that disperse the core.
+about $2.2\times10^{12}$\,s$^{-1}$ ($\varepsilon\lesssim5\times10^{18}$\,W/kg) in water and
+$7.5\times10^{9}$\,s$^{-1}$ in air. This is the honest form of the ``bounded enstrophy''
+admissibility axiom proposed in earlier drafts of this project and in its companion work stream on
+entropy conditions: local, dimensionally derived and material-specific, rather than a global
+integral bound --- which scales with the volume of fluid considered, and for which no derivation was
+ever given. It also turns the admissibility statement from a definition into a theorem. By
+Beale--Kato--Majda~\cite{BKM1984}, which holds for Navier--Stokes as well as Euler, a solution with
+$\int_0^T\|\omega(t)\|_{L^\infty}\,dt<\infty$ is smooth on $[0,T]$; a solution that satisfies
+Eq.~\eqref{eq:admissible} on $[0,T)$ therefore does not blow up at $T$, and any blow-up must first
+leave the admissible set --- in this construction at $\ell_*$, or in a liquid at the cavitation
+scale. The condition says nothing about whether real flows approach the bound; it says where the
+model must be replaced by another.
 
-\begin{table}[htbp]
-\centering
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-\textbf{Time} $\tau$\,(s) & \textbf{Peak Velocity} $u$\,(m/s) & \textbf{Mach} $\text{Ma}$ & \textbf{Acoustic Power} $P_{\text{ac}}$\,(W) & \textbf{Power Density} $p_{\text{ac}}$\,(W/m$^3$) \\
-\midrule
-$1.0 \times 10^{0}$   & $1.00 \times 10^{-4}$ & $6.67 \times 10^{-8}$ & $1.32 \times 10^{-49}$ & $4.19 \times 10^{-44}$ \\
-$1.0 \times 10^{-6}$  & $1.07 \times 10^{-1}$ & $7.14 \times 10^{-5}$ & $2.29 \times 10^{-31}$ & $6.80 \times 10^{-17}$ \\
-$1.0 \times 10^{-12}$ & $1.15 \times 10^{2}$  & $7.65 \times 10^{-2}$ & $3.98 \times 10^{-13}$ & $1.10 \times 10^{11}$ \\
-$6.69 \times 10^{-14}$ & $4.50 \times 10^{2}$  & $0.30$               & $1.48 \times 10^{-9}$  & $2.34 \times 10^{16}$ \\
-$6.16 \times 10^{-15}$ & $1.50 \times 10^{3}$  & $1.00$               & $2.09 \times 10^{-6}$  & $\mathbf{1.17 \times 10^{21}}$ \\
-$9.00 \times 10^{-16}$ & $3.96 \times 10^{3}$  & $2.64$               & $7.22 \times 10^{-4}$  & $7.16 \times 10^{24}$ \\
-$1.00 \times 10^{-18}$ & $1.23 \times 10^{5}$  & $82.0$               & $\mathbf{6.91 \times 10^{5}}$ & $\mathbf{1.79 \times 10^{38}}$ \\
-\bottomrule
-\end{tabular}
-\caption{Lighthill acoustic radiation metrics for the collapsing vortex core in water. Power density reaches astrophysical extremes femtoseconds before mathematical blow-up.}
-\label{tab:acoustic}
-\end{table}
+\subsection{What laboratory vortices do instead}
 
-\subsection{Multi-Fluid Universality: Water, Air, and Helium}
-
-To confirm that these breakdowns are intrinsic to physical fluid mechanics rather than specific to liquid water, we evaluated the breakdown sequence across three diverse physical fluids: liquid water, dry air, and helium gas. Table~\ref{tab:fluids} reports the critical times at which each fluid breaches incompressibility ($\text{Ma} = 0.3$), the sonic barrier ($\text{Ma} = 1.0$), and the continuum hypothesis ($\text{Kn} = 0.1$ and $\text{Kn} = 1.0$).
-
-\begin{table}[htbp]
-\centering
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-\textbf{Fluid} & $c_s$\,(m/s) & $\lambda_{\text{mfp}}$\,(m) & $\tau_{\text{break}}$ ($\text{Ma}=0.3$) & $\tau_{\text{sonic}}$ ($\text{Ma}=1.0$) & $\tau_{\text{Kn}}$ ($\text{Kn}=0.1$) \\
-\midrule
-Liquid Water (300\,K) & $1500$ & $3.0 \times 10^{-10}$ & $6.69 \times 10^{-14}$\,s & $6.16 \times 10^{-15}$\,s & $9.00 \times 10^{-14}$\,s \\
-Dry Air (300\,K, 1\,atm) & $343$ & $6.8 \times 10^{-8}$  & $2.65 \times 10^{-10}$\,s & $2.44 \times 10^{-11}$\,s & $4.62 \times 10^{-9}$\,s \\
-Helium Gas (300\,K, 1\,atm) & $1007$ & $1.8 \times 10^{-7}$ & $1.93 \times 10^{-9}$\,s  & $1.78 \times 10^{-10}$\,s & $3.24 \times 10^{-8}$\,s \\
-\bottomrule
-\end{tabular}
-\caption{Physical transition times across reference fluids. In every fluid, the Navier-Stokes model breaks down orders of magnitude before the mathematical blow-up time $t = 1$.}
-\label{tab:fluids}
-\end{table}
-
-In all physical fluids, the continuum hypothesis ($\text{Kn} \le 0.1$) and the incompressibility condition fail at macroscopic fractions of a second to picoseconds prior to $t=1$. For air and helium gas, continuum breakdown occurs as early as $10^{-8}$ to $10^{-9}$\,s.
-
-\subsection{Laboratory Observations: Reconnection and Dissipation Saturation}
-
-Real laboratory fluid experiments decisively contradict the singular collapsing-vortex scenario. Landmark experiments by Kleckner and Irvine~\cite{KlecknerIrvine2013}, utilizing 3D-printed hydrofoils and high-speed laser scanning tomography in water, demonstrated that when isolated vortex filaments come into close proximity, they do not undergo self-similar collapse. Instead, vortex filaments undergo topological \emph{vortex reconnection}: the core lines collide, pinch off, and rearrange into unknotted vortex rings, shedding helicity into acoustic waves and small-scale turbulence.
-
-Furthermore, extensive direct numerical simulations (DNS) and high-Reynolds-number experimental measurements by Schumacher, Sreenivasan, and coworkers~\cite{Schumacher2014,Donzis2008} reveal that extreme dissipative events in physical turbulence are inherently self-limiting. Although enstrophy can momentarily exceed mean values by several orders of magnitude, viscous diffusion at the Kolmogorov microscale $\eta = (\nu^3/\varepsilon)^{1/4}$ continuously diffuses high-vorticity patches. The local enstrophy density saturates at a finite molecular bound, in perfect accordance with the Beale-Kato-Majda regularizing mechanism~\cite{BKM1984}.
+Laboratory experiments on interacting vortex filaments in water~\cite{KlecknerIrvine2013} show
+reconnection rather than self-similar collapse: core lines approach, pinch off and rearrange,
+shedding energy into waves and small-scale motion. That is a different configuration from the
+single swirling column of the construction, and it does not contradict the theorem; it is a
+reminder that real vortices find other routes to dissipation long before molecular scales. Likewise,
+extreme dissipation events in direct numerical simulations and high-Reynolds-number
+experiments~\cite{Schumacher2014,Donzis2008} are intense but finite and resolved at the Kolmogorov
+scale $\eta$, which in every measured flow exceeds the molecular length by orders of magnitude. The
+Beale--Kato--Majda criterion~\cite{BKM1984} is the mathematical statement that this finiteness is
+what prevents blow-up; it is not itself a statement about molecules.
 
 % ====================================================================
-\section{Teleological Reversal of Newtonian Causality}
+\section{Backward-Specified Forcing and the Limits of MMS}
+\label{sec:causality}
 % ====================================================================
 
-Physics is fundamentally causal: a force pushes a fluid, and the fluid responds ($A \to B$). The
-methodology of this proof reverses this arrow profoundly. The authors do not start with a smooth
-force and observe where the fluid goes. Instead, they:
+Physics problems are usually posed forward: specify a force, then compute how the fluid responds.
+This proof's logical structure runs the specification backward. The authors:
 \begin{enumerate}
   \item \textbf{Stipulate} the goal: a singularity at $t = 1$.
   \item \textbf{Engineer} a collapsing vortex column whose velocity diverges
@@ -368,147 +514,52 @@ force and observe where the fluid goes. Instead, they:
         (Section~10).
 \end{enumerate}
 
-While this satisfies the Millennium Prize rules, it reverses physical causality. The external force
-is not ``driving'' the fluid to a singularity; the mathematically pre-specified singularity
-dictates what the external force must be. The entire $(u, f)$ pair is co-designed; remove $f$ and
-$u$ immediately ceases to satisfy the Navier-Stokes equations. The proof is the mathematical
-equivalent of shooting an arrow into a wall and then painting a bullseye around it.
+This is a completely legitimate way to build an existence proof --- fixing the endpoint and solving
+backward for compatible data is standard technique --- but it has a specific consequence worth
+flagging: because $(u,f)$ are co-designed as a single package, $f$ cannot be given an independent
+physical origin (a stirring mechanism, a boundary forcing, a body force from an external field)
+without already knowing the singular solution it is meant to produce. The paper is transparent
+about this itself: ``An exponentially small external force seeds each pulse; the background shear
+supplies its subsequent growth.'' The force \emph{seeds} --- it does not \emph{drive}.
 
-The paper acknowledges this explicitly: ``An exponentially small external force seeds each pulse;
-the background shear supplies its subsequent growth.'' The force \emph{seeds}---it does not
-\emph{drive}.
-
-% ====================================================================
-\section{The Unforced Euler Singularity: The Ultraviolet Bomb}
-% ====================================================================
-
-For the unforced Euler equations, the singularity must emerge solely from the initial condition
-$u_0(x)$. The formalization constructs $u_0$ as the limit of an infinite series of vortex packets
-with spatial frequencies $\kappa_n \to \infty$ along a super-exponential tower.
-
-Because $u_0 \in C^\infty$, the energy spectrum decays faster than any polynomial at high frequencies, rendering energy at sub-Planckian scales ($\sim 10^{-35}$\,m) mathematically infinitesimal ($\sim 10^{-100}$\,J). However, the physical impossibility lies in \emph{sub-Planckian coherent fine-tuning}. The finite-time singularity causally relies on these sub-atomic fluctuations being perfectly phased and coherently aligned at $t=0$ so background shear can amplify them. In real fluids, discrete atomic motion, Brownian fluctuations, and thermal noise destroy sub-molecular coherence instantly, rendering such fine-tuned initial configurations physically unrealizable.
+It is, in that sense, the mathematical equivalent of shooting an arrow into a wall and painting a
+bullseye around it: a legitimate demonstration that the wall \emph{can} be hit, not a claim about
+where arrows normally land.
 
 % ====================================================================
-\section{Thermodynamic Censorship: A Physical Axiom}
+\section{The Unforced Euler Singularity: Coherent Structure Below Any Physical Cutoff}
+\label{sec:euler}
 % ====================================================================
 
-To bridge the gap between abstract functional analysis and physical reality, we propose the
-\textbf{Thermodynamic Censorship Principle}, conceptually parallel to Penrose's Cosmic Censorship
-Conjecture in general relativity~\cite{Penrose1969}: physical reality may obey an additional
-constraint beyond the differential equation itself.
+For the unforced Euler equations the singularity must come from the initial datum alone. The
+construction~\cite{OpenAIEuler2026} builds $u_0\in C^\infty_{c,\sigma}(\mathbb{R}^3)$ by a stagewise
+iteration: at each stage a localized oscillatory packet of higher frequency is added to the flow
+built so far, the packet is amplified by the shear of that parent flow, and its averaged momentum
+flux feeds the next stage; amplitudes, frequencies, localization lengths and time intervals are
+chosen so that the sum converges in every fixed Sobolev norm while
+$\int_0^{T_*}\|\omega(t)\|_{L^\infty}\,dt$ diverges at a finite $T_*$ (\cite[\S\S2--5]{OpenAIEuler2026}).
 
-\begin{quote}
-  \textbf{Axiom (Uniform Bounded Enstrophy).} \textit{A physically admissible solution to the
-  incompressible Navier-Stokes equations on $\mathbb{R}^3 \times [0, T)$ must satisfy}
-  \begin{equation}
-    \sup_{0 \le t < T} \int_{\mathbb{R}^3} |\nabla \times u(x,t)|^2\,dx \;\le\; \Omega_{\max},
-  \end{equation}
-  \textit{where $\Omega_{\max} < \infty$ is a material-dependent thermodynamic threshold,
-  determined by the bound beyond which localized viscous shear heating invalidates the Boussinesq
-  isothermal approximation.}
-\end{quote}
-
-For liquid water at 300\,K, this threshold is $\Omega_{\max} \approx 1.13 \times 10^{13}$\,s$^{-2}$.
-The OpenAI construction requires $\Omega(t) \to \infty$ as $\tau \to 0$---violating this bound
-well before the mathematical singularity. Under this axiom, the Gevrey-class collapsing-vortex
-mechanism is strictly censored.
-
-\subsection{Formal Kernel Verification in Lean~4 (Zero \texttt{sorry} Axioms)}
-
-To translate this physical principle into machine-checked mathematics, we formalized and proved the censorship theorems in Lean~4 within the \texttt{TopologicalCensorship.lean} module of our repository. Rather than postulating an empirical cutoff as an ad-hoc barrier, we formalized the physical \emph{Dual-Scale Effective Metric}:
-\begin{equation}
-  k_{\text{eff}}(k) = \begin{cases} 
-    0, & k = 0, \\ 
-    \min\left(|k|, \frac{1}{\alpha' |k|}\right), & k \ne 0,
-  \end{cases}
-  \label{eq:dual_scale_metric}
-\end{equation}
-where $\alpha' = \ell_{\min}^2 > 0$ represents the squared minimal fundamental length scale. 
-
-We formalized and kernel-verified two fundamental theorems with 0 \texttt{sorry} keywords and 0 custom axioms:
-\begin{enumerate}
-  \item \textbf{Ultraviolet Boundedness (\texttt{dual\_scale\_wavenumber\_bounded})}: We proved formally that $\forall k \in \mathbb{R}$,
-  \begin{equation}
-    k_{\text{eff}}(k) \;\le\; \frac{1}{\sqrt{\alpha'}}.
-  \end{equation}
-  The proof dispatches the $k = 0$ case via positivity of the square root, and for $k \ne 0$ applies strict algebraic bounds using Mathlib's order and arithmetic lemmas (\texttt{Real.div\_sqrt.symm}, \texttt{mul\_one\_div}, and \texttt{mul\_lt\_mul\_of\_pos\_left}). This strictly forbids ultraviolet and sub-Planckian runaway cascades.
-  \item \textbf{Beale-Kato-Majda Regularity Censorship (\texttt{bkm\_regularity\_censorship})}: Using the contrapositive of the BKM theorem~\cite{BKM1984}, we proved that if the regularized vorticity remains uniformly bounded on $[0, T]$ ($\int_0^T \|\omega(\cdot, t)\|_{L^\infty} dt < \infty$), the velocity field $u(\cdot, t)$ remains smooth across $[0, T]$, guaranteeing global regularity and forbidding singularity formation.
-\end{enumerate}
-Formal kernel inspection (\texttt{\#print axioms}) confirms that both theorems depend strictly on the standard foundational axioms of Lean~4: \texttt{[propext, Classical.choice, Quot.sound]}, with zero custom or unproven axioms. Lake compiles the complete environment across 1946 jobs without errors.
-
-\subsection{Proof-by-Reflection Bridge for AI Theorem Provers}
-
-To prevent future automated proof search agents from discovering unphysical PDE solutions, we implemented a \emph{Physics-Informed Verification Bridge} (\texttt{openai\_poc\_pi\_verifier.py}). The bridge evaluates proof search trajectories using exact rational arithmetic (\texttt{Rat} in Lean~4), eliminating floating-point rounding errors:
-\begin{equation}
-  \text{Ma}_{\text{rat}} = \frac{u_{\max}}{c_s} \in \mathbb{Q}, \quad \text{Kn}_{\text{rat}} = \frac{\lambda_{\text{mfp}}}{\ell_{\min}} \in \mathbb{Q}.
-\end{equation}
-The verifier automatically generates verified Lean~4 reflection certificates (\texttt{PhysicalBoundsRat}) that are evaluated inside the proof assistant via \texttt{\#eval}, providing an air-gapped reward signal that rejects unphysical trajectories during reinforcement learning.
-
-\subsection{Integration with LeanMaster and the Large Lean~4 Corpus}
-
-To complete the physical and mathematical proof of our approach, we introduced \texttt{LeanMaster} (\textit{SocrateAI Scientific Agora LeanMaster})~\cite{LeanMaster2026}, an advanced mathematical physics proving framework integrating eight premier open-source Lean~4 corpora. Leveraging the decoupled epistemic directed acyclic graph (DAG) and the verified theorems in \texttt{LeanMasterBridge.lean}, we formalize three decisive constraints that eliminate the possibility of physical blow-up:
-
-\begin{enumerate}
-  \item \textbf{Topological Helicity \& Viscous Dissipation Lower Bound (\texttt{NSE-P1})}: 
-  In three-dimensional viscous fluids, the hydrodynamic helicity $\mathcal{H}(t) = \int_{\mathbb{T}^3} u \cdot (\nabla \times u)\,dx$ measures the topological Gauss linking number of tangled vortex filaments~\cite{Moffatt1969,ArnoldKhesin1998}. By the Cauchy-Schwarz inequality on $L^2(\mathbb{T}^3)$, $\mathcal{H}(t)^2 \le 4 E(t) \Omega(t)$. Defining the viscous energy dissipation rate $\mathcal{D}(t) = 2\nu \Omega(t)$, we formalized and proved the \emph{Helicity-Dissipation Inequality} with zero \texttt{sorry} keywords:
-  \begin{equation}
-    2 \cdot \mathcal{D}(t) \cdot E(t) \;\ge\; \nu \cdot \mathcal{H}(t)^2.
-  \end{equation}
-  Any fluid configuration possessing non-zero topological linking ($\mathcal{H} \ge 1$) is mathematically forbidden from having zero energy dissipation. This proves that topological knots in real turbulence cannot form dissipationless, stationary, or singular self-similar cores; viscous dissipation is strictly enforced by the underlying topology.
-
-  \item \textbf{Kolmogorov Spectral Energy Cascade Cutoff (\texttt{TURB-P5})}:
-  In fully developed turbulence, the non-linear cascade flux $\Pi(k) = \varepsilon$ transfers energy across the inertial range until reaching the Kolmogorov dissipation wavenumber $k_d = (\varepsilon / \nu^3)^{1/4}$~\cite{Kolmogorov1941}. We proved in Lean~4 that modal viscous dissipation $\mathcal{D}(k, E_k) = 2\nu k^2 E_k$ is strictly positive for all $k \ge 1, E_k \ge 1$, and that the global enstrophy satisfies:
-  \begin{equation}
-    2 \nu \Omega \;\ge\; \varepsilon.
-  \end{equation}
-  This formal contract (\texttt{kolmogorov\_cascade\_master\_contract}) proves that viscous forces unconditionally terminate the cascade at finite $k_d$, mathematically disproving the uncapped UV accumulation ($\kappa_n = \kappa_0 \lambda^n \to \infty$) demanded by the OpenAI similarity ansatz.
-
-  \item \textbf{Dual-Scale Geometric Invariance \& Swampland Censorship (\texttt{TCC-P3})}:
-  Drawing on the Trans-Planckian Censorship Conjecture (TCC)~\cite{BedroyaVafa2020} and Callens dual-scale geometry, physical wavelengths under the Buscher-invariant metric satisfy $\lambda_{\text{num}}(R, \lambda_0) = (R^2 + 1)\lambda_0 \ge 2 > \ell_{\min}$. We proved formally (\texttt{sub\_cutoff\_modes\_impossible}) that sub-cutoff modes $\lambda \le \ell_{\min}$ are algebraically absent from the spectrum.
-\end{enumerate}
-
-Finally, our unified master theorem (\texttt{lean\_master\_unified\_censorship\_master}) establishes the formal contract: a fluid obeying topological helicity conservation, Kolmogorov dissipation saturation, and dual-scale geometric invariance is mathematically barred from collapsing into a finite-time singularity. The complete Lean~4 environment compiles cleanly across 2,588 Lake jobs with zero errors, zero warnings, and zero \texttt{sorry} axioms.
+Because $u_0$ is $C^\infty$, its energy below any molecular length $\lambda$ is negligible; the
+physical issue is not energy but \emph{coherence}. The mechanism requires the packets, down to
+arbitrarily fine scales, to be present in the datum with prescribed phases so that the shear of the
+coarser stages can amplify them in the right order. In a real fluid the Euler equations are the
+$\nu\to0$ idealization of Navier--Stokes, so the physics missing from the Euler construction is
+viscosity itself, which damps a packet of wavenumber $k$ on the time $1/(\nu k^2)$ --- together with
+thermal fluctuations, which set an irreducible noise floor near the scale
+$\ell_{\text{th}}=k_BT/(\rho\nu^2)$ (a few picometres in water, i.e.\ already below $\lambda$, so the
+molecular length is the operative cutoff~\cite{Bandak2022}). Whether a viscous, noisy fluid can
+reproduce the first few stages of the cascade before the fine scales are washed out is a computable
+question (\S\ref{sec:outlook}), not a slogan. Earlier drafts of this audit described the fine scales
+as ``sub-Planckian''; the Planck length is irrelevant here --- the cutoff is molecular.
 
 % ====================================================================
-\section{Discussion}
+\section{Properties of the Specific Construction, and What Was Removed}
+\label{sec:numerics}
 % ====================================================================
 
-The OpenAI system's achievement is a monumental milestone in automated reasoning. It successfully
-exploited the analytical blindspot between $C^\infty$ and real-analytic functions, using Gevrey-class
-class cutoffs to construct a mathematically flawless singularity that the Lean~4 kernel rigorously
-certifies. It did not cheat; it solved the mathematical problem as posed.
-
-However, five independent physical diagnostics converge on a single conclusion: the constructed
-singularity exists exclusively within the abstract mathematical continuum $\mathbb{R}^3$, not
-within any physically realizable fluid. These are: (1) intensive local energy density divergence ($\sim\tau^{-1.010}$);
-(2) thermal-shock enstrophy divergence ($\sim\tau^{-0.515}$); (3) Mach number
-self-invalidation 67~femtoseconds before blow-up; (4) teleological causality inversion; and
-(5) sub-Planckian UV energy injection.
-
-This situation parallels Cosmic Censorship in General Relativity~\cite{Penrose1969}, where naked
-singularities are mathematically consistent with Einstein's field equations yet are conjectured to
-be screened from physical observers. Similarly, thermodynamic constraints may constitute a natural
-``regularity horizon'' censoring NSE blow-ups in physical fluids.
-
-Three key implications emerge:
-\begin{enumerate}
-  \item \textbf{For mathematics}: The proof is definitive. Alternatives C and D are resolved.
-  \item \textbf{For physics}: The singularity requires unphysical Gevrey cutoff gradients,
-        infinite enstrophy, and supersonic fluid velocities at femtosecond timescales. It is a
-        non-observable.
-  \item \textbf{For the Millennium Prize}: The Clay Institute must confront the gap between the
-        mathematical question asked and the physical question intended.
-\end{enumerate}
-
-% ====================================================================
-\section{Physical Turbulence Benchmarking via LeanFlow}
-% ====================================================================
-
-To systematically contrast OpenAI's manufactured singularity with genuine fluid physics, we benchmarked the formalization against the classical 3D Taylor-Green Vortex (TGV) using the \texttt{LeanFlow} pseudo-spectral solver and the \texttt{SocrateAI-Numeric-DualScale-Solver} infrastructure. The TGV was simulated across Reynolds numbers $Re \in \{400, 800, 1600\}$ on the domain $\mathbb{T}^3 = [0, 2\pi]^3$.
-
-\subsection{Comparative Vulnerability Assessment}
-
-Our analysis of the OpenAI Lean~4 repository reveals five critical epistemic disconnects when compared to the physical constraints enforced in LeanFlow:
+Table~\ref{tab:vulnerabilities} collects properties of the particular solution built. They are
+properties of that solution, not defects in the proof, and none of them is a ``vulnerability'' in
+the sense earlier drafts of this audit used the word.
 
 \begin{table}[htbp]
 \centering
@@ -516,56 +567,259 @@ Our analysis of the OpenAI Lean~4 repository reveals five critical epistemic dis
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}p{3.2cm}p{4.6cm}p{7.2cm}@{}}
 \toprule
-\textbf{Vulnerability} & \textbf{OpenAI Formalization} & \textbf{Physical \& Mathematical Assessment} \\
+\textbf{Property} & \textbf{OpenAI Formalization} & \textbf{Reading} \\
 \midrule
-1. Manufactured Residual & \texttt{force u p := navierStokesResidual} & Force is reverse-engineered from a singular profile. Initial data is trivial ($u_0 \equiv 0$). \\
-2. Existential Initial Data & \texttt{$\exists u_0$, ContDiff $\mathbb{R}$ $\infty$ $u_0$} & A single contrived point forming a prevalent measure-zero (shy) set in $H^s(\mathbb{R}^3)$. \\
-3. Axisymmetric Swirl & \texttt{AxisymmetricFields.lean} & Reduces 3D PDE to a 2D similarity profile, failing to represent 3D isotropic turbulence. \\
-4. Uncapped Cascade & \texttt{Requires $\kappa_n = \kappa_0\lambda^n \to \infty$} & Violates physical dissipative cutoffs (Kolmogorov length $\eta$). Without this, $\int_0^T \|\omega\|_\infty dt < \infty$ prevents blow-up. \\
-5. Artificial Window & \texttt{SmoothCutoffs.lean} & Forcing is compactly supported on $[3/8, 1]$. Lifespan $T^* = 1$ is engineered by a temporal cutoff switch. \\
+1. Backward-specified residual & \texttt{force := SpacetimeGluing.\allowbreak smoothExtension 1 (tracedResidual u p L)} (\texttt{CandidateFromLimits.lean}) & The force is the smooth remainder of a co-designed $(u,p)$ (\S\ref{sec:causality}); initial data is $u_0 \equiv 0$ for the forced case. \\
+2. One explicit datum & \texttt{$\exists u_0$, ContDiff $\mathbb{R}$ $\infty$ $u_0$} & A single point of $C^\infty_{c,\sigma}$. Its codimension --- the number of unstable directions of the linearized self-similar profile beyond the symmetry modes --- is the rigorous measure of ``non-generic'' and is not established by this audit (\S\ref{sec:outlook}). \\
+3. Axisymmetric swirl & \texttt{AxisymmetricFields.lean} & A 2D similarity profile with swirl; it need not represent generic three-dimensional turbulence. \\
+4. No dissipative floor & Corrections summed ``with shrinking cutoffs'' down to $\ell_r\to0$ & There is no Kolmogorov scale $\eta$; a physical cutoff enforcing Eq.~\eqref{eq:admissible} would prevent blow-up by Beale--Kato--Majda. \\
+5. Engineered lifetime & \texttt{SmoothCutoffs.lean} time switch & Forcing is compactly supported in time; the lifespan $T^*=1$ is a choice, not a feature of the equations. \\
 \bottomrule
 \end{tabular}
-\caption{Comparative analysis of the OpenAI formalization vulnerabilities versus physical reality.}
+\caption{Properties of the constructed solution, with the Lean locations that encode them.}
 \label{tab:vulnerabilities}
 \end{table}
 
-\subsection{Invariant Trapping and the Energy Cascade}
+\subsection{Numerical material removed from this version}
 
-While the OpenAI construction strictly bounds the global kinetic energy ($E(t) \sim \tau^{0.485} \to 0$), it forces the intensive local energy density to diverge as $e_{\text{local}}(t) \sim \tau^{-1.010} \to \infty$ and enstrophy as $\Omega(t) \sim \tau^{-0.515} \to \infty$. In contrast, physical turbulence obeys strict invariant trapping and bounded enstrophy. 
+Earlier drafts of this audit included Taylor--Green-vortex runs from an in-house pseudo-spectral
+solver, a ``Banach contraction-rate certificate'', and a figure contrasting a JHTDB
+isotropic-turbulence spectrum with an ``OpenAI pre-singularity spectrum''. We have removed them.
+The TGV numbers were not reported with resolution and normalization sufficient for independent
+reproduction; the certificate checked the internal consistency of a software pipeline, not any
+property of the construction; and the ``OpenAI spectrum'' was a schematic Gaussian spike drawn by
+hand, not a computed spectrum --- no numerical realization of the 166-page construction exists, in
+this project or, to our knowledge, elsewhere. What a genuine numerical companion should contain is
+listed in \S\ref{sec:outlook}: the cutoff law, the codimension count and the fluctuating-hydrodynamics
+questions. The scripts distributed with this repository are exponent, unit and consistency checks,
+and are labelled as such.
 
-By the Poincar\'{e} inequality $\Omega(t) \ge \lambda_1 E(t)$, the \texttt{LeanFlow} certified energy upper bound satisfies $E(t) \le E(0)\exp(-2\nu\lambda_1 t)$. Our DNS trajectory for the TGV remained strictly enclosed within this certified region. 
+% ====================================================================
+\section{Discussion}
+% ====================================================================
 
-\begin{itemize}
-    \item \textbf{$Re = 400$}: Final energy $E(10) = 5.22 \times 10^{-2}$, peak enstrophy $\Omega_{\max} = 2.453$.
-    \item \textbf{$Re = 1600$}: Final energy $E(10) = 8.71 \times 10^{-2}$, peak enstrophy $\Omega_{\max} = 5.019$.
-\end{itemize}
+The OpenAI system's achievement is a genuine milestone in automated reasoning. It exploited the
+analytical gap between $C^\infty$ and real-analytic functions, using Gevrey-class cutoffs to
+construct a mathematically flawless singularity that the Lean~4 kernel rigorously certifies. It did
+not cheat; it solved the mathematical problem as posed.
 
-Unlike the unphysical UV accumulation in the Lean~4 proof, the physical cascade perfectly reproduces the Kolmogorov $E(k) \propto k^{-5/3}$ inertial spectrum followed by exponential viscous dissipation.
+Five observations, taken together, show that the constructed singularity exists within the
+abstract mathematical continuum $\mathbb{R}^3$ without describing anything a real, physical fluid
+does: (1) intensive local energy density and enstrophy diverge ($\sim\tau^{-1.010}$,
+$\sim\tau^{-0.515}$) while the global energy vanishes; (2) compressibility, rarefaction and viscous
+heating all become order-one at a single scale $\ell_*=\nu/c_s$ --- a few picoseconds before blow-up
+in water, nanoseconds in air, essentially independently of the initial vortex size --- and in a
+liquid cavitation intervenes three decades earlier still; (3) the moment-matching system's apparent
+ill-conditioning is a non-dimensionalization artifact, not physical fragility; (4) the force is
+backward-specified and has no independent physical origin; and (5) the Euler datum needs coherent
+structure below the molecular length, where the missing physics is viscosity.
 
-\subsection{Autonomous Certification}
+This is not, we want to stress, a novel or contested position among fluid dynamicists: it is close
+to the median reaction from the community discussion summarized in \S\ref{sec:outlook}, and it
+echoes a long-standing point about continuum models generally --- Ohm's law, ideal-gas equations of
+state, and other workhorse relations all have known breakdown regimes without this being considered
+a mark against their mathematical content. Three implications follow:
+\begin{enumerate}
+  \item \textbf{For mathematics}: The proof is definitive. Alternatives C and D are resolved as
+        statements about the continuum incompressible model.
+  \item \textbf{For physics}: This particular singularity requires the fluid to remain a
+        continuum, incompressible, isothermal medium down to $\ell_*$ --- a few molecular
+        diameters in water --- and, in a liquid, to sustain tensions of order $10^2$\,MPa for
+        picoseconds. It is not an observable. What \emph{is} observable is the question of how a
+        real fluid leaves the model: cavitation, compressibility, rarefaction and heating, in an
+        order that Proposition~\ref{prop:scales} makes explicit.
+  \item \textbf{For AI-assisted mathematics}: A kernel-checked proof of a physically motivated
+        equation is not automatically a physical result, and the gap between the two is worth
+        making explicit --- and, where possible, checkable --- as part of the proof pipeline
+        (\S\ref{sec:architecture}).
+\end{enumerate}
 
-The entire benchmarking pipeline was executed autonomously via \texttt{workflowNSEsimu.py}, linking the spectral DNS solver to the Lean~4 verification environment. 
-The empirical Banach Fixed-Point contraction rate satisfied $\sup_t \gamma(t) \le 0.85 < 1.0$. This formally satisfied the \texttt{LeanFlow} predicates (\texttt{Certificate.lean:29-30}). The generated air-gapped certificate (\texttt{proof\_certificate\_tgv.json}) was successfully verified by \texttt{lake build RunuxSpec} with zero errors, formally certifying bounded $H^1$ norms and global smoothness for the physical flow.
+% ====================================================================
+\section{Outlook: Repositioning, Community Directions, and Physically-Grounded AI}
+\label{sec:outlook}
+% ====================================================================
+
+\subsection{Mathematics at Its Limit, Not a Claim About Physics}
+
+Section~\ref{sec:intro} already previewed the position we think the evidence supports, and which
+was arrived at independently by much of the fluid-dynamics community when an early version of this
+audit was first posted for feedback on \texttt{r/FluidMechanics} by one of the present
+authors~\cite{RedditFluidMech2026}: the Millennium Prize problems, Navier--Stokes existence and
+smoothness included, were set as precise tests of mathematical technique against a specific,
+well-defined continuum model --- not as referenda on whether that model perfectly describes real
+fluids. As one commenter (\texttt{Leodip}) put it, ``the point of the millennium prize problem was
+never to figure out anything with regards to real world fluids$\ldots$ finite-time blowup is
+totally unphysical either way and just a result of the N-S model.'' Another (\texttt{mrbiguri})
+added that a blow-up result ``suggests that it's not fully descriptive of real world physics,''
+and a third (\texttt{Dihedralman}) compared this to other well-known breakdowns of continuum
+models, noting simply that ``Ohm's law breaks down$\ldots$ Navier Stokes has always been a useful
+approximation and not fully physical.''
+
+A fourth exchange, prompted by a question (\texttt{brokebeany}) about whether the incompressibility
+breakdown identified in \S\ref{sec:mach} invalidates the OpenAI proof, produced what we think is
+the cleanest statement of the right frame (\texttt{Fluid\_Substance5132}): ``In the real world[,]
+the incompressible approximation fails to capture what actually happens. Within the (non physical)
+incompressible world[,] the o[pen]ai proof remains valid.''
+
+We agree with that statement without qualification. Everything in
+\S\ref{sec:syntax}--\S\ref{sec:euler} should be read accordingly: not as claims that the Lean proof
+is wrong, but as a map of exactly where and how far this specific constructed solution departs from
+the regime the incompressible model is normally trusted to describe. That map is, we think, the
+useful residue of this kind of audit, and several commenters independently proposed uses for it
+that go well beyond simply flagging unphysicality, summarized next.
+
+\subsection{Research Directions from the Community Response}
+
+Four concrete directions recurred in that discussion and align with work streams already underway
+in this project's companion directory, \texttt{05\_Community\_Research\_Directions/}, which credits
+the same discussion:
+
+\begin{enumerate}
+  \item \textbf{An admissibility, or entropy, condition for 3D Navier--Stokes.}
+        \texttt{cowgod42} proposed that 3D Navier--Stokes may need an augmented admissibility
+        condition, analogous to the Lax entropy condition used to select the physically correct
+        weak solution of the inviscid Burgers equation, to filter out unphysical weak solutions
+        such as this one; they noted the blow-up result tells us ``the `correct' equations of
+        fluids should not allow this to happen$\ldots$ we need to change the equations, or augment
+        them in some way.'' \texttt{tlmbot} independently suggested the problem itself may need
+        restatement so that it pertains only to physical fluids. This direction is being developed
+        in \texttt{WorkStream1\_EntropyCondition}.
+  \item \textbf{The pre-singularity trajectory as a turbulence-modeling resource.}
+        \texttt{babainottawa} and \texttt{Cute\_Presence\_2861} both noted that even though the
+        endpoint is unphysical, the approach to it --- before the Mach or Knudsen thresholds in
+        Table~\ref{tab:mach} are crossed --- may still carry information relevant to subgrid-scale
+        closure modeling (LES/RANS). This direction is being developed in
+        \texttt{WorkStream3\_Turbulence}.
+  \item \textbf{Deriving, rather than assuming, the thermal response.} \texttt{vibe0009} correctly
+        pointed out that incompressible Navier--Stokes has no energy equation, so any
+        thermal-shock argument built on top of it (including ours in \S\ref{sec:thermo}) is an
+        external estimate, not a derived consequence. A genuine energy/temperature-coupled
+        extension, or a cavitation/boiling model, is needed before the thermal argument can be
+        sharpened past an order-of-magnitude check. This direction is being developed in
+        \texttt{WorkStream2\_ThermalEquation} and \texttt{WorkStream4\_MechanicalCavitation}.
+  \item \textbf{Teaching proof-search AI systems basic thermodynamics.} In a follow-up post
+        summarizing the initial round of feedback, the audit's authors distilled the most
+        actionable community suggestion as: ``Figuring out how to teach AI proof assistants basic
+        thermodynamics so they catch these edge cases.'' That suggestion is the direct motivation
+        for \S\ref{sec:architecture}.
+\end{enumerate}
+
+None of these four directions is resolved by this paper; we record them as open invitations,
+consistent with the standing call for contributions in
+\texttt{05\_Community\_Research\_Directions/README.md}.
+
+\subsection{Toward Physically-Grounded AI Theorem Proving}
+\label{sec:architecture}
+
+Motivated directly by the fourth point above, we propose a three-pillar architecture for future
+AI-assisted formalization of physically motivated equations, restating an earlier internal draft
+manifesto (\texttt{TAO\_NEUROSYMBOLIC\_SCIENTIFIC\_AI\_MANIFESTO.md}) in a form scoped to what is
+realistically buildable rather than what is aspirational:
+
+\begin{enumerate}
+  \item \textbf{Neural proposal.} An LLM-based multi-agent system, as in OpenAI's own
+        architecture, proposes candidate constructions, tactics, and similarity profiles.
+  \item \textbf{Symbolic verification.} A Lean~4 (or equivalent) kernel checks each candidate for
+        syntactic and logical correctness --- exactly as today, with zero \texttt{sorry} and zero
+        unauthorized axioms. This pillar alone is what makes a result a \emph{theorem}; nothing
+        below changes that.
+  \item \textbf{Physical admissibility gate.} A third, independent checker evaluates the
+        \emph{same} construction against an explicit, falsifiable list of physical admissibility
+        predicates before it is reported as \emph{physically} relevant (not before it is accepted
+        as a mathematical theorem). For incompressible Navier--Stokes the list is short and
+        dimensionally derived (\S\ref{sec:admissibility}): the local vorticity bound
+        $|\omega|\lesssim c_s^2/\nu$ of Eq.~\eqref{eq:admissible}, which encodes
+        $\mathrm{Ma}\lesssim1$ and $\mathrm{Kn}\lesssim1$ at once; for liquids, a core pressure
+        deficit $\rho u^2$ below the tensile strength; and, where an energy equation is present,
+        an Eckert number $u^2/(c_p\Delta T)$ that stays small. Each predicate is a scaling
+        estimate with $O(1)$ prefactors, and should be reported as such.
+\end{enumerate}
+
+A rational-arithmetic reflection bridge (\texttt{openai\_poc\_pi\_verifier.py}) already implements a
+narrow version of pillar 3's Mach/Knudsen checks in Lean, using exact rational arithmetic evaluated
+via \texttt{\#eval}; it is a reasonable starting point for the broader gate above, though it does
+not yet reach into the OpenAI proof objects themselves.
+
+We want to be explicit about the current state of this project's own attempt at pillar 3: the
+\texttt{TopologicalCensorship.lean} module in this repository proves elementary boundedness and
+monotonicity lemmas about an effective-wavenumber formula and a dissipation-rate/enstrophy
+inequality in isolation. As of this writing, \emph{none} of those lemmas are connected, inside
+Lean, to OpenAI's actual \texttt{NavierStokes}/\texttt{Euler} definitions. Presenting them as
+already constraining the OpenAI construction would repeat exactly the kind of overclaiming earlier
+drafts of this project were rightly criticized for. Wiring a genuine physical-admissibility gate to
+the actual proof objects --- not to a free-standing toy formula --- is, in our view, the concrete
+next engineering step, and one we have not yet completed.
+
+\subsection{A Hypothesis on Cutoff Regularizations: Testable Questions, Not a Metric}
+
+Finally, and separately from the buildable architecture above, we state one further-out idea
+explicitly as a \textbf{hypothesis for future investigation}. Earlier drafts of this project
+proposed a ``dual-scale'' effective wavenumber saturating at large $|k|$,
+\begin{equation}
+  k_{\text{eff}}(k) = \min\left(|k|, \dfrac{1}{\alpha' |k|}\right)\quad(k\neq0),\qquad
+  k_{\text{eff}}\le 1/\sqrt{\alpha'},
+  \label{eq:dual_scale_metric}
+\end{equation}
+with $\alpha'=\ell_{\min}^2$, and motivated it by string-theoretic T-duality and Trans-Planckian
+censorship~\cite{BedroyaVafa2020}. The inequality is true and Lean-checkable
+(\texttt{dual\_scale\_wavenumber\_bounded} in this repository), but it is an algebraic fact about
+a formula, and the string-theoretic motivation adds nothing: stripped of that language, a
+regularization of this kind is a member of the Leray-$\alpha$ / Bessel-filter family
+$\bar u=(1-\alpha'\Delta)^{-2}u$, whose global regularity is known~\cite{FHT2001,CHOT2005}. The
+draft that asserted a substantive physical link, via a $K3\times T^2$ compactification, was
+reviewed and its physical claim withdrawn (its central Lean theorem ended in a bare \texttt{True},
+and its vorticity equation lacked a term); it now carries a withdrawal notice in this repository,
+and the companion note~\cite{Callens2026v2} records the corrections.
+
+What survives is a hypothesis with a definite test. Drive the regularized model with OpenAI's
+force, or a truncation of it. If the collapse is arrested when $\ell_r\sim\sqrt{\alpha'}$, then by
+Eq.~\eqref{eq:diffusive} the peak velocity should scale as $u_{\max}\sim\nu/\sqrt{\alpha'}$ and
+the arrest time as $t_c\sim\alpha'/\nu$; setting $\sqrt{\alpha'}=\ell_*$ gives $u_{\max}\sim c_s$,
+consistent with Proposition~\ref{prop:scales}. A positive answer would turn the regularization into
+a predictive statement --- ``a molecular cutoff at $\ell$ bounds the peak velocity at $\nu/\ell$''
+--- that kinetic or molecular-dynamics simulations can check. A negative answer (the pulses
+de-cohering before $\ell_r$ reaches $\sqrt{\alpha'}$) would be equally informative. Two companion
+questions belong with it: the codimension of the blow-up, i.e.\ the number of unstable modes of
+the linearized self-similar profile beyond those generated by symmetries, which is the rigorous
+version of ``fine-tuned'' and has been answered for related Euler and Boussinesq profiles by
+computer-assisted and neural-network methods~\cite{ChenHou2022,Wang2025}; and the fate of the
+exponentially small seeding force under Landau--Lifshitz thermal noise~\cite{Bandak2022}. We claim
+none of these results; we claim only that they are the right questions.
 
 % ====================================================================
 \section{Conclusion}
 % ====================================================================
 
-The OpenAI formalization definitively closes Alternatives C and D of the Clay Millennium Prize.
-It proves that the mathematical continuum $\mathbb{R}^3$ contains sufficient infinite divisibility
-to allow a reverse-engineered, structurally unstable stress field---maintained by internal
-Reynolds-stress cancellation of measure-zero precision---to rupture the equations within abstract
-Sobolev spaces.
+OpenAI's formalization is a genuine, kernel-verified mathematical achievement, and Alternatives C
+and D are, as mathematical statements about the continuum incompressible model, resolved by it.
+Nothing in this paper disputes that, and nothing in it could: the Lean kernel already settled the
+question of syntactic correctness before we started.
 
-However, by demonstrating precisely how pathological, finely-tuned, and thermodynamically
-impossible such a configuration must be---Gevrey-class gradients of magnitude $10^{218}$, a Jacobian
-sensitivity $10^5$ times greater than Avogadro's number, self-invalidating Mach numbers
-67~femtoseconds before the blow-up, and runaway Lighthill acoustic radiation ($P_{\text{ac}} \sim \tau^{-3.04}$)---this formalization inadvertently provides overwhelming
-epistemic evidence to the contrary: \textbf{naturally occurring 3D fluids do not blow up in
-finite time}.
+What this paper adds is a physical reading, corrected in several places from earlier drafts of this
+audit: a scaling table for locally divergent quantities that respects the Prize's global energy
+bound; a unit-free validity scale $\ell_*=\nu/c_s$ at which compressibility, rarefaction and heating
+enter together, with the earlier fluid-specific timelines recovered as special cases; the
+observation that in liquids cavitation comes first; a single local admissibility condition
+$|\omega|\lesssim c_s^2/\nu$ that Beale--Kato--Majda turns into a theorem; a demonstration that the
+moment-matching system's apparent ill-conditioning is a non-dimensionalization artifact, and that
+the acoustic ``check'' of earlier drafts was the Mach criterion in disguise; an honest accounting of
+the backward-specified force; and a description of the Euler datum's dependence on coherent structure
+below the molecular length. None of these observations makes the mathematics wrong, and none of
+them, on their own, proves that real turbulent fluids cannot develop extreme, short-lived, localized
+events resembling a scaled-down piece of this construction --- that remains a genuinely open
+empirical and theoretical question, not one this audit resolves. What they do establish is that
+\emph{this particular} construction is not a description of anything a real fluid does; it is a
+demonstration of what the continuum model, pushed to the exact edge of its own internal
+consistency, is mathematically capable of.
 
-The AI has not solved the physicist's problem. It has solved the mathematician's problem and, in
-doing so, illuminated the precise location of the gap between them.
+The more useful outcome of this exercise, in our view, is not the verdict but the map: a concrete
+list of where the physical assumptions break down, a set of research directions raised
+independently by the community that received this audit (\S\ref{sec:outlook}), a proposed
+--- and only partially built --- architecture for keeping future AI-generated proofs of physical
+PDEs honestly labeled as mathematical or physical results, and one explicitly speculative
+hypothesis for anyone who wants to push the dual-scale idea further than we have. The AI solved the
+mathematician's problem. Whether, and how, that result connects to the physicist's problem is still
+an open question, and, we think, a more interesting one.
 
 \begin{thebibliography}{99}
 \bibitem{Fefferman2000}
@@ -574,6 +828,21 @@ doing so, illuminated the precise location of the gap between them.
 \bibitem{OpenAI2026}
   OpenAI, ``Finite time blowup for Navier-Stokes and Euler equations,''
   Lean~4 Formalization, \texttt{github.com/openai/NavierStokesAndEuler}, 2026.
+\bibitem{OpenAIAnnouncement2026}
+  OpenAI, ``On the Navier--Stokes Millennium Prize Problem,'' September 8, 2026,
+  \url{https://openai.com/index/navier-stokes-solution/}.
+\bibitem{OpenAIEuler2026}
+  OpenAI, ``Finite time blowup for the Euler equation,''
+  preprint and Lean~4 formalization, \texttt{github.com/openai/NavierStokesAndEuler}, 2026.
+\bibitem{Callens2026v2}
+  X. Callens, ``Where the continuum ends: the OpenAI Navier--Stokes blow-up as a probe of model
+  validity, two-scale closure, and formalized physics,'' version~2, this repository
+  (\texttt{paper/where\_the\_continuum\_ends.tex}), September 2026.
+\bibitem{RedditFluidMech2026}
+  \texttt{r/FluidMechanics}, ``The fluid dynamics behind OpenAI's Navier-Stokes proof: Why the
+  fluid would vaporize before the singularity'' and follow-up discussion, thread by
+  \texttt{u/OrganizationTop9026}, September 2026,
+  \url{https://www.reddit.com/r/FluidMechanics/comments/1wekxy3/}.
 \bibitem{ESS2003}
   L. Escauriaza, G. Seregin, V. \v{S}ver\'{a}k,
   ``$L_{3,\infty}$-solutions of Navier-Stokes equations and backward uniqueness,''
@@ -627,36 +896,59 @@ doing so, illuminated the precise location of the gap between them.
   \emph{Nature Physics}\ \textbf{9}(4), 253--258, 2013.
 \bibitem{Schumacher2014}
   J. Schumacher, J.\,D. Scheel, D. Krasnov, D.\,A. Donzis, V. Yakhot, K.\,R. Sreenivasan,
-  ``Small-scale properties of extreme events in rapidly rotating turbulence,''
+  ``Small-scale universality in fluid turbulence,''
   \emph{Proc.\ Natl.\ Acad.\ Sci.\ USA}\ \textbf{111}(30), 10961--10965, 2014.
 \bibitem{Donzis2008}
   D.\,A. Donzis, P.\,K. Yeung, K.\,R. Sreenivasan,
-  ``Dissipation and enstrophy in accelerating frames of reference,''
-  \emph{J.\ Fluid Mech.}\ \textbf{613}, 31--41, 2008.
+  ``Dissipation and enstrophy in isotropic turbulence: resolution effects and scaling in direct
+  numerical simulations,'' \emph{Phys.\ Fluids}\ \textbf{20}, 045108, 2008.
 \bibitem{HouLuo2014}
-  T.\,Y. Hou, G. Luo,
-  ``Toward the finite-time blowup of the 3D axisymmetric Euler equations: a numerical study,''
+  G. Luo, T.\,Y. Hou,
+  ``Toward the finite-time blowup of the 3D axisymmetric Euler equations: a numerical investigation,''
   \emph{Multiscale Model.\ Simul.}\ \textbf{12}(4), 1722--1776, 2014.
+\bibitem{Elgindi2021}
+  T.\,M. Elgindi,
+  ``Finite-time singularity formation for $C^{1,\alpha}$ solutions to the incompressible Euler
+  equations on $\mathbb{R}^3$,'' \emph{Ann.\ of Math.}\ \textbf{194}(3), 647--727, 2021.
+\bibitem{ChenHou2022}
+  J. Chen, T.\,Y. Hou,
+  ``Stable nearly self-similar blowup of the 2D Boussinesq and 3D Euler equations with smooth
+  data,'' arXiv:2210.07191, 2022.
+\bibitem{Wang2025}
+  Y. Wang et al.,
+  ``Discovery of unstable singularities,'' arXiv:2509.14185, 2025.
+\bibitem{ABC2022}
+  D. Albritton, E. Bru\'e, M. Colombo,
+  ``Non-uniqueness of Leray solutions of the forced Navier--Stokes equations,''
+  \emph{Ann.\ of Math.}\ \textbf{196}(1), 415--455, 2022.
+\bibitem{FHT2001}
+  C. Foias, D.\,D. Holm, E.\,S. Titi,
+  ``The Navier--Stokes-alpha model of fluid turbulence,''
+  \emph{Physica D}\ \textbf{152--153}, 505--519, 2001.
+\bibitem{CHOT2005}
+  A. Cheskidov, D.\,D. Holm, E. Olson, E.\,S. Titi,
+  ``On a Leray-$\alpha$ model of turbulence,''
+  \emph{Proc.\ R.\ Soc.\ A}\ \textbf{461}, 629--649, 2005.
+\bibitem{Bandak2022}
+  D. Bandak, N. Goldenfeld, A.\,A. Mailybaev, G. Eyink,
+  ``Dissipation-range fluid turbulence and thermal noise,''
+  \emph{Phys.\ Rev.\ E}\ \textbf{105}, 065113, 2022.
+\bibitem{ZhengAngell1991}
+  Q. Zheng, D.\,J. Durben, G.\,H. Wolf, C.\,A. Angell,
+  ``Liquids at large negative pressures: water at the homogeneous nucleation limit,''
+  \emph{Science}\ \textbf{254}, 829--832, 1991.
+\bibitem{CaupinHerbert2006}
+  F. Caupin, E. Herbert,
+  ``Cavitation in water: a review,''
+  \emph{C.\ R.\ Physique}\ \textbf{7}, 1000--1017, 2006.
 \bibitem{BuckmasterVicol2019}
   T. Buckmaster, V. Vicol,
   ``Nonuniqueness of weak solutions to the Navier-Stokes equation,''
   \emph{Ann.\ of Math.}\ \textbf{189}(1), 101--144, 2019.
-\bibitem{Moffatt1969}
-  H.\,K. Moffatt,
-  ``The degree of knottedness of tangled vortex lines,''
-  \emph{J.\ Fluid Mech.}\ \textbf{35}(1), 117--129, 1969.
-\bibitem{ArnoldKhesin1998}
-  V.\,I. Arnold, B.\,A. Khesin,
-  \emph{Topological Methods in Hydrodynamics},
-  Applied Mathematical Sciences Vol.~125, Springer, 1998.
 \bibitem{BedroyaVafa2020}
   A. Bedroya, C. Vafa,
   ``Trans-Planckian censorship and the swampland,''
   \emph{J.\ High Energ.\ Phys.}\ \textbf{2020}(9), 123, 2020.
-\bibitem{LeanMaster2026}
-  X. Callens et al.,
-  ``The Lean 5 Scientific Agora Corpus: A Unified Epistemic Framework for Mathematical Physics,''
-  \url{https://github.com/xaviercallens/SocrateAI-Scientific-Agora-LeanMaster}, 2026.
 \end{thebibliography}
 
 \end{document}

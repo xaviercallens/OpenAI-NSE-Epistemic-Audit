@@ -10,12 +10,24 @@
 \maketitle
 
 \section{Introduction}
-As noted by \texttt{u/babainottawa}, while the singularity itself is physically unreachable, the \emph{journey} of the singularity contains valuable information. The extreme vortex stretching observed in the regime where $Ma < 0.3$ offers a unique mathematical testbed for turbulence models.
+As noted by \texttt{u/babainottawa}, while the singularity itself is physically unreachable, the \emph{journey} of the singularity contains valuable information. The extreme vortex stretching observed in the regime where the continuum model still applies offers a unique mathematical testbed for turbulence models.
 
-\section{Subgrid-Scale Stress and Singularity Trajectories}
-In Large Eddy Simulation (LES), the subgrid-scale (SGS) stress tensor $\tau_{ij}$ is often modeled using the Smagorinsky eddy viscosity model. By taking the exact mathematical trajectory of the OpenAI blowup construction, we can a priori test how standard SGS models respond to extreme energy cascades.
+\paragraph{Which part of the journey is usable.} Because the collapsing core keeps a radial Reynolds number of order one, its scales are diffusive, $\ell_r \simeq \sqrt{\nu t}$ and $u \simeq \sqrt{\nu/t}$ (up to factors $\tau^{\mp h}$, $h = 1/200$), and are essentially independent of the initial size of the vortex. In a liquid such as water the first constitutive limit is not compressibility but cavitation: the core pressure deficit $\sim\rho u^2$ reaches $p_\infty - p_v \approx 0.1$\,MPa at $u \approx 14$\,m/s, about $5$\,ns before blow-up, when $\ell_r \approx 70$\,nm. Compressibility ($\mathrm{Ma}=0.3$) follows three decades later, at $\approx 5$--$7$\,ps ($\ell_r \approx 3$\,nm); in air the corresponding window closes at $\approx 1.5$--$1.8$\,ns. The trajectory \emph{before} these times---from the initial vortex down to core radii of tens of nanometres in water, and to the Mach limit in gases---is smooth, resolved, and physically meaningful. That is the segment we propose as a benchmark.
 
-The oscillating wave packets constructed in the proof transfer energy to the core vortex in a highly structured, anisotropic manner. Analyzing this process provides a benchmark for dynamic models (like the Germano identity) under transient, non-equilibrium turbulence conditions.
+\section{An Exact Two-Scale Closure}
+The OpenAI construction splits the velocity into a mean collapsing vortex $u_B$ and oscillatory pulses $w$, confined to an annulus, whose averaged momentum flux $T = \langle w \otimes w \rangle$ is controlled explicitly:
+\begin{equation}
+    \partial_t u_B + (u_B\cdot\nabla)u_B - \nu\Delta u_B + \nabla p_B = -\nabla\cdot T + f_{\text{smooth}}.
+\end{equation}
+This is a Reynolds decomposition with an \emph{exact} closure: energy flows from the mean shear into the pulses, and the averaged pulse flux drives the mean vortex into self-similar collapse. Three concrete uses follow.
+
+\begin{enumerate}
+    \item \textbf{A priori test of subgrid-scale models.} Evaluate Smagorinsky, dynamic (Germano-identity), gradient/nonlinear, and backscatter-capable closures on $u_B$ and compare the modelled stress with $T$ in sign, anisotropy, and radial flux. Purely dissipative eddy-viscosity models cannot produce a stress whose work \emph{concentrates} the mean flow; how, and how badly, they fail can be measured rather than argued.
+    \item \textbf{Code verification near singular behaviour.} The method of manufactured solutions is the standard tool for verifying CFD codes (Roache 2002). Truncations of the construction at finite $\tau$ within the usable window are smooth manufactured solutions with a known, very steep but controlled multiscale structure---a hard test of resolution, aliasing, and time stepping in DNS and LES solvers.
+    \item \textbf{Mean-flow/fluctuation feedback in swirling flows.} The pulse amplification relies on centrifugal and axial-shear instability criteria (Leibovich--Stewartson, Billant--Gallaire). The construction shows how such instabilities, arranged coherently, feed stress back into a concentrating vortex. This is of independent interest for vortex breakdown and tornado-like flows, and holds at moderate, physically realizable concentration, far from the singular limit.
+\end{enumerate}
+
+The oscillating wave packets transfer energy to the core vortex in a highly structured, anisotropic manner; analysing this process provides a benchmark for dynamic models under transient, non-equilibrium conditions that no isotropic-turbulence dataset supplies.
 
 \section{Acknowledgments}
 We thank \texttt{u/babainottawa} for shifting the focus from the mathematical endpoint to the physical journey. \textit{Rendons \`a C\'esar ce qui appartient \`a C\'esar.}

@@ -1,27 +1,29 @@
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+import Mathlib.Topology.ContinuousMap.Basic
+
 /-!
 # Formal Lean 4 Proof: PhysLib-Grounded Thermodynamic Censorship of Navier-Stokes Singularities
 
 MechanicaFluidorum Program / SocrateAI Lab (September 2026)
 Formalized using the Lean Prover Community Physics Library (`physlib`) abstractions.
-Kernel-Verified with 0 `sorry` keywords.
+Kernel-Verified with 0 `sorry` keywords and 1 custom axiom
+(`physlib_admissible_non_vacuous`, see below).
 
 ## Abstract
 This module integrates `physlib` (leanprover-community/physlib) fluid-dynamic and thermodynamic structures
 (`VelocityField 3`, `MassDensity 3`, `ScalarField 3`, `ThermodynamicCauchyFlow 3`) with Mathlib measure theory
 to formalize the Thermodynamic Censorship Principle.
 
-We prove with 100% syntactic rigor (0 `sorry` keywords, 0 custom axioms):
+We prove with 100% syntactic rigor (0 `sorry` keywords, 1 custom axiom —
+`physlib_admissible_non_vacuous`, asserting the rest state is admissible):
 1. **`physlib_enstrophy_divergence_censored`**: Enstrophy-divergent flow cannot be a `PhysLibAdmissibleFluid`.
 2. **`physlib_mach_incompressibility_breached`**: Flow exceeding Mach 0.3 violates the physical continuum model.
 3. **`physlib_intensive_energy_shock_invalidated`**: Local kinetic energy density divergence violates isothermal state.
 4. **`physlib_master_censorship_theorem`**: The OpenAI manufactured singularity is formally rejected by physlib type checking.
 -/
-
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import Mathlib.Topology.ContinuousFunction.Basic
 
 open Set MeasureTheory Filter
 open scoped Topology ContDiff BigOperators ENNReal
@@ -52,7 +54,10 @@ def PhysLibSoundSpeedWater : ℝ := 1500
 /-- Mach number incompressibility threshold Ma ≤ 0.3. -/
 def PhysLibMachThreshold : ℝ := 0.3
 
-/-- Maximum thermodynamic enstrophy threshold Ω_max. -/
+/-- LEGACY PLACEHOLDER: this value has no derivation anywhere in the project, and a bound on
+    the global integrated enstrophy scales with fluid volume, so it expresses no material limit.
+    The physically motivated admissibility bound is local: |ω| ≤ c²/ν (≈ 2.2e12 s⁻¹ for water),
+    equivalent to Ma ≲ 1 together with Kn ≲ 1. Kept only so existing statements still elaborate. -/
 def PhysLibMaxEnstrophyWater : ℝ := 1.13e13
 
 /-- Pointwise speed ‖v(t,x)‖. -/

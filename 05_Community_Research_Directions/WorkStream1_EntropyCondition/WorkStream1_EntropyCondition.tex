@@ -12,15 +12,20 @@
 \section{Introduction}
 Following discussions on \texttt{r/FluidMechanics}, a consensus emerged: while the Lean 4 proof of finite-time blowup is syntactically flawless, it highlights the need for an augmented admissibility condition in 3D Navier-Stokes, analogous to the Lax entropy condition for the 1D inviscid Burgers equation. 
 
-\section{The Thermodynamic Admissibility Axiom}
-We propose that physical solutions to the 3D incompressible Navier-Stokes equations must be bounded by a global thermodynamic constraint. The total dissipation must not exceed physical material limits. Thus, we introduce the \emph{Bounded Enstrophy Condition}:
+\section{The Admissibility Condition as a Model-Validity Condition}
+The Lax entropy condition selects, among weak solutions of Burgers' equation, the one that is the vanishing-viscosity limit: it encodes neglected physics (viscosity). The analogue for incompressible Navier--Stokes is a condition expressing the physics the model neglects, namely compressibility and molecular discreteness. A vortex of velocity $U$ and size $L$ has vorticity $|\omega|\sim U/L$; the model is being used within its constitutive assumptions only while $U\lesssim c$ (Mach number below one) and $L\gtrsim\lambda\sim\nu/c$ (Knudsen number below one; $\lambda$ is the mean free path of a gas or the intermolecular spacing of a liquid, both of order $\nu/c$). Together these give a \emph{local} bound on vorticity:
 \begin{equation}
-    \sup_{t \in [0, T)} \int_{\mathbb{R}^3} |\nabla \times u(x,t)|^2 dx \le \Omega_{\max}
+    \sup_{t\in[0,T)}\;\|\omega(\cdot,t)\|_{L^\infty} \;\lesssim\; \frac{c^2}{\nu},
+    \qquad\text{equivalently}\qquad \varepsilon=\nu|\omega|^2\lesssim\frac{c^4}{\nu}.
+    \label{eq:admissible}
 \end{equation}
-For water at 300K, based on molecular mean free path and thermal dissociation limits, $\Omega_{\max} \approx 1.13 \times 10^{13} \text{ s}^{-2}$.
+For water at 300\,K, $c^2/\nu\approx2.2\times10^{12}\,\mathrm{s^{-1}}$; for air, $\approx7.5\times10^{9}\,\mathrm{s^{-1}}$. An earlier version of this work stream proposed instead a bound on the \emph{global} integrated enstrophy $\int|\omega|^2dx$ with a constant $\Omega_{\max}=1.13\times10^{13}\,\mathrm{s^{-2}}$; that constant had no derivation, and a global $L^2$ bound on vorticity scales with the volume of fluid considered, so it does not express a material limit. Condition~\eqref{eq:admissible} is the form we now propose.
+
+\section{Why Admissible Solutions Do Not Blow Up, and Where the OpenAI Solution Exits}
+If a smooth solution satisfies~\eqref{eq:admissible} on $[0,T)$, then $\int_0^T\|\omega(t)\|_{L^\infty}dt\le Tc^2/\nu<\infty$, and the Beale--Kato--Majda criterion, valid for Navier--Stokes as well as Euler, extends the solution smoothly past $T$. So ``admissible on $[0,T)$ implies no blow-up at $T$'' is a theorem whose only input is Definition~\eqref{eq:admissible} --- not a postulate that excludes blow-up by fiat. Conversely, any finite-time singularity must first leave the admissible set. For the OpenAI construction the core has $\ell_r\simeq\sqrt{\nu t}$ and $u\simeq\sqrt{\nu/t}$ (up to $\tau^{\mp h}$, $h<1/100$), so $|\omega|\simeq u/\ell_r\simeq 1/t$ reaches $c^2/\nu$ when $\ell_r$ reaches $\ell_*=\nu/c$, about $0.4$\,ps before the singularity in water (nanometre core), independently of the initial size of the vortex. The blow-up is thus a statement about the model continued past the scale $\ell_*$ where the fluid it describes would already be compressible, rarefied and heated by $\Delta T=u^2/c_p$.
 
 \section{Lean 4 Formalization}
-As shown in our accompanying \texttt{ThermodynamicAdmissibility.lean} file, enforcing this axiom trivially satisfies the Beale-Kato-Majda (BKM) regularity condition. If a solution $u$ is thermodynamically admissible, it cannot blow up. The mathematical singularity manufactured by the OpenAI system requires $\Omega(t) \to \infty$, thus leaving the set of physically admissible solutions prior to the singularity.
+The accompanying \texttt{ThermodynamicAdmissibility.lean} file encodes the earlier global-enstrophy version and does not currently prove its main theorem, \texttt{admissible\_no\_blowup}, which has \texttt{sorry} in place of a proof body. The honest formal target is the BKM-based statement of the previous section --- ``$\sup_t\|\omega\|_\infty\le c^2/\nu$ on $[0,T)$ implies regularity on $[0,T]$'' --- stated against OpenAI's own \texttt{CandidateProperties}; a genuine formalization requires the BKM theorem itself, which is not in Mathlib. This work stream should therefore be read as a proposed research direction with a well-defined formal target, not as a proven theorem.
 
 \section{Acknowledgments}
 We extend our deepest gratitude to \texttt{u/cowgod42} for articulating the connection to the Burgers entropy condition, which inspired this formalization. \textit{Rendons \`a C\'esar ce qui appartient \`a C\'esar.}

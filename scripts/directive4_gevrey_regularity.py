@@ -92,7 +92,8 @@ def run_audit(max_N=15):
     print(f"  Exact Analytical Theorem: exp(-1/q^k) has asymptotic Gevrey index s = 1 + 1/k.")
     print(f"  For k = 2 (exp(-1/q^2)): True Asymptotic Gevrey Index s = 1.5.")
     print(f"\n  Empirical finite-sample fit (N = 3..{max_N}): s_empirical ≈ {gevrey_s_emp:.4f}")
-    print(f"  [NOTE] The empirical value ~ 2.22 is a pre-asymptotic artifact of small N (N <= 15).")
+    print(f"  [NOTE] The empirical value ~ {gevrey_s_emp:.2f} is a pre-asymptotic artifact of small N (N <= 15),")
+    print(f"         not the true asymptotic index (computed just above from this same fit, not hardcoded).")
     print(f"  As N -> infinity, the growth rate approaches the theoretical value s = 1.5.")
 
     print(f"\n{'=' * 70}")

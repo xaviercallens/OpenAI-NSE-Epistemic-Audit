@@ -30,6 +30,15 @@ OpenAI Navier-Stokes and Euler formalization. By combining:
    vortex core contraction from below, eliminating point singularities.
 
 100% Kernel-Verified in Lean 4 with ZERO `sorry` axioms.
+
+## Reader Caution: Toy Structures, Not the Real Construction
+`ViscousFluidState`, `TurbulentCascadeState`, and the other structures defined
+below are bare `Nat`-valued record types (kinetic energy, enstrophy, helicity,
+viscosity, etc. are plain natural numbers with no analytic content). They are
+NOT connected to any real PDE, any actual solution of Navier-Stokes or Euler,
+or to OpenAI's real `VelocityField`/`CandidateProperties` types. The theorems
+in this file are elementary arithmetic facts about these toy Nat records; they
+should not be mistaken for statements about the real OpenAI construction.
 -/
 
 namespace LeanMaster.FluidDynamics

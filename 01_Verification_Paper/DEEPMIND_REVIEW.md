@@ -5,6 +5,10 @@
 **Program**: MechanicaFluidorum Program / SocrateAI Lab (September 2026)  
 **Verification Framework**: Dual-Framework (Topological Validity + Physical Censorship)
 
+> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+>
+> **This is a self-authored simulated review exercise, not an actual review conducted by DeepMind or any external institution.** It should not be cited as external validation.
+
 ---
 
 ## Technical Cross-Examination & Assessment
@@ -27,9 +31,9 @@ Here is a detailed cross-check of OpenAI's specific claims versus the findings o
 *   **OpenAI's Claim**: *"Because a real fluid cannot move infinitely fast, this would mark a breakdown in how the equations model the fluid."*
 *   **Physical Verification Analysis (Section 5)**: The Mach Number Self-Invalidation analysis proves that the incompressible PDE model invalidates itself **67 femtoseconds** ($\tau \approx 6.7 \times 10^{-14}\text{ s}$) prior to the mathematical singularity. At this point, local velocity exceeds Mach 0.3 ($450\text{ m/s}$ in water), breaching the incompressible regime and generating acoustic radiation and thermal shocks to which the incompressible PDEs are blind.
 
-### 4. Unforced Euler Initial Data: Sub-Planckian Coherent Fine-Tuning
+### 4. Unforced Euler Initial Data: Sub-Molecular Coherent Fine-Tuning (open question)
 *   **OpenAI's Method**: For unforced Euler equations, OpenAI constructs an initial condition $u_0 \in C^\infty$ as a superposition of vortex packets with spatial frequencies $\kappa_n \to \infty$.
-*   **Physical Verification Analysis (Section 7)**: Because $u_0 \in C^\infty$, the energy spectrum decays exponentially at high wavenumbers, meaning energy at sub-Planckian scales ($\ll 10^{-35}\text{ m}$) is mathematically infinitesimal ($\sim 10^{-100}\text{ J}$). However, the physical impossibility lies in **sub-Planckian fine-tuning**. The mathematical blow-up causally requires these $10^{-35}\text{ m}$ sub-atomic fluctuations to be perfectly phased and coherently aligned at $t=0$. In physical fluid mechanics, atomic discretization, Brownian motion, and thermal noise destroy sub-molecular coherence instantly, censoring the blow-up.
+*   **Physical Verification Analysis (Section 7)**: Because $u_0 \in C^\infty$, the energy spectrum decays exponentially at high wavenumbers, meaning energy at the relevant small scales is mathematically infinitesimal ($\sim 10^{-100}\text{ J}$). The physically interesting question is **sub-molecular fine-tuning**: the mathematical blow-up requires fluctuations at scales far below the molecular mean-free-path (~$10^{-10}$–$10^{-7}\text{ m}$) to be perfectly phased and coherently aligned at $t=0$. (Note: this is a molecular-scale, not a Planck-scale, question — the Planck length, $\sim 10^{-35}\text{ m}$, is a quantum-gravity scale unrelated to fluid discreteness and is not the relevant physical cutoff.) Whether atomic discretization, Brownian motion, and thermal noise destroy such sub-molecular coherence fast enough to preclude the construction is an open question (see `REVIEW_AND_NEW_DIRECTION.md` Q3), not a demonstrated result.
 
 ### 5. Gevrey Regularity & Pressure Communication Bypass
 *   **OpenAI's Method**: The solution relies on Gevrey-1.5 class cutoffs ($\sim \exp(-1/q^2)$) to satisfy $C^\infty$ smoothness.

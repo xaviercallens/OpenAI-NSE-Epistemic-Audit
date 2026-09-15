@@ -19,7 +19,13 @@ In the OpenAI Lean 4 proof, the constructed vector field $u(x,t)$ satisfies:
 \end{equation}
 Mathematically, this means the PDE is perfectly satisfied. However, in physics, the equation $\nabla \cdot u = 0$ is derived from the continuity equation $\partial_t \rho + \nabla \cdot (\rho u) = 0$ by assuming that density $\rho$ is strictly constant.
 
-This assumption is an asymptotic limit that only holds when the Mach number $Ma = |u|/c_s \ll 1$. When the fluid in the OpenAI singularity breaches $Ma = 0.3$ (at roughly $\tau = 67$ femtoseconds), physical density variations scale as $\Delta \rho / \rho \sim Ma^2 \sim 0.1$. 
+This assumption is an asymptotic limit that only holds when the Mach number $Ma = |u|/c_s \ll 1$. The precise statement uses the bulk modulus $K = \rho c_s^2$: a dynamic pressure change $\Delta p \sim \rho u^2$ produces a density change
+\begin{equation}
+    \frac{\Delta \rho}{\rho} = \frac{\Delta p}{K} \sim \frac{\rho u^2}{\rho c_s^2} = Ma^2 ,
+\end{equation}
+so ``constant density'' means $Ma^2 \ll 1$. When the fluid in the OpenAI singularity breaches $Ma = 0.3$ (at roughly $t \approx 6.7$ picoseconds before blow-up, i.e. physical time $t = T\tau$ with $T = \ell_0^2/\nu = 100$\,s for the $\ell_0=1$\,cm water example --- not the dimensionless $\tau$ read directly as seconds), physical density variations scale as $\Delta \rho / \rho \sim Ma^2 \sim 0.1$.
+
+This number is not an artefact of the $1$\,cm example: because the collapsing core keeps a radial Reynolds number of order one, $u \simeq \sqrt{\nu/t}$ up to a factor $(\ell_0^2/\nu t)^{h}$ with $h=1/200$, so the time at which $Ma = 0.3$ is reached, $t \simeq \nu/(0.3\,c_s)^2 \approx 5$\,ps, changes by less than $30\%$ over six decades of $\ell_0$.
 
 Therefore, while the \emph{vector field} remains mathematically divergence-free, the \emph{physical fluid} it is supposed to represent becomes compressible. The equation stops matching reality.
 

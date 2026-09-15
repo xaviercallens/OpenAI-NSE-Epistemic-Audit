@@ -39,7 +39,23 @@ class FluidProperties:
     vapor_pressure_300k: float      # P_v (Pa)
     boiling_point: float            # T_boil (K) at 1 atm
     critical_temperature: float     # T_crit (K)
-    max_physical_enstrophy: float   # Omega_max (s^-2)
+    max_physical_enstrophy: float   # LEGACY, UNJUSTIFIED (s^-2): no derivation exists;
+                                    # use max_local_vorticity instead.
+
+    @property
+    def max_local_vorticity(self) -> float:
+        """Physically motivated local vorticity bound |omega|_max = c_s^2 / nu (s^-1).
+
+        A vortex of speed U and size L has |omega| ~ U/L; the incompressible
+        continuum model requires U < c_s (Ma < 1) and L > lambda ~ nu/c_s
+        (Kn < 1), hence |omega| < c_s^2/nu. Water: ~2.2e12 s^-1; air: ~7.8e9 s^-1.
+        """
+        return self.speed_of_sound ** 2 / self.kinematic_viscosity
+
+    @property
+    def max_local_dissipation(self) -> float:
+        """Corresponding bound on dissipation per unit mass eps = nu*|omega|^2 < c_s^4/nu (W/kg)."""
+        return self.speed_of_sound ** 4 / self.kinematic_viscosity
 
     @property
     def dynamic_viscosity(self) -> float:
@@ -66,7 +82,8 @@ WATER_300K = FluidProperties(
     vapor_pressure_300k=3536.0,
     boiling_point=373.15,
     critical_temperature=647.0,
-    max_physical_enstrophy=1.13e13    # Thermodynamic molecular ceiling
+    max_physical_enstrophy=1.13e13    # UNJUSTIFIED legacy constant -- no derivation exists;
+                                      # use max_local_vorticity = c_s^2/nu instead
 )
 
 AIR_300K = FluidProperties(
@@ -153,7 +170,8 @@ def as_dict() -> Dict[str, Any]:
                 "rho": v.density,
                 "c_p": v.isobaric_heat_capacity,
                 "mean_free_path": v.mean_free_path,
-                "max_enstrophy": v.max_physical_enstrophy
+                "max_enstrophy_legacy_unjustified": v.max_physical_enstrophy,
+                "max_local_vorticity": v.max_local_vorticity
             }
             for k, v in FLUID_PRESETS.items()
         }

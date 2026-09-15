@@ -8,7 +8,7 @@
 
 ## 📌 1. Executive Overview
 
-In September 2026, OpenAI deployed a multi-agent system of 10,000 reinforcement learning agents to formalize a proof of finite-time blowup for the forced 3D Navier-Stokes and Euler equations in **Lean 4**.
+In September 2026, OpenAI deployed a multi-agent system of a reported ~10,000 reinforcement learning agents (figure not confirmed in OpenAI's own technical writeup) to formalize a proof of finite-time blowup for the forced 3D Navier-Stokes and Euler equations in **Lean 4**.
 
 The official Lean 4 codebase ([`openai/NavierStokesAndEuler`](https://github.com/openai/NavierStokesAndEuler)) **compiles cleanly** with zero syntax errors. However, because Lean 4 checks only pure logical consistency within abstract function spaces ($H^s$), the formalization operates without physical domain boundaries.
 
@@ -62,16 +62,16 @@ $$v_{\text{local}} = 0.3 \times 1500 \text{ m/s} = 450 \text{ m/s}$$
 At this point, compressibility effects take over:
 1. Acoustic compression waves are generated.
 2. Kinetic energy radiates outward as sound waves.
-3. The collapsing core loses energy, **arresting the singularity**.
+3. *Open question, not an established mechanism:* whether the collapsing core loses enough energy this way to arrest the singularity is one of v2's open "cutoff law" questions (see `REVIEW_AND_NEW_DIRECTION.md`) — it has not been demonstrated.
 
-### B. Thermodynamic Censorship & Second Law of Thermodynamics
+### B. Thermodynamic Consistency — constitutive assumptions, not a Second Law violation
 Viscous fluid motion dissipates energy into heat at rate $\epsilon = \nu |\nabla \times u|^2$.
 For the OpenAI core, local temperature rise scales as:
 $$\Delta T(t) \sim \tau^{-1.010} \to \infty$$
-In reality, as $\Delta T$ rises:
+Inside the idealized mathematical model, energy balance and dissipation $\ge 0$ continue to hold — no law of thermodynamics is violated by the construction itself; what fails is the model's constitutive/isothermal assumptions. In a real fluid, as $\Delta T$ rises:
 - Viscosity $\nu(T)$ changes dynamically.
 - Thermal expansion forces the fluid to expand, lowering local vorticity density.
-- Background Brownian thermal fluctuations shatter the hyper-delicate phase alignment required for blowup.
+- *Open question, not an established fact:* whether background Brownian thermal fluctuations shatter the hyper-delicate phase alignment required for blowup fast enough to preclude it is v2's open "thermal noise survival" question (see `REVIEW_AND_NEW_DIRECTION.md` Q3), not a demonstrated result.
 
 ---
 

@@ -37,6 +37,14 @@ class OpenAIPhysicsVerifier:
 
         is_mach_valid = mach_number <= self.mach_limit
         is_knudsen_valid = knudsen_number <= self.knudsen_limit
+        # NOTE: since `enstrophy` is (structurally) always >= 0, this gate is
+        # currently always True and never rejects a candidate -- it checks
+        # non-negativity, not an actual thermodynamic bound. A non-trivial
+        # version would need a genuine upper bound (e.g. the "uniform bounded
+        # enstrophy" hypothesis discussed in
+        # 01_Verification_Paper/OpenAI_NSE_Verification.tex Sec. 10.4, which
+        # is itself explicitly labeled as an open, unproven hypothesis there,
+        # not something this checker can currently enforce).
         is_entropy_valid = entropy_production >= 0.0
 
         is_physically_admissible = is_mach_valid and is_knudsen_valid and is_entropy_valid

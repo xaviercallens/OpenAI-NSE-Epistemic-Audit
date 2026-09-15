@@ -88,9 +88,15 @@ def run_thermal_audit():
     print(f"  {'X_R':>8s}  {'κ(B)':>12s}  {'Stress Error (Non-Dim)':>24s}  {'Fidelity':>16s}")
     print(f"  {'-'*8}  {'-'*12}  {'-'*24}  {'-'*16}")
 
+    # Seeded for reproducibility -- an unseeded RNG here previously made the
+    # printed "STABLE"/"FAIL" rows (and the hardcoded summary conclusion below,
+    # which used to ignore them) a coin flip across runs of identical code.
+    rng = np.random.default_rng(20260915)
+
     lam = 0.1
     X_R_values = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000]
     b_target = np.array([1.0, 0.5, 0.2, 0.8, 0.3])
+    all_stable = True
 
     for X_R in X_R_values:
         B = construct_moment_system(lam, X_R)
@@ -103,13 +109,15 @@ def run_thermal_audit():
         n_trials = 200
         stress_errors = []
         for _ in range(n_trials):
-            delta_b = np.random.randn(5) * noise_scale * norm(b_target)
+            delta_b = rng.standard_normal(5) * noise_scale * norm(b_target)
             c_pert = solve(B, b_target + delta_b)
             stress_err = norm(B @ c_pert - b_target) / norm(b_target)
             stress_errors.append(stress_err)
-        
+
         med_stress = np.median(stress_errors)
-        fidelity = "[OK] Stable" if med_stress < 0.01 else "[FAIL] Unstable"
+        is_stable = med_stress < 0.01
+        all_stable &= is_stable
+        fidelity = "[OK] Stable" if is_stable else "[FAIL] Unstable"
         print(f"  {X_R:8.0f}  {kappa_B:12.2e}  {med_stress:24.4e}  {fidelity}")
 
     print(f"\n{'=' * 72}")
@@ -136,30 +144,46 @@ def run_thermal_audit():
         
         stress_errors_test = []
         for _ in range(100):
-            delta_b_test = np.random.randn(5) * noise_scale_test * norm(b_target)
+            delta_b_test = rng.standard_normal(5) * noise_scale_test * norm(b_target)
             c_pert_test = solve(B_fixed, b_target + delta_b_test)
             stress_err_test = norm(B_fixed @ c_pert_test - b_target) / norm(b_target)
             stress_errors_test.append(stress_err_test)
-        
+
         med_stress_test = np.median(stress_errors_test)
-        fidelity_test = "[OK] Stable" if med_stress_test < 0.01 else "[FAIL] Unstable"
+        is_stable_test = med_stress_test < 0.01
+        all_stable &= is_stable_test
+        fidelity_test = "[OK] Stable" if is_stable_test else "[FAIL] Unstable"
         print(f"  {env_name:20s}  {T_test:10.1f}  {delta_u_test:15.4e}  {med_stress_test:15.4e}  {fidelity_test}")
 
     print(f"\n{'=' * 72}")
     print(f"SUMMARY: STRUCTURAL STABILITY RE-EVALUATION")
     print(f"{'=' * 72}")
-    print(f"""
-  PEER-REVIEW VERIFICATION FINDINGS:
-  
+    if all_stable:
+        print(f"""
+  PEER-REVIEW VERIFICATION FINDINGS (all rows above were [OK] Stable this run):
+
   1. Under proper non-dimensionalization (A = D * B * D), the condition number
-     is kappa(B) ≈ 4.11e5 for all X_R.
-  
-  2. The non-dimensionalized moment-matching system remains STABLE under physical
-     thermal fluctuations across all known states of matter (from 1K up to 15 million K).
-  
+     is kappa(B) ~ 4.11e5 for all X_R.
+
+  2. The non-dimensionalized moment-matching system remained STABLE under the
+     physical thermal fluctuations tested above, across all sampled X_R values
+     and environments (from 1K up to 15 million K), for this run's seed.
+
   CONCLUSION: The claim that Jacobian instability causes thermal decoupling was a
-  numerical artifact. The moment-matching system is structurally stable under
-  all realistic temperatures, confirming that thermal noise cannot decouple it.
+  numerical artifact for the cases tested here. This is a Monte Carlo estimate
+  with n_trials=200/100 per row at a fixed seed, not an analytic guarantee --
+  rerun with a different seed or more trials before treating "STABLE" as final.
+""")
+    else:
+        print(f"""
+  PEER-REVIEW VERIFICATION FINDINGS: at least one row above was [FAIL] Unstable
+  this run -- see the tables above for which X_R value(s) or environment(s).
+
+  CONCLUSION NOT SUPPORTED: this run does NOT support an unqualified "the
+  moment-matching system is stable under all realistic temperatures" claim.
+  Inspect the failing row(s), consider whether n_trials is large enough for
+  the 0.01 threshold to be a reliable Monte Carlo estimate at that noise
+  scale, and rerun before drawing a conclusion.
 """)
 
 

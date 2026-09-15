@@ -61,3 +61,7 @@ skills/
 *social_media*
 *communication*
 .venv/
+
+# Claude Code session artifacts and local clone of the OpenAI repo
+.claude/
+01_Verification_Paper/NavierStokesAndEuler/

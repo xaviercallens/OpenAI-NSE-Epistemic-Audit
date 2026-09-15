@@ -9,6 +9,22 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 
 class TestLeanMasterEpistemicBridge(unittest.TestCase):
     """
+    CAVEAT (added on remediation review): despite this class's name and the
+    "theorems formalized in Lean 4" framing below, these tests do NOT import,
+    read, or invoke Lean, `lake`, or LeanMasterBridge.lean in any way -- they
+    reimplement elementary arithmetic inequalities in pure Python and check
+    each one against itself. Passing here says nothing about whether the
+    corresponding Lean file compiles, is `sorry`-free, or is connected to
+    OpenAI's real Navier-Stokes/Euler definitions (see the Lean review in
+    this project's remediation notes: LeanMasterBridge.lean's structures are
+    bare Nat-valued toy types with no such connection). The wider
+    "LeanMaster / NSE-P1 / TURB-P5 / TCC-P3" framing these names come from
+    has since been dropped from this project's main paper
+    (01_Verification_Paper/OpenAI_NSE_Verification.tex) as unverifiable; the
+    four inequalities below are being kept only as elementary math sanity
+    checks, not as tests of any Lean-verified or physically-established claim.
+
+    Original docstring, for reference:
     Unit tests for LeanMaster Epistemic Bridge theorems formalized in Lean 4:
     1. NSE-P1: Hydrodynamic Helicity & Energy Dissipation Bound (2 D E >= nu H^2)
     2. TURB-P5: Kolmogorov-41 Energy Cascade Cutoff (2 nu Omega >= epsilon)

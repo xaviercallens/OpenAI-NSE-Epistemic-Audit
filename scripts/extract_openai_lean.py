@@ -30,24 +30,36 @@ def run_cmd(cmd, cwd=None):
     return res.returncode, res.stdout.strip(), res.stderr.strip()
 
 def clone_or_update_repo():
+    """Returns (sha, degraded). `degraded=True` means this run did NOT audit
+    the real OpenAI repository -- either the clone failed and we fell back to
+    a 1-line stub, or we could not determine a real git SHA. Callers MUST
+    propagate `degraded` into the certificate rather than silently presenting
+    stub-file results as if they audited the real repo."""
     print(f"[*] Checking repository target at {TARGET_DIR}...")
+    degraded = False
     if not os.path.exists(TARGET_DIR):
         print(f"[*] Cloning {REPO_URL} into {TARGET_DIR}...")
         code, out, err = run_cmd(f"git clone {REPO_URL} \"{TARGET_DIR}\"")
         if code != 0:
             print(f"[!] Git clone failed: {err}")
-            print("[*] Creating local fallback structure for audit protocol testing...")
+            print("[!!!] DEGRADED RUN: could not fetch the real OpenAI repository.")
+            print("[!!!] Falling back to a 1-line placeholder file. Any audit results")
+            print("[!!!] from this run describe the placeholder, NOT OpenAI's actual")
+            print("[!!!] Lean formalization, and must not be reported as if they do.")
+            degraded = True
             os.makedirs(TARGET_DIR, exist_ok=True)
             with open(os.path.join(TARGET_DIR, "ProblemStatement.lean"), "w", encoding="utf-8") as f:
-                f.write("-- OpenAI Navier-Stokes Problem Statement Lean 4 module\n")
+                f.write("-- FALLBACK STUB: real OpenAI repo could not be cloned; this is not the real proof.\n")
     else:
         print(f"[*] Repository already exists at {TARGET_DIR}.")
-    
+
     code, sha, _ = run_cmd("git rev-parse HEAD", cwd=TARGET_DIR)
     if code != 0 or not sha:
-        sha = "eac3fff90286b5120489aa09141029198754402a" # Canonical reference SHA
-    print(f"[✓] Target Repository Git SHA: {sha}")
-    return sha
+        print("[!!!] DEGRADED RUN: could not determine a real git commit SHA for the target directory.")
+        sha = "UNKNOWN_SHA_DEGRADED_RUN"
+        degraded = True
+    print(f"[{'!' if degraded else '✓'}] Target Repository Git SHA: {sha}{'  (DEGRADED)' if degraded else ''}")
+    return sha, degraded
 
 def sha256_file(filepath):
     h = hashlib.sha256()
@@ -91,45 +103,76 @@ def extract_and_catalog_lean_files():
 
 def audit_lean_codebase(lean_catalog):
     print("[*] Executing Epistemic Audit AST Crawling & Verification Protocol...")
-    
+
     sorry_core_count = 0
     sorry_total_count = 0
     custom_axiom_count = 0
     opaque_count = 0
     contdiff_infty_found = False
     energy_bound_found = False
-    
+
+    # Anchored to actual Lean 4 declaration syntax (optional modifiers, then the
+    # keyword, then a name) so we don't match the word appearing in prose or in
+    # a doc comment that explicitly says e.g. "not an axiom". Lean 4 has no
+    # `constant` keyword (that was Lean 3) so it is intentionally NOT matched
+    # here -- matching it against English prose ("a physical constant") is
+    # exactly the false-positive pattern this rewrite removes.
+    axiom_decl_re = re.compile(r'^(private\s+|protected\s+|scoped\s+|noncomputable\s+)*axiom\s+\w')
+    opaque_decl_re = re.compile(r'^(private\s+|protected\s+|scoped\s+|noncomputable\s+)*opaque\s+\w')
+
     for rel_path, meta in lean_catalog.items():
         full_path = os.path.join(TARGET_DIR, rel_path.replace("/", os.sep))
         with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
             lines = content.splitlines()
-            
+
         is_core = meta["is_core_path"]
-        
+        in_block_comment = False
+
         for line in lines:
-            # Strip comments
-            clean_line = line.split("--")[0].strip()
+            # Track (non-nested) /- ... -/ block comments so prose inside them
+            # (e.g. "0 custom axioms", "no sorry used here") is never scanned
+            # as code. This is a simple single-level tracker: it does not
+            # handle nested block comments, which Lean permits but which are
+            # rare in practice; a line that both opens and closes a block
+            # comment is treated as fully commented.
+            raw = line
+            if in_block_comment:
+                if "-/" in raw:
+                    raw = raw.split("-/", 1)[1]
+                    in_block_comment = False
+                else:
+                    continue
+            if "/-" in raw:
+                before, _, after = raw.partition("/-")
+                if "-/" in after:
+                    raw = before + after.split("-/", 1)[1]
+                else:
+                    raw = before
+                    in_block_comment = True
+
+            # Strip line comments
+            clean_line = raw.split("--")[0].strip()
             if not clean_line:
                 continue
-                
+
             if re.search(r'\bsorry\b', clean_line) or re.search(r'\badmit\b', clean_line):
                 sorry_total_count += 1
                 if is_core:
                     sorry_core_count += 1
-                    
-            if re.search(r'\baxiom\b', clean_line) and not clean_line.startswith("/-"):
+
+            if axiom_decl_re.search(clean_line):
                 custom_axiom_count += 1
-                
-            if re.search(r'\bopaque\b', clean_line) or re.search(r'\bconstant\b', clean_line):
+
+            if opaque_decl_re.search(clean_line):
                 opaque_count += 1
-                
+
             if "ContDiff ℝ ⊤" in clean_line or "ContDiff ℝ ∞" in clean_line:
                 contdiff_infty_found = True
-                
+
             if "kineticEnergy" in clean_line or "finite_energy" in clean_line or "∫ x, ‖v x t‖ ^ 2" in clean_line:
                 energy_bound_found = True
-                
+
     verification_results = {
         "check_1_sorry_admit_core": {
             "expected": 0,
@@ -148,51 +191,83 @@ def audit_lean_codebase(lean_catalog):
         },
         "check_4_force_smoothness": {
             "expected": "ContDiff ℝ ⊤ (C^∞)",
-            "found": "ContDiff ℝ ⊤" if contdiff_infty_found else "Default smooth",
-            "status": "PASSED"
+            "found": "ContDiff ℝ ⊤ found in scanned source" if contdiff_infty_found else "NOT FOUND in scanned source",
+            "status": "PASSED" if contdiff_infty_found else "NOT_FOUND"
         },
         "check_5_energy_bound_uniform": {
-            "expected": "L^∞_t L^2_x (Uniform bounded)",
-            "found": "Bounded kinetic energy",
-            "status": "PASSED"
+            "expected": "A kinetic-energy / finite-energy identifier appears in the scanned source",
+            "found": "found" if energy_bound_found else "NOT FOUND in scanned source",
+            "status": "PASSED" if energy_bound_found else "NOT_FOUND"
         },
-        "check_6_gevrey_index": {
+        # ----------------------------------------------------------------
+        # checks 6-9 are NOT derived by scanning this run's cloned repository
+        # -- they are static reference figures carried over from this
+        # project's own physical-verification analysis
+        # (01_Verification_Paper/OpenAI_NSE_Verification.tex). They will
+        # print identically regardless of which repository/commit was
+        # cloned above. They are kept here for convenient cross-reference,
+        # NOT as live audit results, and must not be presented as if this
+        # script derived them from the Lean source it just scanned.
+        # ----------------------------------------------------------------
+        "check_6_gevrey_index_STATIC_REFERENCE": {
+            "source": "static_reference_not_derived_from_this_scan",
             "theoretical_asymptotic_s": 1.5,
             "empirical_preasymptotic_slope": 2.22,
-            "function_class": "Gevrey-1.5 (C^∞ \\ C^ω)",
-            "status": "VERIFIED"
+            "function_class": "Gevrey-1.5 (C^infty, not real-analytic)",
         },
-        "check_7_thermodynamic_divergence": {
+        "check_7_thermodynamic_scaling_STATIC_REFERENCE": {
+            "source": "static_reference_not_derived_from_this_scan",
             "local_energy_density_scaling": "tau^(-1.010)",
             "enstrophy_scaling": "tau^(-0.515)",
-            "thermal_state": "Plasma transition > 10^4 K",
-            "status": "PHYSICALLY_INVALIDATED"
+            "note": "Global L2 energy remains bounded; these are LOCAL/intensive quantities. See OpenAI_NSE_Verification.tex Table 1 for the corrected framing.",
         },
-        "check_8_mach_invalidation_timeline": {
-            "ma_0_3_breach_tau_seconds": 6.7e-14,
-            "femtoseconds_before_singularity": 67.0,
-            "status": "MODEL_SELF_INVALIDATED"
+        "check_8_mach_invalidation_timeline_STATIC_REFERENCE": {
+            "source": "static_reference_not_derived_from_this_scan",
+            "ma_0_3_breach_physical_seconds": 6.69e-12,
+            "picoseconds_before_singularity": 6.69,
+            "note": "Corrected value (physical time t = T*tau, T = l0^2/nu = 100s for water); see OpenAI_NSE_Verification.tex Table tab:mach. An earlier draft mislabeled the dimensionless tau value directly as seconds (100x too small).",
         },
-        "check_9_matrix_conditioning": {
-            "raw_unscaled_kappa_A": 1.78e28,
+        "check_9_matrix_conditioning_STATIC_REFERENCE": {
+            "source": "static_reference_not_derived_from_this_scan",
+            "raw_unscaled_kappa_A_at_XR_1000": 1.78e28,
             "nondimensional_kappa_B": 4.11e5,
-            "system_stability": "Well-conditioned under proper scaling",
-            "status": "NUMERICAL_ARTIFACT_RESOLVED"
+            "note": "The raw figure is a non-dimensionalization artifact, not physical fine-tuning; see OpenAI_NSE_Verification.tex Section 3.",
         }
     }
-    
+
     return verification_results
 
-def generate_audit_certificate(git_sha, lean_catalog, verification_results):
+def generate_audit_certificate(git_sha, degraded, lean_catalog, verification_results):
+    # Derive the headline verdict from the actual computed sub-checks instead
+    # of asserting it as a fixed string, so it cannot silently disagree with
+    # the checks printed right above it.
+    structural_checks = ["check_1_sorry_admit_core", "check_2_custom_axioms", "check_3_opaque_declarations"]
+    failed = [k for k in structural_checks if verification_results[k]["status"] != "PASSED"]
+    if degraded:
+        syntactic_soundness = "DEGRADED_RUN_DID_NOT_SCAN_REAL_REPOSITORY"
+    elif failed:
+        syntactic_soundness = "STRUCTURAL_CHECKS_FAILED: " + ", ".join(failed)
+    else:
+        syntactic_soundness = "ALL_STRUCTURAL_CHECKS_PASSED_0_SORRY_0_AXIOM_0_OPAQUE"
+
     cert_payload = {
-        "certificate_title": "OpenAI Navier-Stokes Epistemic Audit Certificate",
+        "certificate_title": "OpenAI Navier-Stokes Lean Source Structural-Check Certificate",
         "repository_url": REPO_URL,
         "git_commit_sha": git_sha,
+        "degraded_run": degraded,
         "audit_timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "formalization_verdict": {
-            "syntactic_soundness": "PRISTINE_100_PERCENT_ACCEPTED",
-            "physical_realizability": "THERMODYNAMICALLY_UNREALIZABLE",
-            "censorship_status": "PROVABLY_CENSORED_UNDER_BOUNDED_ENSTROPHY"
+            "syntactic_soundness": syntactic_soundness,
+            "note": (
+                "This certificate covers ONLY the structural checks in check_1-5 above, "
+                "which are actually derived from scanning the cloned repository's Lean "
+                "source. check_6-9 are static reference figures from this project's own "
+                "physical-verification paper (see each check's 'source' field) and are "
+                "NOT derived from this scan. Any physical-realizability or "
+                "'censorship' verdict is a separate, explicitly-labeled hypothesis "
+                "discussed in OpenAI_NSE_Verification.tex Sec. 10.4 -- not something "
+                "this script establishes -- and is intentionally not asserted here."
+            ),
         },
         "verification_protocol": verification_results,
         "extracted_sources_summary": {
@@ -215,17 +290,16 @@ def generate_audit_certificate(git_sha, lean_catalog, verification_results):
 
 def main():
     print("=========================================================================")
-    print(" OpenAI Navier-Stokes Formalization Extraction & Epistemic Audit")
+    print(" OpenAI Navier-Stokes Formalization Extraction & Structural-Check Audit")
     print("=========================================================================")
-    sha = clone_or_update_repo()
+    sha, degraded = clone_or_update_repo()
     catalog = extract_and_catalog_lean_files()
     verdict = audit_lean_codebase(catalog)
-    cert = generate_audit_certificate(sha, catalog, verdict)
+    cert = generate_audit_certificate(sha, degraded, catalog, verdict)
     print("\n--- AUDIT SUMMARY ---")
-    print(f"Git SHA         : {cert['git_commit_sha']}")
+    print(f"Git SHA         : {cert['git_commit_sha']}{'  (DEGRADED RUN)' if cert['degraded_run'] else ''}")
     print(f"Syntactic Proof : {cert['formalization_verdict']['syntactic_soundness']}")
-    print(f"Physical State  : {cert['formalization_verdict']['physical_realizability']}")
-    print(f"Censorship      : {cert['formalization_verdict']['censorship_status']}")
+    print("(See formalization_verdict.note in the JSON certificate for scope of this verdict.)")
     print("=========================================================================")
 
 if __name__ == "__main__":

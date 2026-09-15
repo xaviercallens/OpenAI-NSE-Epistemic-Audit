@@ -7,6 +7,8 @@
 
 ![Neuro-Symbolic AI](assets/neuro_symbolic_brain_1789311430590.jpg)
 
+> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+
 ### 🇫🇷 1. L'Héritage Français & Origine des Équations
 Les équations de Navier-Stokes décrivent le mouvement de tous les fluides (eau, air, gaz) :
 - 🇫🇷 **Claude-Louis Navier (1822)** : Illustre ingénieur français formé à l'*École Nationale des Ponts et Chaussées*, qui a introduit le premier les forces de frottement visqueux dans la dynamique des fluides.
@@ -22,8 +24,8 @@ Les équations de Navier-Stokes décrivent le mouvement de tous les fluides (eau
 
 ### ❓ 3. Le Problème du Prix du Millénaire & L'Annonce d'OpenAI
 - En 2000, le *Clay Mathematics Institute* a classé la régularité de Navier-Stokes parmi les 7 **Problèmes du Prix du Millénaire** (1 million $).
-- En septembre 2026, **OpenAI** a déployé 10 000 agents IA pour prouver dans Lean 4 qu'un fluide peut créer une "singularité" (une explosion d'énergie infinie $\vec{u} \to \infty$).
-- **Notre Audit Épistémique en Mots Simples** : La preuve d'OpenAI est valide en mathématiques pures (espaces de Sobolev), mais **physiquement impossible**. Dans la réalité, la compressibilité (Mach > 0.3), le bruit thermique et la viscosité agissent comme une **Censure Thermodynamique** empêchant toute énergie infinie.
+- En septembre 2026, **OpenAI** a déployé un nombre rapporté d'environ 10 000 agents IA (chiffre rapporté, non confirmé dans les publications techniques d'OpenAI elles-mêmes) pour prouver dans Lean 4 qu'un fluide peut créer une "singularité" (une vitesse infinie en un point, $\vec{u} \to \infty$, alors que l'énergie totale reste bornée).
+- **Notre Audit Épistémique en Mots Simples** : La preuve d'OpenAI est valide en mathématiques pures (espaces de Sobolev), mais elle repose sur des hypothèses de constitutivité/incompressibilité qui ne tiennent plus physiquement. Dans la réalité, la compressibilité (Mach > 0.3, seuil des effets de compressibilité — pas le seuil sonique, qui est Mach 1.0) joue un rôle ; le rôle exact du bruit thermique reste une question ouverte à l'étude (voir `REVIEW_AND_NEW_DIRECTION.md`), pas un fait établi. Les trois limites du modèle — compressibilité, raréfaction et échauffement visqueux ($\Delta T = u^2/c_p$, quelques centaines de kelvins au plus, pas un plasma) — apparaissent ensemble à une même échelle $\ell_* \approx \nu/c \approx 0{,}7$ nm dans l'eau, quelques picosecondes avant la singularité ; à pression ambiante, l'eau cavite même avant (vers 14 m/s, ~5 ns avant).
 
 ---
 
@@ -34,9 +36,9 @@ Les équations de Navier-Stokes décrivent le mouvement de tous les fluides (eau
   <img src="../dataset/animations/pre_singularity_vortex.gif" alt="Vortex Core Contraction" width="48%">
 </div>
 
-**🇺🇸** In abstract mathematics, energy concentrates infinitely (as seen in the vortex contraction animation). In physical reality, energy dissipates into chaos (turbulence).
-**🇫🇷** Dans les mathématiques abstraites, l'énergie se concentre à l'infini. Dans la réalité, l'énergie se dissipe dans le chaos (turbulence).
-**🇨🇳** 在抽象数学中，能量无限集中。在物理现实中，能量消散为混沌（湍流）。
+**🇺🇸** In abstract mathematics, the velocity and the energy *density* concentrate without bound while the total energy stays bounded (as seen in the vortex contraction animation). In physical reality, the continuum model stops applying at the molecular scale and energy dissipates into chaos (turbulence).
+**🇫🇷** Dans les mathématiques abstraites, la vitesse et la densité d'énergie se concentrent sans limite, l'énergie totale restant bornée. Dans la réalité, le modèle continu cesse de s'appliquer à l'échelle moléculaire et l'énergie se dissipe dans le chaos (turbulence).
+**🇨🇳** 在抽象数学中，速度和能量密度无限集中，而总能量保持有界。在物理现实中，连续介质模型在分子尺度失效，能量消散为混沌（湍流）。
 
 ---
 

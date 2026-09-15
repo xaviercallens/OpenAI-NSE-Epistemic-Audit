@@ -1,6 +1,14 @@
 /-
   Proof of Concept (PoC) for OpenAI: Physics-Informed Tactic in Lean 4
   MechanicaFluidorum Program · September 2026
+
+  ILLUSTRATIVE STUB — NOT A WORKING PHYSICAL CHECK.
+  This file sketches what a physical-admissibility tactic could look like; it
+  does not currently perform one. None of its predicates depend on their
+  inputs: `MachNumber` ignores `u`, `x`, `y`, `z`, `t` and always returns the
+  constant `1.0 / 343.0`; `SecondLawThermodynamics u` is defined as `True`
+  regardless of `u`; and the main theorem's conclusion is `∀ t > 0, True`,
+  proved by `trivial`. No physics is actually checked here.
 -/
 
 import Mathlib.Analysis.Calculus.Deriv.Basic

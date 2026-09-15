@@ -4,6 +4,8 @@
 
 *MechanicaFluidorum Program · SocrateAI Lab · September 2026*
 
+> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+
 ---
 
 ## 📌 1. Executive Summary
@@ -72,18 +74,18 @@ The fundamental reason why mathematical Navier-Stokes blow-ups cannot occur in r
 The incompressible Navier-Stokes equations assume constant density $\rho = \text{const}$. However, the local Mach number is defined as:
 $$\text{Ma}(x,t) = \frac{\|\vec{u}(x,t)\|}{c_s}$$
 where $c_s \approx 343 \text{ m/s}$ in air ($1500 \text{ m/s}$ in water). 
-When $\text{Ma} > 0.3$, density variations exceed 5%, and the fluid transitions to the **compressible Navier-Stokes regime**. Acoustic compression waves radiate kinetic energy away from the vortex core, preventing velocity from approaching infinity.
+When $\text{Ma} > 0.3$, density variations exceed 5%, and the fluid transitions to the **compressible Navier-Stokes regime** — note this is the *onset of compressibility effects*, not the sonic threshold itself (that is $\text{Ma} = 1.0$, reached later). *Open question, not an established mechanism:* whether acoustic compression waves radiating kinetic energy away from the vortex core are sufficient to arrest the divergence and prevent velocity from approaching infinity is one of the open "cutoff law" questions identified in `REVIEW_AND_NEW_DIRECTION.md` — it has not been demonstrated.
 
 ### B. The Knudsen Continuum Limit ($\text{Kn} \le 0.1$)
 The Navier-Stokes equations treat fluids as a continuous medium. The Knudsen number is defined as:
 $$\text{Kn} = \frac{\lambda}{\ell_{\text{characteristic}}}$$
 where $\lambda \approx 1 \text{ nm}$ is the molecular mean free path. 
-When a mathematical vortex contracts below $10^{-9} \text{ m}$, $\text{Kn} \gg 0.1$, and the continuum hypothesis breaks down. The fluid resolves into individual gas/liquid molecules exhibiting Brownian motion, which shatters the hyper-delicate phase alignment needed for blowup.
+When a mathematical vortex contracts below $10^{-9} \text{ m}$, $\text{Kn} \gg 0.1$, and the continuum hypothesis breaks down. The fluid resolves into individual gas/liquid molecules exhibiting Brownian motion. *Open question, not an established fact:* whether this thermal/molecular noise destroys the hyper-delicate phase alignment needed for blowup fast enough to preclude it is v2's open "thermal noise survival" question (see `REVIEW_AND_NEW_DIRECTION.md` Q3), not a demonstrated result.
 
-### C. Second Law of Thermodynamics (Entropy Production)
+### C. Thermodynamic Consistency (Entropy Production) — constitutive assumptions, not a Second Law violation
 Local entropy production rate $\dot{S}_{\text{local}}$ is proportional to viscous dissipation:
 $$\dot{S}_{\text{local}} = \frac{2 \mu}{T} \sum_{i,j} \left( S_{ij} \right)^2 \ge 0$$
-An unconstrained mathematical blowup requires local enstrophy density to diverge to infinity ($\Omega \to \infty$) without thermal feedback. This violates local isothermal conditions, causing thermal expansion that diffuses vortex energy.
+Inside the idealized mathematical model, energy balance and dissipation $\ge 0$ continue to hold — no law of thermodynamics is violated by the construction itself. What breaks down is the model's constitutive and isothermal/incompressibility assumptions: an unconstrained mathematical blowup drives local enstrophy density to diverge ($\Omega \to \infty$) without the thermal feedback a real fluid would exhibit, which is physically inconsistent with those assumptions, not with the Second Law per se (see `REVIEW_AND_NEW_DIRECTION.md`).
 
 ---
 

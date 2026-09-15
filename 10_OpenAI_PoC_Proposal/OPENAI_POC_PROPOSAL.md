@@ -11,7 +11,7 @@
 
 OpenAI's formalization of the 3D Navier-Stokes and Euler equations in Lean 4 demonstrated the extraordinary power of multi-agent reinforcement learning in navigating complex combinatorial proof spaces. 
 
-However, the mathematical blow-up formalization achieved by OpenAI operated in unconstrained abstract Sobolev spaces ($H^s$), where velocity fields can exceed the speed of sound ($Ma > 0.3$) and violate the Second Law of Thermodynamics. While syntactically flawless in pure logic, the resulting counterexample lacks physical admissibility.
+However, the mathematical blow-up formalization achieved by OpenAI operated in unconstrained abstract Sobolev spaces ($H^s$), where velocity fields pass $Ma > 0.3$ (the onset of compressibility effects, not the sonic threshold itself, which is $Ma = 1.0$) and where the underlying constitutive/incompressibility assumptions break down physically — not, as earlier drafts put it, a violation of the Second Law of Thermodynamics itself (energy balance and dissipation $\ge 0$ continue to hold inside the idealized model; see `REVIEW_AND_NEW_DIRECTION.md`). While syntactically flawless in pure logic, the resulting counterexample lacks physical admissibility.
 
 We propose a **Proof of Concept (PoC)** to upgrade OpenAI's theorem proving pipeline: **Physics-Informed Formal Proof Search (PI-FPS)**.
 
@@ -24,7 +24,7 @@ By embedding physical domain guardrails (`physlib`) directly into Lean 4 tactic 
 ```
 +-----------------------------------------------------------------------------------+
 |                        OPENAI MULTI-AGENT PROOF SEARCH                            |
-|                     (10,000 RL Agents generating Lean 4 tactics)                 |
+|              (reported ~10,000 RL Agents generating Lean 4 tactics*)             |
 +-----------------------------------------------------------------------------------+
                                           |
                                           v
@@ -37,11 +37,13 @@ By embedding physical domain guardrails (`physlib`) directly into Lean 4 tactic 
                    |                                             |
                    v                                             v
         [Violates Physical Bounds]                     [Physically Admissible]
-       (Ma > 0.3, dS/dt < 0, Kn > 0.1)                (Entropy Production >= 0)
+   (Ma > 0.3, constitutive assumptions              (Entropy Production >= 0,
+    break down, Kn > 0.1)                            model stays thermodynamically consistent)
                    |                                             |
                    v                                             v
        ❌ Reject / Penalize RL                         ✅ Kernel Verified & Certified
 ```
+\* Reported agent-count figure, not confirmed in OpenAI's own technical writeup.
 
 ---
 

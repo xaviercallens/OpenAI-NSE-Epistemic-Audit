@@ -1,3 +1,9 @@
+import Mathlib.Analysis.InnerProductSpace.Basic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+import Mathlib.Topology.ContinuousMap.Basic
+
 /-!
 # Formal Lean 4 Proof: Physical Invalidation & Thermodynamic Censorship of OpenAI NSE Blowup
 
@@ -16,12 +22,6 @@ We prove with 100% syntactic rigor (0 `sorry` axioms, 0 custom axioms):
 4. **Master Theorem (`openai_physical_invalidation_master`)**: The OpenAI manufactured singularity is formally censored and rejected by physical fluid admissibility.
 -/
 
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
-import Mathlib.Topology.ContinuousFunction.Basic
-
 open Set MeasureTheory Filter
 open scoped Topology ContDiff BigOperators ENNReal
 
@@ -39,7 +39,10 @@ def soundSpeedWater : ℝ := 1500
 /-- Incompressibility threshold for Mach number (Ma < 0.3). -/
 def machIncompressibilityThreshold : ℝ := 0.3
 
-/-- Maximum physical enstrophy threshold Ω_max (water at 300K: ~ 1.13e13 s⁻²). -/
+/-- LEGACY PLACEHOLDER (water at 300K, "~ 1.13e13 s⁻²"): this value has no derivation anywhere
+    in the project, and a global integrated-enstrophy bound scales with fluid volume, so it is not
+    a material limit. The physically motivated bound is local: |ω| ≤ c²/ν (≈ 2.2e12 s⁻¹ for
+    water), i.e. Ma ≲ 1 and Kn ≲ 1 together. Kept only so existing statements still elaborate. -/
 def maxPhysicalEnstrophyWater : ℝ := 1.13e13
 
 /-- Pointwise velocity norm ‖u(x,t)‖. -/

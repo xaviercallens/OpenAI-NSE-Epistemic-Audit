@@ -20,21 +20,51 @@
 
 \maketitle
 
+\begin{center}
+\fbox{\begin{minipage}{0.92\linewidth}
+\textbf{Superseded --- retained for the record.} This September~12 draft is superseded by
+\texttt{01\_Verification\_Paper/OpenAI\_NSE\_Verification.tex} (``A Physical Reading, Not a
+Physical Refutation'') and by \texttt{paper/where\_the\_continuum\_ends.tex} (Version~2), which
+should be cited instead. The specific corrections made there, and applied inline below where a
+sentence would otherwise be false, are:
+\begin{itemize}
+  \item \emph{``Plasma temperatures.''} Because the core keeps $\ell_r^2 = \nu t$, viscous heating over
+  the remaining time is $\Delta T = \varepsilon t/c_p = u^2/c_p$: about $50$\,K at $\mathrm{Ma}=0.3$ and
+  $540$\,K at $\mathrm{Ma}=1$ in water. Boiling is reached near $\mathrm{Ma}\approx0.37$; $10^4$\,K would
+  need $\mathrm{Ma}\approx4$, far outside the model. No plasma is implied.
+  \item \emph{The constant $\Omega_{\max}=1.13\times10^{13}\,\mathrm{s^{-2}}$} has no derivation. A
+  global integrated-enstrophy bound is also the wrong object (it scales with the fluid volume). The
+  physically motivated admissibility condition is local: $|\omega|\lesssim c^2/\nu$
+  ($2.2\times10^{12}\,\mathrm{s^{-1}}$ in water), equivalent to $\mathrm{Ma}\lesssim1$ and
+  $\mathrm{Kn}\lesssim1$ together; with it, ``admissible on $[0,T)\Rightarrow$ regular on $[0,T]$'' is
+  the Beale--Kato--Majda theorem, not an axiom (\S\ref{sec:principle}).
+  \item \emph{``The physics is vacuous'' / ``censorship.''} Withdrawn. The result is a statement about
+  the continuum model; the physical content is a map of \emph{where} the model's constitutive
+  assumptions end, namely at the single scale $\ell_*=\nu/c$ (water: $0.7$\,nm).
+  \item \emph{``Lemma~8.7.''} The five-moment matching is Proposition~B.8 / Eqs.~(5.10)--(5.11) of the
+  OpenAI paper; Lemma~8.7 is a different lemma.
+  \item \emph{Timeline.} With $\ell_r\simeq\sqrt{\nu t}$ and $u\simeq\sqrt{\nu/t}$, the breakdown
+  times are essentially independent of the reference length $\ell_0$ (which enters only as
+  $(\ell_0^2/\nu t)^{h}\approx1.3$); the ``6.7\,ps'' figure is $4.9$\,ps in unit-free form.
+\end{itemize}
+\end{minipage}}
+\end{center}
+
 \begin{abstract}
 In September 2026, an OpenAI multi-agent system produced a Lean 4 formalized proof of finite-time blow-up for the forced 3D incompressible Navier-Stokes equations, establishing Alternatives C and D of the Clay Millennium Prize Problem. We independently verify the logical soundness of this formalization: zero \texttt{sorry} axioms, zero custom axioms, correct $C^\infty$ force type, correct uniform $L^2$ energy bound. The Lean 4 kernel accepts the proof, and the mathematics is irrefutable.
 
-However, we demonstrate through computational analysis that the constructed singularity is thermodynamically unrealizable. Three independent lines of evidence: (i) intensive local kinetic energy density diverges as $\tau^{-1.010}$ and global enstrophy diverges as $\tau^{-0.515}$, generating temperatures past the plasma threshold, violating Boussinesq incompressibility; (ii) the Mach number exceeds 0.3 at $\tau \sim 6.7 \times 10^{-14}$ seconds before singularity (67 femtoseconds), at which point NSE cease to describe the physical system; (iii) non-dimensionalization analysis reveals the moment-matching system is well-conditioned ($\kappa(B) \approx 4.11 \times 10^5$), confirming the raw $10^{28}$ condition number in prior literature was an unscaled numerical artifact, while the velocity profile itself relies on non-analytic Gevrey cutoffs ($s=1.5$).
+We then ask how far the constructed singularity travels outside the model's domain of validity. Three lines of evidence: (i) intensive local kinetic energy density diverges as $\tau^{-1.010}$ and integrated enstrophy as $\tau^{-0.515}$; the corresponding viscous heating is $\Delta T = u^2/c_p$, which passes the boiling point of water near $\mathrm{Ma}\approx0.37$ (not, as an earlier version of this abstract said, a plasma threshold); (ii) the Mach number exceeds 0.3 at physical time $t = T\tau \sim 6.7 \times 10^{-12}$ seconds before singularity ($\approx 6.7$ picoseconds for $\ell_0=1$\,cm, $T=\ell_0^2/\nu=100$\,s; $4.9$\,ps in the unit-free form $t\simeq\nu/(\mathrm{Ma}\,c)^2$), at which point NSE cease to describe the physical system; (iii) non-dimensionalization analysis reveals the moment-matching system is well-conditioned ($\kappa(B) \approx 4.11 \times 10^5$), confirming the raw $10^{28}$ condition number in prior literature was an unscaled numerical artifact, while the velocity profile itself relies on non-analytic Gevrey cutoffs ($s=1.5$).
 
-We formalize a Thermodynamic Censorship principle: physically admissible solutions must satisfy uniform bounded enstrophy. Under this axiom, Gevrey-class collapsing-vortex singularities are provably censored.
+We state a physical admissibility condition in local form, $|\omega|\lesssim c^2/\nu$, and note that under it the absence of blow-up is a consequence of the Beale--Kato--Majda criterion rather than a postulate.
 \end{abstract}
 
 \section{Introduction}
 
 The three-dimensional incompressible Navier-Stokes equations (NSE) have stood as a cornerstone of fluid mechanics for nearly two centuries \cite{Leray1934}. In 2000, Charles Fefferman formalized the Millennium Prize problem, asking whether solutions to the unforced or forced NSE either exist globally in time and remain smooth, or whether they can develop finite-time singularities (blow-ups) \cite{Fefferman2000}.
 
-In September 2026, an OpenAI multi-agent system claimed a formalized proof in Lean 4 establishing a finite-time blow-up for the forced 3D incompressible NSE. This result formally resolves Alternatives C and D of the Millennium Prize problem. Our Physical Verification separates the mathematical validity of the proof from its physical significance. While the mathematics is robust, our analysis reveals that the constructed blow-up requires unphysical thermodynamic and kinematic extremes. This prompts a fundamental distinction between the mathematical and physical validity of NSE solutions. We introduce the concept of Thermodynamic Censorship, demonstrating that the AI-generated singularity violates fundamental physical limits prior to the blow-up time. 
+In September 2026, an OpenAI multi-agent system claimed a formalized proof in Lean 4 establishing a finite-time blow-up for the forced 3D incompressible NSE. This result formally resolves Alternatives C and D of the Millennium Prize problem. Our Physical Verification separates the mathematical validity of the proof from its physical significance. While the mathematics is robust, our analysis shows that the constructed blow-up leaves the regime in which the incompressible continuum model describes a fluid, and it identifies the scale at which this happens. This prompts a distinction between the mathematical and physical validity of NSE solutions. We state a physical admissibility condition (\S\ref{sec:principle}) and locate where the AI-generated singularity exits it prior to the blow-up time.
 
-The paper is structured as follows. Section 2 details the formal verification of the OpenAI Lean 4 proof. Section 3 analyzes the paradoxical energy density divergence. Section 4 explores the breakdown of the incompressibility assumption via Mach number self-invalidation. Section 5 discusses the non-dimensionalization of the moment-matching system. Section 6 introduces the Thermodynamic Censorship Principle. Section 7 discusses the broader implications, and Section 8 concludes.
+The paper is structured as follows. Section 2 details the formal verification of the OpenAI Lean 4 proof. Section 3 analyzes the paradoxical energy density divergence. Section 4 explores the breakdown of the incompressibility assumption via Mach number self-invalidation. Section 5 discusses the non-dimensionalization of the moment-matching system. Section 6 states the physical admissibility condition. Section 7 discusses the broader implications, and Section 8 concludes.
 
 \section{Formal Verification of the OpenAI Lean 4 Proof}
 
@@ -87,8 +117,12 @@ $H^{3/2}$ Sobolev Norm $\|u\|_{H^{3/2}}$ & $-0.5075$ \\
 \end{tabular}
 \end{table}
 
-\subsection{Thermal Violation}
-The extreme local dissipation generated by the diverging enstrophy violates the isothermal assumption of the NSE. The local temperature rise scales as $\Delta T \sim \tau^{-1.010} \to \infty$. Long before the mathematical blow-up, the fluid reaches plasma temperatures, wholly invalidating the Boussinesq approximation and incompressibility.
+\subsection{Viscous Heating and the Isothermal Assumption}
+The local dissipation generated by the diverging vorticity conflicts with the isothermal assumption of the NSE. Because the core keeps a radial Reynolds number of order one, $\ell_r^2 = \nu t$ where $t$ is the physical time remaining, so the dissipation per unit mass $\varepsilon = \nu(u/\ell_r)^2$ acting over that time gives
+\begin{equation}
+  \Delta T \;=\; \frac{\varepsilon\, t}{c_p} \;=\; \frac{u^2}{c_p} \;\sim\; \tau^{-1.010},
+\end{equation}
+i.e.\ an Eckert number of order one. For water this is $\approx 48$\,K at $\mathrm{Ma}=0.3$ and $\approx 540$\,K at $\mathrm{Ma}=1$; boiling ($\Delta T = 73$\,K) is reached at $u \approx 553$\,m/s, $\mathrm{Ma}\approx0.37$, about $3$--$4.5$\,ps before the singularity. The formal divergence $\Delta T\to\infty$ is a property of the model continued past its validity; physically it says only that heating becomes an order-one effect at the same scale as compressibility. It does \emph{not} imply plasma temperatures: $10^4$\,K would require $\mathrm{Ma}\approx4$, where the incompressible description has long ceased to apply. The estimate assumes the heat stays in the core over the collapse time, which holds when the Prandtl number is of order one or larger (water, $\mathrm{Pr}\approx7$); for gases ($\mathrm{Pr}\approx0.7$) it is an upper estimate.
 
 \section{Mach Number Self-Invalidation}
 
@@ -100,26 +134,28 @@ Consider water at 300K: speed of sound $c_s = 1500$ m/s, kinematic viscosity $\n
 \subsection{Mach Number Trajectory}
 The peak velocity diverges as $|u|_{max} \sim \tau^{-0.5050}$. 
 
+The self-similar collapse profile is parameterized by a dimensionless time-to-singularity $\tau$; the physical elapsed time is $t = T\tau$ with $T \equiv \ell_0^2/\nu = 100$\,s for the water example ($\ell_0 = 1$\,cm), \emph{not} $\tau$ read directly in seconds. The table below reports $t$.
+
 \begin{table}[h]
 \centering
-\caption{Physical invalidation timeline prior to singularity}
+\caption{Physical invalidation timeline prior to singularity (time column corrected to physical seconds $t=T\tau$, $T=100$\,s)}
 \begin{tabular}{@{}lll@{}}
 \toprule
-Time to singularity $\tau$ (s) & Mach Number $Ma$ & Physical State \\
+Time to singularity $t=T\tau$ (s) & Mach Number $Ma$ & Physical State \\
 \midrule
-$1.0 \times 10^{-3}$ & $10^{-10}$ & Valid incompressible fluid \\
-$6.7 \times 10^{-14}$ & $0.3$ & Compressibility onset (Invalidation) \\
-$6.2 \times 10^{-15}$ & $1.0$ & Supersonic flow \\
-$9.0 \times 10^{-16}$ & $\sim 10$ & Continuum breakdown (Knudsen $\sim 1$) \\
+$1.0 \times 10^{-1}$ & $10^{-10}$ & Valid incompressible fluid \\
+$6.7 \times 10^{-12}$ & $0.3$ & Compressibility onset (Invalidation) \\
+$6.2 \times 10^{-13}$ & $1.0$ & Supersonic flow \\
+$9.0 \times 10^{-14}$ & $\sim 10$ & Continuum breakdown (Knudsen $\sim 1$) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-At $\tau = 6.7 \times 10^{-14}$ s, $Ma$ exceeds 0.3. The mathematical model ceases to describe the physical fluid at this exact moment.
+At $t = 6.7 \times 10^{-12}$ s, $Ma$ exceeds 0.3. The mathematical model ceases to describe the physical fluid at this exact moment.
 
 \section{Matrix Scaling \& Non-Dimensionalization of the Moment System}
 
-To ensure the Gevrey profile satisfies the NSE, the AI enforces a 5-moment matching condition on the radial profile, codified in a Jacobian matrix $A$ (Appendix B.8 of the AI proof).
+To ensure the Gevrey profile satisfies the NSE, the AI enforces a 5-moment matching condition on the radial profile, a $5\times5$ linear system in the five unknown coefficients (Proposition~B.8 and Eqs.~(5.10)--(5.11) of the OpenAI paper; an earlier version of this paper cited ``Lemma~8.7'', which is a different lemma).
 
 \subsection{Non-Dimensionalization Analysis}
 Let $X_R$ be the truncation radius. A raw SVD of $A$ yields a condition number $\kappa(A) \sim X_R^{7.75}$ reaching $10^{28}$ at $X_R = 1000$. However, matrix factorization $A = D B D$ with diagonal scaling $D = \text{diag}(1, X_R^2, X_R^4)$ isolates the physical dimensional powers.
@@ -142,19 +178,27 @@ Truncation Radius $X_R$ & Raw $\kappa(A)$ & Non-Dimensionalized $\kappa(B)$ \\
 \subsection{Structural Stability}
 Preconditioning with $D^{-1}$ yields a non-dimensionalized condition number $\kappa(B) \approx 4.11 \times 10^5$ that is uniform and bounded for all $X_R$. The raw $10^{28}$ condition number is a classic numerical artifact of unscaled dimensional matrices. Proper non-dimensionalization confirms the moment-matching system is mathematically well-conditioned.
 
-\section{Thermodynamic Censorship Principle}
+\section{A Physical Admissibility Condition}
+\label{sec:principle}
 
-To bridge the gap between mathematics and physics, we propose the Thermodynamic Censorship Principle.
+To bridge the gap between mathematics and physics, we state the condition under which the incompressible continuum model is being used within its domain of validity.
 
-\begin{axiom}[Uniform Bounded Enstrophy]
-A physically admissible solution to the Navier-Stokes equations must satisfy $\sup_t \int |\nabla \times u|^2 dx \leq \Omega_{max}$, where $\Omega_{max}$ is a material-dependent thermodynamic constant.
-\end{axiom}
+\begin{definition}[Local admissibility]
+A solution of the Navier-Stokes equations is \emph{physically admissible} on $[0,T)$ if its vorticity satisfies
+\begin{equation}
+  \sup_{t<T}\;\|\omega(\cdot,t)\|_{L^\infty} \;\lesssim\; \frac{c^2}{\nu},
+\end{equation}
+where $c$ is the sound speed and $\nu$ the kinematic viscosity of the fluid being modelled.
+\end{definition}
 
 \subsection{Physical Motivation}
-The enstrophy bounds the total viscous dissipation rate. Exceeding $\Omega_{max}$ implies a local temperature rise sufficient to cause phase transition or significant compressibility, breaking the NSE derivation. For water at 300K, we estimate $\Omega_{max} \sim 1.13 \times 10^{13}$ s$^{-2}$.
+A vortex of velocity $U$ and size $L$ has $|\omega|\sim U/L$. Compressibility requires $U\lesssim c$ and the continuum hypothesis requires $L\gtrsim\lambda\sim\nu/c$ (the mean free path in a gas, the intermolecular spacing in a liquid, both of order $\nu/c$). Hence $|\omega|\lesssim c^2/\nu$ is the vorticity form of ``$\mathrm{Ma}\lesssim1$ and $\mathrm{Kn}\lesssim1$'', and $\varepsilon=\nu|\omega|^2\lesssim c^4/\nu$ is the corresponding bound on dissipation per unit mass. For water at 300\,K, $c^2/\nu\approx2.2\times10^{12}\,\mathrm{s^{-1}}$ (and $c^4/\nu\approx5\times10^{18}$\,W/kg); for air, $c^2/\nu\approx7.5\times10^{9}\,\mathrm{s^{-1}}$. The condition is local: a bound on the global integrated enstrophy $\int|\omega|^2dx$, as proposed in an earlier version of this section with an unjustified constant ``$\Omega_{\max}=1.13\times10^{13}\,\mathrm{s^{-2}}$'', scales with the volume of fluid and does not express any material limit.
+
+\subsection{Consequence via Beale--Kato--Majda}
+If a smooth solution is admissible on $[0,T)$ then $\int_0^T\|\omega(t)\|_{L^\infty}\,dt\le T c^2/\nu<\infty$, and the Beale--Kato--Majda criterion \cite{BKM1984}, which holds for Navier--Stokes as well as Euler, gives regularity up to and including $T$. So ``admissible on $[0,T)$ implies no blow-up at $T$'' is a theorem whose only input is the definition above; conversely, any finite-time singularity must first leave the admissible set. The OpenAI core does so when $\ell_r\simeq\sqrt{\nu t}$ reaches $\ell_*=\nu/c$, i.e.\ at $t\simeq\nu/c^2\approx0.4$\,ps in water.
 
 \subsection{Lean 4 Formalization}
-We have implemented this axiom in Lean 4 as \texttt{ThermodynamicCensorship.lean}. Under this axiom, any Gevrey-class collapsing vortex singularity is formally rejected by the type checker prior to blow-up time. A potential proof of rigorous censorship may rely on the Beale-Kato-Majda criterion \cite{BKM1984}.
+The file \texttt{ThermodynamicCensorship.lean} in this repository encodes an earlier, global-enstrophy version of this condition. \emph{Caveat.} Any Lean ``rejection'' obtained from it is a direct consequence of the definition of admissibility: the type checker verifies that a solution with unbounded vorticity is not admissible, which is what the definition says, and nothing about real fluids. The content is in the physical motivation of the threshold $c^2/\nu$ and in the BKM step, neither of which is formalized against OpenAI's actual objects at the time of writing; the honest formal target is the BKM-based statement above, applied to OpenAI's \texttt{CandidateProperties}.
 
 \section{Discussion}
 
@@ -166,7 +210,7 @@ The forced nature of the solution (Alternatives C and D) leaves open whether unf
 
 \section{Conclusion}
 
-The OpenAI Lean 4 proof of Navier-Stokes blow-up is formally correct. The physics, however, is vacuous. By analyzing the blow-up, we showed that the system undergoes catastrophic thermal divergence and Mach number invalidation at $\tau \sim 6.7 \times 10^{-14}$ seconds before the singularity. We propose the Thermodynamic Censorship Principle to restrict the solution space to physically realizable flows. 
+The OpenAI Lean 4 proof of Navier-Stokes blow-up is formally correct. Its physical content is a map of where the continuum model ends: the core reaches $\mathrm{Ma}=0.3$ about $5$--$7$\,ps before the singularity, at which point viscous heating ($\Delta T=u^2/c_p\approx50$\,K) and rarefaction ($\ell_r$ a few nanometres) are already order-one effects, all at the single scale $\ell_*=\nu/c$. We state a local admissibility condition, $|\omega|\lesssim c^2/\nu$, under which the absence of blow-up follows from the Beale--Kato--Majda criterion.
 
 The AI has not solved the physicist's problem; it has solved the mathematician's problem and, in doing so, exposed the gap between them.
 
@@ -181,7 +225,7 @@ where $\mathbf{D}(u) = \frac{1}{2}(\nabla u + (\nabla u)^T)$ is the rate-of-stra
 \begin{equation}
 \int_{\mathbb{R}^3} 2\mu \, \mathbf{D}(u) : \mathbf{D}(u) \, dx = \mu \int_{\mathbb{R}^3} |\nabla \times u|^2 dx = \mu \, \Omega(t)
 \end{equation}
-For the AI's collapsing vortex, the enstrophy density scales as $\omega^2 \sim \tau^{-2.010}$. Concurrently, the thermal conduction timescale $t_{\text{diff}} \sim l_r^2 / \alpha_{\text{thermal}} \sim \tau^{1.0}$ acts too slowly to diffuse the highly localized heat generation. As a result, the source term dominates, and the local temperature rises as $\Delta T \sim \tau^{-1.010} \to \infty$. This mechanically driven heating mathematically forces the fluid past the boiling threshold ($T > 373$ K for water) and eventually the plasma threshold ($T > 10^4$ K), unequivocally invalidating the incompressibility assumption prior to the singularity.
+For the AI's collapsing vortex, the local enstrophy density scales as $|\omega|^2 \sim \tau^{-2.010}$ (the integrated enstrophy $\Omega$ as $\tau^{-0.515}$). The thermal diffusion length over the remaining time, $\sqrt{\alpha t}$, compares with the core radius $\ell_r=\sqrt{\nu t}$ as $\mathrm{Pr}^{-1/2}$: for water ($\mathrm{Pr}\approx7$) conduction removes only a fraction of the heat on the collapse time, so the source term dominates and $\Delta T\simeq\varepsilon t/c_p = u^2/c_p \sim \tau^{-1.010}$; for gases ($\mathrm{Pr}\approx0.7$) the same expression is an upper estimate. This mechanically driven heating passes the boiling threshold of water ($\Delta T=73$\,K) at $\mathrm{Ma}\approx0.37$, a few picoseconds before the singularity, at essentially the same moment as compressibility becomes order one. The earlier claim in this appendix that it reaches ``the plasma threshold ($T>10^4$\,K)'' is withdrawn: that would require $\mathrm{Ma}\approx4$, outside the model's validity.
 
 \begin{thebibliography}{99}
 \bibitem{Leray1934} Leray, J. (1934). Sur le mouvement d'un liquide visqueux emplissant l'espace. \textit{Acta Mathematica}, 63, 193-248.

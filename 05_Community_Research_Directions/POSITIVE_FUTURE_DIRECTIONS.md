@@ -49,7 +49,7 @@ In practical engineering (aerodynamics, weather forecasting, nuclear reactor coo
 
 ### 2. Physics-Informed Interactive Theorem Proving (PI-ITP)
 By coupling OpenAI's Sobolev formalization with physical domain libraries like `physlib`, we can create **Physics-Informed Theorem Provers**:
-- **Mechanism**: Integrate physical bounds (Mach limit $Ma \le 0.3$, Knudsen continuum bound $Kn \le 0.1$, viscous dissipation ceiling $\Omega_{\max}$) directly into Lean 4 tactic searches.
+- **Mechanism**: Integrate physical bounds (Mach limit $Ma \le 0.3$, Knudsen continuum bound $Kn \le 0.1$, or the single local vorticity bound $|\omega| \lesssim c^2/\nu$ that combines them) directly into Lean 4 tactic searches.
 - **Impact**: Ensures that when AI agents search for PDE solutions, they discover **physically admissible flow fields** that respect the real universe.
 
 ### 3. Certified Neural Operators for Real-World Fluid Dynamics
@@ -57,10 +57,10 @@ Machine learning models like Fourier Neural Operators (FNOs) and Physics-Informe
 - **Goal**: Leverage Lean 4 tactics to construct **formally certified neural operators**.
 - **Impact**: Provides mathematical guarantees that AI surrogates for aerodynamics or weather prediction will never diverge or violate conservation of mass and momentum.
 
-### 4. Proving Physical Regularity under Bounded Enstrophy
-Instead of searching for abstract blow-ups, researchers can use OpenAI's Lean 4 machinery to formally prove:
-$$\text{If } \sup_{t} \int_{\mathbb{R}^3} |\nabla \times u|^2 dx \le \Omega_{\max}, \quad \text{then } u(x,t) \text{ is globally smooth for all } t > 0.$$
-- **Impact**: Formally establishes that under realistic thermodynamic conditions, physical fluids remain smooth for all time, advancing the physical understanding of the Navier-Stokes equations.
+### 4. Formalizing the Known Regularity Criteria about OpenAI's Objects
+Instead of searching for abstract blow-ups, researchers can use OpenAI's Lean 4 machinery to formally prove, about OpenAI's own `CandidateProperties`:
+$$\text{If } \sup_{t<T} \|\omega(t)\|_{L^\infty} \le c^2/\nu \ (\text{equivalently } Ma, Kn \lesssim 1 \text{ everywhere}), \quad \text{then } u \text{ is smooth on } [0,T].$$
+- **Status**: this is the Beale–Kato–Majda theorem (and its $\dot H^1$ cousin, Leray's criterion), not a new axiom — so the deliverable is a known theorem stated about the real objects, which is useful to the whole community. It says that a solution which stays within the model's validity range cannot blow up; it does *not* settle Statement A, which remains open.
 
 ---
 

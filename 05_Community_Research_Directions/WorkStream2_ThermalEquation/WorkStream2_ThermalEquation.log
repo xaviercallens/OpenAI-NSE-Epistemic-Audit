@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.8.12)  13 SEP 2026 08:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.8.12)  15 SEP 2026 21:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -288,7 +288,7 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count288
 \l__pdf_internal_box=\box53
 )
-No file WorkStream2_ThermalEquation.aux.
+(./WorkStream2_ThermalEquation.aux)
 \openout1 = `WorkStream2_ThermalEquation.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
@@ -309,6 +309,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 9.
 LaTeX Font Info:    ... okay on input line 9.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 9.
 LaTeX Font Info:    ... okay on input line 9.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -344,8 +345,10 @@ LaTeX Font Info:    ... okay on input line 9.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring OFF on input line 9.
+(./WorkStream2_ThermalEquation.out) (./WorkStream2_ThermalEquation.out)
 \@outlinefile=\write3
 \openout3 = `WorkStream2_ThermalEquation.out'.
+
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -387,31 +390,24 @@ Overfull \hbox (84.25072pt too wide) in paragraph at lines 11--11
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
 (./WorkStream2_ThermalEquation.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-Package rerunfilecheck Warning: File `WorkStream2_ThermalEquation.out' has chan
-ged.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `WorkStream2_ThermalEquation.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  FFEF6E3F2DDE6927A18A9899C50FDA41;529.
+Package rerunfilecheck Info: File `WorkStream2_ThermalEquation.out' has not cha
+nged.
+(rerunfilecheck)             Checksum: 2DB93960DA2C09B7B5CED84558C377C1;504.
  ) 
 Here is how much of TeX's memory you used:
- 10024 strings out of 474222
- 151463 string characters out of 5748733
- 1931975 words of memory out of 5000000
- 32165 multiletter control sequences out of 15000+600000
+ 10039 strings out of 474222
+ 151807 string characters out of 5748733
+ 1937975 words of memory out of 5000000
+ 32172 multiletter control sequences out of 15000+600000
  566778 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,6n,79p,407b,440s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,6n,79p,880b,441s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
@@ -425,10 +421,10 @@ amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 sy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
 b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on WorkStream2_ThermalEquation.pdf (1 page, 153520 bytes).
+Output written on WorkStream2_ThermalEquation.pdf (2 pages, 163620 bytes).
 PDF statistics:
- 90 PDF objects out of 1000 (max. 8388607)
- 58 compressed objects within 1 object stream
- 7 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 108 PDF objects out of 1000 (max. 8388607)
+ 75 compressed objects within 1 object stream
+ 9 named destinations out of 1000 (max. 500000)
+ 33 words of extra memory for PDF output out of 10000 (max. 10000000)
 

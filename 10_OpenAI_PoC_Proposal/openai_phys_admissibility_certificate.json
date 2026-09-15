@@ -1,0 +1,82 @@
+{
+  "poc_title": "OpenAI Physics-Informed Formal Proof Search (PI-FPS) Certificate",
+  "target_system": "OpenAI Lean 4 Theorem Prover & Neural Operator Verifier",
+  "scenarios": {
+    "openai_unconstrained_sobolev_proof": {
+      "trajectory_metrics": {
+        "max_velocity_m_s": 450.0,
+        "mach_number": 1.3119533527696794,
+        "knudsen_number": 1000.0000000000001,
+        "enstrophy": 100000000.0,
+        "entropy_production_rate": 10000.0
+      },
+      "rational_bounds": {
+        "mach": {
+          "num": 450,
+          "den": 343,
+          "str": "450/343",
+          "limit_str": "3/10",
+          "valid": false
+        },
+        "knudsen": {
+          "num": 1000,
+          "den": 1,
+          "str": "1000",
+          "limit_str": "1/10",
+          "valid": false
+        },
+        "enstrophy": {
+          "num": 100000000,
+          "den": 1,
+          "str": "100000000",
+          "valid": true
+        }
+      },
+      "admissibility_checks": {
+        "mach_condition_passed": false,
+        "knudsen_condition_passed": false,
+        "entropy_second_law_passed": true
+      },
+      "verdict": "UNPHYSICAL_BLOWUP_REJECTED",
+      "epistemic_recommendation": "Reject trajectory in OpenAI RL reward function: breaches physical continuum boundaries."
+    },
+    "leanflow_dual_scale_proof": {
+      "trajectory_metrics": {
+        "max_velocity_m_s": 85.0,
+        "mach_number": 0.2478134110787172,
+        "knudsen_number": 0.001,
+        "enstrophy": 120.0,
+        "entropy_production_rate": 0.012
+      },
+      "rational_bounds": {
+        "mach": {
+          "num": 85,
+          "den": 343,
+          "str": "85/343",
+          "limit_str": "3/10",
+          "valid": true
+        },
+        "knudsen": {
+          "num": 1,
+          "den": 1000,
+          "str": "1/1000",
+          "limit_str": "1/10",
+          "valid": true
+        },
+        "enstrophy": {
+          "num": 120,
+          "den": 1,
+          "str": "120",
+          "valid": true
+        }
+      },
+      "admissibility_checks": {
+        "mach_condition_passed": true,
+        "knudsen_condition_passed": true,
+        "entropy_second_law_passed": true
+      },
+      "verdict": "PHYSICALLY_ADMISSIBLE",
+      "epistemic_recommendation": "Proof search trajectory complies with physical laws."
+    }
+  }
+}

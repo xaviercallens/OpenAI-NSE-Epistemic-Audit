@@ -1,3 +1,8 @@
+import NavierStokes.ProblemStatement
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.MeasureTheory.Integral.Bochner.Basic
+import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
+
 /-!
 # Thermodynamic Censorship of Navier-Stokes Singularities
 
@@ -28,11 +33,6 @@ We define:
 
 This file imports the OpenAI NavierStokesAndEuler Lean 4 library.
 -/
-
-import NavierStokes.ProblemStatement
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Measure.Haar.InnerProductSpace
 
 noncomputable section
 

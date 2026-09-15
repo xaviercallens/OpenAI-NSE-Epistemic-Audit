@@ -19,10 +19,16 @@ The complete energy equation for a fluid includes the viscous dissipation functi
 \end{equation}
 The contraction of the strain rate tensor $\mathbf{D}(u)$ is directly proportional to the enstrophy density $|\nabla \times u|^2$ in incompressible flow.
 
-\section{Vaporization by Pure Force}
-As \texttt{u/Little-Name9809} pointed out, this suggests a mechanism for vaporizing a fluid into plasma using only mechanical force (and no external heat). Because the OpenAI singularity requires the local enstrophy density to scale as $\tau^{-2.515}$, the local heat generation rate diverges. 
+\section{Heating by Pure Force}
+\texttt{u/Little-Name9809} asked whether this suggests a mechanism for vaporizing a fluid using only mechanical force (no external heat). In the OpenAI construction the \emph{local} enstrophy density scales as $|\omega|^2\sim\tau^{-2-2h}=\tau^{-2.010}$ (the \emph{integrated} enstrophy $\Omega=\int|\omega|^2dx$, which also absorbs the shrinking volume, scales as $\tau^{-0.515}$; $h=1/200$), so the local heat generation rate $\varepsilon=\nu|\omega|^2$ diverges.
 
-Integrating this rate against the thermal diffusion timescale reveals that the fluid reaches $373\text{ K}$ (boiling) at $\tau \approx 45.6\text{ ps}$ prior to the mathematical blowup. The continuum assumption is shredded by the phase change.
+The temperature rise follows in three lines. The core keeps a radial Reynolds number of order one, so its radius is the diffusive length $\ell_r^2=\nu t$, where $t$ is the physical time remaining. The dissipation per unit mass is $\varepsilon=\nu(u/\ell_r)^2$. Acting over the time $t$,
+\begin{equation}
+    \Delta T \;\simeq\; \frac{\varepsilon\,t}{c_p} \;=\; \frac{\nu u^2 t}{\ell_r^2\,c_p} \;=\; \frac{u^2}{c_p}\;\sim\;\tau^{-1.010},
+\end{equation}
+an Eckert number of order one: the kinetic energy per unit mass of the core is converted to heat within the core on its own collapse time. For water ($c_p=4184$\,J/kg/K) this gives $\Delta T\approx48$\,K at $\mathrm{Ma}=0.3$ and $\approx540$\,K at $\mathrm{Ma}=1$; boiling ($\Delta T=73$\,K) is reached at $u\approx553$\,m/s, $\mathrm{Ma}\approx0.37$, about $3$--$4.5$\,ps before the mathematical blow-up (an earlier version of this note gave $45.6$\,ps, from an illustrative constant that has since been removed). Heating is therefore an order-one effect at the same scale, $\ell_*=\nu/c$, at which compressibility and rarefaction appear; it is not an independent, earlier limit. A plasma ($\sim10^4$\,K) would need $\mathrm{Ma}\approx4$, far outside the incompressible model, so ``plasma by pure force'' is not supported by this estimate.
+
+\emph{Caveat.} The estimate assumes the heat stays in the core over the collapse time. The thermal diffusion length $\sqrt{\alpha t}$ compares with $\ell_r=\sqrt{\nu t}$ as $\mathrm{Pr}^{-1/2}$: for water ($\mathrm{Pr}\approx7$) conduction removes only a fraction of the heat, so the estimate stands; for gases ($\mathrm{Pr}\approx0.7$) it is an upper bound. Either way the conclusion is that the constant-temperature, constant-density assumptions of the model stop holding at $\ell_*$, not that any particular phase change is predicted.
 
 \section{Acknowledgments}
 Thank you to \texttt{u/vibe0009} and \texttt{u/Little-Name9809} for prompting this explicit thermal derivation. \textit{Rendons \`a C\'esar ce qui appartient \`a C\'esar.}
