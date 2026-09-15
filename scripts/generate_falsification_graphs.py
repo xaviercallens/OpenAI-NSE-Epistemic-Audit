@@ -36,15 +36,15 @@ tau_mach_breach = tau[mach_breach_idx]
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 12))
 
 # Subplot 1: Enstrophy Divergence vs Physical Reality
-ax1.loglog(tau, omega_math, 'r--', label='OpenAI Lean 4 Claim: $\Omega \sim \\tau^{-0.515}$')
+ax1.loglog(tau, omega_math, 'r--', label=r'OpenAI Lean 4 Claim: $\Omega \sim \tau^{-0.515}$')
 ax1.loglog(tau, omega_physics, 'b-', linewidth=3, label='Physical CFD Reality (Viscous Capped)')
-ax1.axhline(omega_phys_max, color='k', linestyle=':', label='Thermodynamic Censorship Limit ($\Omega_{max}$)')
-ax1.axvline(tau_mach_breach, color='orange', linestyle='-', linewidth=2, label=f'Mach 0.3 Breakdown ($\\tau \\approx {tau_mach_breach:.1e}$ s)')
+ax1.axhline(omega_phys_max, color='k', linestyle=':', label=r'Thermodynamic Censorship Limit ($\Omega_{max}$)')
+ax1.axvline(tau_mach_breach, color='orange', linestyle='-', linewidth=2, label=rf'Mach 0.3 Breakdown ($\tau \approx {tau_mach_breach:.1e}$ s)')
 
 ax1.set_xlim(1e-2, 1e-15) # Reversing x-axis to show approaching T=0
 ax1.set_ylim(1e6, 1e18)
-ax1.set_xlabel('Time to Singularity $\\tau$ (seconds)')
-ax1.set_ylabel('Global Enstrophy $\Omega(t)$')
+ax1.set_xlabel(r'Time to Singularity $\tau$ (seconds)')
+ax1.set_ylabel(r'Global Enstrophy $\Omega(t)$')
 ax1.set_title('Topological Singularity vs Kolmogorov Dissipation (Water)')
 ax1.grid(True, which="both", ls="-", alpha=0.2)
 ax1.legend(loc='upper right')
