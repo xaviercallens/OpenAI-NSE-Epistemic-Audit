@@ -87,6 +87,14 @@ class TestLighthillAcousticPhysics(unittest.TestCase):
         self.assertAlmostEqual(energy_exponent, -2.04, places=6)
         self.assertTrue(energy_exponent < 0, "Integrated acoustic energy must diverge as tau -> 0")
 
+    def test_run_experimentation(self):
+        """Verify run_experimentation executes without errors."""
+        from experiment_lighthill_and_physics_data import run_experimentation
+        try:
+            run_experimentation()
+        except Exception as e:
+            self.fail(f"run_experimentation failed with exception: {e}")
+
 
 if __name__ == '__main__':
     unittest.main()

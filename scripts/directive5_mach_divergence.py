@@ -19,9 +19,7 @@ from physics_constants import (
     L_REF_DEFAULT, get_reference_velocity
 )
 
-# ============================================================
 # Physical Constants (Water at 300K) from Unified Repository
-# ============================================================
 c_s = WATER_300K.speed_of_sound           # Speed of sound in water (m/s)
 nu = WATER_300K.kinematic_viscosity       # Kinematic viscosity of water (m²/s)
 rho = WATER_300K.density                  # Density (kg/m³)
@@ -33,233 +31,120 @@ mfp_water = WATER_300K.mean_free_path     # Intermolecular mean free path (m)
 # Anisotropy parameter (from the paper: h < 1/100)
 h = ANISOTROPY_H_DEFAULT                  # h = 1/200 = 0.005
 
-# ============================================================
 # Reference Scales
-# ============================================================
 L_ref = L_REF_DEFAULT                     # Macroscopic reference length (0.01 m = 1 cm)
 u_ref = get_reference_velocity(WATER_300K, L_ref)  # ~ 10^{-4} m/s (viscous velocity scale)
-print("=" * 72)
-print("DIRECTIVE 5: MACH NUMBER DIVERGENCE — PHYSICAL SELF-INVALIDATION")
-print("=" * 72)
-print(f"\n--- Physical Reference Scales (Water at {T}K) ---")
-print(f"  Speed of sound:    c_s = {c_s} m/s")
-print(f"  Kinematic visc:    ν   = {nu:.1e} m²/s")
-print(f"  Initial core:      L₀  = {L_ref*100:.1f} cm")
-print(f"  Reference velocity: u₀  = ν/L₀ = {u_ref:.2e} m/s")
-print(f"  Anisotropy param:  h   = {h}")
 
-# ============================================================
-# Velocity and Mach number as functions of tau
-# ============================================================
-# Dominant velocity: u_theta ~ u_ref * tau^{-1/2 - h}
-# This is the azimuthal velocity at the vortex core edge
-# Mach number: Ma = u_theta / c_s
 
-def velocity(tau):
+def velocity(tau, u_0=u_ref, h_param=h):
     """Peak velocity at the vortex core edge."""
-    return u_ref * tau ** (-0.5 - h)
+    return u_0 * tau ** (-0.5 - h_param)
 
-def mach_number(tau):
+
+def mach_number(tau, u_0=u_ref, c_sound=c_s, h_param=h):
     """Local Mach number."""
-    return velocity(tau) / c_s
+    return velocity(tau, u_0, h_param) / c_sound
 
-def core_radius(tau):
+
+def core_radius(tau, l_0=L_ref):
     """Radial scale of the vortex core."""
-    return L_ref * tau ** 0.5
+    return l_0 * tau ** 0.5
 
-def reynolds_angular(tau):
+
+def reynolds_angular(tau, u_0=u_ref, l_0=L_ref, nu_val=nu, h_param=h):
     """Angular Reynolds number ~ u_theta * l_r / nu."""
-    return velocity(tau) * core_radius(tau) / nu
+    return velocity(tau, u_0, h_param) * core_radius(tau, l_0) / nu_val
 
-def temperature_rise(tau):
+
+def temperature_rise(tau, u_0=u_ref, l_0=L_ref, nu_val=nu, c_p=c_p_water, h_param=h):
     """
     Local temperature rise from viscous dissipation.
     Delta_T ~ nu * |curl u|^2 * tau / (rho * c_p)
     |curl u| ~ u_theta / l_r
-    c_p for water ~ 4186 J/(kg·K)
     """
-    c_p = c_p_water
-    vorticity = velocity(tau) / core_radius(tau)
-    dissipation_rate = nu * vorticity**2  # W/m³/rho
-    delta_T = dissipation_rate * tau / c_p
-    return delta_T
+    vorticity = velocity(tau, u_0, h_param) / core_radius(tau, l_0)
+    dissipation_rate = nu_val * vorticity**2
+    return dissipation_rate * tau / c_p
 
-# ============================================================
-# Find critical times
-# ============================================================
-# Ma = 0.3 threshold (incompressibility breaks)
-# u_ref * tau^{-0.5-h} / c_s = 0.3
-# tau^{-0.5-h} = 0.3 * c_s / u_ref
-# tau = (0.3 * c_s / u_ref)^{-1/(0.5+h)}
 
-Ma_threshold = MACH_INCOMPRESSIBILITY_LIMIT
-tau_break_Ma = (Ma_threshold * c_s / u_ref) ** (-1.0 / (0.5 + h))
+def get_critical_times(u_0=u_ref, c_sound=c_s, l_0=L_ref, mfp=mfp_water, h_param=h):
+    """Calculates critical tau breakdown thresholds for incompressibility, sonic, and continuum."""
+    tau_break_Ma = (MACH_INCOMPRESSIBILITY_LIMIT * c_sound / u_0) ** (-1.0 / (0.5 + h_param))
+    tau_sonic = (SONIC_MACH_LIMIT * c_sound / u_0) ** (-1.0 / (0.5 + h_param))
+    tau_knudsen = (mfp / l_0) ** (1.0 / 0.5)
 
-# Ma = 1.0 (sonic)
-tau_sonic = (SONIC_MACH_LIMIT * c_s / u_ref) ** (-1.0 / (0.5 + h))
+    tau_range = np.logspace(-30, 0, 1000)
+    temps = [temperature_rise(t, u_0=u_0, l_0=l_0, h_param=h_param) for t in tau_range]
+    boil_idx = next((i for i, t in enumerate(temps) if t > 100), None)
+    tau_boil = float(tau_range[boil_idx]) if boil_idx is not None else None
 
-# Knudsen number = mean_free_path / l_r = 1 (continuum breaks)
-tau_knudsen = (mfp_water / L_ref) ** (1.0 / 0.5)
+    return {
+        'tau_break_Ma': float(tau_break_Ma),
+        'tau_sonic': float(tau_sonic),
+        'tau_knudsen': float(tau_knudsen),
+        'tau_boil': tau_boil,
+    }
 
-# Temperature: Delta_T > 100K (boiling)
-# Find numerically
-tau_range = np.logspace(-30, 0, 10000)
-temps = [temperature_rise(t) for t in tau_range]
-boil_idx = next((i for i, t in enumerate(temps) if t > 100), None)
-tau_boil = tau_range[boil_idx] if boil_idx else None
 
-print(f"\n--- Critical Times (tau = 1-t, singularity at tau = 0) ---")
-print(f"  Ma = 0.3 (incompressible limit):  tau_break = {tau_break_Ma:.6e}")
-print(f"  Ma = 1.0 (sonic):                 tau_sonic  = {tau_sonic:.6e}")
-print(f"  Kn = 1   (continuum limit):        tau_Kn     = {tau_knudsen:.6e}")
-if tau_boil:
-    print(f"  ΔT > 100K (boiling):              tau_boil   = {tau_boil:.6e}")
+def run_audit():
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
 
-print(f"\n  Physical time remaining before singularity:")
-print(f"    At Ma = 0.3: t_remaining = {tau_break_Ma:.6e} seconds")
-print(f"    At sonic:    t_remaining = {tau_sonic:.6e} seconds")
+    print("=" * 72)
+    print("DIRECTIVE 5: MACH NUMBER DIVERGENCE — PHYSICAL SELF-INVALIDATION")
+    print("=" * 72)
+    print(f"\n--- Physical Reference Scales (Water at {T}K) ---")
+    print(f"  Speed of sound:    c_s = {c_s} m/s")
+    print(f"  Kinematic visc:    ν   = {nu:.1e} m²/s")
+    print(f"  Initial core:      L₀  = {L_ref*100:.1f} cm")
+    print(f"  Reference velocity: u₀  = ν/L₀ = {u_ref:.2e} m/s")
+    print(f"  Anisotropy param:  h   = {h}")
 
-# ============================================================
-# Generate the Mach number trajectory
-# ============================================================
-print(f"\n--- Mach Number Trajectory ---")
-tau_points = np.logspace(-25, 0, 200)
-ma_points = [mach_number(t) for t in tau_points]
-vel_points = [velocity(t) for t in tau_points]
-re_points = [reynolds_angular(t) for t in tau_points]
+    crits = get_critical_times()
+    tau_break_Ma = crits['tau_break_Ma']
+    tau_sonic = crits['tau_sonic']
+    tau_knudsen = crits['tau_knudsen']
+    tau_boil = crits['tau_boil']
 
-# Table of key values
-print(f"\n  {'tau':>12s}  {'|u| (m/s)':>12s}  {'Ma':>10s}  {'l_r (m)':>12s}  {'Re_angular':>12s}  {'Status':>20s}")
-print(f"  {'-'*12}  {'-'*12}  {'-'*10}  {'-'*12}  {'-'*12}  {'-'*20}")
+    print(f"\n--- Critical Times (tau = 1-t, singularity at tau = 0) ---")
+    print(f"  Ma = 0.3 (incompressible limit):  tau_break = {tau_break_Ma:.6e}")
+    print(f"  Ma = 1.0 (sonic):                 tau_sonic  = {tau_sonic:.6e}")
+    print(f"  Kn = 1   (continuum limit):        tau_Kn     = {tau_knudsen:.6e}")
+    if tau_boil:
+        print(f"  ΔT > 100K (boiling):              tau_boil   = {tau_boil:.6e}")
 
-tau_samples = [1.0, 1e-2, 1e-5, 1e-8, 1e-10, 1e-12, 1e-15, 1e-18, 1e-20, 1e-25]
-for tau in tau_samples:
-    u = velocity(tau)
-    ma = mach_number(tau)
-    lr = core_radius(tau)
-    re_a = reynolds_angular(tau)
-    
-    if ma < 0.3:
-        status = "✅ Incompressible"
-    elif ma < 1.0:
-        status = "⚠️  Compressible"
-    elif lr > mfp_water:
-        status = "🔴 Supersonic"
-    else:
-        status = "💀 Sub-molecular"
-    
-    print(f"  {tau:12.2e}  {u:12.4e}  {ma:10.4e}  {lr:12.4e}  {re_a:12.4e}  {status}")
+    print(f"\n--- Mach Number Trajectory ---")
+    print(f"  {'tau':>12s}  {'|u| (m/s)':>12s}  {'Ma':>10s}  {'l_r (m)':>12s}  {'Re_angular':>12s}  {'Status':>20s}")
+    print(f"  {'-'*12}  {'-'*12}  {'-'*10}  {'-'*12}  {'-'*12}  {'-'*20}")
 
-# ============================================================
-# ASCII Plot: Mach Number vs tau
-# ============================================================
-print(f"\n--- Mach Number vs. Time to Singularity (log-log) ---")
-width = 65
-height = 22
+    tau_samples = [1.0, 1e-2, 1e-5, 1e-8, 1e-10, 1e-12, 1e-15, 1e-18, 1e-20, 1e-25]
+    for tau_s in tau_samples:
+        u = velocity(tau_s)
+        ma = mach_number(tau_s)
+        lr = core_radius(tau_s)
+        re_a = reynolds_angular(tau_s)
+        if ma < 0.3:
+            status = "Incompressible"
+        elif ma < 1.0:
+            status = "Compressible"
+        elif lr > mfp_water:
+            status = "Supersonic"
+        else:
+            status = "Sub-molecular"
+        print(f"  {tau_s:12.2e}  {u:12.4e}  {ma:10.4e}  {lr:12.4e}  {re_a:12.4e}  {status:>20s}")
 
-log_tau = [np.log10(t) for t in tau_points if mach_number(t) > 1e-10]
-log_ma = [np.log10(mach_number(t)) for t in tau_points if mach_number(t) > 1e-10]
-
-x_min, x_max = min(log_tau), max(log_tau)
-y_min, y_max = -5, max(log_ma)
-
-grid = [[' '] * width for _ in range(height)]
-
-# Plot the Ma curve
-for x, y in zip(log_tau, log_ma):
-    col = int((x - x_min) / (x_max - x_min) * (width - 1))
-    row = height - 1 - int((y - y_min) / (y_max - y_min) * (height - 1))
-    col = max(0, min(width-1, col))
-    row = max(0, min(height-1, row))
-    grid[row][col] = '●'
-
-# Mark Ma = 0.3 line
-ma_03_row = height - 1 - int((np.log10(0.3) - y_min) / (y_max - y_min) * (height - 1))
-if 0 <= ma_03_row < height:
-    for c in range(width):
-        if grid[ma_03_row][c] == ' ':
-            grid[ma_03_row][c] = '─'
-
-# Mark Ma = 1.0 line
-ma_1_row = height - 1 - int((0 - y_min) / (y_max - y_min) * (height - 1))
-if 0 <= ma_1_row < height:
-    for c in range(width):
-        if grid[ma_1_row][c] == ' ':
-            grid[ma_1_row][c] = '═'
-
-print(f"  log₁₀(Ma) ^")
-for i in range(height):
-    y_label = y_max - (y_max - y_min) * i / (height - 1)
-    label = ""
-    if i == ma_03_row:
-        label = " ← Ma=0.3 (INCOMPRESSIBLE LIMIT)"
-    elif i == ma_1_row:
-        label = " ← Ma=1.0 (SONIC BARRIER)"
-    if i % 5 == 0:
-        print(f"  {y_label:6.1f} |{''.join(grid[i])}{label}")
-    else:
-        print(f"         |{''.join(grid[i])}{label}")
-print(f"         +{'-' * width}> log₁₀(τ)")
-print(f"          {x_min:.0f}{' ' * (width - 5)}{x_max:.0f}")
-
-# ============================================================
-# Sweeping Initial Macroscopic Length Scale (L_ref)
-# ============================================================
-print(f"\n{'=' * 72}")
-print(f"SWEEP 1: INITIAL MACROSCOPIC LENGTH SCALE (L_ref)")
-print(f"{'=' * 72}")
-print(f"  {'L_ref (m)':>12s}  {'u_ref (m/s)':>12s}  {'tau_break (Ma=0.3)':>20s}  {'tau_sonic (Ma=1.0)':>20s}")
-print(f"  {'-'*12}  {'-'*12}  {'-'*20}  {'-'*20}")
-for L_test in [1e-6, 1e-4, 1e-2, 1.0, 1e2, 1e4, 1e6]:
-    u_test = nu / L_test
-    tau_b = (0.3 * c_s / u_test) ** (-1.0 / (0.5 + h))
-    tau_s = (1.0 * c_s / u_test) ** (-1.0 / (0.5 + h))
-    print(f"  {L_test:12.1e}  {u_test:12.2e}  {tau_b:20.6e}  {tau_s:20.6e}")
-
-# ============================================================
-# Sweeping Fluid Constants (Water, Air, Glycerol)
-# ============================================================
-print(f"\n{'=' * 72}")
-print(f"SWEEP 2: FLUID CONSTANTS (Water, Air, Glycerol)")
-print(f"{'=' * 72}")
-fluids = [
-    ("Water (300K)", 1500.0, 1.0e-6),
-    ("Air (300K)", 343.0, 1.5e-5),
-    ("Glycerol (293K)", 1900.0, 1.1e-3)
-]
-print(f"  {'Fluid':>15s}  {'c_s (m/s)':>10s}  {'nu (m²/s)':>10s}  {'tau_break (Ma=0.3)':>20s}")
-print(f"  {'-'*15}  {'-'*10}  {'-'*10}  {'-'*20}")
-for name, c_test, nu_test in fluids:
-    u_test = nu_test / L_ref
-    tau_b = (0.3 * c_test / u_test) ** (-1.0 / (0.5 + h))
-    print(f"  {name:15s}  {c_test:10.1f}  {nu_test:10.1e}  {tau_b:20.6e}")
-
-# ============================================================
-# Summary
-# ============================================================
-print(f"\n{'=' * 72}")
-print(f"SUMMARY: MACH NUMBER DIVERGENCE ANALYSIS")
-print(f"{'=' * 72}")
-print(f"""
+    print(f"\n{'=' * 72}")
+    print(f"SUMMARY: MACH NUMBER DIVERGENCE ANALYSIS")
+    print(f"{'=' * 72}")
+    print(f"""
   The OpenAI collapsing vortex core reaches:
-  
   • Ma = 0.3 at τ = {tau_break_Ma:.2e} seconds before singularity
-    → Incompressibility assumption FAILS
-    → Must switch to COMPRESSIBLE Navier-Stokes
-    
   • Ma = 1.0 at τ = {tau_sonic:.2e} seconds before singularity
-    → SONIC BARRIER — shock waves form
-    → Entropy production becomes dominant
-    
   • Core radius reaches molecular scale at τ = {tau_knudsen:.2e}
-    → CONTINUUM HYPOTHESIS FAILS
-    → Must use Boltzmann kinetic theory
 
-  🔴 CONCLUSION: The mathematical singularity at τ = 0 is physically
-  unreachable. The Navier-Stokes equations self-invalidate at τ ≈ {tau_break_Ma:.1e}
-  when the Mach number exceeds 0.3. The compressible equations would
-  generate acoustic radiation and thermal shocks that arrest the collapse.
-  
-  The AI's singularity exists only in the mathematical limit of a PDE
-  that has ceased to describe the physical system it was derived from.
+  CONCLUSION: Navier-Stokes incompressibility fails at τ ≈ {tau_break_Ma:.1e} s.
 """)
+
+
+if __name__ == '__main__':
+    run_audit()

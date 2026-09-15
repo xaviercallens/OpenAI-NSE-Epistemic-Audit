@@ -27,11 +27,6 @@ import sys
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-print("=" * 70)
-print("DIRECTIVE 3: 5-MOMENT JACOBIAN NON-DIMENSIONALIZATION AUDIT")
-print("OpenAI Navier-Stokes — Appendix B.8 / Lemma 8.7")
-print("=" * 70)
-
 def construct_A_theta(lam, X_R):
     """Construct the 3×3 azimuthal moment block."""
     n_quad = 200
@@ -108,36 +103,34 @@ def get_nondimensional_matrices(lam, X_R):
     
     return A_full, B_full
 
-# ============================================================
-# Sweep X_R to compare Raw vs Non-Dimensionalized Condition Numbers
-# ============================================================
+def run_audit():
+    print("=" * 70)
+    print("DIRECTIVE 3: 5-MOMENT JACOBIAN NON-DIMENSIONALIZATION AUDIT")
+    print("OpenAI Navier-Stokes — Appendix B.8 / Lemma 8.7")
+    print("=" * 70)
+    print(f"\n--- Condition Number vs. X_R (lambda = 0.1): Raw vs Non-Dimensionalized ---")
+    print(f"  {'X_R':>10s}  {'kappa(A) [Raw]':>20s}  {'kappa(B) [Non-Dim]':>22s}  {'Interpretation':>20s}")
+    print(f"  {'-'*10}  {'-'*20}  {'-'*22}  {'-'*20}")
 
-print(f"\n--- Condition Number vs. X_R (lambda = 0.1): Raw vs Non-Dimensionalized ---")
-print(f"  {'X_R':>10s}  {'kappa(A) [Raw]':>20s}  {'kappa(B) [Non-Dim]':>22s}  {'Interpretation':>20s}")
-print(f"  {'-'*10}  {'-'*20}  {'-'*22}  {'-'*20}")
+    X_Rs = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000]
+    lam_fixed = 0.1
 
-X_Rs = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000]
-lam_fixed = 0.1
+    for X_R in X_Rs:
+        A_full, B_full = get_nondimensional_matrices(lam_fixed, X_R)
+        
+        _, S_A, _ = svd(A_full)
+        kappa_A = S_A[0] / S_A[-1] if S_A[-1] > 1e-300 else float('inf')
+        
+        _, S_B, _ = svd(B_full)
+        kappa_B = S_B[0] / S_B[-1] if S_B[-1] > 1e-300 else float('inf')
+        
+        interp = "Artifact (Unscaled)" if kappa_A > 1e5 and kappa_B < 1e5 else "Bounded"
+        print(f"  {X_R:10.1f}  {kappa_A:20.6e}  {kappa_B:22.6e}  {interp:>20s}")
 
-for X_R in X_Rs:
-    A_full, B_full = get_nondimensional_matrices(lam_fixed, X_R)
-    
-    _, S_A, _ = svd(A_full)
-    kappa_A = S_A[0] / S_A[-1] if S_A[-1] > 1e-300 else float('inf')
-    
-    _, S_B, _ = svd(B_full)
-    kappa_B = S_B[0] / S_B[-1] if S_B[-1] > 1e-300 else float('inf')
-    
-    interp = "Artifact (Unscaled)" if kappa_A > 1e5 and kappa_B < 1e5 else "Bounded"
-    print(f"  {X_R:10.1f}  {kappa_A:20.6e}  {kappa_B:22.6e}  {interp:>20s}")
-
-# ============================================================
-# Summary
-# ============================================================
-print(f"\n{'=' * 70}")
-print(f"SUMMARY: NON-DIMENSIONALIZATION AUDIT RESULTS")
-print(f"{'=' * 70}")
-print(f"""
+    print(f"\n{'=' * 70}")
+    print(f"SUMMARY: NON-DIMENSIONALIZATION AUDIT RESULTS")
+    print(f"{'=' * 70}")
+    print(f"""
   PEER-REVIEW VERIFICATION FINDINGS:
   
   1. Raw SVD of the moment matrix A produces a massive condition number (kappa ~ 10^28)
@@ -153,4 +146,8 @@ print(f"""
   unscaled dimensional matrix into a floating-point solver. Proper non-dimensionalization
   eliminates the X_R dependence entirely. The claim of Jacobian thermal instability is invalid.
 """)
+
+
+if __name__ == '__main__':
+    run_audit()
 

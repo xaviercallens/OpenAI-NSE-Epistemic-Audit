@@ -3,6 +3,9 @@ import os
 import json
 import subprocess
 import sys
+import tempfile
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../scripts')))
 
 class TestIntegrationPipeline(unittest.TestCase):
 
@@ -30,11 +33,24 @@ class TestIntegrationPipeline(unittest.TestCase):
             content = f.read()
         self.assertIn("\\begin{table}", content)
 
+        # In-process test for coverage
+        from extract_limits_to_latex import extract_physical_limits
+        lean_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../03_Lean4_Topological_Censorship/src/drafts/PhysLibThermodynamicCensorship.lean'))
+        table_code = extract_physical_limits(lean_path)
+        self.assertIn("\\begin{table}", table_code)
+
     def test_falsification_graph_generator(self):
         """Test that graph generation script executes cleanly."""
         script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../scripts/generate_falsification_graphs.py'))
         result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, f"Graph script failed with output: {result.stderr}")
+
+        # In-process test for coverage
+        from generate_falsification_graphs import generate_falsification_graphs
+        with tempfile.TemporaryDirectory() as tmpdir:
+            out_img = os.path.join(tmpdir, "test_falsification.png")
+            generate_falsification_graphs(out_img)
+            self.assertTrue(os.path.exists(out_img))
 
 if __name__ == '__main__':
     unittest.main()

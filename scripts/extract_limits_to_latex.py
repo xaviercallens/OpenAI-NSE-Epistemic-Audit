@@ -50,10 +50,15 @@ Knudsen Threshold ($Kn$) & {limits['Knudsen Threshold']} \\\\
     return latex_table
 
 if __name__ == "__main__":
-    lean_path = os.path.join(
+    primary_path = os.path.join(
         os.path.dirname(__file__),
         "../03_Lean4_Topological_Censorship/src/PhysLibThermodynamicCensorship.lean"
     )
+    draft_path = os.path.join(
+        os.path.dirname(__file__),
+        "../03_Lean4_Topological_Censorship/src/drafts/PhysLibThermodynamicCensorship.lean"
+    )
+    lean_path = primary_path if os.path.exists(primary_path) else draft_path
     latex_out = extract_physical_limits(lean_path)
     
     out_path = os.path.join(os.path.dirname(__file__), "../04_Thermodynamic_Censorship_Paper/physlib_limits_table.tex")
