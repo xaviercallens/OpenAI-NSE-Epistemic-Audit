@@ -55,11 +55,25 @@ FILES_TO_PACKAGE = [
     ("scripts/directive5_mach_divergence.py", "directive5_mach_divergence.py"),
     ("scripts/directive2_thermodynamic_paradox.py", "directive2_thermodynamic_paradox.py"),
     ("dataset/README.md", "dataset_README.md"),
+    # --- v5.2.0: dual-scale lock programme, forced core, Lean 4 ---
+    ("05_Community_Research_Directions/DUAL_SCALE_LOCK_PROGRAMME.md", "DUAL_SCALE_LOCK_PROGRAMME.md"),
+    ("05_Community_Research_Directions/DIRECTION1_RESULTS.md", "DIRECTION1_RESULTS.md"),
+    ("05_Community_Research_Directions/LERAY_ALPHA_DUAL_SCALE_LOCK.md", "LERAY_ALPHA_DUAL_SCALE_LOCK.md"),
+    ("05_Community_Research_Directions/experiments/RESULTS.md", "EXPERIMENTS_RESULTS.md"),
+    ("05_Community_Research_Directions/experiments/spectral3d.py", "spectral3d.py"),
+    ("05_Community_Research_Directions/experiments/forced_core.py", "forced_core.py"),
+    ("05_Community_Research_Directions/experiments/forced_core_axial.py", "forced_core_axial.py"),
+    ("05_Community_Research_Directions/experiments/results/cutoff_law_summary.png", "figure_cutoff_law_summary.png"),
+    ("05_Community_Research_Directions/experiments/results/forced_core_32_v3.png", "figure_forced_core.png"),
+    ("03_Lean4_Topological_Censorship/src/CoreScaling.lean", "CoreScaling.lean"),
+    ("03_Lean4_Topological_Censorship/src/LerayAlphaFilter.lean", "LerayAlphaFilter.lean"),
+    ("03_Lean4_Topological_Censorship/src/LatticeBGKEntropy.lean", "LatticeBGKEntropy.lean"),
+    ("03_Lean4_Topological_Censorship/src/AlphaEnergyIdentity.lean", "AlphaEnergyIdentity.lean"),
 ]
 
 METADATA = {
     "metadata": {
-        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.0.0)",
+        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.2.0)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
@@ -84,7 +98,21 @@ METADATA = {
             "independent one; the external force has no independent physical origin, by construction; "
             "and the Euler datum requires coherent structure below the molecular length, where the "
             "missing physics is viscosity itself, not any exotic short-distance cutoff.</p>"
-            "<p>This version (v5.0.0) supersedes all previous public drafts of this project, including "
+            "<p><strong>New in v5.2.0.</strong> The cutoff-regularization hypothesis the paper previously "
+            "stated as untested is tested with a validated 3D pseudo-spectral solver (Taylor-Green "
+            "Re=1600 dissipation peak at t=9.14 against a published 9.0). It is exact given its premise, "
+            "but the premise -- a Re~1 diffusive core -- is not produced by generic data. A manufactured "
+            "Re=1 collapse, sustained by its own Navier-Stokes residual, is tracked to 1.7e-7; on it the "
+            "barrier's engagement reduces to a single variable, and transport-filtering regularizations "
+            "of the Leray-alpha and LANS-alpha type are one to two orders of magnitude weaker than "
+            "dissipation, because they can act only through a nonlinearity that is a few percent of the "
+            "dynamics (the gate-drain crossover Reynolds number is an exact norm ratio, 8 to 142). The "
+            "continuum validity scale is shown to be the mean free path with a derived kinetic-theory "
+            "constant (0.67 for air). The bundle adds 38 Lean 4 theorems on the three standard axioms "
+            "(the Proposition 5.1 scaling chain, Leray-alpha filter bounds, an H-theorem for the discrete "
+            "BGK collision step, and the gate-drain energy identity); none is yet connected to OpenAI's "
+            "own definitions, as each file states.</p>"
+            "<p>This version supersedes all previous public drafts of this project, including "
             "one previously deposited under this same Zenodo record. Claims withdrawn in this revision "
             "-- \"plasma temperatures\", a global enstrophy-censorship axiom with no stated derivation, "
             "the acoustic check treated as independent, femtosecond-scale timings, and the framing of "
@@ -121,7 +149,7 @@ METADATA = {
             "Cavitation",
             "Neuro-Symbolic AI"
         ],
-        "version": "5.0.0",
+        "version": "5.2.0",
         "license": "cc-by-4.0",
         "access_right": "open",
         "related_identifiers": [
@@ -131,7 +159,7 @@ METADATA = {
                 "scheme": "url"
             },
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.0.0",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.2.0",
                 "relation": "isIdenticalTo",
                 "scheme": "url"
             },
@@ -203,19 +231,51 @@ def confirm_publish():
     return response == "yes"
 
 
-def push_to_zenodo(token, repo_root, publish=False):
+def _get_json(url, headers, attempts=6, wait_s=20):
+    """
+    GET a Zenodo API URL and return parsed JSON, retrying 5xx responses.
+    Zenodo intermittently answers with an HTML '504 Gateway Time-out' page;
+    calling .json() on that raises a decode error mid-upload, which is how an
+    earlier run of this script failed. Non-5xx errors are not retried.
+    """
+    import time
+    last = None
+    for i in range(attempts):
+        r = requests.get(url, headers=headers, timeout=120)
+        if r.status_code == 200:
+            return r.json()
+        last = r
+        if r.status_code < 500:
+            break
+        print(f"  [!] {r.status_code} from Zenodo, retry {i + 1}/{attempts} in {wait_s}s")
+        time.sleep(wait_s)
+    print(f"[-] GET {url} failed: {last.status_code} {last.text[:200]}", file=sys.stderr)
+    sys.exit(1)
+
+
+def push_to_zenodo(token, repo_root, publish=False, draft_id=None):
     headers = {"Authorization": f"Bearer {token}"}
-    
+
+    # 0. An explicit draft id bypasses discovery. The listing endpoint does not
+    #    reliably return an existing unsubmitted draft, and requesting a new
+    #    version while one exists fails with "Please remove all files first".
+    if draft_id:
+        chk = _get_json(f"{ZENODO_BASE_URL}/deposit/depositions/{draft_id}", headers)
+        if chk.get("submitted"):
+            print(f"[-] Draft {draft_id} is already submitted; refusing to continue.", file=sys.stderr)
+            sys.exit(1)
+        print(f"[+] Using explicit unsubmitted draft: {draft_id}")
+
     # 1. Check existing draft or create new version from RECORD_ID
-    print(f"[*] Checking Zenodo record {RECORD_ID}...")
-    r = requests.get(f"{ZENODO_BASE_URL}/deposit/depositions", headers=headers)
-    if r.status_code != 200:
-        print(f"[-] Failed to fetch deposits: {r.status_code} {r.text}", file=sys.stderr)
-        sys.exit(1)
-    
-    deposits = r.json()
+    deposits = []
     concept_id = None
-    draft_id = None
+    if not draft_id:
+        print(f"[*] Checking Zenodo record {RECORD_ID}...")
+        r = requests.get(f"{ZENODO_BASE_URL}/deposit/depositions", headers=headers)
+        if r.status_code != 200:
+            print(f"[-] Failed to fetch deposits: {r.status_code} {r.text}", file=sys.stderr)
+            sys.exit(1)
+        deposits = r.json()
 
     for d in deposits:
         if str(d.get("id")) == str(RECORD_ID):
@@ -241,8 +301,7 @@ def push_to_zenodo(token, repo_root, publish=False):
         print(f"[+] Created newversion draft: {draft_id}")
     
     # 2. Get draft details & bucket
-    draft_r = requests.get(f"{ZENODO_BASE_URL}/deposit/depositions/{draft_id}", headers=headers)
-    draft_info = draft_r.json()
+    draft_info = _get_json(f"{ZENODO_BASE_URL}/deposit/depositions/{draft_id}", headers)
     bucket_url = draft_info.get("links", {}).get("bucket")
     print(f"[*] Draft {draft_id} bucket: {bucket_url}")
     
@@ -326,6 +385,11 @@ def main():
         action="store_true",
         help="Deprecated: Use without --publish instead. Upload files and metadata but do not publish."
     )
+    parser.add_argument(
+        "--draft-id",
+        default=None,
+        help="Target this existing unsubmitted draft instead of discovering or creating one."
+    )
     args = parser.parse_args()
 
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -351,7 +415,7 @@ def main():
         print("[*] Publication cancelled by user. Draft is ready for manual review.")
         sys.exit(0)
 
-    push_to_zenodo(args.token, repo_root, publish=should_publish)
+    push_to_zenodo(args.token, repo_root, publish=should_publish, draft_id=args.draft_id)
 
 
 if __name__ == "__main__":
