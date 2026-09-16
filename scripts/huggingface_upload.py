@@ -116,7 +116,7 @@ pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.3.0)"
 
 **Socrate AI Lab / MechanicaFluidorum Program** &middot; Lead: Xavier Callens
 **GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.3.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.3.0))
-**Zenodo:** concept record [10.5281/zenodo.22696718](https://doi.org/10.5281/zenodo.22696718)
+**Zenodo:** concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (always resolves to the latest version) &middot; v5.3.0: [10.5281/zenodo.22777467](https://doi.org/10.5281/zenodo.22777467)
 
 ## What this is
 

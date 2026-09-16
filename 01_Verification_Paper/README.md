@@ -13,7 +13,7 @@
 *   **Reproduction Protocol:** [`REPRODUCTION_PROTOCOL.md`](REPRODUCTION_PROTOCOL.md) (Step-by-step verification protocol for all 8 directives)
 *   **Check Script:** [`verify_openai.py`](verify_openai.py) (AST inspector for OpenAI Lean 4 source)
 *   **Verification Script:** [`verify-physical-vacuity.sh`](verify-physical-vacuity.sh) (Automated test runner)
-*   **Zenodo Synchronizer:** [`zenodo_push.py`](zenodo_push.py) (Automated synchronizer for Zenodo DOI 10.5281/zenodo.22696718)
+*   **Zenodo Synchronizer:** [`zenodo_push.py`](zenodo_push.py) (Automated synchronizer for the Zenodo concept DOI 10.5281/zenodo.22696717; v5.3.0 is 10.5281/zenodo.22777467)
 
 ---
 

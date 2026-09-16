@@ -51,10 +51,19 @@ now with a mechanism. The gate-versus-drain comparison stands as a ranking of tw
 - HuggingFace card and Zenodo metadata brought to v5.3.0; the Zenodo push script retries 5xx
   responses and accepts `--draft-id`.
 
+### Published
+
+- **Zenodo:** v5.3.0 published as **10.5281/zenodo.22777467** (concept DOI
+  **10.5281/zenodo.22696717**, which always resolves to the latest version). Published directly from a
+  draft verified beforehand against the committed release: 32/32 files, every checksum matching,
+  metadata and description checked. An earlier attempt had been delayed by a Zenodo-side 504 outage.
+- **HuggingFace:** `callensxavier/OpenAI-NSE-Thermodynamic-Censorship` at v5.3.0, verified live (paper
+  PDF byte-identical to the release). The card previously labelled record 22696718 as the "concept
+  record"; that id is an earlier version record, and the card now cites the concept DOI.
+
 ### Pending
 
 - The `96³` forced-core crossing sweep.
-- Zenodo publication, blocked by a Zenodo-side 504 outage at time of writing.
 
 ## v5.2.0 — 2026-09-16 — 3D solver, cutoff law tested, forced core, gate vs drain, 38 Lean theorems
 

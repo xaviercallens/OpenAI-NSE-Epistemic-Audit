@@ -5,7 +5,7 @@
 ### *A Physical Reading, Not a Physical Refutation*
 
 [![CI Pipeline](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/audit-pipeline.yml/badge.svg)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/audit-pipeline.yml)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22727801.svg)](https://doi.org/10.5281/zenodo.22727801)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22696717.svg)](https://doi.org/10.5281/zenodo.22696717)
 [![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Discussions](https://img.shields.io/github/discussions/xaviercallens/OpenAI-NSE-Epistemic-Audit)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions)
@@ -13,7 +13,7 @@
 
 **Non-Profit Citizen Science Initiative for Neuro-Symbolic Science · MechanicaFluidorum Program · September 2026**
 
-[📄 Read the Paper (PDF)](01_Verification_Paper/OpenAI_NSE_Verification.pdf) · [💬 Join Discussions](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions) · [🏛️ Zenodo](https://doi.org/10.5281/zenodo.22727801) · [🤗 HuggingFace](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship) · [⚖️ Legal Notice](LEGAL_NOTICE_AND_CITIZEN_SCIENCE_DISCLAIMER.md)
+[📄 Read the Paper (PDF)](01_Verification_Paper/OpenAI_NSE_Verification.pdf) · [💬 Join Discussions](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions) · [🏛️ Zenodo](https://doi.org/10.5281/zenodo.22696717) · [🤗 HuggingFace](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship) · [⚖️ Legal Notice](LEGAL_NOTICE_AND_CITIZEN_SCIENCE_DISCLAIMER.md)
 
 <br>
 
@@ -253,15 +253,18 @@ Whether you want to debate the boundary between abstract Sobolev spaces and flui
 ```bibtex
 @misc{callens2026nse,
   author       = {Callens, Xavier and {MechanicaFluidorum Program}},
-  title        = {On the Physical Vacuity of Manufactured Singularities:
-                  A Comprehensive Physical Verification of the OpenAI
-                  Navier-Stokes Formalization},
+  title        = {The OpenAI Navier-Stokes and Euler Blow-Up Proofs:
+                  A Physical Reading, Not a Physical Refutation},
   year         = {2026},
   month        = sep,
+  version      = {5.3.0},
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.22727801},
-  url          = {https://doi.org/10.5281/zenodo.22727801},
-  note         = {SocrateAI Lab, MechanicaFluidorum Program}
+  doi          = {10.5281/zenodo.22777467},
+  url          = {https://doi.org/10.5281/zenodo.22777467},
+  note         = {SocrateAI Lab, MechanicaFluidorum Program. Concept DOI
+                  10.5281/zenodo.22696717 resolves to the latest version.
+                  Versions 2.0.0 (10.5281/zenodo.22725347, 22727801) carry
+                  withdrawn claims; see CHANGELOG.md}
 }
 ```
 
