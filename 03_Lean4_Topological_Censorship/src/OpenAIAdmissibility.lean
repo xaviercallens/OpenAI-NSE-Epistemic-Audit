@@ -1,4 +1,6 @@
 import NavierStokes.ProblemStatement
+import NavierStokes.PeriodicIntegration
+import NavierStokes.PeriodicUniqueness
 import Mathlib.Analysis.Calculus.FDeriv.Comp
 import Mathlib.Analysis.Calculus.FDeriv.Prod
 import Mathlib.Analysis.Calculus.FDeriv.Add
@@ -9,13 +11,16 @@ import Mathlib.Topology.Algebra.Order.Floor
 # Admissibility on OpenAI's own proof objects
 
 **Build.** This file does NOT compile with this folder's own lakefile, because it
-imports OpenAI's `NavierStokes.ProblemStatement`. Compile it inside OpenAI's project:
+imports OpenAI's `NavierStokes.ProblemStatement`, `NavierStokes.PeriodicIntegration`
+and `NavierStokes.PeriodicUniqueness`. Compile it inside OpenAI's project:
 
     cd NavierStokesAndEuler
-    lake build NavierStokes.ProblemStatement     # imports only Mathlib; fast
+    lake build NavierStokes.PeriodicUniqueness   # 3 files: ProblemStatement,
+                                                 # PeriodicIntegration, PeriodicUniqueness
     lake env lean <path>/OpenAIAdmissibility.lean
 
 Do not build the full `NavierStokes` library (~580 files); nothing else is needed.
+(If those three oleans already exist, the `lake build` step is a no-op.)
 
 This is the first file in this project whose statements are about OpenAI's
 *actual* definitions: `VelocityField`, `spatialDerivative`, `SpeedUnboundedAtOne`
@@ -36,12 +41,12 @@ and `CandidateProperties` are imported unchanged from
   velocity is `U` metres per second, so a physical gradient is `(U/L)` times the
   simulated one. `admissibleScaled_iff` converts between the two.
 
-## What is ASSUMED, and nothing here proves it
+## The former hypothesis is now PROVED: every result is unconditional
 
-`BKMHypothesis` is an explicit hypothesis, passed as an argument, never an axiom:
-*for OpenAI's candidate objects, a uniformly bounded velocity gradient on `[0, 1)`
-excludes `SpeedUnboundedAtOne`.* No statement in this file proves it, which is why
-it never appears in a `#print axioms` output.
+`BKMHypothesis` is a `Prop`: *for OpenAI's candidate objects, a uniformly bounded
+velocity gradient on `[0, 1)` excludes `SpeedUnboundedAtOne`.* It is proved here as
+`bkmHypothesis_holds : BKMHypothesis` (the periodic mean-velocity bound), with no
+`sorry` and no axiom beyond `propext`, `Classical.choice`, `Quot.sound`.
 
 The name is kept for continuity with the paper, but the content is **weaker than
 Beale–Kato–Majda** and, for these objects, holds by an elementary argument rather
@@ -50,13 +55,24 @@ than by BKM. On the unit periodic cell, the mean velocity satisfies
 to zero, and `∫(u·∇)u = ∫∇·(u⊗u) = 0` because `∇·u = 0`. The force is smooth and
 periodic on `[0, ∞)`, so `⟨f⟩` is bounded on `[0, 1]`, and `u(0) = 0` gives a bounded
 mean. A uniform gradient bound `C` then bounds the oscillation over the cell by
-`√3·C`, so `|u| ≤ |⟨u⟩| + √3·C` everywhere. It is left as a hypothesis only because
-formalizing it needs integration by parts over the periodic cell for the
-`fderiv`-defined operators of `ProblemStatement` (a torus divergence theorem), which
-Mathlib does not provide in this form. The theorems below are therefore conditional
-on a true but unformalized elementary lemma, not on a deep analytic theorem.
+`√3·C`, so `|u| ≤ |⟨u⟩| + √3·C` everywhere. The periodic-cell integration by parts
+(a torus divergence theorem for the `fderiv`-defined operators of `ProblemStatement`)
+is taken from OpenAI's own `NavierStokes.PeriodicIntegration` and
+`NavierStokes.PeriodicUniqueness`. The formal steps, along any fixed direction `e`:
+
+* `mean_rate`: `∫⟪e, ∂ₜu⟫ = ∫⟪e, f⟫` over the cube (advection, Laplacian and pressure
+  terms integrate to zero by periodicity and `∇·u = 0`);
+* `mean_hasDerivAt`: the cell mean `∫⟪e, u(t,·)⟫` has that derivative on `(0, 1)`;
+* `mean_le`: with `u(0) = 0` and `‖f‖ ≤ K` on `[0,1] × cube`, the mean is `≤ ‖e‖·K`;
+* `bkmHypothesis_holds`: the mean-value inequality gives oscillation `≤ √3·C`, and
+  taking `e = u(t,x)` yields `‖u‖ ≤ K + √3·C`, contradicting `speed_unbounded`.
 
 ## What is proved
+
+The primed theorems `candidate_violates_every_gradient_bound'`,
+`candidate_not_admissible'`, `candidate_not_admissibleScaled'` and
+`exits_admissible_near_one'` are the unconditional forms (no hypothesis argument);
+the unprimed ones keep their original statement taking `BKMHypothesis` as input.
 
 1. `candidate_violates_every_gradient_bound`: under `BKMHypothesis`, any `u`
    satisfying OpenAI's `CandidateProperties` has no uniform gradient bound on
@@ -76,7 +92,7 @@ on a true but unformalized elementary lemma, not on a deep analytic theorem.
 Nothing here says the construction exists, and nothing here says anything about
 physical fluids beyond the definitional content of the bound. The theorems
 constrain *any* object with OpenAI's candidate properties, including the one their
-paper constructs, conditional on `BKMHypothesis`.
+paper constructs; since `bkmHypothesis_holds` is proved, unconditionally.
 -/
 
 noncomputable section
@@ -120,13 +136,13 @@ theorem admissibleScaled_iff {L U c nu : ℝ} (hL : 0 < L) (hU : 0 < U)
     have := (le_div_iff₀ hUL).1 this
     linarith [mul_comm (U / L) ‖spatialDerivative u t x‖]
 
-/-- **HYPOTHESIS, not a theorem and not an axiom.** For OpenAI's candidate objects,
-a uniformly bounded velocity gradient on `[0, 1)` excludes `SpeedUnboundedAtOne`.
-Named for continuity with the paper, but weaker than Beale–Kato–Majda: for these
-periodic, forced, zero-initial-data objects it follows from the mean-velocity
-identity `d/dt ⟨u⟩ = ⟨f⟩` plus the oscillation bound `√3·C` (see the module
-docstring), which needs torus integration by parts not available here in this form.
-Not proved in this file; every use below takes it as an explicit argument. -/
+/-- **Periodic mean-velocity bound — proved** (as `bkmHypothesis_holds` below). For
+OpenAI's candidate objects, a uniformly bounded velocity gradient on `[0, 1)` excludes
+`SpeedUnboundedAtOne`. Named for continuity with the paper, but weaker than
+Beale–Kato–Majda: for these periodic, forced, zero-initial-data objects it follows
+from the mean-velocity identity `d/dt ⟨u⟩ = ⟨f⟩` plus the oscillation bound `√3·C`
+(see the module docstring). The unprimed theorems below take it as an argument; the
+primed ones discharge it with `bkmHypothesis_holds`. -/
 def BKMHypothesis : Prop :=
   ∀ (u : VelocityField) (p : PressureField) (f : VelocityField),
     CandidateProperties u p f → (∃ C, GradientBoundedOn u 1 C) → ¬ SpeedUnboundedAtOne u
@@ -265,6 +281,257 @@ theorem exits_admissible_near_one (hBKM : BKMHypothesis)
   · exact (hB t ⟨ht.1, h⟩ x).trans (le_max_left _ _)
   · exact (hcon t ⟨lt_of_not_ge h, ht.2⟩ x).trans (le_max_right _ _)
 
+/-! ### `BKMHypothesis` is a theorem: the periodic mean-velocity bound
+
+Everything below uses OpenAI's own periodic-cell integration library
+(`NavierStokes.PeriodicIntegration`: cube integrals, the periodic divergence
+theorem, differentiation under the integral; `NavierStokes.PeriodicUniqueness`:
+periodic integration by parts for the `ProblemStatement` operators). -/
+
+section PeriodicMean
+
+open MeasureTheory
+open scoped InnerProductSpace
+open NavierStokes.PeriodicIntegration (toSpace cubeIntegral cubeMeasure UnitPeriods spatialPartial
+  cubeIntegral_sub cubeIntegral_add cubeIntegral_sum cubeIntegral_zero
+  cubeIntegral_mono_on_cube cubeIntegral_continuousOn_Icc hasDerivAt_cubeIntegral_of_contDiffOn)
+open NavierStokes.PeriodicUniqueness (slab spatial_smooth exists_cube_representative
+  cubeIntegral_fderiv_apply_zero cubeIntegral_inner_partial inner_pressureGradient fderiv_inner
+  spatial_partial_contDiff spatial_partial_periodic time_differentiable_at_interior
+  spatialLaplacian_contDiff pressureGradient_contDiff)
+
+private theorem nat_le_infty' (n : ℕ) : (n : WithTop ℕ∞) ≤ ∞ :=
+  (ENat.natCast_lt_of_coe_top_le_withTop le_rfl n).le
+
+private theorem infty_add_one_le' : (∞ : WithTop ℕ∞) + 1 ≤ ∞ := by
+  exact le_of_eq (by rfl)
+
+theorem cubeIntegral_const (c : ℝ) : cubeIntegral (fun _ : Space => c) = c := by
+  simp [cubeIntegral, cubeMeasure, NavierStokes.PeriodicIntegration.cube, measureReal_def,
+    Real.volume_Icc_pi]
+
+lemma unitPeriods_const (e : Space) : UnitPeriods (fun _ : Space => e) := fun _ _ => rfl
+
+lemma spatialPartial_const (e : Space) (i : Fin 3) (x : Space) :
+    spatialPartial i (fun _ : Space => e) x = 0 := by
+  simp [spatialPartial]
+
+lemma slab_sub_pre {t : ℝ} (ht : t ∈ Ico (0:ℝ) 1) : slab t t ⊆ preSingularDomain :=
+  fun _ hz => ⟨⟨ht.1.trans hz.1.1, hz.1.2.trans_lt ht.2⟩, hz.2⟩
+
+lemma slab_sub_future {t : ℝ} (ht : 0 ≤ t) : slab t t ⊆ futureDomain :=
+  fun _ hz => ⟨ht.trans hz.1.1, hz.2⟩
+
+/-- Integrated momentum balance: along a fixed direction `e`, the time derivative of
+the velocity has the same cube integral as the force. -/
+theorem mean_rate (h : CandidateProperties u p f) (e : Space) {t : ℝ} (ht : t ∈ Ioo (0:ℝ) 1) :
+    cubeIntegral (fun x => ⟪e, temporalDerivative u t x⟫_ℝ) =
+      cubeIntegral (fun x => ⟪e, f (t, x)⟫_ℝ) := by
+  have ht' : t ∈ Ico (0:ℝ) 1 := ⟨ht.1.le, ht.2⟩
+  have hmem : t ∈ Icc t t := ⟨le_rfl, le_rfl⟩
+  have hU : ContDiff ℝ ∞ (fun x : Space => u (t, x)) :=
+    spatial_smooth (h.velocity_smooth.mono (slab_sub_pre ht')) hmem
+  have hP : ContDiff ℝ ∞ (fun x : Space => p (t, x)) :=
+    spatial_smooth (h.pressure_smooth.mono (slab_sub_pre ht')) hmem
+  have hF : ContDiff ℝ ∞ (fun x : Space => f (t, x)) :=
+    spatial_smooth (h.force_smooth.mono (slab_sub_future ht.1.le)) hmem
+  have hpU : UnitPeriods (fun x : Space => u (t, x)) := fun x i => h.velocity_periodic t ht' x i
+  have hpP : UnitPeriods (fun x : Space => p (t, x)) := fun x i => h.pressure_periodic t ht' x i
+  have he : ContDiff ℝ ∞ (fun _ : Space => e) := contDiff_const
+  have hpt : ∀ x, ⟪e, temporalDerivative u t x⟫_ℝ =
+      ⟪e, f (t, x)⟫_ℝ - ⟪e, advection u t x⟫_ℝ + ⟪e, spatialLaplacian u t x⟫_ℝ -
+        ⟪e, pressureGradient p t x⟫_ℝ := by
+    intro x
+    have hns := h.navier_stokes t ht x
+    unfold navierStokesResidual at hns
+    rw [← hns]
+    simp only [inner_add_right, inner_sub_right]
+    ring
+  -- advection: `⟪e, (u·∇)u⟫ = (u·∇)⟪e, u⟫` integrates to zero since `∇·u = 0`
+  have hA : cubeIntegral (fun x => ⟪e, advection u t x⟫_ℝ) = 0 := by
+    have hfun : (fun x => ⟪e, advection u t x⟫_ℝ) =
+        (fun x => fderiv ℝ (fun y => ⟪e, u (t, y)⟫_ℝ) x (u (t, x))) := by
+      funext x
+      rw [fderiv_inner he hU x (u (t, x))]
+      simp [advection, spatialDerivative]
+    have hpe : UnitPeriods (fun y : Space => ⟪e, u (t, y)⟫_ℝ) := by
+      intro y i
+      simp only [hpU y i]
+    rw [hfun]
+    exact cubeIntegral_fderiv_apply_zero (he.inner ℝ hU) hU hpe hpU
+      (fun x => h.divergence_free t ht' x)
+  -- viscous term: each `⟪e, ∂ᵢ∂ᵢu⟫` is a total derivative
+  have hL : cubeIntegral (fun x => ⟪e, spatialLaplacian u t x⟫_ℝ) = 0 := by
+    have hsum : cubeIntegral (fun x => ⟪e, spatialLaplacian u t x⟫_ℝ) =
+        ∑ i : Fin 3, cubeIntegral (fun x =>
+          ⟪e, spatialPartial i (spatialPartial i (fun y => u (t, y))) x⟫_ℝ) := by
+      simp only [spatialLaplacian, inner_sum]
+      exact cubeIntegral_sum Finset.univ _ (fun i _ =>
+        (he.inner ℝ (spatial_partial_contDiff (spatial_partial_contDiff hU i) i)).continuous)
+    rw [hsum]
+    apply Finset.sum_eq_zero
+    intro i _
+    have hi := cubeIntegral_inner_partial he (spatial_partial_contDiff hU i) (unitPeriods_const e)
+      (spatial_partial_periodic hpU i) i
+    simp only [spatialPartial_const, inner_zero_left, cubeIntegral_zero, neg_zero] at hi
+    exact hi
+  -- pressure: `⟪e, ∇p⟫ = ∂ₑp` integrates to zero
+  have hPr : cubeIntegral (fun x => ⟪e, pressureGradient p t x⟫_ℝ) = 0 := by
+    have hfun : (fun x => ⟪e, pressureGradient p t x⟫_ℝ) =
+        (fun x => fderiv ℝ (fun y => p (t, y)) x ((fun _ : Space => e) x)) := by
+      funext x
+      exact inner_pressureGradient p t x e
+    rw [hfun]
+    exact cubeIntegral_fderiv_apply_zero hP he hpP (unitPeriods_const e)
+      (fun x => by simp [spatialPartial_const])
+  have c1 := (he.inner ℝ hF).continuous
+  have c2 : Continuous (fun x => ⟪e, advection u t x⟫_ℝ) := (he.inner ℝ ((hU.fderiv_right infty_add_one_le').clm_apply hU)).continuous
+  have c3 := (he.inner ℝ (spatialLaplacian_contDiff hU)).continuous
+  have c4 := (he.inner ℝ (pressureGradient_contDiff hP)).continuous
+  rw [show (fun x => ⟪e, temporalDerivative u t x⟫_ℝ) = _ from funext hpt,
+    cubeIntegral_sub ((c1.fun_sub c2).fun_add c3) c4, cubeIntegral_add (c1.fun_sub c2) c3,
+    cubeIntegral_sub c1 c2]
+  rw [hA, hL, hPr]
+  ring
+
+/-- The directional cell mean `t ↦ ∫_cube ⟪e, u(t,·)⟫` has derivative `∫_cube ⟪e, f(t,·)⟫`. -/
+theorem mean_hasDerivAt (h : CandidateProperties u p f) (e : Space) {t : ℝ}
+    (ht : t ∈ Ioo (0:ℝ) 1) :
+    HasDerivAt (fun s => cubeIntegral (fun x => ⟪e, u (s, x)⟫_ℝ))
+      (cubeIntegral (fun x => ⟪e, f (t, x)⟫_ℝ)) t := by
+  have hF : ContDiffOn ℝ 1 (fun z : SpaceTime => ⟪e, u z⟫_ℝ) (Ioo (0:ℝ) 1 ×ˢ univ) :=
+    ((contDiffOn_const.inner ℝ h.velocity_smooth).of_le (nat_le_infty' 1)).mono
+      (fun z hz => ⟨⟨hz.1.1.le, hz.1.2⟩, hz.2⟩)
+  have hd := hasDerivAt_cubeIntegral_of_contDiffOn
+    (F := fun z : SpaceTime => ⟪e, u z⟫_ℝ) isOpen_Ioo hF ht
+  have hb : t < (t + 1) / 2 := by linarith [ht.2]
+  have hsub : slab 0 ((t + 1) / 2) ⊆ preSingularDomain :=
+    fun _ hz => ⟨⟨hz.1.1, hz.1.2.trans_lt (by linarith [ht.2])⟩, hz.2⟩
+  have hrate : (fun x => deriv (fun s => ⟪e, u (s, x)⟫_ℝ) t) =
+      (fun x => ⟪e, temporalDerivative u t x⟫_ℝ) := by
+    funext x
+    have hu' := (time_differentiable_at_interior (h.velocity_smooth.mono hsub)
+      ⟨ht.1, hb⟩ x).hasDerivAt
+    exact ((innerSL ℝ e).hasFDerivAt.comp_hasDerivAt t hu').deriv
+  rw [hrate, mean_rate h e ht] at hd
+  exact hd
+
+/-- Mean-velocity bound: the directional cell mean is at most `‖e‖·K` on `(0, 1)`. -/
+theorem mean_le (h : CandidateProperties u p f) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ e : Space, ∀ t ∈ Ioo (0:ℝ) 1,
+      cubeIntegral (fun x => ⟪e, u (t, x)⟫_ℝ) ≤ ‖e‖ * K := by
+  have hK : IsCompact (Icc (0:ℝ) 1 ×ˢ (toSpace '' NavierStokes.PeriodicIntegration.cube)) :=
+    isCompact_Icc.prod ((show IsCompact NavierStokes.PeriodicIntegration.cube from
+      isCompact_Icc).image toSpace.continuous)
+  obtain ⟨K0, hK0⟩ := hK.exists_bound_of_continuousOn
+    (h.force_smooth.continuousOn.mono (fun z hz => ⟨hz.1.1, mem_univ _⟩))
+  refine ⟨max K0 0, le_max_right _ _, fun e t ht => ?_⟩
+  set K := max K0 0
+  have hforce : ∀ s ∈ Ioo (0:ℝ) 1, cubeIntegral (fun x => ⟪e, f (s, x)⟫_ℝ) ≤ ‖e‖ * K := by
+    intro s hs
+    have hF : ContDiff ℝ ∞ (fun x : Space => f (s, x)) :=
+      spatial_smooth (h.force_smooth.mono (slab_sub_future hs.1.le)) ⟨le_rfl, le_rfl⟩
+    calc cubeIntegral (fun x => ⟪e, f (s, x)⟫_ℝ) ≤ cubeIntegral (fun _ : Space => ‖e‖ * K) :=
+          cubeIntegral_mono_on_cube (contDiff_const.inner ℝ hF).continuous continuous_const
+            (fun y hy => (real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left
+              ((hK0 (s, toSpace y) ⟨⟨hs.1.le, hs.2.le⟩, y, hy, rfl⟩).trans (le_max_left _ _))
+              (norm_nonneg _)))
+      _ = ‖e‖ * K := cubeIntegral_const _
+  set m : ℝ → ℝ := fun s => cubeIntegral (fun x => ⟪e, u (s, x)⟫_ℝ) with hm
+  have hcont : ContinuousOn m (Icc 0 t) :=
+    cubeIntegral_continuousOn_Icc (F := fun z : SpaceTime => ⟪e, u z⟫_ℝ)
+      ((continuousOn_const.inner h.velocity_smooth.continuousOn).mono
+        (fun _ hz => ⟨⟨hz.1.1, hz.1.2.trans_lt ht.2⟩, hz.2⟩))
+  obtain ⟨c, hc, hceq⟩ := exists_hasDerivAt_eq_slope m
+    (fun s => cubeIntegral (fun x => ⟪e, f (s, x)⟫_ℝ)) ht.1 hcont
+    (fun s hs => mean_hasDerivAt h e ⟨hs.1, hs.2.trans ht.2⟩)
+  have hm0 : m 0 = 0 := by
+    simp [hm, h.zero_initial_velocity]
+  rw [hm0, sub_zero, sub_zero, eq_div_iff ht.1.ne'] at hceq
+  have hfc := hforce c ⟨hc.1, hc.2.trans ht.2⟩
+  have hK0' : 0 ≤ ‖e‖ * K := mul_nonneg (norm_nonneg _) (le_max_right _ _)
+  change m t ≤ _
+  nlinarith [ht.1, ht.2]
+
+/-- **Periodic mean-velocity bound — proved** (the statement formerly assumed as
+`BKMHypothesis`; the name is kept for continuity). For OpenAI's candidate objects, a
+uniformly bounded velocity gradient on `[0, 1)` excludes `SpeedUnboundedAtOne`:
+the directional cell mean is at most `‖e‖·K` (`mean_le`), the oscillation over the
+cell is at most `√3·C`, so `‖u‖ ≤ K + √3·C` on `(0, 1) × ℝ³`. -/
+theorem bkmHypothesis_holds : BKMHypothesis := by
+  rintro u p f h ⟨C, hC⟩ hsp
+  obtain ⟨K, hK0, hK⟩ := mean_le h
+  have hC0 : 0 ≤ C := (norm_nonneg _).trans (hC 0 ⟨le_rfl, one_pos⟩ 0)
+  have h3 : 0 ≤ Real.sqrt 3 * C := mul_nonneg (Real.sqrt_nonneg _) hC0
+  obtain ⟨t, x, ht, -, hbig⟩ := hsp (K + Real.sqrt 3 * C + 1) (by positivity) 1 one_pos
+  have ht' : t ∈ Ico (0:ℝ) 1 := ⟨ht.1.le, ht.2⟩
+  have hU : ContDiff ℝ ∞ (fun y : Space => u (t, y)) :=
+    spatial_smooth (h.velocity_smooth.mono (slab_sub_pre ht')) ⟨le_rfl, le_rfl⟩
+  obtain ⟨z, hz, hzx⟩ := exists_cube_representative (f := fun y : Space => u (t, y))
+    (fun i y => h.velocity_periodic t ht' y i) x
+  have hlip : ∀ a b : Space, ‖u (t, a) - u (t, b)‖ ≤ C * ‖a - b‖ := fun a b =>
+    convex_univ.norm_image_sub_le_of_norm_fderiv_le
+      (fun y _ => hU.differentiable (by simp) y) (fun y _ => hC t ht' y) (mem_univ b) (mem_univ a)
+  have hdist : ∀ y ∈ NavierStokes.PeriodicIntegration.cube, ‖z - toSpace y‖ ≤ Real.sqrt 3 := by
+    intro y hy
+    rw [EuclideanSpace.norm_eq]
+    apply Real.sqrt_le_sqrt
+    have hi : ∀ i, ‖(z - toSpace y) i‖ ^ 2 ≤ 1 := by
+      intro i
+      have h1 := hz i
+      have h2 := hy.1 i
+      have h3 := hy.2 i
+      have hcoord : (z - toSpace y) i = z i - y i := rfl
+      rw [hcoord, Real.norm_eq_abs, sq_abs]
+      simp only [Pi.zero_apply, Pi.one_apply] at h2 h3
+      nlinarith [h1.1, h1.2]
+    calc ∑ i, ‖(z - toSpace y) i‖ ^ 2 ≤ ∑ _i : Fin 3, (1:ℝ) := Finset.sum_le_sum fun i _ => hi i
+      _ = 3 := by simp
+  set e := u (t, z) with he
+  have hosc : ⟪e, e⟫_ℝ - ‖e‖ * (Real.sqrt 3 * C) ≤ cubeIntegral (fun y => ⟪e, u (t, y)⟫_ℝ) := by
+    calc ⟪e, e⟫_ℝ - ‖e‖ * (Real.sqrt 3 * C)
+        = cubeIntegral (fun _ : Space => ⟪e, e⟫_ℝ - ‖e‖ * (Real.sqrt 3 * C)) :=
+          (cubeIntegral_const _).symm
+      _ ≤ _ := by
+        apply cubeIntegral_mono_on_cube continuous_const (contDiff_const.inner ℝ hU).continuous
+        intro y hy
+        have h1 : ⟪e, e⟫_ℝ - ⟪e, u (t, toSpace y)⟫_ℝ ≤ ‖e‖ * (Real.sqrt 3 * C) := by
+          rw [← inner_sub_right]
+          refine (real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_left ?_ (norm_nonneg _))
+          calc ‖e - u (t, toSpace y)‖ ≤ C * ‖z - toSpace y‖ := hlip z (toSpace y)
+            _ ≤ C * Real.sqrt 3 := mul_le_mul_of_nonneg_left (hdist y hy) hC0
+            _ = Real.sqrt 3 * C := mul_comm _ _
+        linarith
+  have hmean := hK e t ht
+  rw [real_inner_self_eq_norm_sq] at hosc
+  have hnorm : ‖u (t, x)‖ = ‖e‖ := by rw [he]; exact congrArg norm hzx.symm
+  rw [hnorm] at hbig
+  nlinarith [norm_nonneg e]
+
+end PeriodicMean
+
+/-! ### Unconditional corollaries -/
+
+/-- (1, unconditional) A candidate has no uniform gradient bound on `[0, 1)`. -/
+theorem candidate_violates_every_gradient_bound' (hc : CandidateProperties u p f) :
+    ∀ C : ℝ, ¬ GradientBoundedOn u 1 C :=
+  candidate_violates_every_gradient_bound bkmHypothesis_holds hc
+
+/-- (2, unconditional) A candidate is not admissible for any fluid. -/
+theorem candidate_not_admissible' (hc : CandidateProperties u p f) :
+    ∀ c nu : ℝ, ¬ Admissible c nu u :=
+  candidate_not_admissible bkmHypothesis_holds hc
+
+/-- (2', unconditional) A candidate is not admissible for any fluid in any system of units. -/
+theorem candidate_not_admissibleScaled' (hc : CandidateProperties u p f) :
+    ∀ L U c nu : ℝ, 0 < L → 0 < U → 0 < c → 0 < nu → ¬ AdmissibleScaled L U c nu u :=
+  candidate_not_admissibleScaled bkmHypothesis_holds hc
+
+/-- (3, unconditional) Every gradient bound is exceeded arbitrarily close to `t = 1`. -/
+theorem exits_admissible_near_one' (hc : CandidateProperties u p f) :
+    ∀ C δ : ℝ, 0 < δ → ∃ t ∈ Ioo (1 - δ) 1, ∃ x : Space, C < ‖spatialDerivative u t x‖ :=
+  exits_admissible_near_one bkmHypothesis_holds hc
+
 end OpenAIAdmissibility
 
 #print axioms OpenAIAdmissibility.admissibleScaled_iff
@@ -274,3 +541,11 @@ end OpenAIAdmissibility
 #print axioms OpenAIAdmissibility.spatialDerivative_eq_fderivWithin
 #print axioms OpenAIAdmissibility.gradient_bounded_before
 #print axioms OpenAIAdmissibility.exits_admissible_near_one
+#print axioms OpenAIAdmissibility.mean_rate
+#print axioms OpenAIAdmissibility.mean_hasDerivAt
+#print axioms OpenAIAdmissibility.mean_le
+#print axioms OpenAIAdmissibility.bkmHypothesis_holds
+#print axioms OpenAIAdmissibility.candidate_violates_every_gradient_bound'
+#print axioms OpenAIAdmissibility.candidate_not_admissible'
+#print axioms OpenAIAdmissibility.candidate_not_admissibleScaled'
+#print axioms OpenAIAdmissibility.exits_admissible_near_one'
