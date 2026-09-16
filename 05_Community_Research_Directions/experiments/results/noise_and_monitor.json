@@ -1,0 +1,97 @@
+{
+  "fdt_equipartition": {
+    "k": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "per_mode_energy": [
+      0.0,
+      0.00010684991179675719,
+      0.00018039549368203795,
+      0.00018978029923174056,
+      0.00020162494195073876,
+      0.00020289044396150163,
+      0.00014605407505619252,
+      6.568593247141966e-05,
+      2.0791077037290522e-05
+    ],
+    "relative_spread_in_band": 0.2331962880660012,
+    "mean_energy": 0.13315345650914984,
+    "theta": 0.0001,
+    "equipartition_ok": true,
+    "note": "Equipartition predicts per-mode energy independent of k. Spread is measured over the dealiased band only."
+  },
+  "fdt_temperature_linearity": {
+    "samples": [
+      {
+        "theta": 2.5e-05,
+        "mean_energy": 0.03342078453862397
+      },
+      {
+        "theta": 5e-05,
+        "mean_energy": 0.06684919399541758
+      },
+      {
+        "theta": 0.0001,
+        "mean_energy": 0.1337261687037632
+      },
+      {
+        "theta": 0.0002,
+        "mean_energy": 0.2675663895388307
+      }
+    ],
+    "log_log_slope": 1.000353793256471,
+    "expected_slope": 1.0,
+    "linear_in_temperature": true
+  },
+  "pulse_survival": {
+    "noiseless": {
+      "shell_energy_initial": 9.999999999999985e-07,
+      "shell_energy_final": 4.1060290446919116e-05
+    },
+    "thermal": {
+      "shell_energy_initial": 9.999999999999985e-07,
+      "shell_energy_final": 0.012758802870139831
+    },
+    "thermal_floor_in_shell": 0.005997096895928068,
+    "pulse_above_floor": false,
+    "caveat": "Not the OpenAI pulses: those are phase-coherent and shear-amplified by a specific construction. This measures only whether a perturbation of this amplitude and scale sits above the thermal floor."
+  },
+  "validity_monitor": {
+    "laboratory_cm_scale": {
+      "omega_max_admissible_per_s": 2250000000000.0,
+      "worst_Ma": 0.0006666666666666666,
+      "worst_Kn": 5.0929581789406505e-08,
+      "worst_vorticity_ratio": 1.567453650538998e-10,
+      "first_Ma_crossing_t": null,
+      "first_Kn_crossing_t": null,
+      "first_vorticity_crossing_t": null,
+      "stayed_admissible": true,
+      "u_scale_m_per_s": 1.0,
+      "l_scale_m": 0.01
+    },
+    "extreme_microscale": {
+      "omega_max_admissible_per_s": 2250000000000.0,
+      "worst_Ma": 0.2,
+      "worst_Kn": 0.05092958178940651,
+      "worst_vorticity_ratio": 0.04702360951616994,
+      "first_Ma_crossing_t": null,
+      "first_Kn_crossing_t": null,
+      "first_vorticity_crossing_t": null,
+      "stayed_admissible": true,
+      "u_scale_m_per_s": 300.0,
+      "l_scale_m": 1e-08
+    },
+    "reference_bounds": {
+      "water_omega_max_per_s": 2250000000000.0,
+      "air_omega_max_per_s": 7541602564.102564
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "config": {
+    "n_shells": 22,
+    "nu": 1e-06,
+    "points": 8,
+    "t_end": 30.0,
+    "dt": 0.0005,
+    "forcing": 1.0,
+    "shell_lo": 7,
+    "shell_hi": 15
+  },
+  "runs": [
+    {
+      "alpha_prime": null,
+      "k_alpha": Infinity,
+      "k_eta": 32768.0,
+      "omega_max": 600.9836075320445,
+      "k_at_omega_max": 32768.0,
+      "u_at_barrier": 0.0,
+      "energy": 0.8502436294243241,
+      "barrier_inside_range": false,
+      "barrier_before_viscosity": false,
+      "finite": true
+    },
+    {
+      "alpha_prime": 6.103515625e-05,
+      "k_alpha": 128.0,
+      "k_eta": 4096.0,
+      "omega_max": 90.33764987656261,
+      "k_at_omega_max": 1024.0,
+      "u_at_barrier": 0.15446538888730255,
+      "energy": 0.8466046067939081,
+      "barrier_inside_range": true,
+      "barrier_before_viscosity": true,
+      "finite": true
+    },
+    {
+      "alpha_prime": 1.52587890625e-05,
+      "k_alpha": 256.0,
+      "k_eta": 4096.0,
+      "omega_max": 101.06317656920628,
+      "k_at_omega_max": 2048.0,
+      "u_at_barrier": 0.12641718675628555,
+      "energy": 0.847272770303312,
+      "barrier_inside_range": true,
+      "barrier_before_viscosity": true,
+      "finite": true
+    },
+    {
+      "alpha_prime": 3.814697265625e-06,
+      "k_alpha": 512.0,
+      "k_eta": 8192.0,
+      "omega_max": 148.0072484489935,
+      "k_at_omega_max": 2048.0,
+      "u_at_barrier": 0.10345017186046353,
+      "energy": 0.848371949833588,
+      "barrier_inside_range": true,
+      "barrier_before_viscosity": true,
+      "finite": true
+    },
+    {
+      "alpha_prime": 9.5367431640625e-07,
+      "k_alpha": 1024.0,
+      "k_eta": 8192.0,
+      "omega_max": 201.8793214279438,
+      "k_at_omega_max": 4096.0,
+      "u_at_barrier": 0.07989466335850474,
+      "energy": 0.8489798070198952,
+      "barrier_inside_range": true,
+      "barrier_before_viscosity": true,
+      "finite": true
+    },
+    {
+      "alpha_prime": 2.384185791015625e-07,
+      "k_alpha": 2048.0,
+      "k_eta": 16384.0,
+      "omega_max": 225.88552951800537,
+      "k_at_omega_max": 4096.0,
+      "u_at_barrier": 0.05832692877477924,
+      "energy": 0.8495171063351429,
+      "barrier_inside_range": true,
+      "barrier_before_viscosity": true,
+      "finite": true
+    },
+    {
+      "alpha_prime": 5.960464477539063e-08,
+      "k_alpha": 4096.0,
+      "k_eta": 16384.0,
+      "omega_max": 366.8303082413895,
+      "k_at_omega_max": 8192.0,
+      "u_at_barrier": 0.04471999770491368,
+      "energy": 0.8499122664269596,
+      "barrier_inside_range": true,
+      "barrier_before_viscosity": true,
+      "finite": true
+    },
+    {
+      "alpha_prime": 1.4901161193847656e-08,
+      "k_alpha": 8192.0,
+      "k_eta": 32768.0,
+      "omega_max": 397.0753432696342,
+      "k_at_omega_max": 16384.0,
+      "u_at_barrier": 0.04003174913542526,
+      "energy": 0.850037210776454,
+      "barrier_inside_range": true,
+      "barrier_before_viscosity": true,
+      "finite": true
+    },
+    {
+      "alpha_prime": 9.313225746154785e-10,
+      "k_alpha": 32768.0,
+      "k_eta": 32768.0,
+      "omega_max": 667.8446691697869,
+      "k_at_omega_max": 32768.0,
+      "u_at_barrier": 0.02038100186675375,
+      "energy": 0.8502586474060122,
+      "barrier_inside_range": true,
+      "barrier_before_viscosity": false,
+      "finite": true
+    }
+  ],
+  "n_usable": 7,
+  "power_law_fits": {
+    "omega_max": {
+      "exponent": -0.19174420202369608,
+      "r_squared": 0.977775019874568,
+      "n_points": 7,
+      "ci95": [
+        -0.2235929350714637,
+        -0.17012879612278536
+      ],
+      "decades_spanned": 3.612359947967774,
+      "predicted_exponent": -1.0,
+      "law": "omega_max ~ nu/alpha'",
+      "consistent_with_prediction": false
+    },
+    "u_at_barrier": {
+      "exponent": 0.17266614944290584,
+      "r_squared": 0.9909426128945477,
+      "n_points": 7,
+      "ci95": [
+        0.1602937589833217,
+        0.19415788629082362
+      ],
+      "decades_spanned": 3.612359947967774,
+      "predicted_exponent": -0.5,
+      "law": "u(k_alpha) ~ nu/sqrt(alpha')",
+      "consistent_with_prediction": false
+    }
+  },
+  "caveat": "Shell model, not Navier-Stokes. Tests the balance argument only."
+}

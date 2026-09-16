@@ -1,0 +1,170 @@
+{
+  "config": {
+    "n": 32,
+    "nu": 0.005,
+    "ic": "tubes",
+    "points": 4,
+    "t_end": 1.5,
+    "dissipation": "barrier"
+  },
+  "runs": [
+    {
+      "alpha_prime": 0.01373291015625,
+      "k_alpha": 8.533333333333333,
+      "omega_max": 39.174263923807196,
+      "u_max": 4.387606331644715,
+      "t_peak": 0.2859016597982987,
+      "l_arrest": 1.5707963267948966,
+      "k_dissipation_peak": 4.0,
+      "k_eta": 26.85540133305994,
+      "Re_core": 1378.4071818339098,
+      "final_energy": 0.39177530790592446,
+      "peak_enstrophy": 8.14751441678478,
+      "max_div_relative": 2.574762214295449e-17,
+      "wall_time_s": 7.3,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": true,
+      "C3_dissipation_peaks_at_barrier": true,
+      "usable": true,
+      "exclusion_reason": null
+    },
+    {
+      "alpha_prime": 0.02756941490862388,
+      "k_alpha": 6.0226305848385815,
+      "omega_max": 38.79226823318649,
+      "u_max": 4.334870717833172,
+      "t_peak": 0.0,
+      "l_arrest": 1.5707963267948966,
+      "k_dissipation_peak": 4.0,
+      "k_eta": 26.9947902701655,
+      "Re_core": 1361.8398001406206,
+      "final_energy": 0.3867435222672386,
+      "peak_enstrophy": 8.14751441678478,
+      "max_div_relative": 2.472029361131428e-17,
+      "wall_time_s": 7.3,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": true,
+      "C3_dissipation_peaks_at_barrier": true,
+      "usable": true,
+      "exclusion_reason": null
+    },
+    {
+      "alpha_prime": 0.05534680047826099,
+      "k_alpha": 4.250634276730445,
+      "omega_max": 38.79226823318649,
+      "u_max": 4.334870717833172,
+      "t_peak": 0.0,
+      "l_arrest": 1.5707963267948966,
+      "k_dissipation_peak": 4.0,
+      "k_eta": 27.14766657549881,
+      "Re_core": 1361.8398001406206,
+      "final_energy": 0.36289713236947313,
+      "peak_enstrophy": 8.14751441678478,
+      "max_div_relative": 2.4575178676594246e-17,
+      "wall_time_s": 7.0,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": true,
+      "C3_dissipation_peaks_at_barrier": true,
+      "usable": true,
+      "exclusion_reason": null
+    },
+    {
+      "alpha_prime": 0.1111111111111111,
+      "k_alpha": 3.0,
+      "omega_max": 38.79226823318649,
+      "u_max": 4.334870717833172,
+      "t_peak": 0.0,
+      "l_arrest": 1.5707963267948966,
+      "k_dissipation_peak": 4.0,
+      "k_eta": 26.912138316062954,
+      "Re_core": 1361.8398001406206,
+      "final_energy": 0.31612594511193154,
+      "peak_enstrophy": 8.14751441678478,
+      "max_div_relative": 2.7737863625391644e-17,
+      "wall_time_s": 6.0,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": true,
+      "C3_dissipation_peaks_at_barrier": true,
+      "usable": true,
+      "exclusion_reason": null
+    }
+  ],
+  "n_usable": 4,
+  "premise_check": {
+    "Re_core_values": [
+      1378.4071818339098,
+      1361.8398001406206,
+      1361.8398001406206,
+      1361.8398001406206
+    ],
+    "Re_core_median": 1361.8398001406206,
+    "premise_holds": false,
+    "note": "The cutoff law is a statement about a Re~1 diffusive core. If Re_core is far from O(1), this flow does not realize the law's hypotheses and the exponent fits below do not test it."
+  },
+  "power_law_fits": {
+    "t_peak": {
+      "exponent": NaN,
+      "n_points": 1,
+      "insufficient_data": true,
+      "predicted_exponent": 1.0,
+      "law": "t_c ~ alpha'/nu"
+    },
+    "u_max": {
+      "exponent": -0.005205265226405707,
+      "r_squared": 0.6000000000000001,
+      "n_points": 4,
+      "ci95": [
+        -0.01735088408801909,
+        3.411258529934697e-16
+      ],
+      "decades_spanned": 0.9079949117450494,
+      "predicted_exponent": -0.5,
+      "law": "u_max ~ nu/sqrt(alpha')",
+      "consistent_with_prediction": false
+    },
+    "omega_max": {
+      "exponent": -0.004218199563664148,
+      "r_squared": 0.6000000000000363,
+      "n_points": 4,
+      "ci95": [
+        -0.01406066521221495,
+        5.828597554712831e-16
+      ],
+      "decades_spanned": 0.9079949117450494,
+      "predicted_exponent": -1.0,
+      "law": "omega_max ~ nu/alpha'",
+      "consistent_with_prediction": false
+    },
+    "l_arrest": {
+      "exponent": 7.295297385264236e-19,
+      "r_squared": NaN,
+      "n_points": 4,
+      "ci95": [
+        -1.0720590616729568e-16,
+        1.3057422463500286e-16
+      ],
+      "decades_spanned": 0.9079949117450494,
+      "predicted_exponent": 0.5,
+      "law": "l_arrest ~ sqrt(alpha')",
+      "consistent_with_prediction": false
+    }
+  },
+  "predictions": {
+    "t_c": {
+      "exponent": 1.0,
+      "law": "t_c ~ alpha'/nu"
+    },
+    "u_max": {
+      "exponent": -0.5,
+      "law": "u_max ~ nu/sqrt(alpha')"
+    },
+    "omega_max": {
+      "exponent": -1.0,
+      "law": "omega_max ~ nu/alpha'"
+    },
+    "l_arrest": {
+      "exponent": 0.5,
+      "law": "l_arrest ~ sqrt(alpha')"
+    }
+  }
+}

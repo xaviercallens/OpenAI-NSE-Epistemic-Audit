@@ -1,0 +1,78 @@
+{
+  "V1_taylor_green_invariants": {
+    "energy": 0.125,
+    "energy_expected": 0.125,
+    "energy_error": 0.0,
+    "enstrophy": 0.375,
+    "enstrophy_expected": 0.375,
+    "enstrophy_error": 0.0,
+    "pass": true
+  },
+  "V2_divergence_floor": {
+    "taylor_green_relative": 8.083315336612298e-32,
+    "taylor_green_absolute": 2.29387679442751e-27,
+    "random_field_relative": 8.269741537439946e-17,
+    "random_field_absolute": 1.6430965391490137e-11,
+    "float64_epsilon": 2.220446049250313e-16,
+    "interpretation": "The Taylor-Green figure is an artifact of that initial condition's binary representability, not a property of the method. The random-field figure (~1e-16 relative) is the method's actual divergence floor."
+  },
+  "V3_energy_balance": {
+    "max_relative_imbalance": 0.0007919415979641015,
+    "energy_monotone_decreasing": true,
+    "max_div_relative": 4.606345772666796e-18,
+    "note": "residual is dominated by the finite-difference dE/dt, not the solver",
+    "pass": true
+  },
+  "V4_cross_check_dualscale": {
+    "relative_difference": 4.4609759503103636e-13,
+    "steps": 40,
+    "dt": 0.002,
+    "note": "IFRK4 (this module) vs rk4_step from dualscale_solver.numeric.rk4_integrator",
+    "pass": true
+  },
+  "V5_grid_convergence": {
+    "32": {
+      "final_energy": 0.09556600736474957,
+      "final_enstrophy": 0.3831098307677265,
+      "peak_dissipation": 0.015324393230709056,
+      "wall_time_s": 1.6,
+      "steps": 24
+    },
+    "48": {
+      "final_energy": 0.09556597699337686,
+      "final_enstrophy": 0.3831132411113126,
+      "peak_dissipation": 0.015324529644452507,
+      "wall_time_s": 9.0,
+      "steps": 35
+    },
+    "64": {
+      "final_energy": 0.09556597681174253,
+      "final_enstrophy": 0.38311327233038817,
+      "peak_dissipation": 0.015324530893215525,
+      "wall_time_s": 35.5,
+      "steps": 47
+    },
+    "successive_relative_differences": [
+      3.1780528660899436e-07,
+      1.9006171300091393e-09
+    ],
+    "converging": true
+  },
+  "V6_tgv_re1600": {
+    "n_grid": 64,
+    "Re": 1600.0,
+    "peak_dissipation": 0.013385913469197853,
+    "peak_time": 9.137965651064201,
+    "reference": {
+      "peak_time": 9.0,
+      "peak_dissipation": 0.0125,
+      "source": "Brachet+1983; van Rees+2011"
+    },
+    "peak_time_error": 0.1379656510642011,
+    "kmax_eta_final": 0.2507829157599706,
+    "resolved": false,
+    "max_div_relative": 2.9821852968095426e-17,
+    "wall_time_s": 215.0,
+    "caveat": "At this resolution Re=1600 is under-resolved (a converged DNS needs ~256^3); treat the peak TIME as the meaningful comparison and expect the peak MAGNITUDE to be overpredicted as energy accumulates near the cutoff."
+  }
+}
