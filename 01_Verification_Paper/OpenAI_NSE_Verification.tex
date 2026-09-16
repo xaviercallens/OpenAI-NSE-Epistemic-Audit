@@ -623,6 +623,65 @@ companion should contain instead is listed in \S\ref{sec:outlook}: the cutoff la
 count and the fluctuating-hydrodynamics questions.
 
 % ====================================================================
+\section{Testing the Cutoff Regularization Hypothesis}
+\label{sec:cutoff-tested}
+
+We implemented a three-dimensional pseudo-spectral Navier--Stokes solver (rotational form, FFT
+Leray projection, Orszag $2/3$ dealiasing, integrating-factor RK4 so that the stiff barrier term
+imposes no step restriction) and swept the regularization parameter. Code, data and reproduction
+instructions accompany this paper. The solver reproduces the Taylor--Green transition benchmark's
+dissipation peak at $t=9.14$ against a published $t=9.0$ at $\mathrm{Re}=1600$, with the peak
+magnitude $7\%$ high in the manner expected of an under-resolved spectral run
+($k_{\max}\eta=0.25$).
+
+Three things came out of it, and the third is the useful one.
+
+\paragraph{The law is exact, given its premise.} Granting a core on the diffusive scaling
+$\ell_r=\sqrt{\nu t}$, $u=\sqrt{\nu/t}$ --- equivalently $\mathrm{Re}_{\text{core}}=u\ell_r/\nu=1$
+--- the arrest condition follows from the barrier operator itself rather than by assumption: the
+operator $\nu k^2\max(1,\alpha'k^2)$ exceeds the plain viscous rate at the core's own wavenumber
+exactly when $\ell_r<\sqrt{\alpha'}$. Substituting back reproduces all four exponents as
+identities, to machine precision. A disagreement with experiment is therefore a statement about the
+premise, not about the arithmetic.
+
+\paragraph{The premise is not reached.} In a forced dyadic cascade swept over $3.6$ decades in
+$\alpha'$, the measured exponents are $|\omega|_{\max}\sim\alpha'^{-0.192}$ (predicted $-1$) and
+$u\sim\alpha'^{+0.173}$ (predicted $-1/2$, and the sign is wrong), with $R^2=0.98$--$0.99$. Written
+in the barrier wavenumber $k_\alpha=\alpha'^{-1/2}$, the measured velocity at the arrest scale is
+$u\sim k_\alpha^{-0.345}$, which matches the Kolmogorov inertial-range value $k^{-1/3}$ to $3.5\%$
+and misses the cutoff law's $u\sim\nu k_\alpha$ by three orders of magnitude. The local Reynolds
+number at the arrest scale runs from $1.2\times10^3$ down to $4.9$ across the sweep, never
+approaching unity. The cutoff law describes a viscously dominated $\mathrm{Re}\approx1$ core; a
+cascade places the arrest scale in an inertial range, where inertial-range scaling governs and the
+law has no purchase.
+
+\paragraph{Direct simulation cannot close the gap either.} The same test in three dimensions is
+bounded from both sides. The barrier caps vorticity at $\nu/\alpha'=\nu k_\alpha^2$, so arresting a
+\emph{growing} vorticity rather than merely damping the initial field requires
+$\nu k_\alpha^2>|\omega|_0$, while resolution requires $k_\alpha<k_{\max}=n/3$ and the barrier must
+engage before ordinary viscosity does, $k_\alpha<k_\eta$. The first two give
+\begin{equation}
+  n \;>\; 3\sqrt{|\omega|_0\,\mathrm{Re}},
+  \label{eq:barrier-resolution}
+\end{equation}
+that is $n>85$ at $\mathrm{Re}=400$ and $n>170$ at $\mathrm{Re}=1600$ for Taylor--Green data. This
+is why sweeps at $64^3$ in earlier work on this project moved the peak enstrophy by less than a
+tenth of a percent across five decades of $\alpha'$: the barrier was never engaged at all. At
+$96^3$ and $\mathrm{Re}=200$ the admissible band is empty outright --- its lower edge
+$\sqrt{|\omega|_0/\nu}=20$ exceeds the measured $k_\eta=17.6$ --- and every run in the sweep
+excluded itself, reporting which control it failed.
+
+\paragraph{The sharpened question.} The cutoff law cannot be tested with generic initial data at
+any resolution, because generic initial data does not produce a $\mathrm{Re}\approx1$ collapsing
+core; that core is a specific property of the construction, sustained by its forcing. A genuine
+test therefore requires reproducing the construction's own forcing, or a truncation of it, rather
+than any flow that merely develops small scales. We regard this as a more useful statement of the
+open problem than the one it replaces, and note the corollary: for $\sqrt{\alpha'}\gg\eta$ the
+inertial range governs, while at $\sqrt{\alpha'}\sim\eta$ the barrier acts where viscosity already
+does and $\alpha'$ stops being an independent parameter. The window in which a cutoff
+regularization could say anything new about a physical fluid is correspondingly narrow.
+
+% ====================================================================
 \section{Discussion}
 % ====================================================================
 
@@ -661,6 +720,17 @@ a mark against their mathematical content. Three implications follow:
         making explicit --- and, where possible, checkable --- as part of the proof pipeline
         (\S\ref{sec:architecture}).
 \end{enumerate}
+
+A fourth implication concerns this paper's own method, and \S\ref{sec:cutoff-tested} is the
+occasion for it. Having spent the preceding sections establishing where a construction stops
+describing a fluid, we proposed a remedy --- a cutoff regularization --- and then found, on
+testing it, that the remedy could not be evaluated at all with generic data, because it presumes
+the very core structure that generic data does not produce. The asymmetry is worth naming: it is
+easier to identify where a model fails than to establish that a proposed repair does anything, and
+the standard of evidence we applied to OpenAI's construction is the one we then had to apply to our
+own suggestion. That the suggestion survived only as a conditional statement, with its premise
+promoted from an implicit assumption to the object actually under test, seems to us the useful
+outcome rather than a disappointing one.
 
 % ====================================================================
 \section{Outlook: Repositioning, Community Directions, and Physically-Grounded AI}
@@ -805,83 +875,115 @@ reviewed and its physical claim withdrawn (its central Lean theorem ended in a b
 and its vorticity equation lacked a term); it now carries a withdrawal notice in this repository,
 and the companion note~\cite{Callens2026v2} records the corrections.
 
-What survives is a hypothesis with a definite test. If the collapse is arrested when
-$\ell_r\sim\sqrt{\alpha'}$, then by Eq.~\eqref{eq:diffusive} the peak velocity should scale as
-$u_{\max}\sim\nu/\sqrt{\alpha'}$, the arrest time as $t_c\sim\alpha'/\nu$, and the peak vorticity
-as $|\omega|_{\max}\sim\nu/\alpha'$; setting $\sqrt{\alpha'}=\ell_*$ gives $u_{\max}\sim c_s$,
-consistent with Proposition~\ref{prop:scales}. Earlier versions of this paper recorded that test as
-not yet performed. We have now performed it, and \S\ref{sec:cutoff-tested} reports the outcome.
+What survives is a hypothesis with a definite test, which earlier versions of this paper
+recorded as not yet performed. We have since performed it; \S\ref{sec:cutoff-tested} reports
+the outcome, and the research directions that follow from it are set out in
+\S\ref{sec:directions}.
 
-\subsection{The cutoff law, tested: the premise is the obstruction}
-\label{sec:cutoff-tested}
+\subsection{Three directions, in detail}
+\label{sec:directions}
 
-We implemented a three-dimensional pseudo-spectral Navier--Stokes solver (rotational form, FFT
-Leray projection, Orszag $2/3$ dealiasing, integrating-factor RK4 so that the stiff barrier term
-imposes no step restriction) and swept the regularization parameter. Code, data and reproduction
-instructions accompany this paper. The solver reproduces the Taylor--Green transition benchmark's
-dissipation peak at $t=9.14$ against a published $t=9.0$ at $\mathrm{Re}=1600$, with the peak
-magnitude $7\%$ high in the manner expected of an under-resolved spectral run
-($k_{\max}\eta=0.25$).
+The community suggestions of \S\ref{sec:outlook} are broad. The three directions below are the
+ones we think are both consequential and startable now, and we give each in enough detail to be
+acted on --- including the failure modes, since a direction stated without its failure modes is an
+advertisement rather than a plan. Three shorter items follow.
 
-Three things came out of it, and the third is the useful one.
+\paragraph{Direction 1. A forced-core test bed for cutoff regularizations.}
+\S\ref{sec:cutoff-tested} showed that the obstruction to testing any cutoff regularization is the
+unavailability of a $\mathrm{Re}\approx1$ collapsing core, not the regularization itself. The
+remedy is to build one deliberately. Take the construction's leading-order core profile,
+$\ell_r\asymp\tau^{1/2}$, $\ell_z\asymp\tau^{1/2-h}$, $u_\theta,u_z\asymp\tau^{-1/2-h}$, impose it
+as a target on a periodic box, and let the forcing be whatever residual sustains it --- the same
+manufactured-solution logic the construction itself uses (\S\ref{sec:causality}), but needed here
+only over a decade or two in $\tau$ at resolvable scales rather than all the way to $t=1$. Then
+switch on the barrier and measure the four predicted quantities directly.
 
-\paragraph{The law is exact, given its premise.} Granting a core on the diffusive scaling
-$\ell_r=\sqrt{\nu t}$, $u=\sqrt{\nu/t}$ --- equivalently $\mathrm{Re}_{\text{core}}=u\ell_r/\nu=1$
---- the arrest condition follows from the barrier operator itself rather than by assumption: the
-operator $\nu k^2\max(1,\alpha'k^2)$ exceeds the plain viscous rate at the core's own wavenumber
-exactly when $\ell_r<\sqrt{\alpha'}$. Substituting back reproduces all four exponents as
-identities, to machine precision. A disagreement with experiment is therefore a statement about the
-premise, not about the arithmetic.
+The control is $\alpha'=0$: the forced core must follow the diffusive scaling to the accuracy of
+the discretization, or the test bed is wrong before any barrier is applied. Three failure modes
+have to be reported rather than discovered later. First, the forcing may do the work that the
+dynamics is supposed to do; the diagnostic is the ratio of the barrier's dissipation to the
+forcing's power input at the core scale, which must be $O(1)$ or larger at arrest for the arrest
+to be dynamical. Second, a forced swirling column is liable to azimuthal instability, which would
+destroy the core for reasons having nothing to do with the barrier; the axisymmetric and
+three-dimensional runs must be compared. Third, the barrier may interact with the forcing rather
+than with the core if the forcing has support above $k_\alpha$ --- so the forcing must be
+spectrally confined below the barrier, and that confinement checked. A clean positive result would
+turn a cutoff scale into a predictive statement about peak velocity; a clean negative one would
+show that arrest is not what a cutoff does.
 
-\paragraph{The premise is not reached.} In a forced dyadic cascade swept over $3.6$ decades in
-$\alpha'$, the measured exponents are $|\omega|_{\max}\sim\alpha'^{-0.192}$ (predicted $-1$) and
-$u\sim\alpha'^{+0.173}$ (predicted $-1/2$, and the sign is wrong), with $R^2=0.98$--$0.99$. Written
-in the barrier wavenumber $k_\alpha=\alpha'^{-1/2}$, the measured velocity at the arrest scale is
-$u\sim k_\alpha^{-0.345}$, which matches the Kolmogorov inertial-range value $k^{-1/3}$ to $3.5\%$
-and misses the cutoff law's $u\sim\nu k_\alpha$ by three orders of magnitude. The local Reynolds
-number at the arrest scale runs from $1.2\times10^3$ down to $4.9$ across the sweep, never
-approaching unity. The cutoff law describes a viscously dominated $\mathrm{Re}\approx1$ core; a
-cascade places the arrest scale in an inertial range, where inertial-range scaling governs and the
-law has no purchase.
+\paragraph{Direction 2. Sharpening the admissibility condition.}
+The bound $|\omega|\lesssim c_s^2/\nu$ of \S\ref{sec:admissibility} is dimensionally forced but
+blunt in three respects, each of which is a concrete question.
 
-\paragraph{Direct simulation cannot close the gap either.} The same test in three dimensions is
-bounded from both sides. The barrier caps vorticity at $\nu/\alpha'=\nu k_\alpha^2$, so arresting a
-\emph{growing} vorticity rather than merely damping the initial field requires
-$\nu k_\alpha^2>|\omega|_0$, while resolution requires $k_\alpha<k_{\max}=n/3$ and the barrier must
-engage before ordinary viscosity does, $k_\alpha<k_\eta$. The first two give
-\begin{equation}
-  n \;>\; 3\sqrt{|\omega|_0\,\mathrm{Re}},
-  \label{eq:barrier-resolution}
-\end{equation}
-that is $n>85$ at $\mathrm{Re}=400$ and $n>170$ at $\mathrm{Re}=1600$ for Taylor--Green data. This
-is why sweeps at $64^3$ in earlier work on this project moved the peak enstrophy by less than a
-tenth of a percent across five decades of $\alpha'$: the barrier was never engaged at all. At
-$96^3$ and $\mathrm{Re}=200$ the admissible band is empty outright --- its lower edge
-$\sqrt{|\omega|_0/\nu}=20$ exceeds the measured $k_\eta=17.6$ --- and every run in the sweep
-excluded itself, reporting which control it failed.
+\emph{Wrong field?} Viscous dissipation density is $2\nu|S|^2$ with $S$ the rate-of-strain tensor,
+not $\nu|\omega|^2$. The two agree in integral ($\int2|S|^2=\int|\omega|^2$ on a domain without
+boundary) and in order of magnitude, but not pointwise --- and every physical mechanism in
+\S\ref{sec:mach}, heating especially, is driven by the local dissipation. A criterion stated on
+$|S|$ would be the physically correct object; it is stated on $|\omega|$ here because
+Beale--Kato--Majda is.
 
-\paragraph{The sharpened question.} The cutoff law cannot be tested with generic initial data at
-any resolution, because generic initial data does not produce a $\mathrm{Re}\approx1$ collapsing
-core; that core is a specific property of the construction, sustained by its forcing. A genuine
-test therefore requires reproducing the construction's own forcing, or a truncation of it, rather
-than any flow that merely develops small scales. We regard this as a more useful statement of the
-open problem than the one it replaces, and note the corollary: for $\sqrt{\alpha'}\gg\eta$ the
-inertial range governs, while at $\sqrt{\alpha'}\sim\eta$ the barrier acts where viscosity already
-does and $\alpha'$ stops being an independent parameter. The window in which a cutoff
-regularization could say anything new about a physical fluid is correspondingly narrow.
+\emph{Wrong functional?} Magnitude may be the wrong thing to bound at all. Constantin and
+Fefferman~\cite{ConstantinFefferman1993} showed that regularity follows from sufficient
+\emph{coherence of the vorticity direction} in regions of large vorticity, rather than from any
+bound on its magnitude. That is strikingly close to the property this paper has repeatedly
+identified as the construction's essential and physically fragile ingredient --- coherent phase
+alignment maintained down to arbitrarily fine scales (\S\ref{sec:euler}). A direction-based
+admissibility criterion would therefore discriminate exactly where a magnitude-based one does not,
+and would connect the geometric fragility to a regularity theorem rather than to an estimate. We
+regard this as the most promising single item on this list.
 
-\paragraph{The two companion questions.} On thermal noise, we have implemented Landau--Lifshitz
-fluctuating hydrodynamics in the same solver, with the noise amplitude verified rather than assumed
---- equipartition across the resolved band and an equilibrium energy linear in temperature both
-hold to the accuracy of the runs. A first probe places a seeded pulse roughly two orders of
-magnitude below the thermal floor at the same wavenumber; we report this as a calibration of the
-method and a single data point, not as an answer, since the construction's pulses are
-phase-coherent and shear-amplified in a specific arrangement that this probe does not reproduce.
-The codimension question --- the number of unstable modes of the linearized self-similar profile
-beyond those generated by symmetries, which is the rigorous version of ``fine-tuned'' and has been
-answered for related Euler and Boussinesq profiles by computer-assisted and neural-network
-methods~\cite{ChenHou2022,Wang2025} --- remains untouched here; it needs eigenvalue analysis in
-similarity variables rather than forward integration.
+\emph{Not formalized.} As noted in \S\ref{sec:architecture}, none of this repository's Lean
+material is connected to OpenAI's definitions. The tractable step is narrow and worth stating
+precisely: define admissibility as a predicate on OpenAI's own \texttt{VelocityField}, and prove
+the reduction ``admissible on $[0,T)$ $\Rightarrow$ not \texttt{SpeedUnboundedAtOne}''. The
+Beale--Kato--Majda theorem is not in Mathlib and would have to enter as an explicit hypothesis or
+axiom; the reduction that consumes it is elementary and provable, and the result would be the
+first statement in this project that constrains the actual proof objects. Labelling which part is
+assumed is the whole point of doing it this way.
+
+Finally, a limit worth recording: an admissibility condition that excludes blow-up is weaker than
+one that selects a unique physical solution. Non-uniqueness of Leray solutions of the forced
+equations~\cite{ABC2022} is not addressed by any bound of this kind, and we do not claim it is.
+
+\paragraph{Direction 3. Coherent pulses under thermal noise.}
+\S\ref{sec:cutoff-tested} reports a calibrated Landau--Lifshitz implementation and one data point.
+The data point is not yet the question, because the quantity that matters is coherence rather than
+amplitude: the construction's pulses are phase-locked and shear-amplified in a specific
+arrangement, and a random perturbation of equal energy is a different object. The sharp question is
+a competition between two rates --- the shear amplification rate $\sigma$ supplied by the
+background, and the rate at which noise destroys the phase relation the amplification depends on.
+Amplification survives when $\sigma\,\tau_{\text{decoh}}\gg1$, and $\tau_{\text{decoh}}$ is
+computable from the noise variance at the packet's wavenumber, so the criterion is a number, not a
+judgement. The natural amplitude scale to compare against is the thermal length
+$\ell_{\text{th}}=k_BT/(\rho\nu^2)$, which is picometres in water, well below the molecular
+spacing; the comparison that matters is therefore made at the scale where amplification begins,
+not at the scale where the construction ends.
+
+What makes this worth doing is the strength of the conclusion available. Every argument in
+\S\ref{sec:mach} concerns the approach to the singularity: the model fails at $\ell_*$, some
+picoseconds before $t=1$. A decoherence result would instead concern $t=0$ --- it would say the
+required datum cannot be prepared in a fluid at finite temperature, which is a statement about
+realizability rather than about a limit reached en route. The caveat is symmetric and must be kept
+in view: fluctuating hydrodynamics is itself a coarse-grained model with a validity range, and
+pushing it to nanometre scales repeats, in a new place, exactly the error this audit was written to
+correct.
+
+\paragraph{Three shorter items.} \emph{Codimension.} The number of unstable modes of the
+linearized self-similar profile beyond those generated by symmetries is the rigorous form of
+``non-generic''; it has been computed for related Euler and Boussinesq profiles by
+computer-assisted and neural-network methods~\cite{ChenHou2022,Wang2025}, and needs eigenvalue
+analysis in similarity variables rather than the forward integration used here. A finite count
+would not make the blow-up physically irrelevant, since unstable self-similar solutions still
+organize transient dynamics. \emph{Dyadic criticality.} In checking whether our exponents meet a
+formalized shell-model threshold, we found that the construction's enstrophy exponent at $h\to0$
+coincides with the rate saturating the dyadic estimate that carries the same scaling as
+three-dimensional Navier--Stokes. We record it as a numerical coincidence, not a theorem: the shell
+model's single length scale is an obstruction to deriving it, given $\ell_r\neq\ell_z$ here. It is
+also independent of, and pulls opposite to, the Serrin-threshold marginality of \S\ref{sec:thermo}.
+\emph{Validity monitoring in practice.} The monitor of \S\ref{sec:architecture} is a small amount
+of code and would cost little in a production solver; whether reporting departure from the modelled
+regime changes anything about how such solvers are used is an empirical question about practice,
+not about fluids.
 
 % ====================================================================
 \section{Conclusion}
@@ -908,6 +1010,16 @@ what changed, and why, in Appendix~\ref{app:versions}.) What they do establish i
 \emph{this particular} construction is not a description of anything a real fluid does; it is a
 demonstration of what the continuum model, pushed to the exact edge of its own internal
 consistency, is mathematically capable of.
+
+We also tested, rather than merely proposed, the one repair this paper had to offer. The cutoff
+regularization of \S\ref{sec:outlook} turns out to be exact given its premise and untestable
+without it: a $\mathrm{Re}\approx1$ collapsing core is a property of the construction, not of flows
+in general, so no amount of resolution applied to generic data can decide the question
+(\S\ref{sec:cutoff-tested}). The three directions of \S\ref{sec:directions} follow from that, and
+the second of them --- an admissibility criterion stated on the coherence of vorticity direction
+rather than on its magnitude, after Constantin and Fefferman~\cite{ConstantinFefferman1993} ---
+strikes us as the most likely of the three to say something that is both true and new, because it
+bears directly on the coherence the construction requires and the thermal environment denies.
 
 The more useful outcome of this exercise, in our view, is not the verdict but the map: a concrete
 list of where the physical assumptions break down, a set of research directions raised
@@ -1132,6 +1244,10 @@ edge cases like this one; that suggestion is the direct motivation for \S\ref{se
   D. Bandak, N. Goldenfeld, A.\,A. Mailybaev, G. Eyink,
   ``Dissipation-range fluid turbulence and thermal noise,''
   \emph{Phys.\ Rev.\ E}\ \textbf{105}, 065113, 2022.
+\bibitem{ConstantinFefferman1993}
+  P. Constantin, C. Fefferman,
+  ``Direction of vorticity and the problem of global regularity for the Navier--Stokes equations,''
+  \emph{Indiana Univ.\ Math.\ J.}\ \textbf{42}(3), 775--789, 1993.
 \bibitem{ZhengAngell1991}
   Q. Zheng, D.\,J. Durben, G.\,H. Wolf, C.\,A. Angell,
   ``Liquids at large negative pressures: water at the homogeneous nucleation limit,''

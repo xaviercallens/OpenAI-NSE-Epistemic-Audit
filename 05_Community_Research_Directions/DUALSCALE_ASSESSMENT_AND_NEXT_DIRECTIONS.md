@@ -151,6 +151,24 @@ integrable. Citing these files as certifying regularity inverts their actual con
 
 ## 3. Research directions that follow
 
+> **Status update (2026-09-16).** Items A1, B1, B2 and B3 below have since been implemented, and
+> C1 answered. See `experiments/RESULTS.md` for the data and
+> `01_Verification_Paper/OpenAI_NSE_Verification.tex` §9 for the write-up. The headline outcome:
+> **the cutoff law (B1) is exact given its premise but untestable without it** — a `Re≈1`
+> collapsing core is a property of the construction, not of flows in general, so no resolution
+> applied to generic data can decide it. The three directions that follow from that result are
+> developed in the paper's §10.5; in short they are (1) a *forced-core test bed* that supplies the
+> missing premise, (2) an admissibility criterion stated on **vorticity direction** rather than
+> magnitude, after Constantin–Fefferman — which bears directly on the coherence the construction
+> needs and the thermal environment denies, and is the most promising item here — and (3) the
+> competition between shear amplification and noise-driven **decoherence**, which would speak to
+> whether the datum can be prepared at all rather than to where the model fails en route.
+>
+> The original plan is retained below as written, since the estimates in it are what the work was
+> costed against and two of them proved wrong in instructive ways: the DNS route (A2/B1) was
+> defeated by a resolution constraint not anticipated here, and the shell model turned out to carry
+> the result instead.
+
 Ordered by value per unit effort. The unifying theme: **use these assets to answer the questions
 this project has posed and left open, rather than to re-litigate OpenAI's proof.**
 
