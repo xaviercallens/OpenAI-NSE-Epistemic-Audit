@@ -681,6 +681,36 @@ inertial range governs, while at $\sqrt{\alpha'}\sim\eta$ the barrier acts where
 does and $\alpha'$ stops being an independent parameter. The window in which a cutoff
 regularization could say anything new about a physical fluid is correspondingly narrow.
 
+\paragraph{A distinct lock: Leray-$\alpha$ gates transfer rather than draining energy.}
+The regularization tested above modifies \emph{dissipation},
+$\nu|k|^2\mapsto\nu|k|^2\max(1,\alpha'|k|^2)$. The Leray-$\alpha$ model~\cite{FHT2001,CHOT2005}
+modifies \emph{transport} instead,
+\begin{equation}
+  \partial_t u+(\bar u\cdot\nabla)u=-\nabla p+\nu\Delta u,\qquad
+  \bar u=(1-\alpha^2\Delta)^{-1}u,
+  \label{eq:leray-alpha}
+\end{equation}
+and it is this second family, not the first, whose three-dimensional global well-posedness is a
+theorem. The two are easily conflated, and earlier documents in this programme did conflate them;
+the negative result above concerns the first. It transfers to the second only in its kinematic
+part: arrest at the filter scale for a $\mathrm{Re}\approx1$ core still gives $t_c\sim\alpha^2/\nu$
+and $u_{\max}\sim\nu/\alpha$, and generic data still does not supply that core.
+
+What does not transfer is the mechanism, and here the two locks differ in kind. The Leray-$\alpha$
+nonlinearity does no work on $u$: since $\bar u$ is solenoidal,
+$\int u\cdot(\bar u\cdot\nabla)u\,dx=-\int(\nabla\cdot\bar u)\,|u|^2/2\,dx=0$, so the inviscid
+system conserves $\tfrac12\int|u|^2$ exactly (to a drift of $3\times10^{-16}$ over two hundred steps
+in our implementation). Implementing Eq.~\eqref{eq:leray-alpha} in the same solver, on the same
+Taylor--Green data at $\mathrm{Re}=200$, peak vorticity falls monotonically with $\alpha$, by a
+factor of $3.3$ between $\alpha=0$ and $\alpha=0.4$, while the fraction of energy dissipated
+\emph{decreases} from $55\%$ to $35\%$; the hyperviscous barrier, by contrast, dissipates slightly
+more than plain Navier--Stokes. Hyperviscosity destroys energy that reaches small scales;
+Leray-$\alpha$ prevents it from arriving. One is a drain and the other a gate. Neither result bears
+on the regularity of the Navier--Stokes equations themselves --- a theorem about a modified equation
+does not constrain the unmodified one --- but the distinction is the sharpest statement we can give
+of what a ``dual-scale lock'' would have to be, and it is taken up in Direction~2 of
+\S\ref{sec:directions}.
+
 % ====================================================================
 \section{Discussion}
 % ====================================================================
@@ -913,7 +943,12 @@ show that arrest is not what a cutoff does.
 
 \paragraph{Direction 2. Sharpening the admissibility condition.}
 The bound $|\omega|\lesssim c_s^2/\nu$ of \S\ref{sec:admissibility} is dimensionally forced but
-blunt in three respects, each of which is a concrete question.
+blunt. Its candidates can be ordered by how finely they discriminate: a bound on vorticity
+\emph{magnitude} (the present one); a bound on \emph{transfer} across a scale, which is what
+Leray-$\alpha$ enforces and which \S\ref{sec:cutoff-tested} measured to be energy-conserving rather
+than dissipative; and a bound on vorticity \emph{direction}. The middle term is where the
+dual-scale intuition behind earlier drafts of this programme properly lives, and the measurement is
+the first quantitative evidence for it. Three concrete questions follow.
 
 \emph{Wrong field?} Viscous dissipation density is $2\nu|S|^2$ with $S$ the rate-of-strain tensor,
 not $\nu|\omega|^2$. The two agree in integral ($\int2|S|^2=\int|\omega|^2$ on a domain without

@@ -224,6 +224,8 @@ class PseudoSpectralNavierStokes3D:
         alpha_prime: Optional[float] = None,
         dissipation: str = "laplacian",
         dealias: bool = True,
+        leray_alpha: Optional[float] = None,
+        leray_filter_power: int = 1,
     ):
         if dissipation not in ("laplacian", "bihyper", "barrier"):
             raise ValueError(f"unknown dissipation operator: {dissipation}")
@@ -255,6 +257,22 @@ class PseudoSpectralNavierStokes3D:
 
         self.k_max_effective = (2.0 / 3.0) * (self.n / 2.0) if dealias else self.n / 2.0
         self.diss_symbol = self._build_dissipation_symbol()
+
+        # --- Leray-alpha transport regularization -------------------------
+        # NOTE: this is a *different* model from the 'barrier'/'bihyper'
+        # dissipation operators above, and the two are easily conflated.
+        #   hyperviscous barrier : modifies DISSIPATION,  nu|k|^2 -> nu|k|^2 m(k)
+        #   Leray-alpha          : modifies TRANSPORT,    (u.grad)u -> (ubar.grad)u
+        # Only the second is the Leray-alpha / Navier-Stokes-alpha family whose
+        # 3D global well-posedness is a theorem (Foias-Holm-Titi 2001;
+        # Cheskidov-Holm-Olson-Titi 2005). A result about one says nothing about
+        # the other.
+        self.leray_alpha = leray_alpha
+        self.leray_filter_power = int(leray_filter_power)
+        if leray_alpha:
+            self.filter_symbol = 1.0 / (1.0 + leray_alpha**2 * self.k_sq) ** self.leray_filter_power
+        else:
+            self.filter_symbol = None
 
     # -- operators ----------------------------------------------------------
 
@@ -316,9 +334,41 @@ class PseudoSpectralNavierStokes3D:
         nl_hat = np.stack([np.fft.fftn(wxu[i]) for i in range(3)])
         return self.project_leray(-nl_hat)
 
+    def smoothed_velocity(self, u_hat: np.ndarray) -> np.ndarray:
+        """The Leray-alpha transport velocity ubar = (1 - alpha^2 Delta)^{-p} u."""
+        if self.filter_symbol is None:
+            return u_hat
+        return u_hat * self.filter_symbol
+
+    def nonlinear_leray_alpha(self, u_hat: np.ndarray) -> np.ndarray:
+        """
+        Projected nonlinear term for Leray-alpha: -P[(ubar.grad)u].
+
+        Computed in divergence form, (ubar.grad)u = div(ubar (x) u), which is
+        valid because ubar is solenoidal (the filter is a function of |k| and so
+        commutes with the Leray projector). The rotational form used for plain
+        Navier-Stokes does not apply here: the identity
+        (u.grad)u = omega x u + grad(|u|^2/2) needs the advecting and advected
+        velocities to be the same field, and in this model they are not.
+        """
+        ub_hat = self.smoothed_velocity(u_hat)
+        u = np.stack([np.fft.ifftn(u_hat[i]).real for i in range(3)])
+        ub = np.stack([np.fft.ifftn(ub_hat[i]).real for i in range(3)])
+        out = np.empty_like(u_hat)
+        for i in range(3):
+            flux = np.stack([np.fft.fftn(ub[j] * u[i]) for j in range(3)])
+            out[i] = 1j * (self.kx * flux[0] + self.ky * flux[1] + self.kz * flux[2])
+        return self.project_leray(-out)
+
+    def nonlinear_term(self, u_hat: np.ndarray) -> np.ndarray:
+        """Dispatch to the Leray-alpha or the plain Navier-Stokes nonlinearity."""
+        if self.filter_symbol is None:
+            return self.nonlinear(u_hat)
+        return self.nonlinear_leray_alpha(u_hat)
+
     def rhs(self, t: float, u_hat: np.ndarray) -> np.ndarray:
         """Full RHS including dissipation (for the non-stiff reference stepper)."""
-        return self.nonlinear(u_hat) + self.diss_symbol * u_hat
+        return self.nonlinear_term(u_hat) + self.diss_symbol * u_hat
 
     # -- diagnostics --------------------------------------------------------
 
@@ -498,10 +548,10 @@ class PseudoSpectralNavierStokes3D:
         """
         E = np.exp(self.diss_symbol * dt)
         E2 = np.exp(self.diss_symbol * dt * 0.5)
-        n1 = self.nonlinear(u_hat)
-        n2 = self.nonlinear(E2 * (u_hat + 0.5 * dt * n1))
-        n3 = self.nonlinear(E2 * u_hat + 0.5 * dt * n2)
-        n4 = self.nonlinear(E * u_hat + dt * E2 * n3)
+        n1 = self.nonlinear_term(u_hat)
+        n2 = self.nonlinear_term(E2 * (u_hat + 0.5 * dt * n1))
+        n3 = self.nonlinear_term(E2 * u_hat + 0.5 * dt * n2)
+        n4 = self.nonlinear_term(E * u_hat + dt * E2 * n3)
         out = E * u_hat + (dt / 6.0) * (E * n1 + 2.0 * E2 * (n2 + n3) + n4)
         return self.project_leray(out)
 

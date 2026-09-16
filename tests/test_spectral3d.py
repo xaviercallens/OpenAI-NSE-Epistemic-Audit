@@ -200,6 +200,80 @@ class TestThermalNoise(unittest.TestCase):
         self.assertEqual(float(np.max(np.abs(inc))), 0.0)
 
 
+class TestLerayAlpha(unittest.TestCase):
+    """
+    Leray-alpha modifies TRANSPORT, (u.grad)u -> (ubar.grad)u with
+    ubar = (1 - alpha^2 Delta)^{-1} u. It is a different model from the
+    hyperviscous 'barrier', which modifies DISSIPATION. These tests pin the
+    properties that distinguish it, which are also the ones a Lean
+    formalization would need to state.
+    """
+
+    def test_filter_symbol_bounds(self):
+        """0 < (1 + alpha^2 |k|^2)^{-1} <= 1, with equality only at k = 0."""
+        s = PseudoSpectralNavierStokes3D(n_grid=16, nu=1e-2, leray_alpha=0.1)
+        self.assertTrue(np.all(s.filter_symbol > 0))
+        self.assertTrue(np.all(s.filter_symbol <= 1.0))
+        self.assertEqual(float(s.filter_symbol[0, 0, 0]), 1.0)
+        self.assertTrue(np.all(s.filter_symbol[s.k_sq > 0] < 1.0))
+
+    def test_smoothed_velocity_is_solenoidal(self):
+        """The filter is radial in k, so it commutes with the Leray projector."""
+        s = PseudoSpectralNavierStokes3D(n_grid=16, nu=1e-2, leray_alpha=0.2)
+        ub = s.smoothed_velocity(s.initialize_random_solenoidal(seed=1))
+        self.assertLess(s.divergence_report(ub)["div_l2_relative"], 1e-12)
+
+    def test_reduces_to_navier_stokes_as_alpha_vanishes(self):
+        """The filter correction is O(alpha^2 k^2): two decades per decade of alpha."""
+        base = PseudoSpectralNavierStokes3D(n_grid=16, nu=1e-2)
+        u0 = base.initialize_random_solenoidal(seed=4, energy=0.2)
+        ns = base.nonlinear_term(u0)
+
+        def rel(a):
+            la = PseudoSpectralNavierStokes3D(n_grid=16, nu=1e-2, leray_alpha=a).nonlinear_term(u0)
+            return np.sqrt(np.sum(np.abs(la - ns) ** 2)) / np.sqrt(np.sum(np.abs(ns) ** 2))
+
+        self.assertLess(rel(1e-4), 1e-6)
+        ratio = rel(1e-3) / rel(1e-4)
+        self.assertAlmostEqual(np.log10(ratio), 2.0, delta=0.05)
+
+    def test_nonlinearity_conserves_kinetic_energy(self):
+        """
+        int u.(ubar.grad)u = int ubar.grad(|u|^2/2) = -int (div ubar)|u|^2/2 = 0.
+        So the inviscid Leray-alpha flow conserves (1/2)int|u|^2 exactly: the
+        lock suppresses transfer rather than dissipating energy.
+        """
+        s = PseudoSpectralNavierStokes3D(n_grid=16, nu=0.0, leray_alpha=0.05)
+        u = s.initialize_random_solenoidal(seed=9, energy=0.2)
+        e0 = s.energy(u)
+        for _ in range(100):
+            u = s.ifrk4_step(u, 2e-3)
+        self.assertLess(abs(s.energy(u) - e0) / e0, 1e-12)
+
+    def test_power_input_of_nonlinearity_vanishes(self):
+        """Direct check of the identity above, without time stepping."""
+        s = PseudoSpectralNavierStokes3D(n_grid=16, nu=1e-2, leray_alpha=0.3)
+        u = s.initialize_random_solenoidal(seed=11, energy=0.3)
+        power = float(np.real(np.sum(np.conj(u) * s.nonlinear_term(u))))
+        scale = float(np.sum(np.abs(u) ** 2)) * float(np.sqrt(np.max(s.k_sq)))
+        self.assertLess(abs(power) / scale, 1e-12)
+
+    def test_lock_retains_energy_unlike_hyperviscosity(self):
+        """
+        The distinguishing physical signature: Leray-alpha suppresses peak
+        vorticity while RETAINING more energy than plain Navier-Stokes, whereas
+        a hyperviscous barrier removes energy.
+        """
+        n, nu, t_end = 24, 5e-3, 5.0
+        def run(**kw):
+            s = PseudoSpectralNavierStokes3D(n_grid=n, nu=nu, **kw)
+            return s.run(s.initialize_taylor_green(), t_end=t_end, dt=0.02, diagnostics_every=5)
+        ns = run()
+        la = run(leray_alpha=0.3)
+        self.assertLess(float(np.max(la["omega_max"])), float(np.max(ns["omega_max"])))
+        self.assertGreater(float(la["energy"][-1]), float(ns["energy"][-1]))
+
+
 class TestCutoffLawSelfConsistency(unittest.TestCase):
     """
     The experimental result is a statement about the law's *premise*, which only

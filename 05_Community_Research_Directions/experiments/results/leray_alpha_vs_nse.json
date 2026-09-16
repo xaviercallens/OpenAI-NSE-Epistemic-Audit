@@ -1,0 +1,62 @@
+[
+  {
+    "model": "NSE",
+    "peak_enstrophy": 1.2848081052663576,
+    "peak_omega": 10.416727753185524,
+    "t_peak": 6.066864273182497,
+    "E_final": 0.05607934892688513,
+    "energy_lost_frac": 0.551365208584919,
+    "wall": 36.9
+  },
+  {
+    "model": "Leray-a a=0.05",
+    "leray_alpha": 0.05,
+    "peak_enstrophy": 1.2373525254126645,
+    "peak_omega": 10.115479905178816,
+    "t_peak": 6.302251371108913,
+    "E_final": 0.05752584493335968,
+    "energy_lost_frac": 0.5397932405331225,
+    "wall": 38.4
+  },
+  {
+    "model": "Leray-a a=0.1",
+    "leray_alpha": 0.1,
+    "peak_enstrophy": 1.126718849057835,
+    "peak_omega": 9.222289373604745,
+    "t_peak": 6.611794672251766,
+    "E_final": 0.06146613155508974,
+    "energy_lost_frac": 0.5082709475592821,
+    "wall": 35.0
+  },
+  {
+    "model": "Leray-a a=0.2",
+    "leray_alpha": 0.2,
+    "peak_enstrophy": 0.9068155987698269,
+    "peak_omega": 6.794682202179899,
+    "t_peak": 6.959841034137162,
+    "E_final": 0.07022147873467366,
+    "energy_lost_frac": 0.4382281701226107,
+    "wall": 35.5
+  },
+  {
+    "model": "Leray-a a=0.4",
+    "leray_alpha": 0.4,
+    "peak_enstrophy": 0.6837008672199252,
+    "peak_omega": 3.1842017160305347,
+    "t_peak": 7.258164021271852,
+    "E_final": 0.081668587342826,
+    "energy_lost_frac": 0.34665130125739196,
+    "wall": 40.0
+  },
+  {
+    "model": "hyperv a'=0.01",
+    "alpha_prime": 0.01,
+    "dissipation": "barrier",
+    "peak_enstrophy": 1.2107461309294343,
+    "peak_omega": 9.666813618468822,
+    "t_peak": 6.072523239835448,
+    "E_final": 0.055711170628044406,
+    "energy_lost_frac": 0.5543106349756448,
+    "wall": 34.8
+  }
+]
