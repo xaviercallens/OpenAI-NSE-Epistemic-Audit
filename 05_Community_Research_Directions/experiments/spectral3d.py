@@ -226,6 +226,7 @@ class PseudoSpectralNavierStokes3D:
         dealias: bool = True,
         leray_alpha: Optional[float] = None,
         leray_filter_power: int = 1,
+        alpha_model: str = "leray",
     ):
         if dissipation not in ("laplacian", "bihyper", "barrier"):
             raise ValueError(f"unknown dissipation operator: {dissipation}")
@@ -267,11 +268,24 @@ class PseudoSpectralNavierStokes3D:
         # 3D global well-posedness is a theorem (Foias-Holm-Titi 2001;
         # Cheskidov-Holm-Olson-Titi 2005). A result about one says nothing about
         # the other.
+        # Two members of the alpha family are provided:
+        #   'leray' : d_t u + (ubar.grad) u = -grad p + nu Lap u          (Leray-alpha)
+        #   'lans'  : d_t v - u x (curl v) + grad pi = nu Lap v,           (LANS-alpha /
+        #             v = (1 - alpha^2 Lap) u                               Navier-Stokes-alpha)
+        # In both, the STATE is the smooth solenoidal field u. LANS-alpha is the one
+        # obtained by Lagrangian averaging (Holm-Marsden-Ratiu 1998) and therefore the
+        # one the programme conjectures could be *derived* from kinetic fluctuations;
+        # its conserved quantity is the alpha-energy (1/2) int u.v, not (1/2) int |u|^2.
+        if alpha_model not in ("leray", "lans"):
+            raise ValueError(f"unknown alpha_model: {alpha_model}")
+        self.alpha_model = alpha_model
         self.leray_alpha = leray_alpha
         self.leray_filter_power = int(leray_filter_power)
         if leray_alpha:
-            self.filter_symbol = 1.0 / (1.0 + leray_alpha**2 * self.k_sq) ** self.leray_filter_power
+            self.helmholtz_symbol = (1.0 + leray_alpha**2 * self.k_sq) ** self.leray_filter_power
+            self.filter_symbol = 1.0 / self.helmholtz_symbol
         else:
+            self.helmholtz_symbol = None
             self.filter_symbol = None
 
     # -- operators ----------------------------------------------------------
@@ -360,10 +374,39 @@ class PseudoSpectralNavierStokes3D:
             out[i] = 1j * (self.kx * flux[0] + self.ky * flux[1] + self.kz * flux[2])
         return self.project_leray(-out)
 
+    def nonlinear_lans_alpha(self, u_hat: np.ndarray) -> np.ndarray:
+        """
+        Projected nonlinear term for LANS-alpha, returned as d(u_hat)/dt.
+
+        With v = (1 - alpha^2 Lap) u the equation is  d_t v = u x (curl v) - grad pi,
+        so the projected increment of v is -P[(curl v) x u], and the increment of
+        the state u follows by applying the inverse Helmholtz operator. The
+        rotational form is exact here because u.((curl v) x u) = 0 pointwise,
+        which is what makes the alpha-energy (1/2) int u.v an exact invariant.
+        """
+        v_hat = u_hat * self.helmholtz_symbol
+        u = np.stack([np.fft.ifftn(u_hat[i]).real for i in range(3)])
+        wv = np.stack([np.fft.ifftn(self.curl(v_hat)[i]).real for i in range(3)])
+        wxu = np.stack([
+            wv[1] * u[2] - wv[2] * u[1],
+            wv[2] * u[0] - wv[0] * u[2],
+            wv[0] * u[1] - wv[1] * u[0],
+        ])
+        dv_hat = self.project_leray(-np.stack([np.fft.fftn(wxu[i]) for i in range(3)]))
+        return dv_hat * self.filter_symbol
+
+    def alpha_energy(self, u_hat: np.ndarray) -> float:
+        """LANS-alpha invariant (1/2)<u.v> = (1/2)<|u|^2 + alpha^2 |grad u|^2>."""
+        if self.helmholtz_symbol is None:
+            return self.energy(u_hat)
+        return 0.5 * float(np.sum(self.helmholtz_symbol * np.abs(u_hat) ** 2)) / (self.n**6)
+
     def nonlinear_term(self, u_hat: np.ndarray) -> np.ndarray:
-        """Dispatch to the Leray-alpha or the plain Navier-Stokes nonlinearity."""
+        """Dispatch to the selected alpha-model or the plain Navier-Stokes nonlinearity."""
         if self.filter_symbol is None:
             return self.nonlinear(u_hat)
+        if self.alpha_model == "lans":
+            return self.nonlinear_lans_alpha(u_hat)
         return self.nonlinear_leray_alpha(u_hat)
 
     def rhs(self, t: float, u_hat: np.ndarray) -> np.ndarray:

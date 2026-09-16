@@ -1,0 +1,73 @@
+[
+  {
+    "model": "NSE",
+    "peak_omega": 10.416727753185524,
+    "t_peak": 5.691629667308492,
+    "E_lost": 0.551365208584919,
+    "Ea_lost": 0.5513652085849188,
+    "sub_alpha_slope": -5.72219875531781,
+    "fit_k_range": [
+      8.0,
+      14.4
+    ],
+    "wall": 35.4
+  },
+  {
+    "model": "Leray-a 0.2",
+    "leray_alpha": 0.2,
+    "peak_omega": 6.794682202179899,
+    "t_peak": 8.0,
+    "E_lost": 0.4382281701226107,
+    "Ea_lost": 0.2448655559005649,
+    "sub_alpha_slope": -4.83272153825718,
+    "fit_k_range": [
+      7.5,
+      14.4
+    ],
+    "wall": 38.8
+  },
+  {
+    "model": "LANS-a 0.2",
+    "leray_alpha": 0.2,
+    "alpha_model": "lans",
+    "peak_omega": 4.313009226383838,
+    "t_peak": 7.488666249722989,
+    "E_lost": 0.5241324382321475,
+    "Ea_lost": 0.42545494259126726,
+    "sub_alpha_slope": -8.218511177461512,
+    "fit_k_range": [
+      7.5,
+      14.4
+    ],
+    "wall": 34.3
+  },
+  {
+    "model": "Leray-a 0.4",
+    "leray_alpha": 0.4,
+    "peak_omega": 3.1842017160305347,
+    "t_peak": 8.0,
+    "E_lost": 0.34665130125739196,
+    "Ea_lost": -0.029531053348484715,
+    "sub_alpha_slope": -5.316744379472958,
+    "fit_k_range": [
+      3.75,
+      14.4
+    ],
+    "wall": 41.7
+  },
+  {
+    "model": "LANS-a 0.4",
+    "leray_alpha": 0.4,
+    "alpha_model": "lans",
+    "peak_omega": 2.4751179627201876,
+    "t_peak": 8.0,
+    "E_lost": 0.5259251942363088,
+    "Ea_lost": 0.3558357232217607,
+    "sub_alpha_slope": -7.145163184695272,
+    "fit_k_range": [
+      3.75,
+      14.4
+    ],
+    "wall": 42.5
+  }
+]

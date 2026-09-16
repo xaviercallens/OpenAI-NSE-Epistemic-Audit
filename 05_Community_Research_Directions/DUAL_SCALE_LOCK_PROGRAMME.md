@@ -206,6 +206,13 @@ noise to scales below `ℓ*`. Any one of these breaks the unification. None of t
 
 ## 5. Staged plan
 
+> **Week 1 done (2026-09-16) — see `WEEK1_LOCK_RESULTS.md`.** Items 1, 2 and 4 delivered and
+> verified (LANS-α gates harder than Leray-α; the Mach cap is large-scale in a cascade and lands
+> on `ℓ*` for a collapse; 17 Lean theorems on the three standard axioms). Item 3 returned an
+> honest null: a plane-wave packet on Taylor–Green is not amplified (`σ < 0`), so Lock F is now
+> formally blocked on Direction 1. Three of six locks wait on the same object — the forced-core
+> test bed is the next step, and it is over-determined.
+
 **This week (existing code).**
 1. LANS-α alongside Leray-α in `spectral3d.py` (different nonlinearity; ~hours). Repeat the
    drain-vs-gate comparison; check the sub-α spectrum for the Graham et al. pileup.

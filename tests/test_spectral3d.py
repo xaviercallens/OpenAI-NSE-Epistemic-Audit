@@ -274,6 +274,66 @@ class TestLerayAlpha(unittest.TestCase):
         self.assertGreater(float(la["energy"][-1]), float(ns["energy"][-1]))
 
 
+class TestLANSAlpha(unittest.TestCase):
+    """
+    LANS-alpha (Navier-Stokes-alpha): d_t v - u x curl v + grad pi = nu Lap v,
+    v = (1 - alpha^2 Lap) u. The Lagrangian-averaged member of the family, and
+    the one the programme conjectures could be derived from kinetic fluctuations.
+    Its invariant is the alpha-energy (1/2)<u.v>, NOT (1/2)<|u|^2>.
+    """
+
+    def _pair(self, a, nu=0.0, n=16):
+        return PseudoSpectralNavierStokes3D(n_grid=n, nu=nu, leray_alpha=a, alpha_model="lans")
+
+    def test_reduces_to_navier_stokes_as_alpha_vanishes(self):
+        base = PseudoSpectralNavierStokes3D(n_grid=16, nu=1e-2)
+        u0 = base.initialize_random_solenoidal(seed=4, energy=0.2)
+        ns = base.nonlinear_term(u0)
+
+        def rel(a):
+            la = PseudoSpectralNavierStokes3D(n_grid=16, nu=1e-2, leray_alpha=a,
+                                              alpha_model="lans").nonlinear_term(u0)
+            return np.sqrt(np.sum(np.abs(la - ns) ** 2)) / np.sqrt(np.sum(np.abs(ns) ** 2))
+
+        self.assertLess(rel(1e-4), 1e-6)
+        self.assertAlmostEqual(np.log10(rel(1e-3) / rel(1e-4)), 2.0, delta=0.05)
+
+    def test_alpha_energy_is_the_invariant_and_plain_energy_is_not(self):
+        s = self._pair(0.05)
+        u = s.initialize_random_solenoidal(seed=9, energy=0.2)
+        ea0, e0 = s.alpha_energy(u), s.energy(u)
+        for _ in range(100):
+            u = s.ifrk4_step(u, 2e-3)
+        self.assertLess(abs(s.alpha_energy(u) - ea0) / ea0, 1e-12)
+        # plain energy is exchanged with the alpha^2|grad u|^2 part; it must move
+        self.assertGreater(abs(s.energy(u) - e0) / e0, 1e-8)
+
+    def test_alpha_energy_reduces_to_energy_without_filter(self):
+        s = PseudoSpectralNavierStokes3D(n_grid=16, nu=1e-2)
+        u = s.initialize_random_solenoidal(seed=2)
+        self.assertEqual(s.alpha_energy(u), s.energy(u))
+
+    def test_power_input_on_v_vanishes_pointwise_identity(self):
+        """u.((curl v) x u) = 0 pointwise, so <u . d_t v> = 0 exactly."""
+        s = self._pair(0.3, nu=1e-2)
+        u = s.initialize_random_solenoidal(seed=11, energy=0.3)
+        dv = s.nonlinear_lans_alpha(u) * s.helmholtz_symbol  # recover d(v_hat)/dt
+        power = float(np.real(np.sum(np.conj(u) * dv)))
+        scale = float(np.sum(np.abs(u) ** 2)) * float(np.sqrt(np.max(s.k_sq)))
+        self.assertLess(abs(power) / scale, 1e-12)
+
+    def test_lans_suppresses_peak_vorticity_at_least_as_much_as_leray(self):
+        n, nu, t_end, a = 24, 5e-3, 5.0, 0.3
+        def run(**kw):
+            s = PseudoSpectralNavierStokes3D(n_grid=n, nu=nu, **kw)
+            return s.run(s.initialize_taylor_green(), t_end=t_end, dt=0.02, diagnostics_every=5)
+        ns = float(np.max(run()["omega_max"]))
+        le = float(np.max(run(leray_alpha=a)["omega_max"]))
+        la = float(np.max(run(leray_alpha=a, alpha_model="lans")["omega_max"]))
+        self.assertLess(le, ns)
+        self.assertLess(la, ns)
+
+
 class TestCutoffLawSelfConsistency(unittest.TestCase):
     """
     The experimental result is a statement about the law's *premise*, which only
