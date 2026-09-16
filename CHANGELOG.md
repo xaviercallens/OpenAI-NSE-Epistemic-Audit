@@ -1,5 +1,74 @@
 # Changelog
 
+## v5.2.0 — 2026-09-16 — 3D solver, cutoff law tested, forced core, gate vs drain, 38 Lean theorems
+
+### Paper (`01_Verification_Paper/`, 23 pages)
+
+- **New §9, "Testing the Cutoff Regularization Hypothesis".** The cutoff law the Outlook stated as
+  untested is tested. It is exact given its premise (all four exponents reproduced as identities to
+  machine precision), but the premise — a `Re ≈ 1` diffusive core — is never produced by generic
+  data: in a dyadic cascade the arrest-scale velocity follows `k^−0.345` (Kolmogorov `−1/3`), not
+  the law's `k^+1`, with Re 5–1200 at the arrest scale. A 3D DNS resolution constraint
+  `n > 3√(ω₀Re)` explains why earlier sweeps saw no effect at all.
+- **Leray-α: gate, not drain.** Leray-α suppresses peak vorticity 3.3× while *retaining* more
+  energy (its transport term does no work), where hyperviscosity dissipates. Distinguished
+  explicitly from the hyperviscous barrier the earlier test used; the two had been conflated.
+- **§9.1, a forced collapsing core.** A manufactured `Re = 1` collapse, sustained by its own
+  Navier–Stokes residual, tracks the analytic target to `1.7×10⁻⁷`. The barrier's engagement
+  `B/F` collapses onto the single variable `α′/(ντ)` (per-run prefactor `0.188 ± 0.010`), which is
+  sufficient for all four arrest exponents. A lagging-core explanation of the sub-unity slope was
+  tested and refuted.
+- **§9.2, gate or drain on a `Re ≈ 1` collapse.** With axial structure, Leray-α and LANS-α lag the
+  collapse by 0.2–0.4%; a barrier at the same scale lags it by 5–45%. Against the forcing, the
+  nonlinearity is only ~5% of the dynamics, and a transport filter can act only through it. The
+  gate–barrier crossover is an exact identity,
+  `Re_× = ‖(L_barrier − L_ν)U‖ / ‖N_α(U) − N(U)‖`, ranging 8–142 and largest where arrest occurs.
+- **Which lock acts where the continuum ends.** The validity scale is the mean free path with a
+  derived constant (`ℓ*/λ = c̄/2c_s = 0.67` for air, matching the independent 45 nm / 68 nm).
+  The operative lock at `ℓ*` is dissipative — collisional relaxation — not a Lagrangian-averaged
+  transport filter. The LANS-α derivation conjecture is relocated to `Re ≳ 10–100`, not refuted.
+- **§10.3 Lean status** updated; **Directions 1–3** updated with what is built, what is pending, and
+  an uninformative first Lock-F attempt (`σ < 0`); abstract and conclusion updated. New references:
+  Holm–Marsden–Ratiu 1998, Golse–Saint-Raymond 2004, Bhatnagar–Gross–Krook 1954.
+
+### Code and data (`05_Community_Research_Directions/experiments/`)
+
+- `spectral3d.py`: 3D pseudo-spectral NSE (rotational form, FFT Leray projection, 2/3 dealiasing,
+  integrating-factor RK4); hyperviscous barrier; **Leray-α** (divergence form) and **LANS-α**
+  (rotational form on `v`); Landau–Lifshitz noise with FDT calibration; runtime validity monitor;
+  forcing hooks. Validated against the Taylor–Green Re=1600 benchmark (dissipation peak `t = 9.14`
+  vs published `9.0`).
+- `forced_core.py`, `forced_core_axial.py`, `plot_forced_core.py`: the forced-core test bed and its
+  axial extension. `shell_mach_cap.py`, `lock_f_coherence.py`, `shell_cutoff_law.py`,
+  `sweep_cutoff_law.py`, `analyse_cutoff_law.py`, `noise_and_monitor.py`, `validate_tgv3d.py`.
+- Bugs fixed that the tests caught: a duplicated final time sample that made every
+  `np.gradient`-based dE/dt diagnostic NaN; a key collision that overwrote the dissipation time
+  series with the operator name; a vorticity-inversion sign error; a core-size estimator biased 12%
+  by tail truncation.
+
+### Lean 4 (`03_Lean4_Topological_Censorship/src/`, 38 theorems, standard axioms only)
+
+- `CoreScaling.lean` — Proposition 5.1 as an equality chain from the diffusive core scalings.
+- `LerayAlphaFilter.lean` — the Leray-α filter-symbol bounds.
+- `LatticeBGKEntropy.lean` — H-theorem for the discrete BGK collision step.
+- `AlphaEnergyIdentity.lean` — a projected skew term changes energy at second order; a dissipative
+  term removes it at first order.
+- Every `#print axioms` is exactly `[propext, Classical.choice, Quot.sound]`; zero `sorryAx`,
+  independently re-verified. **None is connected to OpenAI's definitions yet** — stated in each file.
+
+### Programme documents (`05_Community_Research_Directions/`)
+
+`DUALSCALE_ASSESSMENT_AND_NEXT_DIRECTIONS.md`, `DUAL_SCALE_LOCK_PROGRAMME.md`,
+`LERAY_ALPHA_DUAL_SCALE_LOCK.md`, `WEEK1_LOCK_RESULTS.md`, `DIRECTION1_RESULTS.md`,
+`RICCATI_THRESHOLD_CHECK.md`, `experiments/RESULTS.md`.
+
+### Pending
+
+- The `96³` forced-core sweep that reaches the `B/F = 1` crossing (for the arrest exponents directly).
+- A collapsing axial scale; azimuthal stability of the forced column; the construction's own profile
+  with `h > 0`.
+- The Zenodo draft for record 22696718 (new version 22777467) remains **unpublished** pending review.
+
 ## v5.1.0 — 2026-09-15 — Peer review response, table fixes, Zenodo record corrected
 
 - Addressed an open peer review of the flagship paper (recorded verbatim in

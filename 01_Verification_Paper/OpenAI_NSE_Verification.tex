@@ -61,7 +61,12 @@ forcefully by the fluid-dynamics community when an early version of this audit w
 of this paper could only state: it is exact given its premise, but that premise --- a
 $\mathrm{Re}\approx1$ viscously dominated core --- is not produced by generic initial data, so the
 arrest scale instead obeys inertial-range scaling, and the hypothesis cannot be tested without
-reproducing the construction's own forcing.
+reproducing the construction's own forcing. We then supply that forcing. On a manufactured
+$\mathrm{Re}\approx1$ collapse the barrier's engagement reduces to a function of a single
+variable, while transport-filtering regularizations of the Leray-$\alpha$ and LANS-$\alpha$ type
+are the weaker lock by one to two orders of magnitude, because on such a collapse they can act only
+through a nonlinearity that is a few percent of the dynamics. The lock that operates where the
+continuum ends is dissipative, which is what kinetic theory supplies.
 \end{abstract}
 
 % ====================================================================
@@ -707,9 +712,116 @@ factor of $3.3$ between $\alpha=0$ and $\alpha=0.4$, while the fraction of energ
 more than plain Navier--Stokes. Hyperviscosity destroys energy that reaches small scales;
 Leray-$\alpha$ prevents it from arriving. One is a drain and the other a gate. Neither result bears
 on the regularity of the Navier--Stokes equations themselves --- a theorem about a modified equation
-does not constrain the unmodified one --- but the distinction is the sharpest statement we can give
-of what a ``dual-scale lock'' would have to be, and it is taken up in Direction~2 of
-\S\ref{sec:directions}.
+does not constrain the unmodified one. Which of the two is the relevant lock turns out to depend on
+the Reynolds number of what is being locked, and \S\ref{sec:gate-drain} measures that dependence on
+the collapse the cutoff law is actually about.
+
+\subsection{Supplying the premise: a forced collapsing core}
+\label{sec:forced-core}
+
+The obstruction above is the absence of a $\mathrm{Re}\approx1$ collapsing core in generic flow, so
+we manufacture one. The target is a time-reversed Lamb--Oseen column: Gaussian vorticity
+$\omega_z=\Gamma/(\pi\ell^2)\,e^{-r^2/\ell^2}$ with fixed circulation and $\ell^2=\nu\tau$, the
+diffusive scaling of Eq.~\eqref{eq:diffusive}. Choosing $\Gamma=2\pi\nu/0.638$ gives
+$u_{\max}\ell/\nu=1$ exactly, so the cutoff law's premise holds by construction. The forcing is the
+residual of the target under the plain Navier--Stokes operators, $f=\partial_tU-N(U)-\nu\Delta U$;
+for the column $N(U)$ is a pure gradient and projects out, and $f=-\tfrac54\nu\Delta U$ ---
+time-reversed diffusion requires anti-diffusion. With the regularization off, the simulated flow
+tracks the analytic target to a whole-field relative error of $1.7\times10^{-7}$ over the entire
+collapse.
+
+With the barrier on and the \emph{same} forcing, the natural diagnostic is the ratio $B/F$ of the
+barrier's extra dissipation to the forcing's power input. Scaling gives $B/F\propto\alpha'/(\nu\tau)$,
+and arrest is the crossing $B/F=1$. Over a $2.6\times$ range of $\alpha'$ the measured $B/F$
+\emph{collapses onto a single function of $\alpha'/(\nu\tau)$}: the per-run prefactor is
+$0.188\pm0.010$, and at a common value of the variable the four runs agree to $6\%$. That collapse
+is the load-bearing result, because it is sufficient on its own: if $B/F$ depends on
+$\alpha'/(\nu\tau)$ alone, arrest occurs at a fixed value $x_*$ of it, so $\tau_c=\alpha'/(\nu x_*)$
+and all four predicted exponents follow with no assumption about the curve's shape. The curve is not
+a pure power law --- its pooled log-log slope is $0.85$, falling from $1.13$ to $0.56$ across the
+band --- and we checked the obvious alternative explanation before accepting this: a lagging core
+would steepen the curve, and refitting against the measured rather than the target core size gives a
+slope of $2.4$, the wrong direction. The shape is instead that of the fraction of the forcing's
+Gaussian spectrum lying above $k_\alpha$. At $32^3$ the crossing itself falls just below the
+resolved window; a $96^3$ sweep that reaches it is in progress.
+
+\subsection{Gate or drain on a \texorpdfstring{$\mathrm{Re}\approx1$}{Re~1} collapse}
+\label{sec:gate-drain}
+
+On the swirl column the $\alpha$-model nonlinearities are also pure gradients, so Leray-$\alpha$ and
+LANS-$\alpha$~\cite{HolmMarsdenRatiu1998} are inert there. Adding an axisymmetric meridional cell
+with axial Reynolds number one makes them act, and the same forcing construction then tracks its
+target to $6.5\times10^{-7}$. On this target, with filter width matched to the barrier scale
+($\sqrt{\alpha'}=\alpha=0.25$--$0.5$), the transport filters lag the collapse by $0.2$--$0.4\%$ with
+no change to its rate, while the barrier lags it by $5$--$45\%$, roughly halves $d\ell/dt$, and cuts
+the swirl-to-axial energy transfer threefold.
+
+The reason is visible in the size of each term measured against the forcing. Viscosity is about
+$0.85$ of it; the projected nonlinearity is $0.04$--$0.05$. A $\mathrm{Re}\approx1$ collapse is a
+balance between forcing and viscosity, and a transport filter can act only through the nonlinear
+share, so its leverage is capped by a quantity that is small \emph{because} the Reynolds number is
+one. The barrier acts on the field directly. Scaling the target by $\lambda$ multiplies the core
+Reynolds number by $\lambda$ while linear terms scale as $\lambda$ and the nonlinearity as
+$\lambda^2$, which gives an exact scan without further simulation (Table~\ref{tab:gate-drain}).
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}rccc@{}}
+\toprule
+core $\mathrm{Re}$ & nonlinear\,/\,forcing & transport filter\,/\,forcing & barrier\,/\,forcing \\
+\midrule
+$0.3$  & $0.014$ & $0.006$ & $0.83$ \\
+$1$    & $0.046$ & $0.020$ & $0.83$ \\
+$10$   & $0.42$  & $0.18$  & $0.76$ \\
+$30$   & $0.81$  & $0.35$  & $0.49$ \\
+$100$  & $0.98$  & $0.43$  & $0.18$ \\
+$1000$ & $1.00$  & $0.44$  & $0.018$ \\
+\bottomrule
+\end{tabular}
+\caption{Leverage of each regularization, as the norm of the perturbation it makes to the dynamics
+divided by the norm of the forcing, for a Leray-$\alpha$ filter and a barrier at the same scale
+($\alpha=0.35$, $t=0.4T$). LANS-$\alpha$ agrees with Leray-$\alpha$ to within $5\%$ throughout.}
+\label{tab:gate-drain}
+\end{table}
+
+The Reynolds number at which the two are equal needs no fitting. Both leverages are divided by the
+same forcing norm, which cancels in their ratio, so the crossover is exactly
+\begin{equation}
+  \mathrm{Re}_\times=\frac{\big\|(L_{\text{barrier}}-L_\nu)\,U\big\|}{\big\|N_\alpha(U)-N(U)\big\|},
+  \label{eq:gate-drain-crossover}
+\end{equation}
+a property of the target and the filter alone. It is not universal: over three filter widths and
+three core sizes it ranges from $8$ to $142$, rising steeply as the filter width approaches the core
+size. It is well above one in every case, and largest as $\alpha/\ell\to1$, which is where arrest
+happens.
+
+\paragraph{Which lock acts where the continuum ends.}
+Proposition~\ref{prop:scales} places a core with $\mathrm{Re}_r=O(1)$ at $\ell_*$, and arrest there
+means $\alpha/\ell\to1$ --- precisely the regime in which a transport filter has two orders of
+magnitude less leverage than dissipation. We had conjectured that LANS-$\alpha$ with
+$\alpha\approx\ell_*$, being a Lagrangian average, might be \emph{derived} rather than posited as the
+lock at the continuum limit. This measurement relocates that conjecture rather than refuting it: a
+transport filter is the stronger lock for transfer-driven dynamics at $\mathrm{Re}\gtrsim10$--$100$,
+the regime where the cutoff law's premise fails, and the weaker one on the collapse. It is consistent
+with Tao's averaged Navier--Stokes blow-up~\cite{Tao2016}, which preserves the energy identity and
+shows that what prevents blow-up must constrain the structure of transfer, not the energy budget ---
+but on a $\mathrm{Re}\approx1$ core there is little transfer to constrain.
+
+The lock that does act there is dissipative, and physics supplies one without being asked. Kinetic
+theory gives $\nu\approx\tfrac12\bar c\lambda$ for a gas, so
+$\ell_*=\nu/c_s\approx(\bar c/2c_s)\,\lambda$; for air $\bar c/2c_s=0.67$, and the independently
+computed $\ell_*=45$\,nm against a mean free path of $68$\,nm gives the same $0.67$. The validity
+scale of Proposition~\ref{prop:scales} \emph{is} the mean free path, with a derived constant. The
+hierarchy connecting the two descriptions is Chapman--Enskog, with the Knudsen number as the locking
+parameter; incompressible Navier--Stokes is a rigorous limit of the Boltzmann
+equation~\cite{GolseSaintRaymond2004}, and the collision operator that takes over below $\lambda$
+is a drain with an H-theorem. For its discrete BGK form~\cite{BGK1954} we have proved in Lean that
+each collision step contracts the relative entropy by at least a factor $1-\omega$
+(\S\ref{sec:architecture}). A phenomenological Mach cap applied to a dyadic cascade makes the same
+point from the other side: in a cascade it engages at the \emph{largest} scale, while on the
+diffusive collapse it engages at exactly $\ell_*$. The regularizations that matter at the continuum
+limit are the ones the underlying physics already contains.
 
 % ====================================================================
 \section{Discussion}
@@ -874,15 +986,20 @@ $|\omega|/(c_s^2/\nu)=0.05$ --- with byte-identical numerics in both cases. Mode
 property of the discretization, and a solver that reports its own departure from the modelled
 regime seems to us more useful than one that regularizes the departure away.
 
-We want to be explicit about the current state of this project's own attempt at pillar 3: the
-\texttt{TopologicalCensorship.lean} module in this repository proves elementary boundedness and
-monotonicity lemmas about an effective-wavenumber formula and a dissipation-rate/enstrophy
-inequality in isolation. As of this writing, \emph{none} of those lemmas are connected, inside
-Lean, to OpenAI's actual \texttt{NavierStokes}/\texttt{Euler} definitions. Presenting them as
-already constraining the OpenAI construction would repeat exactly the kind of overclaiming earlier
-drafts of this project were rightly criticized for. Wiring a genuine physical-admissibility gate to
-the actual proof objects --- not to a free-standing toy formula --- is, in our view, the concrete
-next engineering step, and one we have not yet completed.
+We want to be explicit about the current state of this project's own attempt at pillar 3. Four
+Lean files in this repository now compile against Mathlib with no \texttt{sorry} and no axioms
+beyond the standard three, together $38$ theorems: the scaling chain of
+Proposition~\ref{prop:scales} as an equality chain from the diffusive core scalings (core
+Reynolds number one, the Mach and Knudsen times, Eckert number one, and their coincidence at
+$\ell_*$); the bounds on the Leray-$\alpha$ filter symbol; an H-theorem for the discrete BGK
+collision step; and the finite-dimensional identity behind the gate--drain distinction of
+\S\ref{sec:gate-drain}, that a projected skew-adjoint term changes the energy only at second order in
+the step while a dissipative one removes it at first order. Each file's header states what it does not
+prove. As of this writing, \emph{none} of these results is connected, inside Lean, to OpenAI's
+actual \texttt{NavierStokes}/\texttt{Euler} definitions, and presenting them as already constraining
+the construction would repeat exactly the overclaiming earlier drafts of this project were rightly
+criticized for. Wiring an admissibility predicate to the actual proof objects remains the concrete
+next step, and one we have not yet completed.
 
 \subsection{A Hypothesis on Cutoff Regularizations: Testable Questions, Not a Metric}
 
@@ -919,27 +1036,18 @@ acted on --- including the failure modes, since a direction stated without its f
 advertisement rather than a plan. Three shorter items follow.
 
 \paragraph{Direction 1. A forced-core test bed for cutoff regularizations.}
-\S\ref{sec:cutoff-tested} showed that the obstruction to testing any cutoff regularization is the
-unavailability of a $\mathrm{Re}\approx1$ collapsing core, not the regularization itself. The
-remedy is to build one deliberately. Take the construction's leading-order core profile,
-$\ell_r\asymp\tau^{1/2}$, $\ell_z\asymp\tau^{1/2-h}$, $u_\theta,u_z\asymp\tau^{-1/2-h}$, impose it
-as a target on a periodic box, and let the forcing be whatever residual sustains it --- the same
-manufactured-solution logic the construction itself uses (\S\ref{sec:causality}), but needed here
-only over a decade or two in $\tau$ at resolvable scales rather than all the way to $t=1$. Then
-switch on the barrier and measure the four predicted quantities directly.
-
-The control is $\alpha'=0$: the forced core must follow the diffusive scaling to the accuracy of
-the discretization, or the test bed is wrong before any barrier is applied. Three failure modes
-have to be reported rather than discovered later. First, the forcing may do the work that the
-dynamics is supposed to do; the diagnostic is the ratio of the barrier's dissipation to the
-forcing's power input at the core scale, which must be $O(1)$ or larger at arrest for the arrest
-to be dynamical. Second, a forced swirling column is liable to azimuthal instability, which would
-destroy the core for reasons having nothing to do with the barrier; the axisymmetric and
-three-dimensional runs must be compared. Third, the barrier may interact with the forcing rather
-than with the core if the forcing has support above $k_\alpha$ --- so the forcing must be
-spectrally confined below the barrier, and that confinement checked. A clean positive result would
-turn a cutoff scale into a predictive statement about peak velocity; a clean negative one would
-show that arrest is not what a cutoff does.
+The first two stages of this direction are now built and reported in \S\ref{sec:forced-core} and
+\S\ref{sec:gate-drain}: a manufactured $\mathrm{Re}\approx1$ collapse tracked to $10^{-7}$, the
+single-variable collapse of the barrier's engagement, and the gate--drain comparison. Four things
+remain, in order of value. First, the $B/F=1$ crossing itself, from which the four arrest exponents
+can be fitted directly; the $96^3$ sweep that reaches it is in progress. Second, a collapsing
+\emph{axial} scale: the meridional cell used here has $\ell_z$ fixed by the box, whereas the
+construction has $\ell_z\asymp\tau^{1/2-h}$, which needs a localized axial envelope. Third, the
+azimuthal stability of the forced column, which the axisymmetric targets used so far cannot probe
+and which could destroy the core for reasons unrelated to any regularization. Fourth, the
+construction's own profile with $h>0$ in place of the Gaussian surrogate. One of the failure modes
+this direction was designed to catch --- the forcing doing the work the dynamics should do --- is
+now measured rather than merely anticipated: the $B/F$ diagnostic is exactly that ratio.
 
 \paragraph{Direction 2. Sharpening the admissibility condition.}
 The bound $|\omega|\lesssim c_s^2/\nu$ of \S\ref{sec:admissibility} is dimensionally forced but
@@ -947,8 +1055,10 @@ blunt. Its candidates can be ordered by how finely they discriminate: a bound on
 \emph{magnitude} (the present one); a bound on \emph{transfer} across a scale, which is what
 Leray-$\alpha$ enforces and which \S\ref{sec:cutoff-tested} measured to be energy-conserving rather
 than dissipative; and a bound on vorticity \emph{direction}. The middle term is where the
-dual-scale intuition behind earlier drafts of this programme properly lives, and the measurement is
-the first quantitative evidence for it. Three concrete questions follow.
+dual-scale intuition behind earlier drafts of this programme was placed, and
+\S\ref{sec:gate-drain} now limits its reach: a transfer bound is the effective constraint only at
+$\mathrm{Re}\gtrsim10$--$100$, and at $\ell_*$, where $\mathrm{Re}_r=O(1)$, it is the weakest of the
+three. Three concrete questions follow.
 
 \emph{Wrong field?} Viscous dissipation density is $2\nu|S|^2$ with $S$ the rate-of-strain tensor,
 not $\nu|\omega|^2$. The two agree in integral ($\int2|S|^2=\int|\omega|^2$ on a domain without
@@ -967,8 +1077,9 @@ admissibility criterion would therefore discriminate exactly where a magnitude-b
 and would connect the geometric fragility to a regularity theorem rather than to an estimate. We
 regard this as the most promising single item on this list.
 
-\emph{Not formalized.} As noted in \S\ref{sec:architecture}, none of this repository's Lean
-material is connected to OpenAI's definitions. The tractable step is narrow and worth stating
+\emph{Not formalized against the construction.} As noted in \S\ref{sec:architecture}, this
+repository's Lean results --- including the scaling chain of Proposition~\ref{prop:scales} --- are
+not connected to OpenAI's definitions. The tractable step is narrow and worth stating
 precisely: define admissibility as a predicate on OpenAI's own \texttt{VelocityField}, and prove
 the reduction ``admissible on $[0,T)$ $\Rightarrow$ not \texttt{SpeedUnboundedAtOne}''. The
 Beale--Kato--Majda theorem is not in Mathlib and would have to enter as an explicit hypothesis or
@@ -993,6 +1104,14 @@ judgement. The natural amplitude scale to compare against is the thermal length
 $\ell_{\text{th}}=k_BT/(\rho\nu^2)$, which is picometres in water, well below the molecular
 spacing; the comparison that matters is therefore made at the scale where amplification begins,
 not at the scale where the construction ends.
+
+A first attempt clarifies what the measurement requires. A phase-definite single-mode packet seeded
+on a Taylor--Green background is not amplified in any orientation we tried: its amplitude decays
+several times faster than viscosity alone, by scattering to neighbouring wavenumbers. With
+$\sigma<0$ the competition the criterion describes cannot arise, so the result is uninformative
+rather than negative. It needs a \emph{localized} packet in a region of sustained strain, which is
+what the forced core of Direction~1 provides, and a packet amplitude above the thermal floor at its
+wavenumber from the start --- the attempt began below it.
 
 What makes this worth doing is the strength of the conclusion available. Every argument in
 \S\ref{sec:mach} concerns the approach to the singularity: the model fails at $\ell_*$, some
@@ -1050,11 +1169,19 @@ We also tested, rather than merely proposed, the one repair this paper had to of
 regularization of \S\ref{sec:outlook} turns out to be exact given its premise and untestable
 without it: a $\mathrm{Re}\approx1$ collapsing core is a property of the construction, not of flows
 in general, so no amount of resolution applied to generic data can decide the question
-(\S\ref{sec:cutoff-tested}). The three directions of \S\ref{sec:directions} follow from that, and
-the second of them --- an admissibility criterion stated on the coherence of vorticity direction
-rather than on its magnitude, after Constantin and Fefferman~\cite{ConstantinFefferman1993} ---
-strikes us as the most likely of the three to say something that is both true and new, because it
-bears directly on the coherence the construction requires and the thermal environment denies.
+(\S\ref{sec:cutoff-tested}). We then built the premise and measured on it
+(\S\ref{sec:forced-core}, \S\ref{sec:gate-drain}). The barrier's engagement reduces to a function of
+one variable, and transport-filtering regularizations --- the family in which the intuition behind
+earlier drafts was placed --- turn out to be one to two orders of magnitude weaker than dissipation
+on exactly the kind of collapse that reaches $\ell_*$, because there they can act only through a
+nonlinearity that is a few percent of the dynamics. The lock that acts where the continuum ends is
+dissipative, and the physics already contains it: the validity scale is the mean free path, with a
+constant derived from kinetic theory, and the collision operator that replaces hydrodynamics below
+it has an H-theorem. The three directions of \S\ref{sec:directions} follow, and the second of them
+--- an admissibility criterion stated on the coherence of vorticity direction rather than on its
+magnitude, after Constantin and Fefferman~\cite{ConstantinFefferman1993} --- still strikes us as the
+most likely to say something that is both true and new, because it bears directly on the coherence
+the construction requires and the thermal environment denies.
 
 The more useful outcome of this exercise, in our view, is not the verdict but the map: a concrete
 list of where the physical assumptions break down, a set of research directions raised
@@ -1271,6 +1398,18 @@ edge cases like this one; that suggestion is the direct motivation for \S\ref{se
   C. Foias, D.\,D. Holm, E.\,S. Titi,
   ``The Navier--Stokes-alpha model of fluid turbulence,''
   \emph{Physica D}\ \textbf{152--153}, 505--519, 2001.
+\bibitem{HolmMarsdenRatiu1998}
+  D.\,D. Holm, J.\,E. Marsden, T.\,S. Ratiu,
+  ``Euler--Poincar\'e models of ideal fluids with nonlinear dispersion,''
+  \emph{Phys.\ Rev.\ Lett.}\ \textbf{80}, 4173--4176, 1998.
+\bibitem{GolseSaintRaymond2004}
+  F. Golse, L. Saint-Raymond,
+  ``The Navier--Stokes limit of the Boltzmann equation for bounded collision kernels,''
+  \emph{Invent.\ Math.}\ \textbf{155}, 81--161, 2004.
+\bibitem{BGK1954}
+  P.\,L. Bhatnagar, E.\,P. Gross, M. Krook,
+  ``A model for collision processes in gases. I. Small amplitude processes in charged and neutral
+  one-component systems,'' \emph{Phys.\ Rev.}\ \textbf{94}, 511--525, 1954.
 \bibitem{CHOT2005}
   A. Cheskidov, D.\,D. Holm, E. Olson, E.\,S. Titi,
   ``On a Leray-$\alpha$ model of turbulence,''
