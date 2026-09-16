@@ -577,7 +577,8 @@ class PseudoSpectralNavierStokes3D:
         dx = 2.0 * np.pi / self.n
         return cfl * dx / umax
 
-    def ifrk4_step(self, u_hat: np.ndarray, dt: float) -> np.ndarray:
+    def ifrk4_step(self, u_hat: np.ndarray, dt: float, t: float = 0.0,
+                   forcing: Optional[Callable[[float], np.ndarray]] = None) -> np.ndarray:
         """
         Integrating-factor RK4. The linear dissipation is integrated exactly:
 
@@ -588,13 +589,24 @@ class PseudoSpectralNavierStokes3D:
 
         This removes the O(nu alpha' k^4) stiffness that would otherwise make an
         alpha' sweep over decades computationally impossible.
+
+        `forcing(t)` returns a solenoidal Fourier-space force; it is evaluated at
+        the RK stage times and added to the nonlinear term. This is what the
+        forced-core test bed uses to sustain a manufactured Re~1 collapse.
         """
         E = np.exp(self.diss_symbol * dt)
         E2 = np.exp(self.diss_symbol * dt * 0.5)
-        n1 = self.nonlinear_term(u_hat)
-        n2 = self.nonlinear_term(E2 * (u_hat + 0.5 * dt * n1))
-        n3 = self.nonlinear_term(E2 * u_hat + 0.5 * dt * n2)
-        n4 = self.nonlinear_term(E * u_hat + dt * E2 * n3)
+        if forcing is None:
+            N = self.nonlinear_term
+            n1 = N(u_hat)
+            n2 = N(E2 * (u_hat + 0.5 * dt * n1))
+            n3 = N(E2 * u_hat + 0.5 * dt * n2)
+            n4 = N(E * u_hat + dt * E2 * n3)
+        else:
+            n1 = self.nonlinear_term(u_hat) + forcing(t)
+            n2 = self.nonlinear_term(E2 * (u_hat + 0.5 * dt * n1)) + forcing(t + 0.5 * dt)
+            n3 = self.nonlinear_term(E2 * u_hat + 0.5 * dt * n2) + forcing(t + 0.5 * dt)
+            n4 = self.nonlinear_term(E * u_hat + dt * E2 * n3) + forcing(t + dt)
         out = E * u_hat + (dt / 6.0) * (E * n1 + 2.0 * E2 * (n2 + n3) + n4)
         return self.project_leray(out)
 
@@ -622,6 +634,9 @@ class PseudoSpectralNavierStokes3D:
         stepper: str = "ifrk4",
         progress: Optional[Callable[[float, Dict[str, Any]], None]] = None,
         max_steps: int = 200000,
+        forcing: Optional[Callable[[float], np.ndarray]] = None,
+        dt_fn: Optional[Callable[[float], float]] = None,
+        t_start: float = 0.0,
     ) -> Dict[str, Any]:
         """
         Integrate to t_end, recording diagnostics.
@@ -633,7 +648,7 @@ class PseudoSpectralNavierStokes3D:
         if temperature_param > 0 and rng is None:
             rng = np.random.default_rng(0)
 
-        t = 0.0
+        t = float(t_start)
         step = 0
         rec: Dict[str, list] = {
             "t": [], "energy": [], "enstrophy": [], "dissipation": [],
@@ -663,11 +678,13 @@ class PseudoSpectralNavierStokes3D:
         record()
         while t < t_end and step < max_steps:
             h = dt if dt is not None else self.cfl_dt(u_hat, cfl)
+            if dt_fn is not None:
+                h = min(h, dt_fn(t))
             h = min(h, t_end - t)
             if h <= 0:
                 break
             if stepper == "ifrk4":
-                u_hat = self.ifrk4_step(u_hat, h)
+                u_hat = self.ifrk4_step(u_hat, h, t=t, forcing=forcing)
             elif stepper == "rk4":
                 u_hat = self.rk4_step_reference(t, u_hat, h)
             else:
