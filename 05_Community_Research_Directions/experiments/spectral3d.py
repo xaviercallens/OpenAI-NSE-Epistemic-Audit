@@ -548,6 +548,11 @@ class PseudoSpectralNavierStokes3D:
         }
 
         def record() -> None:
+            # Never record the same instant twice: a duplicated final sample puts a
+            # zero interval into the time series, which makes np.gradient (and any
+            # dE/dt diagnostic built on it) return NaN.
+            if rec["t"] and t <= rec["t"][-1]:
+                return
             d = self.divergence_report(u_hat)
             rec["t"].append(t)
             rec["energy"].append(self.energy(u_hat))

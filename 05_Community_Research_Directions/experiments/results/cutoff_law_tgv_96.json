@@ -1,0 +1,160 @@
+{
+  "config": {
+    "n": 96,
+    "nu": 0.005,
+    "ic": "tgv",
+    "points": 6,
+    "t_end": 7.0,
+    "dissipation": "barrier",
+    "k_lo": 14.0,
+    "k_hi": 30.0
+  },
+  "runs": [
+    {
+      "alpha_prime": 0.0011111111111111113,
+      "k_alpha": 29.999999999999993,
+      "omega_max": 11.093144591092619,
+      "u_max": 0.8693239039123835,
+      "t_peak": 5.443750301395043,
+      "l_arrest": 2.0943951023931953,
+      "k_dissipation_peak": 3.0,
+      "k_eta": 17.56558491650906,
+      "Re_core": 364.1415453494857,
+      "final_energy": 0.06721465994862082,
+      "peak_enstrophy": 1.2786180207460196,
+      "max_div_relative": 2.838237800219628e-17,
+      "wall_time_s": 642.5,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": false,
+      "C3_dissipation_peaks_at_barrier": false,
+      "usable": false,
+      "exclusion_reason": "viscosity bites first"
+    },
+    {
+      "alpha_prime": 0.0015071441014553183,
+      "k_alpha": 25.758621104534665,
+      "omega_max": 11.209868846509522,
+      "u_max": 0.8693877039113549,
+      "t_peak": 5.4431768772335,
+      "l_arrest": 2.0943951023931953,
+      "k_dissipation_peak": 3.0,
+      "k_eta": 17.565686915234913,
+      "Re_core": 364.1682698305614,
+      "final_energy": 0.06721440490076794,
+      "peak_enstrophy": 1.27771339941344,
+      "max_div_relative": 2.8139355544146606e-17,
+      "wall_time_s": 628.4,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": false,
+      "C3_dissipation_peaks_at_barrier": false,
+      "usable": false,
+      "exclusion_reason": "viscosity bites first"
+    },
+    {
+      "alpha_prime": 0.0020443350082964026,
+      "k_alpha": 22.116885373565957,
+      "omega_max": 11.327748191997529,
+      "u_max": 0.8688924499189498,
+      "t_peak": 5.442817745287479,
+      "l_arrest": 2.0943951023931953,
+      "k_dissipation_peak": 3.0,
+      "k_eta": 17.56522385375129,
+      "Re_core": 363.9608183233346,
+      "final_energy": 0.06721347607424152,
+      "peak_enstrophy": 1.2759134609069862,
+      "max_div_relative": 3.1980995318913e-17,
+      "wall_time_s": 628.1,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": false,
+      "C3_dissipation_peaks_at_barrier": false,
+      "usable": false,
+      "exclusion_reason": "viscosity bites first"
+    },
+    {
+      "alpha_prime": 0.0027729967042372785,
+      "k_alpha": 18.990015678337006,
+      "omega_max": 11.354412725038467,
+      "u_max": 0.8676160036150605,
+      "t_peak": 5.442578840609295,
+      "l_arrest": 2.0943951023931953,
+      "k_dissipation_peak": 3.0,
+      "k_eta": 17.563647376703095,
+      "Re_core": 363.4261417458679,
+      "final_energy": 0.0672074010428503,
+      "peak_enstrophy": 1.2729688214320956,
+      "max_div_relative": 2.92543079421676e-17,
+      "wall_time_s": 628.2,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": false,
+      "C3_dissipation_peaks_at_barrier": false,
+      "usable": false,
+      "exclusion_reason": "viscosity bites first"
+    },
+    {
+      "alpha_prime": 0.003761375063531626,
+      "k_alpha": 16.305220620915193,
+      "omega_max": 11.2299283297409,
+      "u_max": 0.8660258248169916,
+      "t_peak": 5.442733646578432,
+      "l_arrest": 2.0943951023931953,
+      "k_dissipation_peak": 3.0,
+      "k_eta": 17.561676404716245,
+      "Re_core": 362.7600492085469,
+      "final_energy": 0.0671887790107373,
+      "peak_enstrophy": 1.2685573425366499,
+      "max_div_relative": 2.7480679001628217e-17,
+      "wall_time_s": 629.5,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": true,
+      "C3_dissipation_peaks_at_barrier": false,
+      "usable": false,
+      "exclusion_reason": "dissipation does not peak at the barrier (flow not arrested there)"
+    },
+    {
+      "alpha_prime": 0.005102040816326532,
+      "k_alpha": 13.999999999999998,
+      "omega_max": 11.011660743730577,
+      "u_max": 0.8633914208762967,
+      "t_peak": 5.564744868864993,
+      "l_arrest": 2.0943951023931953,
+      "k_dissipation_peak": 3.0,
+      "k_eta": 17.56159953385831,
+      "Re_core": 361.6565526663236,
+      "final_energy": 0.06714892885432125,
+      "peak_enstrophy": 1.26120396204047,
+      "max_div_relative": 2.82414147219982e-17,
+      "wall_time_s": 627.9,
+      "C1_barrier_resolved": true,
+      "C2_barrier_before_viscosity": true,
+      "C3_dissipation_peaks_at_barrier": false,
+      "usable": false,
+      "exclusion_reason": "dissipation does not peak at the barrier (flow not arrested there)"
+    }
+  ],
+  "n_usable": 0,
+  "premise_check": {
+    "Re_core_values": [],
+    "Re_core_median": null,
+    "premise_holds": null,
+    "note": "The cutoff law is a statement about a Re~1 diffusive core. If Re_core is far from O(1), this flow does not realize the law's hypotheses and the exponent fits below do not test it."
+  },
+  "power_law_fits": {},
+  "predictions": {
+    "t_c": {
+      "exponent": 1.0,
+      "law": "t_c ~ alpha'/nu"
+    },
+    "u_max": {
+      "exponent": -0.5,
+      "law": "u_max ~ nu/sqrt(alpha')"
+    },
+    "omega_max": {
+      "exponent": -1.0,
+      "law": "omega_max ~ nu/alpha'"
+    },
+    "l_arrest": {
+      "exponent": 0.5,
+      "law": "l_arrest ~ sqrt(alpha')"
+    }
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "analytic_self_consistency": {
+    "rows": [
+      {
+        "alpha_prime": 0.01,
+        "l_arrest": 0.1,
+        "t_c": 10.0,
+        "t_c_predicted": 10.0,
+        "u_max": 0.01,
+        "u_max_predicted": 0.01,
+        "omega_max": 0.09999999999999999,
+        "omega_max_predicted": 0.1,
+        "Re_core_at_arrest": 1.0
+      },
+      {
+        "alpha_prime": 0.001,
+        "l_arrest": 0.03162277660168379,
+        "t_c": 1.0,
+        "t_c_predicted": 1.0,
+        "u_max": 0.03162277660168379,
+        "u_max_predicted": 0.0316227766016838,
+        "omega_max": 1.0,
+        "omega_max_predicted": 1.0,
+        "Re_core_at_arrest": 0.9999999999999998
+      },
+      {
+        "alpha_prime": 0.0001,
+        "l_arrest": 0.01,
+        "t_c": 0.1,
+        "t_c_predicted": 0.1,
+        "u_max": 0.1,
+        "u_max_predicted": 0.1,
+        "omega_max": 10.0,
+        "omega_max_predicted": 10.0,
+        "Re_core_at_arrest": 1.0
+      },
+      {
+        "alpha_prime": 1e-05,
+        "l_arrest": 0.0031622776601683794,
+        "t_c": 0.01,
+        "t_c_predicted": 0.01,
+        "u_max": 0.31622776601683794,
+        "u_max_predicted": 0.31622776601683794,
+        "omega_max": 100.0,
+        "omega_max_predicted": 100.0,
+        "Re_core_at_arrest": 1.0
+      },
+      {
+        "alpha_prime": 1e-06,
+        "l_arrest": 0.001,
+        "t_c": 0.001,
+        "t_c_predicted": 0.001,
+        "u_max": 1.0,
+        "u_max_predicted": 1.0,
+        "omega_max": 1000.0,
+        "omega_max_predicted": 1000.0000000000001,
+        "Re_core_at_arrest": 1.0
+      }
+    ],
+    "fitted_exponents": {
+      "t_c": 1.0000000000000002,
+      "u_max": -0.5000000000000001,
+      "omega_max": -1.0000000000000002,
+      "l_arrest": 0.5000000000000001
+    },
+    "predicted_exponents": {
+      "t_c": 1.0,
+      "u_max": -0.5,
+      "omega_max": -1.0,
+      "l_arrest": 0.5
+    },
+    "Re_core_is_unity": true,
+    "self_consistent": true,
+    "conclusion": "Granting the premise, the law is exact: the arrest scale follows from the barrier operator itself and the three exponents are identities. Any experimental disagreement is therefore a statement about whether the premise (Re_core ~ 1) is realised, not about the law's arithmetic."
+  },
+  "premise_reachability": {
+    "shell_model": {
+      "k_alpha": [
+        128.0,
+        256.0,
+        512.0,
+        1024.0,
+        2048.0,
+        4096.0,
+        8192.0
+      ],
+      "Re_at_arrest_scale": [
+        1206.7608506820511,
+        493.8171357667404,
+        202.05111691496785,
+        78.0221321860398,
+        28.479945690810176,
+        10.917968189676191,
+        4.886688126882967
+      ],
+      "Re_min": 4.886688126882967,
+      "Re_max": 1206.7608506820511,
+      "u_exponent_vs_k_alpha": -0.3453322988858117,
+      "kolmogorov_prediction": -0.3333333333333333,
+      "cutoff_law_prediction": 1.0,
+      "premise_reached": false
+    },
+    "cutoff_law_tgv_96": {
+      "n_runs": 6,
+      "n_usable": 0,
+      "exclusion_reasons": {
+        "viscosity bites first": 4,
+        "dissipation does not peak at the barrier (flow not arrested there)": 2
+      },
+      "Re_core_values": [
+        364.1415453494857,
+        364.1682698305614,
+        363.9608183233346,
+        363.4261417458679,
+        362.7600492085469,
+        361.6565526663236
+      ],
+      "omega_max_spread": 0.030590672270672595
+    },
+    "cutoff_law_tubes_32": {
+      "n_runs": 4,
+      "n_usable": 4,
+      "exclusion_reasons": {},
+      "Re_core_values": [
+        1378.4071818339098,
+        1361.8398001406206,
+        1361.8398001406206,
+        1361.8398001406206
+      ],
+      "omega_max_spread": 0.009823029671255439
+    }
+  },
+  "resolution_requirement": {
+    "omega_0": 2.0,
+    "requirement": "n > 3*sqrt(omega_0*Re)",
+    "by_reynolds": {
+      "200": {
+        "n_required": 60.0
+      },
+      "400": {
+        "n_required": 84.8528137423857
+      },
+      "800": {
+        "n_required": 120.0
+      },
+      "1600": {
+        "n_required": 169.7056274847714
+      },
+      "3200": {
+        "n_required": 240.0
+      }
+    }
+  }
+}

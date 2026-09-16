@@ -57,6 +57,26 @@ reported the `1e-32` figure as "exact machine zero" evidence of a superior metho
 
 ## 2. The cutoff law — tested, and **not** confirmed
 
+### Is the law wrong, or is its premise unreachable?
+
+This distinction decides how the result reads, so it was settled explicitly
+(`analyse_cutoff_law.py`, part A) rather than asserted.
+
+**The law is arithmetically exact given its premise.** Granting a core on the diffusive scaling
+(`Re_core = 1`), the arrest condition follows from the barrier operator itself rather than by
+assumption: `ν k² max(1, α′k²)` exceeds the plain viscous rate at the core's own wavenumber exactly
+when `ℓ_r < √α′`. Substituting back reproduces all four exponents **as identities to machine
+precision**:
+
+| | `t_c` | `u_max` | `ω_max` | `ℓ_arrest` |
+|---|---|---|---|---|
+| computed | `+1.000000` | `−0.500000` | `−1.000000` | `+0.500000` |
+| predicted | `+1.0` | `−0.5` | `−1.0` | `+0.5` |
+
+So the experimental disagreement below is a statement about the **premise**, not about the law's
+arithmetic. That is the difference between "this hypothesis is wrong" and "this hypothesis is
+untestable with generic data" — and it is the latter.
+
 ### What was predicted
 
 The flagship paper states as an untested hypothesis that a regularization arresting the collapse
@@ -116,9 +136,15 @@ than merely damp the initial field (`ω_cap > ω_0`) gives
 
 For the Taylor–Green vortex (`ω_0 = 2`): **n > 85 at Re=400, n > 170 at Re=1600.** This is exactly
 why earlier 64³ attempts in this program saw max enstrophy move by 0.02% across five decades of
-`α′` — the barrier was never engaged at all. Even at 96³ the usable band is 0.66 decades, too thin
-to fit an exponent. The 96³ run is included for completeness; the shell model is what carries the
-result.
+`α′` — the barrier was never engaged at all.
+
+The completed 96³ run at Re=200 shows the squeeze is two-sided, and tighter than the resolution
+constraint alone suggests. The band needs `√(ω_0/ν) < k_α < min(k_η, n/3)`; here the lower edge is
+`20.0` while the **measured** `k_η = 17.6`, so the band is **empty** and no placement of the
+barrier can work. All six runs excluded themselves — four with "viscosity bites first", two with
+"dissipation does not peak at the barrier" — and `ω_max` varied by only **3.06%** across the whole
+sweep, the quantitative signature of an inert barrier. The controls did their job: not one run
+produced a number that could have been mistaken for a result.
 
 A first 32³ run also correctly self-reported `Re_core = 1362` and flagged
 **"premise DOES NOT HOLD → the exponent fits do not constitute a test of the law."**
