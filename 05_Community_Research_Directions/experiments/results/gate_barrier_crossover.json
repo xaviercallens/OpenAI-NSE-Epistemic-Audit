@@ -1,0 +1,92 @@
+[
+  {
+    "t_frac": 0.2,
+    "ell": 0.8944271909999159,
+    "alpha": 0.25,
+    "alpha_over_ell": 0.2795084971874737,
+    "crossover_Re_leray": 8.201049628280769,
+    "crossover_Re_lans": 7.327788761531077,
+    "gate_at_Re1": 0.01321211856641271,
+    "barrier_at_Re1": 0.10835324005788043
+  },
+  {
+    "t_frac": 0.2,
+    "ell": 0.8944271909999159,
+    "alpha": 0.35,
+    "alpha_over_ell": 0.3913118960624632,
+    "crossover_Re_leray": 26.635103821565185,
+    "crossover_Re_lans": 25.680433159558046,
+    "gate_at_Re1": 0.0195891673286295,
+    "barrier_at_Re1": 0.5217595055760597
+  },
+  {
+    "t_frac": 0.2,
+    "ell": 0.8944271909999159,
+    "alpha": 0.5,
+    "alpha_over_ell": 0.5590169943749475,
+    "crossover_Re_leray": 58.80875894537008,
+    "crossover_Re_lans": 61.37672377841548,
+    "gate_at_Re1": 0.027061593313937062,
+    "barrier_at_Re1": 1.591458717876963
+  },
+  {
+    "t_frac": 0.4,
+    "ell": 0.7745966692414834,
+    "alpha": 0.25,
+    "alpha_over_ell": 0.3227486121839514,
+    "crossover_Re_leray": 16.175241431386215,
+    "crossover_Re_lans": 14.520637062121452,
+    "gate_at_Re1": 0.014026907024913481,
+    "barrier_at_Re1": 0.2268886076635829
+  },
+  {
+    "t_frac": 0.4,
+    "ell": 0.7745966692414834,
+    "alpha": 0.35,
+    "alpha_over_ell": 0.45184805705753195,
+    "crossover_Re_leray": 41.379704148665034,
+    "crossover_Re_lans": 39.50820475049359,
+    "gate_at_Re1": 0.02006708580973056,
+    "barrier_at_Re1": 0.8303700739325247
+  },
+  {
+    "t_frac": 0.4,
+    "ell": 0.7745966692414834,
+    "alpha": 0.5,
+    "alpha_over_ell": 0.6454972243679028,
+    "crossover_Re_leray": 84.62131393014391,
+    "crossover_Re_lans": 85.79562401348464,
+    "gate_at_Re1": 0.026745186174494427,
+    "barrier_at_Re1": 2.2632127953920373
+  },
+  {
+    "t_frac": 0.6,
+    "ell": 0.6324555320336759,
+    "alpha": 0.25,
+    "alpha_over_ell": 0.3952847075210474,
+    "crossover_Re_leray": 34.6508995574374,
+    "crossover_Re_lans": 30.566864433045254,
+    "gate_at_Re1": 0.014774990761636627,
+    "barrier_at_Re1": 0.5119667208435363
+  },
+  {
+    "t_frac": 0.6,
+    "ell": 0.6324555320336759,
+    "alpha": 0.35,
+    "alpha_over_ell": 0.5533985905294664,
+    "crossover_Re_leray": 73.24479429495025,
+    "crossover_Re_lans": 66.66646977982386,
+    "gate_at_Re1": 0.020096131232261512,
+    "barrier_at_Re1": 1.4719369982313197
+  },
+  {
+    "t_frac": 0.6,
+    "ell": 0.6324555320336759,
+    "alpha": 0.5,
+    "alpha_over_ell": 0.7905694150420948,
+    "crossover_Re_leray": 141.70270283837854,
+    "crossover_Re_lans": 132.26404633297065,
+    "gate_at_Re1": 0.02552813238295486,
+    "barrier_at_Re1": 3.617405357080641
+  }
+]

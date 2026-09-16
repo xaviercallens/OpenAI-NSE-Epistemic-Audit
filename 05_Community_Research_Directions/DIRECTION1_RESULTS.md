@@ -88,6 +88,111 @@ inert, and the fit excludes `τ > 0.7T` so a badly chosen band cannot contaminat
   Replaced by an enstrophy-weighted second moment with the periodization floor added back
   analytically; it recovers the analytic ℓ to 3%.
 
+## Stage 2 — axial structure: the transport gates, measured against the barrier
+
+**Code:** `experiments/forced_core_axial.py` · **Tests:** `tests/test_forced_core_axial.py` (9)
+**Data:** `results/forced_core_axial_32.json`, `results/gate_leverage_vs_re.json`,
+`results/gate_barrier_crossover.json`
+
+### Setup
+
+The swirl column plus an axisymmetric meridional cell from a Stokes streamfunction
+`Ψ = W r² e^{−r²/ℓ²} sin z`, with `W = ν/(2ℓ)` so the axial peak velocity is `ν/ℓ` (axial Re = 1).
+Solenoidal to 9×10⁻¹⁸ after projection. The forcing uses a central finite-difference time
+derivative; two step sizes agree to 4×10⁻⁹. Control whole-field L2 error: **6.5×10⁻⁷**. The
+α-model nonlinearities are no longer inert. Stated limitation: `k_z = 1`, so the axial scale does
+not collapse with the core.
+
+### Result: the gates barely touch a Re ≈ 1 collapse
+
+Same target, same forcing, filter width matched to the barrier scale (`√α′ = α`), 32³:
+
+| model | α | lag at window end | `dℓ/dt` vs target | meridional energy fraction (target 3.1%) |
+|---|---|---|---|---|
+| Leray-α | 0.25 / 0.35 / 0.50 | 0.17% / 0.23% / 0.31% | 1.00 | 3.1% |
+| LANS-α | 0.25 / 0.35 / 0.50 | 0.26% / 0.32% / 0.37% | 1.00–1.01 | 3.1% |
+| barrier | 0.25 / 0.35 / 0.50 | **4.8% / 19.2% / 45%** | 0.78 / 0.60 / 0.53 | 2.5% / 1.5% / **1.0%** |
+
+### Why, measured in the right units
+
+The first account of this result said the nonlinear term was "O(10⁻⁴) of the field scale". That
+number was normalized by `|U|·k_max`, which makes every term small when ν = 0.01; it is not a
+statement about the dynamics. Measured against the **forcing** instead, at `t = 0.3T` and `0.6T`:
+
+| term, relative to the forcing | value |
+|---|---|
+| viscous `νΔU` | ~0.85 |
+| nonlinear `P N(U)` | **0.04–0.05** |
+| perturbation a gate makes (`N_α − N`), α = 0.25–0.5 | 0.014–0.027 |
+| perturbation the barrier makes, same scale | 0.16–3.6 |
+
+A Re ≈ 1 collapse is a balance between forcing and viscosity. The nonlinear term is about 5% of
+it, and a transport gate can only act through that 5%. **A gate's leverage is bounded by the
+nonlinear term's share, and that share is small precisely because Re ≈ 1.** The barrier acts on the
+field directly, whatever sustains it, so it has 11× to 142× more leverage at the same scale.
+
+### Leverage against Reynolds number, and the crossover
+
+Scaling the target by λ multiplies the core Re by λ: linear terms scale as λ, the nonlinearity as
+λ². This allows an exact Re scan with no time stepping (α = 0.35, `t = 0.4T`):
+
+| Re | nonlinear / forcing | Leray gate | LANS gate | barrier | barrier / gate |
+|---|---|---|---|---|---|
+| 0.3 | 0.014 | 0.006 | 0.006 | 0.83 | 138 |
+| 1 | 0.046 | 0.020 | 0.021 | 0.83 | 41 |
+| 10 | 0.42 | 0.18 | 0.19 | 0.76 | 4.1 |
+| 30 | 0.81 | 0.35 | 0.37 | 0.49 | 1.4 |
+| 100 | 0.98 | 0.43 | 0.45 | 0.18 | 0.41 |
+| 1000 | 1.00 | 0.44 | 0.46 | 0.018 | 0.04 |
+
+Gate leverage grows as Re at low Re (fitted slope +1.00 — close to forced by the λ²/λ scaling, so
+this is a consistency check rather than independent evidence) and saturates near 0.44. Barrier
+leverage is flat at low Re and falls as 1/Re once the nonlinearity dominates the forcing.
+
+**The crossover is an exact identity, not a fit.** Gate and barrier leverage share the same forcing
+norm, which cancels in their ratio, so the Re at which they are equal is exactly
+`Re_x = ‖(L_barrier − L_ν)U‖ / ‖N_α(U) − N(U)‖` — a property of the target and the filter alone.
+A test pins this to ten decimal places.
+
+**It is not universal.** Over nine configurations (three filter widths × three core sizes) it runs
+from **8 to 142**, growing roughly as `(α/ℓ)^2.7`: barrier leverage rises steeply as the barrier
+scale approaches the core, while gate leverage stays bounded by the filtered share of the
+nonlinearity. The robust statement is that **Re_x ≫ 1 in every case measured** (minimum 8), and that
+it is **largest where arrest actually happens**, as α/ℓ → 1 (142 at α/ℓ = 0.79, still rising).
+
+### What this does to the programme's central conjecture
+
+The programme conjectured that LANS-α with `α ≈ ℓ*` is the Lagrangian average over kinetic
+fluctuations, and therefore a *derived* lock at the continuum limit. This result relocates that
+conjecture rather than refuting it.
+
+Proposition 5.1 places a `Re_r = O(1)` core at `ℓ*`, and arrest means α/ℓ → 1. That is exactly the
+regime where a transport gate has two orders of magnitude less leverage than dissipation. **So
+LANS-α cannot be the operative lock for an OpenAI-type collapse at ℓ*.** Transport gates are the
+effective lock only for Re ≳ O(10–100), i.e. transfer-driven dynamics, which is the regime where the
+cutoff law's premise fails. **Gate and cutoff law test opposite premises.**
+
+The consistent reading gives each lock its own regime:
+
+* **Re ≫ 1, cascades:** a transport gate (LANS-α) is the stronger lock. The derivation conjecture
+  survives here, as a closure for inertial-range dynamics.
+* **Re ≈ 1, the collapse at ℓ*:** a drain is the stronger lock. The drain that physics actually
+  supplies there is the programme's own Lock K: collisional relaxation, whose discrete form is the
+  BGK step shown to contract relative entropy in `LatticeBGKEntropy.lean`, which is itself a
+  first-order drain in the sense of `AlphaEnergyIdentity.lean`.
+
+In other words, the dual-scale lock that acts at ℓ* is kinetic and dissipative, not a
+Lagrangian-averaged gate. This is a stronger statement than the programme made before, and one of
+its own experiments is what forced it.
+
+### Limitations
+
+* `k_z = 1`: the axial scale does not collapse. A collapsing `ℓ_z` needs a localized axial envelope.
+* 32³, filter widths 0.25–0.5 below the window floor, so arrest `ℓ ~ α` itself is not observed for
+  the gates. The leverage analysis is instantaneous and does not need the window.
+* The `(α/ℓ)^2.7` trend is fitted over α/ℓ ∈ [0.28, 0.79]; the value at α/ℓ = 1 is a short
+  extrapolation.
+
 ## What this bed cannot test, and stage 2
 
 For the z-invariant column every α-model nonlinearity is a pure gradient and projects to zero

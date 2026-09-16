@@ -152,6 +152,18 @@ stronger than any statement about the approach to `t = 1`.
 
 ### Lock A — the α-model (posited → to be derived)
 
+> **Status update (2026-09-16) — conjecture relocated, not refuted.** Measured on the forced-core
+> bed (`DIRECTION1_RESULTS.md`, stage 2): on a Re ≈ 1 collapse a transport gate can only act
+> through the nonlinear term, which is ~5% of the forcing, so Leray-α and LANS-α lag the collapse
+> by 0.2–0.4% while a dissipative barrier at the same scale lags it by up to 45%. The Re at which a
+> gate becomes as strong a lock as a barrier is exactly
+> `‖(L_barrier − L_ν)U‖ / ‖N_α(U) − N(U)‖`: between 8 and 142 across nine configurations, and
+> largest as α/ℓ → 1, which is where arrest happens. Since Proposition 5.1 puts a `Re_r = O(1)`
+> core at `ℓ*`, **LANS-α cannot be the operative lock for the collapse at ℓ*.** The conjecture
+> survives for Re ≫ 1 (cascades, where the gate is the stronger lock). At ℓ* the operative lock is
+> a drain, which physics supplies through Lock K (collisional relaxation). Lock K moves from
+> "the root" to "the lock that acts at ℓ*". The text below is retained as originally written.
+
 *What.* `ū = (1 − α²Δ)⁻¹u` (Leray-α) or the Lagrangian-averaged variant (LANS-α, Holm–Marsden–Ratiu
 1998). Global 3D well-posedness is a theorem for both.
 *Status.* **Posited.** `α` is a free parameter. This is the weakness the T-duality drafts shared:
