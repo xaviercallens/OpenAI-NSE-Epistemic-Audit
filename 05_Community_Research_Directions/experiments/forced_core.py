@@ -257,19 +257,28 @@ def run_core(n: int, nu: float, l0: float, alpha_prime: float | None,
     return out
 
 
-def pooled_bf_law(runs: list, nu: float, bf_min: float = 0.02) -> dict:
+def pooled_bf_law(runs: list, nu: float, bf_min: float = 0.02,
+                  tau_max_frac: float = 0.7) -> dict:
     """
     The mechanism test, usable even when no run reaches B/F = 1: the scaling
     argument predicts  B/F = C alpha'/(nu tau)  at ALL times, i.e. slope 1 in
     log(B/F) vs log(alpha'/(nu tau)) pooled over runs and samples, with the
     intercept giving C. Samples with tiny B/F are excluded (numerical noise).
+
+    Samples with tau > tau_max_frac * T are also excluded: if k_alpha lies inside
+    the INITIAL Gaussian's spectrum the barrier strips that tail at t = 0, which
+    shows up as an early hook in B/F (and a transient growth of l) that has
+    nothing to do with the collapse. The default band now keeps k_alpha above the
+    initial core, but the filter makes the fit robust to a badly chosen band.
     """
     xs, ys = [], []
     for r in runs:
         S = r["series"]
+        T = r.get("T", np.inf)
+        tau = np.asarray(S["tau"])
         bf = np.asarray(S["barrier_extra"]) / np.maximum(np.abs(np.asarray(S["forcing_power"])), 1e-300)
-        x = r["alpha_prime"] / (nu * np.asarray(S["tau"]))
-        m = bf > bf_min
+        x = r["alpha_prime"] / (nu * tau)
+        m = (bf > bf_min) & (tau < tau_max_frac * T)
         xs.append(x[m]); ys.append(bf[m])
     x = np.concatenate(xs); y = np.concatenate(ys)
     if len(x) < 4:
@@ -277,9 +286,29 @@ def pooled_bf_law(runs: list, nu: float, bf_min: float = 0.02) -> dict:
     a, b = np.polyfit(np.log(x), np.log(y), 1)
     resid = np.log(y) - (a * np.log(x) + b)
     r2 = 1.0 - np.sum(resid**2) / np.sum((np.log(y) - np.log(y).mean())**2)
+
+    # COLLAPSE is the load-bearing statement, not the slope. If B/F is a single
+    # function of alpha'/(nu tau) -- whatever its shape -- then arrest (B/F = 1)
+    # happens at one fixed value x* of that variable, so tau_c = alpha'/(nu x*)
+    # and the four predicted EXPONENTS follow with no assumption about the
+    # slope; only the prefactor depends on the curve's shape. The shape here is
+    # concave in log-log (local slope falls with x), as expected for the
+    # erfc-like fraction of a Gaussian forcing spectrum lying above k_alpha.
+    # Measured on 32^3: C spread 5% across a 2.6x range of alpha'.
+    per_run_C, per_run_slope = [], []
+    for xr, yr in zip(xs, ys):
+        if len(xr) >= 4:
+            ar, br = np.polyfit(np.log(xr), np.log(yr), 1)
+            per_run_C.append(float(np.exp(br))); per_run_slope.append(float(ar))
+    coll = {}
+    if len(per_run_C) >= 2:
+        C_arr = np.array(per_run_C)
+        coll = {"per_run_C": per_run_C, "per_run_local_slope": per_run_slope,
+                "C_spread_rel": float(C_arr.std() / C_arr.mean()),
+                "collapses": bool(C_arr.std() / C_arr.mean() < 0.15)}
     return {"n_samples": int(len(x)), "slope": float(a), "predicted_slope": 1.0,
             "prefactor_C": float(np.exp(b)), "r_squared": float(r2),
-            "x_range_decades": float(np.log10(x.max() / x.min()))}
+            "x_range_decades": float(np.log10(x.max() / x.min())), **coll}
 
 
 def alpha_models_are_inert(n: int, nu: float, l0: float) -> dict:
@@ -334,10 +363,16 @@ def main() -> None:
     print(f"    control {'PASS' if ctrl_ok else 'FAIL'} (threshold 5% on the L2 field error)")
 
     # Barrier sweep: sqrt(alpha') must sit inside the resolved collapse window
-    # (l_min, l0). The usable dynamic range is set by l0/l_min ~ n, which is why
-    # a wide sweep needs a large grid.
+    # (l_min, l0) -- and well below l0, so that k_alpha = 1/sqrt(alpha') starts
+    # ABOVE the initial core's spectrum and the barrier is inert at t = 0. With
+    # sqrt(alpha') = 0.7 l0 the barrier strips the initial Gaussian's tail
+    # immediately (seen as an early growth of l and a hook in B/F). The usable
+    # dynamic range is set by l0/l_min ~ n, which is why a wide sweep needs a
+    # large grid.
     lo = args.sqrt_a_lo if args.sqrt_a_lo else 1.3 * l_min
-    hi = args.sqrt_a_hi if args.sqrt_a_hi else 0.7 * args.l0
+    hi = args.sqrt_a_hi if args.sqrt_a_hi else 0.35 * args.l0
+    if hi > 0.4 * args.l0:
+        print(f" WARNING: sqrt(alpha') upper {hi:.3f} > 0.4 l0: barrier engages the initial core at t=0")
     if lo >= hi:
         raise SystemExit(f" sweep band empty: sqrt(alpha') lower {lo:.3f} >= upper {hi:.3f}; "
                          f"raise n or l0, or pass --sqrt-a-lo/--sqrt-a-hi")
@@ -362,6 +397,10 @@ def main() -> None:
     if "slope" in law:
         print(f"    slope {law['slope']:+.3f} (predicted +1.000), R^2 {law['r_squared']:.3f},"
               f" prefactor C = {law['prefactor_C']:.3f}")
+        if "C_spread_rel" in law:
+            print(f"    COLLAPSE: per-run C spread {100*law['C_spread_rel']:.1f}% -> "
+                  f"{'B/F is a function of alpha\'/(nu tau) alone' if law['collapses'] else 'NO collapse'};"
+                  f" per-run local slopes {['%.2f' % s for s in law['per_run_local_slope']]}")
         print(f"    => actual crossover tau_c = C alpha'/nu = {law['prefactor_C']:.2f} alpha'/nu;"
               f" for the largest alpha' here that is tau = {law['prefactor_C']*alphas.max()/args.nu:.1f}"
               f" against a window floor of tau_min = {l_min**2/args.nu:.1f}")
