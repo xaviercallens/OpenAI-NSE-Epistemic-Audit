@@ -65,8 +65,11 @@ reproducing the construction's own forcing. We then supply that forcing. On a ma
 $\mathrm{Re}\approx1$ collapse the barrier's engagement reduces to a function of a single
 variable, while transport-filtering regularizations of the Leray-$\alpha$ and LANS-$\alpha$ type
 are the weaker lock by one to two orders of magnitude, because on such a collapse they can act only
-through a nonlinearity that is a few percent of the dynamics. The lock that operates where the
-continuum ends is dissipative, which is what kinetic theory supplies.
+through a nonlinearity that is a few percent of the dynamics. Nor is the missing lock a stronger
+drain: the exact shear-mode spectrum of the BGK kinetic model damps small scales \emph{less} than
+viscosity, caps the relaxation rate at the collision frequency, and ends the hydrodynamic mode at
+$k\lambda=\sqrt{\pi/2}$. What operates where the continuum ends is not a regularization of the
+hydrodynamic equations but the termination of the hydrodynamic description itself.
 \end{abstract}
 
 % ====================================================================
@@ -803,25 +806,60 @@ magnitude less leverage than dissipation. We had conjectured that LANS-$\alpha$ 
 $\alpha\approx\ell_*$, being a Lagrangian average, might be \emph{derived} rather than posited as the
 lock at the continuum limit. This measurement relocates that conjecture rather than refuting it: a
 transport filter is the stronger lock for transfer-driven dynamics at $\mathrm{Re}\gtrsim10$--$100$,
-the regime where the cutoff law's premise fails, and the weaker one on the collapse. It is consistent
+the regime where the cutoff law's premise fails, and the weaker one on the collapse. (Both
+regularizations are models; the comparison ranks them against each other, and says nothing yet
+about which, if either, resembles what a real fluid does at $\ell_*$. That question is taken up
+below, and the answer is neither.) It is consistent
 with Tao's averaged Navier--Stokes blow-up~\cite{Tao2016}, which preserves the energy identity and
 shows that what prevents blow-up must constrain the structure of transfer, not the energy budget ---
 but on a $\mathrm{Re}\approx1$ core there is little transfer to constrain.
 
-The lock that does act there is dissipative, and physics supplies one without being asked. Kinetic
-theory gives $\nu\approx\tfrac12\bar c\lambda$ for a gas, so
-$\ell_*=\nu/c_s\approx(\bar c/2c_s)\,\lambda$; for air $\bar c/2c_s=0.67$, and the independently
+What does act there is set by the physics beneath the continuum, and the first step is to
+identify that physics precisely. Kinetic theory gives $\nu\approx\tfrac12\bar c\lambda$ for a gas,
+so $\ell_*=\nu/c_s\approx(\bar c/2c_s)\,\lambda$; for air $\bar c/2c_s=0.67$, and the independently
 computed $\ell_*=45$\,nm against a mean free path of $68$\,nm gives the same $0.67$. The validity
 scale of Proposition~\ref{prop:scales} \emph{is} the mean free path, with a derived constant. The
 hierarchy connecting the two descriptions is Chapman--Enskog, with the Knudsen number as the locking
-parameter; incompressible Navier--Stokes is a rigorous limit of the Boltzmann
-equation~\cite{GolseSaintRaymond2004}, and the collision operator that takes over below $\lambda$
-is a drain with an H-theorem. For its discrete BGK form~\cite{BGK1954} we have proved in Lean that
-each collision step contracts the relative entropy by at least a factor $1-\omega$
-(\S\ref{sec:architecture}). A phenomenological Mach cap applied to a dyadic cascade makes the same
-point from the other side: in a cascade it engages at the \emph{largest} scale, while on the
-diffusive collapse it engages at exactly $\ell_*$. The regularizations that matter at the continuum
-limit are the ones the underlying physics already contains.
+parameter, and incompressible Navier--Stokes is a rigorous limit of the Boltzmann
+equation~\cite{GolseSaintRaymond2004}. The collision operator that takes over below $\lambda$ is
+dissipative in the thermodynamic sense: for its discrete BGK form~\cite{BGK1954} we have proved in
+Lean that each collision step contracts the relative entropy by at least a factor $1-\omega$
+(\S\ref{sec:architecture}).
+
+It is tempting to conclude that the kinetic regime acts like the barrier --- a stronger drain on
+small scales. It does not, and the exact linear theory shows why. For the BGK model with collision
+time $\tau$ (so $\nu=v_{\text{th}}^2\tau$ and $\lambda=v_{\text{th}}\tau$), a transverse shear
+perturbation of wavenumber $k$ obeys the dispersion relation
+\begin{equation}
+  1=\frac1\tau\Big\langle\frac{1}{\sigma+ikv}\Big\rangle_{v\sim\mathcal N(0,v_{\text{th}}^2)},
+  \qquad \sigma=s+1/\tau ,
+  \label{eq:bgk-shear}
+\end{equation}
+which we solved exactly through the Faddeeva function and, independently, as the spectrum of a
+discrete-velocity operator; the two agree to $3\times10^{-12}$. Three facts follow. At small $k$ the
+shear damping rate is $\Gamma=\nu k^2\big[1-(k\lambda)^2+\dots\big]$: the first kinetic correction
+\emph{reduces} the damping, the opposite sign to hyperviscosity, and truncated at that order it turns
+negative for $k\lambda>1$ --- the Burnett instability~\cite{Bobylev1982}, which the full kinetic mode
+does not share. The damping rate never exceeds the collision rate $1/\tau$; this is exact, since the
+linearized operator is a skew advection term plus $-(1/\tau)(I-P)$ with $P$ a projection, the
+spectral counterpart of the H-theorem. And at
+\begin{equation}
+  k\lambda=\sqrt{\pi/2}\approx1.2533
+  \label{eq:bgk-termination}
+\end{equation}
+the hydrodynamic shear mode ceases to exist: as $\sigma\to0^+$ the velocity average in
+Eq.~\eqref{eq:bgk-shear} tends to $\sqrt{\pi/2}/(k\lambda)$, so no root survives beyond it and only
+free-streaming decay of the continuum remains. At $k\lambda=1$ the barrier already damps $1.43$
+times harder than kinetic theory does; at $k\lambda=3$ there is no kinetic mode to compare, and the
+barrier exceeds the collision-rate cap by a factor of $81$ or more.
+
+So the lock at $\ell_*$ is neither of the two regularizations tested above. It is not a stronger
+drain, and not a gate on transfer. It is the end of the hydrodynamic description: the velocity
+gradient on which Navier--Stokes, the barrier and the $\alpha$-models all act stops having
+autonomous dynamics at a scale fixed by the mean free path. That returns this paper to the reading
+of \S\ref{sec:mach}, now with a mechanism rather than only a scale. A phenomenological Mach cap
+applied to a dyadic cascade makes a complementary point: in a cascade it engages at the
+\emph{largest} scale, while on the diffusive collapse it engages at exactly $\ell_*$.
 
 % ====================================================================
 \section{Discussion}
@@ -986,20 +1024,18 @@ $|\omega|/(c_s^2/\nu)=0.05$ --- with byte-identical numerics in both cases. Mode
 property of the discretization, and a solver that reports its own departure from the modelled
 regime seems to us more useful than one that regularizes the departure away.
 
-We want to be explicit about the current state of this project's own attempt at pillar 3. Four
-Lean files in this repository now compile against Mathlib with no \texttt{sorry} and no axioms
-beyond the standard three, together $38$ theorems: the scaling chain of
+We want to be explicit about the current state of this project's own attempt at pillar 3. Five
+Lean files in this repository compile with no \texttt{sorry} and no axioms beyond the standard
+three, together $45$ theorems. Four are free-standing: the scaling chain of
 Proposition~\ref{prop:scales} as an equality chain from the diffusive core scalings (core
 Reynolds number one, the Mach and Knudsen times, Eckert number one, and their coincidence at
 $\ell_*$); the bounds on the Leray-$\alpha$ filter symbol; an H-theorem for the discrete BGK
 collision step; and the finite-dimensional identity behind the gate--drain distinction of
 \S\ref{sec:gate-drain}, that a projected skew-adjoint term changes the energy only at second order in
-the step while a dissipative one removes it at first order. Each file's header states what it does not
-prove. As of this writing, \emph{none} of these results is connected, inside Lean, to OpenAI's
-actual \texttt{NavierStokes}/\texttt{Euler} definitions, and presenting them as already constraining
-the construction would repeat exactly the overclaiming earlier drafts of this project were rightly
-criticized for. Wiring an admissibility predicate to the actual proof objects remains the concrete
-next step, and one we have not yet completed.
+the step while a dissipative one removes it at first order. The fifth is the first to state results
+about OpenAI's \emph{actual} objects: it imports their \texttt{ProblemStatement} unchanged and is
+described under Direction~2 of \S\ref{sec:directions}, including exactly what it assumes. Each
+file's header states what it does not prove.
 
 \subsection{A Hypothesis on Cutoff Regularizations: Testable Questions, Not a Metric}
 
@@ -1077,15 +1113,26 @@ admissibility criterion would therefore discriminate exactly where a magnitude-b
 and would connect the geometric fragility to a regularity theorem rather than to an estimate. We
 regard this as the most promising single item on this list.
 
-\emph{Not formalized against the construction.} As noted in \S\ref{sec:architecture}, this
-repository's Lean results --- including the scaling chain of Proposition~\ref{prop:scales} --- are
-not connected to OpenAI's definitions. The tractable step is narrow and worth stating
-precisely: define admissibility as a predicate on OpenAI's own \texttt{VelocityField}, and prove
-the reduction ``admissible on $[0,T)$ $\Rightarrow$ not \texttt{SpeedUnboundedAtOne}''. The
-Beale--Kato--Majda theorem is not in Mathlib and would have to enter as an explicit hypothesis or
-axiom; the reduction that consumes it is elementary and provable, and the result would be the
-first statement in this project that constrains the actual proof objects. Labelling which part is
-assumed is the whole point of doing it this way.
+\emph{Formalized against the construction --- and what that turned out to require.} The narrow step
+proposed in earlier versions is now done. Admissibility is stated on OpenAI's own
+\texttt{VelocityField}, as a bound on the operator norm of \texttt{spatialDerivative}; that norm
+dominates both strain and vorticity, which settles the ``wrong field?'' question for the purposes of a
+formal statement. Unconditionally, any object satisfying OpenAI's \texttt{CandidateProperties} has a
+uniformly bounded gradient on every $[0,1-\delta]$. Given one hypothesis --- that a uniformly bounded
+gradient on $[0,1)$ excludes \texttt{SpeedUnboundedAtOne} --- the same object exceeds every gradient
+bound in every window before $t=1$, and therefore leaves the admissible set for every fluid and every
+choice of units. All results compile inside OpenAI's own project with only the standard axioms.
+
+Earlier versions said this hypothesis would be the Beale--Kato--Majda theorem. It is much weaker,
+and saying so matters. OpenAI's candidate properties include spatial periodicity of velocity,
+pressure and force, and zero initial velocity. On the periodic cell the pressure gradient, the
+viscous term and the divergence-free advection all average to zero, so the cell mean obeys
+$d\langle u\rangle/dt=\langle f\rangle$ and stays bounded; a gradient bound $C$ then confines $u$ to
+within $\sqrt3\,C$ of that mean. The hypothesis is an elementary lemma, left unformalized only
+because it needs integration by parts over the periodic cell in a form Mathlib does not yet provide.
+The honest reading follows: the formal result is close to ``velocity blow-up forces gradient
+blow-up,'' and its value is that it is the first statement in this project about the proof objects
+themselves, not that it adds physics.
 
 Finally, a limit worth recording: an admissibility condition that excludes blow-up is weaker than
 one that selects a unique physical solution. Non-uniqueness of Leray solutions of the forced
@@ -1174,10 +1221,13 @@ in general, so no amount of resolution applied to generic data can decide the qu
 one variable, and transport-filtering regularizations --- the family in which the intuition behind
 earlier drafts was placed --- turn out to be one to two orders of magnitude weaker than dissipation
 on exactly the kind of collapse that reaches $\ell_*$, because there they can act only through a
-nonlinearity that is a few percent of the dynamics. The lock that acts where the continuum ends is
-dissipative, and the physics already contains it: the validity scale is the mean free path, with a
-constant derived from kinetic theory, and the collision operator that replaces hydrodynamics below
-it has an H-theorem. The three directions of \S\ref{sec:directions} follow, and the second of them
+nonlinearity that is a few percent of the dynamics. Nor does the physics beneath the continuum
+behave like the stronger of the two: the validity scale is the mean free path, with a constant
+derived from kinetic theory, and the exact kinetic shear spectrum damps small scales less than
+viscosity, caps the rate at the collision frequency, and ends the hydrodynamic mode at
+$k\lambda=\sqrt{\pi/2}$. The lock that acts where the continuum ends is the end of the hydrodynamic
+description, which is where this paper began. The three directions of \S\ref{sec:directions}
+follow, and the second of them
 --- an admissibility criterion stated on the coherence of vorticity direction rather than on its
 magnitude, after Constantin and Fefferman~\cite{ConstantinFefferman1993} --- still strikes us as the
 most likely to say something that is both true and new, because it bears directly on the coherence
@@ -1406,6 +1456,10 @@ edge cases like this one; that suggestion is the direct motivation for \S\ref{se
   F. Golse, L. Saint-Raymond,
   ``The Navier--Stokes limit of the Boltzmann equation for bounded collision kernels,''
   \emph{Invent.\ Math.}\ \textbf{155}, 81--161, 2004.
+\bibitem{Bobylev1982}
+  A.\,V. Bobylev,
+  ``The Chapman--Enskog and Grad methods for solving the Boltzmann equation,''
+  \emph{Sov.\ Phys.\ Dokl.}\ \textbf{27}, 29--31, 1982.
 \bibitem{BGK1954}
   P.\,L. Bhatnagar, E.\,P. Gross, M. Krook,
   ``A model for collision processes in gases. I. Small amplitude processes in charged and neutral

@@ -163,6 +163,15 @@ stronger than any statement about the approach to `t = 1`.
 > survives for Re ≫ 1 (cascades, where the gate is the stronger lock). At ℓ* the operative lock is
 > a drain, which physics supplies through Lock K (collisional relaxation). Lock K moves from
 > "the root" to "the lock that acts at ℓ*". The text below is retained as originally written.
+>
+> **Further correction (v5.3.0) to the note just above.** "A drain, which physics supplies through
+> Lock K" is wrong in the sense it implies. The exact BGK shear spectrum
+> (`experiments/lock_k_kinetic_spectrum.py`) gives damping `νk²[1 − (kλ)² + …]` — *less* than
+> viscosity — capped at the collision rate `1/τ`, with the hydrodynamic mode ending at
+> `kλ = √(π/2)`. Kinetic theory is not a stronger drain; it is the **termination** of the
+> hydrodynamic mode. Lock K's role is therefore "the regime in which the gradient-based locks
+> (barrier, gate) stop being defined", not "the strongest drain". Of the six locks, it remains the
+> root; the barrier is now known not to model it.
 
 *What.* `ū = (1 − α²Δ)⁻¹u` (Leray-α) or the Lagrangian-averaged variant (LANS-α, Holm–Marsden–Ratiu
 1998). Global 3D well-posedness is a theorem for both.

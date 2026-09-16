@@ -1,5 +1,61 @@
 # Changelog
 
+## v5.3.0 — 2026-09-16 — The kinetic lock is a termination, not a drain; first Lean bridge to OpenAI's objects
+
+### Correction to v5.2.0
+
+v5.2.0 said "the lock that operates where the continuum ends is dissipative, which is what kinetic
+theory supplies", implying real physics at `ℓ*` acts like the hyperviscous barrier that §9.2 found to
+be the stronger of two model regularizations. **That implication is withdrawn.** The exact shear-mode
+spectrum of the BGK kinetic model (`experiments/lock_k_kinetic_spectrum.py`; two independent methods
+agreeing to 3×10⁻¹²; numbers re-derived and re-verified from scratch) shows:
+
+- damping `Γ = νk²[1 − (kλ)² + …]` — the first kinetic correction **reduces** damping (Burnett
+  coefficient +1, derived and confirmed), the opposite sign to hyperviscosity; truncated at that order
+  it becomes unstable for `kλ > 1` (Bobylev), the full mode does not;
+- the damping never exceeds the collision rate `1/τ` — exact, since the linearized operator is skew
+  advection plus `−(1/τ)(I − P)`, the spectral twin of the Lean H-theorem;
+- the hydrodynamic shear mode **ceases to exist** at `kλ = √(π/2) ≈ 1.2533` (closed form);
+- at `kλ = 1` the barrier damps 1.43× harder than kinetic theory.
+
+BGK collisions are dissipative thermodynamically, but they are not a stronger drain on small scales.
+**The lock at `ℓ*` is the end of the hydrodynamic description** — the paper's original §5 reading,
+now with a mechanism. The gate-versus-drain comparison stands as a ranking of two *models*.
+
+### Paper (24 pages)
+
+- §9.2 "Which lock acts where the continuum ends" rewritten with the BGK dispersion relation
+  (Eq. `bgk-shear`), the termination wavenumber (Eq. `bgk-termination`), and the corrected
+  conclusion; a clause added that the gate–drain ranking is a model comparison. Abstract and
+  conclusion corrected accordingly. New reference: Bobylev 1982.
+- §10.3 Lean status: 45 theorems in five files, one now about OpenAI's actual objects.
+- Direction 2 rewritten: the formal reduction is **done**, and its hypothesis is **not**
+  Beale–Kato–Majda but an elementary periodic-cell lemma (cell mean obeys `d⟨u⟩/dt = ⟨f⟩`; a gradient
+  bound `C` confines `u` within `√3·C` of it), unformalized only for want of torus integration by
+  parts in Mathlib. The honest reading is stated: the result is close to "velocity blow-up forces
+  gradient blow-up", valuable as the first bridge, not as new physics.
+
+### Lean 4
+
+- `OpenAIAdmissibility.lean` (7 theorems) imports OpenAI's `NavierStokes.ProblemStatement` unchanged.
+  Unconditionally, a candidate's velocity gradient is bounded on every `[0, 1−δ]`; given the labelled
+  hypothesis, any object with OpenAI's `CandidateProperties` exceeds every gradient bound in every
+  window before `t = 1`, hence leaves the admissible set for every fluid and unit choice. Compiled
+  inside OpenAI's project; independently re-verified (0 errors, 0 warnings, 0 `sorryAx`, standard
+  axioms only). Build instructions in the module header.
+
+### Also
+
+- `DIRECTION1_RESULTS.md` and `DUAL_SCALE_LOCK_PROGRAMME.md` carry explicit correction notes rather
+  than silent rewrites.
+- HuggingFace card and Zenodo metadata brought to v5.3.0; the Zenodo push script retries 5xx
+  responses and accepts `--draft-id`.
+
+### Pending
+
+- The `96³` forced-core crossing sweep.
+- Zenodo publication, blocked by a Zenodo-side 504 outage at time of writing.
+
 ## v5.2.0 — 2026-09-16 — 3D solver, cutoff law tested, forced core, gate vs drain, 38 Lean theorems
 
 ### Paper (`01_Verification_Paper/`, 23 pages)

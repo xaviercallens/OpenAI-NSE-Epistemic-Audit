@@ -176,14 +176,25 @@ The consistent reading gives each lock its own regime:
 
 * **Re ≫ 1, cascades:** a transport gate (LANS-α) is the stronger lock. The derivation conjecture
   survives here, as a closure for inertial-range dynamics.
-* **Re ≈ 1, the collapse at ℓ*:** a drain is the stronger lock. The drain that physics actually
-  supplies there is the programme's own Lock K: collisional relaxation, whose discrete form is the
-  BGK step shown to contract relative entropy in `LatticeBGKEntropy.lean`, which is itself a
-  first-order drain in the sense of `AlphaEnergyIdentity.lean`.
+* **Re ≈ 1, the collapse at ℓ*:** of the two *model* regularizations, the drain is the stronger.
 
-In other words, the dual-scale lock that acts at ℓ* is kinetic and dissipative, not a
-Lagrangian-averaged gate. This is a stronger statement than the programme made before, and one of
-its own experiments is what forced it.
+> **Correction (v5.3.0).** An earlier version of this note continued: "The drain that physics
+> actually supplies there is the programme's own Lock K: collisional relaxation … the dual-scale
+> lock that acts at ℓ* is kinetic and dissipative." The exact shear-mode spectrum of the BGK model
+> (`experiments/lock_k_kinetic_spectrum.py`) refutes the implication that kinetic theory acts like
+> the barrier. Its damping is `Γ = νk²[1 − (kλ)² + …]` — the first kinetic correction *reduces*
+> damping — it never exceeds the collision rate `1/τ`, and the hydrodynamic shear mode ceases to
+> exist at `kλ = √(π/2) ≈ 1.2533`. At `kλ = 1` the barrier damps 1.43× harder than kinetic theory.
+> BGK collisions are dissipative in the thermodynamic sense (the H-theorem holds), but they are not
+> a stronger drain on small scales.
+
+The corrected reading: the gate-versus-drain comparison ranks two *models* against each other, and
+says nothing by itself about what a real fluid does at ℓ*. What a real fluid does is neither: at a
+scale fixed by the mean free path, the velocity gradient on which Navier–Stokes, the barrier and the
+α-models all act stops having autonomous dynamics. The lock at ℓ* is the end of the hydrodynamic
+description — which is the paper's original §5 reading, now with a mechanism rather than only a
+scale. One of the programme's own experiments forced the gate-versus-drain result, and a second
+forced this correction to how it was first interpreted.
 
 ### Limitations
 

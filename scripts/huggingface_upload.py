@@ -80,6 +80,11 @@ FILES_TO_UPLOAD = [
     ("05_Community_Research_Directions/experiments/results/gate_barrier_crossover.json", "data/gate_barrier_crossover.json"),
     ("05_Community_Research_Directions/experiments/results/lans_vs_leray_vs_nse.json", "data/lans_vs_leray_vs_nse.json"),
     ("05_Community_Research_Directions/experiments/results/shell_mach_cap.json", "data/shell_mach_cap.json"),
+    # --- v5.3.0 additions ---
+    ("03_Lean4_Topological_Censorship/src/OpenAIAdmissibility.lean", "lean4/OpenAIAdmissibility.lean"),
+    ("05_Community_Research_Directions/experiments/lock_k_kinetic_spectrum.py", "code/lock_k_kinetic_spectrum.py"),
+    ("05_Community_Research_Directions/experiments/results/lock_k_kinetic_spectrum.png", "figures/lock_k_kinetic_spectrum.png"),
+    ("05_Community_Research_Directions/experiments/results/lock_k_kinetic_spectrum.json", "data/lock_k_kinetic_spectrum.json"),
 ]
 
 DATASET_CARD = """---
@@ -104,13 +109,13 @@ language:
   - en
 size_categories:
   - n<1K
-pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.2.0)"
+pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.3.0)"
 ---
 
 # The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation
 
 **Socrate AI Lab / MechanicaFluidorum Program** &middot; Lead: Xavier Callens
-**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.2.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.2.0))
+**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.3.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.3.0))
 **Zenodo:** concept record [10.5281/zenodo.22696718](https://doi.org/10.5281/zenodo.22696718)
 
 ## What this is
@@ -134,7 +139,7 @@ expressible as one local vorticity bound |&omega;| &lesssim; c<sub>s</sub><sup>2
 Beale-Kato-Majda theorem turns into a genuine admissibility criterion. For liquids, cavitation is
 reached three decades earlier still.
 
-## Results added in v5.2.0
+## Results added in v5.2.0 and v5.3.0
 
 - **3D solver validated.** Pseudo-spectral Navier-Stokes solver reproduces the Taylor-Green
   Re = 1600 benchmark: dissipation peak at t = 9.14 against the published t = 9.0.
@@ -148,8 +153,17 @@ reached three decades earlier still.
   Re_x = ||(L_barrier - L_nu) U|| / ||N_alpha(U) - N(U)|| ranges 8-142.
 - **Kinetic anchor.** l*/lambda = cbar/(2 c_s) = 0.67 for air: the validity scale is the mean free
   path, with a derived constant.
-- **Lean 4.** 38 theorems on the three standard axioms (scaling chain, Leray-alpha filter bounds,
-  discrete BGK H-theorem, gate/drain energy identity) -- none yet connected to OpenAI's definitions.
+- **Kinetic lock (v5.3.0) -- a correction to v5.2.0.** The exact BGK shear-mode spectrum damps small
+  scales LESS than viscosity (Gamma = nu k^2 [1 - (k lambda)^2 + ...]), never exceeds the collision
+  rate 1/tau, and the hydrodynamic mode ceases to exist at k lambda = sqrt(pi/2) = 1.2533. At
+  k lambda = 1 the barrier damps 1.43x harder than kinetic theory. So the lock at l* is the end of the
+  hydrodynamic description, not a stronger drain; v5.2.0's "the lock at l* is dissipative, supplied by
+  kinetic theory" is withdrawn in that sense.
+- **Lean 4.** 45 theorems on the three standard axioms: scaling chain, Leray-alpha filter bounds,
+  discrete BGK H-theorem, gate/drain energy identity, and (v5.3.0) the first statements on OpenAI's
+  own `ProblemStatement` objects -- any object with their CandidateProperties exceeds every gradient
+  bound before t = 1, given an elementary periodic-cell lemma (not Beale-Kato-Majda) that is stated as
+  a labelled hypothesis because Mathlib lacks the needed torus integration by parts.
 
 ## What changed from earlier releases (important)
 
@@ -215,7 +229,7 @@ def main():
             path_in_repo=path_in_repo,
             repo_id=REPO_ID,
             repo_type=REPO_TYPE,
-            commit_message="v5.2.0: forced core, gate vs drain, Lean results",
+            commit_message="v5.3.0: kinetic spectrum correction, first Lean bridge to OpenAI objects",
         )
 
     print("  -> README.md (dataset card)")
@@ -224,7 +238,7 @@ def main():
         path_in_repo="README.md",
         repo_id=REPO_ID,
         repo_type=REPO_TYPE,
-        commit_message="v5.2.0: update dataset card",
+        commit_message="v5.3.0: update dataset card",
     )
 
     print("  -> REPO_README.md (pointer replacing outdated card)")

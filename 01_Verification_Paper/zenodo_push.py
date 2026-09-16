@@ -69,11 +69,15 @@ FILES_TO_PACKAGE = [
     ("03_Lean4_Topological_Censorship/src/LerayAlphaFilter.lean", "LerayAlphaFilter.lean"),
     ("03_Lean4_Topological_Censorship/src/LatticeBGKEntropy.lean", "LatticeBGKEntropy.lean"),
     ("03_Lean4_Topological_Censorship/src/AlphaEnergyIdentity.lean", "AlphaEnergyIdentity.lean"),
+    # --- v5.3.0 ---
+    ("03_Lean4_Topological_Censorship/src/OpenAIAdmissibility.lean", "OpenAIAdmissibility.lean"),
+    ("05_Community_Research_Directions/experiments/lock_k_kinetic_spectrum.py", "lock_k_kinetic_spectrum.py"),
+    ("05_Community_Research_Directions/experiments/results/lock_k_kinetic_spectrum.png", "figure_lock_k_kinetic_spectrum.png"),
 ]
 
 METADATA = {
     "metadata": {
-        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.2.0)",
+        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.3.0)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
@@ -98,7 +102,7 @@ METADATA = {
             "independent one; the external force has no independent physical origin, by construction; "
             "and the Euler datum requires coherent structure below the molecular length, where the "
             "missing physics is viscosity itself, not any exotic short-distance cutoff.</p>"
-            "<p><strong>New in v5.2.0.</strong> The cutoff-regularization hypothesis the paper previously "
+            "<p><strong>New in v5.2.0 and v5.3.0.</strong> The cutoff-regularization hypothesis the paper previously "
             "stated as untested is tested with a validated 3D pseudo-spectral solver (Taylor-Green "
             "Re=1600 dissipation peak at t=9.14 against a published 9.0). It is exact given its premise, "
             "but the premise -- a Re~1 diffusive core -- is not produced by generic data. A manufactured "
@@ -108,10 +112,15 @@ METADATA = {
             "dissipation, because they can act only through a nonlinearity that is a few percent of the "
             "dynamics (the gate-drain crossover Reynolds number is an exact norm ratio, 8 to 142). The "
             "continuum validity scale is shown to be the mean free path with a derived kinetic-theory "
-            "constant (0.67 for air). The bundle adds 38 Lean 4 theorems on the three standard axioms "
-            "(the Proposition 5.1 scaling chain, Leray-alpha filter bounds, an H-theorem for the discrete "
-            "BGK collision step, and the gate-drain energy identity); none is yet connected to OpenAI's "
-            "own definitions, as each file states.</p>"
+            "constant (0.67 for air). The exact shear-mode spectrum of the BGK kinetic model then shows that "
+            "kinetic theory does not act like a stronger drain: its damping is below viscosity, capped at "
+            "the collision rate, and the hydrodynamic mode ceases to exist at k lambda = sqrt(pi/2), so the "
+            "lock at the continuum limit is the end of the hydrodynamic description (v5.3.0 corrects the "
+            "v5.2.0 wording on this point). The bundle adds 45 Lean 4 theorems on the three standard "
+            "axioms (the Proposition 5.1 scaling chain, Leray-alpha filter bounds, an H-theorem for the "
+            "discrete BGK collision step, the gate-drain energy identity, and the first statements on "
+            "OpenAI's own ProblemStatement objects, conditional on an elementary periodic-cell lemma that "
+            "is stated as a labelled hypothesis).</p>"
             "<p>This version supersedes all previous public drafts of this project, including "
             "one previously deposited under this same Zenodo record. Claims withdrawn in this revision "
             "-- \"plasma temperatures\", a global enstrophy-censorship axiom with no stated derivation, "
@@ -149,7 +158,7 @@ METADATA = {
             "Cavitation",
             "Neuro-Symbolic AI"
         ],
-        "version": "5.2.0",
+        "version": "5.3.0",
         "license": "cc-by-4.0",
         "access_right": "open",
         "related_identifiers": [
@@ -159,7 +168,7 @@ METADATA = {
                 "scheme": "url"
             },
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.2.0",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.3.0",
                 "relation": "isIdenticalTo",
                 "scheme": "url"
             },
