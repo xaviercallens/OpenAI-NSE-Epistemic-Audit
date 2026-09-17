@@ -66,3 +66,7 @@ skills/
 .claude/
 01_Verification_Paper/NavierStokesAndEuler/
 benchmark_runs/
+
+# LaTeX build byproducts
+*.bbl
+*.blg

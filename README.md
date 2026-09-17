@@ -44,7 +44,6 @@ The research question behind the later versions is a "lock" chain: does somethin
 | **3** | $\ell_*$ is the mean free path up to an O(1) constant: $\ell_*/\lambda = \bar c/(2c_s) \approx 0.67$ for air | kinetic-theory derivation; $\ell_* = 45$ nm vs air mean free path $\approx 68$ nm | **Derived**, consistent with data (gases only) |
 | **4** | At $\ell_*$ the hydrodynamic shear mode ends at $k\lambda=\sqrt{\pi/2}$; kinetic damping is *below* $\nu k^2$ and capped at $1/\tau$ | exact linear BGK spectrum ([`lock_k_kinetic_spectrum.py`](05_Community_Research_Directions/experiments/lock_k_kinetic_spectrum.py)); [`KineticSpectralCap.lean`](03_Lean4_Topological_Censorship/src/KineticSpectralCap.lean); nonlinear Rust solver [`kinetic_lock_rs/`](05_Community_Research_Directions/kinetic_lock_rs/README.md) | **Linear: exact. Nonlinear: null** — a forced kinetic core is *not* arrested at that scale; its apparent stopping point follows the grid |
 | **5** | The kinetic model is thermodynamically consistent (discrete H-theorem, conservation, positivity) | [`LatticeBGKEntropy.lean`](03_Lean4_Topological_Censorship/src/LatticeBGKEntropy.lean), [`NonlinearBGKEntropy.lean`](03_Lean4_Topological_Censorship/src/NonlinearBGKEntropy.lean) | **Proved** |
-
 | **6** | Which physics a blow-up meets first depends on its route, by $\mathrm{Kn}=\mathrm{Ma}/\mathrm{Re}$. OpenAI's route ($\mathrm{Re}\approx1$): everything at $\ell_*$. Inertial route ($\mathrm{Re}\to\infty$, Tao 2016): compressibility first, inside the continuum, at $\mathrm{Re}\,\ell_*$. Bounded-velocity route (human-written forced Euler blow-up): viscosity first, at $\ell_*/\mathrm{Ma}$ | [`BlowupRegimeMap.lean`](03_Lean4_Topological_Censorship/src/BlowupRegimeMap.lean) | **Proved** (algebra, not PDE) |
 | **7** | A compressible, heat-conducting gas driven by the same force: on OpenAI's route nothing stops the core before $\ell_*$ (it lags 14–25%); on the inertial route ($\mathrm{Re}\gtrsim16$) air **locks at local Mach 0.70** however far the target is driven | [`compressible_core.py`](05_Community_Research_Directions/experiments/compressible_core.py), [`THERMO_COMPRESSIBLE_LOCK_STUDY.md`](05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md) | **Measured**, grid-converged; 1D ideal gas, open-loop force; a lock on Mach number, not on velocity or core size; thermal kinetic test pending |
 | — | *Withdrawn:* "a Leray-α filter of width $\ell_*$ represents the fluid at its continuum limit" | [`LerayAlphaLinearization.lean`](03_Lean4_Topological_Censorship/src/LerayAlphaLinearization.lean): α does not appear in the linearized dynamics, which stay $\nu k^2$, above any kinetic cap | **Refuted** (paper §9.5) |
@@ -307,10 +306,10 @@ Whether you want to debate the boundary between abstract Sobolev spaces and flui
                   A Physical Reading, Not a Physical Refutation},
   year         = {2026},
   month        = sep,
-  version      = {5.3.0},
+  version      = {5.5.0},
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.22777467},
-  url          = {https://doi.org/10.5281/zenodo.22777467},
+  doi          = {10.5281/zenodo.22806767},
+  url          = {https://doi.org/10.5281/zenodo.22806767},
   note         = {SocrateAI Lab, MechanicaFluidorum Program. Concept DOI
                   10.5281/zenodo.22696717 resolves to the latest version.
                   Versions 2.0.0 (10.5281/zenodo.22725347, 22727801) carry

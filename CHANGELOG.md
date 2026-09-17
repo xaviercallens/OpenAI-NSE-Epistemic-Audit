@@ -44,6 +44,13 @@ as a theorem about a different equation.
 - Lean total: 74 declarations in nine files. Benchmark extended to the new files and results.
 - Write-up: `05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md`.
 
+### Published
+
+- **Zenodo:** v5.5.0 published as **10.5281/zenodo.22806767** (concept DOI **10.5281/zenodo.22696717**,
+  verified to resolve to it). Published directly from a draft verified beforehand: 50/50 files, every
+  MD5 matching the release commit, description identical to the committed metadata. One stale sentence
+  ("57 Lean 4 declarations in seven files") was caught in that check and fixed before publishing.
+
 ## v5.4.1 — 2026-09-17 — Reproducibility benchmark; one figure corrected; documentation brought up to date
 
 ### Correction to v5.4.0
