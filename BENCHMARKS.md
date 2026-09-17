@@ -7,6 +7,29 @@ checks each regenerated number against the committed result it came from. Long r
 about 6 h; the kinetic collapse runs, about 5 h) are not re-simulated; their headline numbers are
 re-derived from the committed data, and that distinction is marked in the tables.
 
+## Result for v5.5.0
+
+**54 / 54 checks pass.** Run 2026-09-17, `--full` tier (wall time 31 min on a machine also running two
+kinetic production jobs; about 9 min unloaded). Everything in the v5.4.1 tables below reproduced again,
+bit-identically, and `pytest` now runs 124 tests. New in this version:
+
+| check | committed / quoted | reproduced |
+|---|---|---|
+| `BlowupRegimeMap.lean` | 13 declarations, standard axioms | 13, 0 errors, no `sorryAx` |
+| `LerayAlphaLinearization.lean` | 4 declarations, standard axioms | 4, 0 errors, no `sorryAx` |
+| Lean total | 74 declarations in nine files | 74 |
+| compressible core, low-Mach control: max lag (re-simulated) | 6.90e-6 | 6.90e-6 |
+| Re = 1, real-gas μ, isothermal: max lag (re-simulated) | 0.1397 | 0.1397 |
+| Re = 1, air, full thermodynamics: max lag (re-simulated) | 0.2464 | 0.2464 |
+| grid convergence n = 400 vs 800, air (re-simulated) | < 1% | 0.5% |
+| air Mach lock at target Ma = 4, Re = 16 / 64 (re-derived from `compressible_core_re_sweep.json`) | 0.70 | 0.700 / 0.700 |
+| air Mach lock at target Ma = 8 | 0.70 | 0.701 |
+| Mach lock, grid convergence n = 500 vs 1000 | < 0.5% | 0.002% |
+| ν-constant isothermal control does not lock | 1.91 | 1.91 |
+
+The Reynolds sweep itself (26 runs, about 40 min) is re-derived from its committed JSON rather than
+re-simulated; the physics ladder (`compressible_core_study.py`, 14 runs) is re-simulated in the `--full` tier.
+
 ## Result for v5.4.1
 
 **44 / 44 checks pass.** Run 2026-09-17 on the release commit, `--full` tier, 6 min 39 s wall time.

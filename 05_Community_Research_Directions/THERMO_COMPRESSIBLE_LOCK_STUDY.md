@@ -46,7 +46,7 @@ piece at a time: viscosity law (`μ ∝ ρ` | `μ` const | `μ ∝ T^0.76`), the
 energy equation, Pr 0.71, γ 1.4 | no viscous heating), force convention (per mass | per volume).
 Units `ℓ* = c = 1`; target Mach number `Re/ℓ`.
 
-Gates: low-Mach control tracks to **1.3×10⁻⁴**; RHS reproduces the analytic target tendency; axis
+Gates: low-Mach control tracks to **7×10⁻⁶**; RHS reproduces the analytic target tendency; axis
 operator exact to 2×10⁻⁵ (a 50% first-node error was found by the tests and fixed — results unchanged to
 three digits); mass drift ≤ 7×10⁻⁵; **grid-converged** (n = 400/800 and 500/1000 agree to three digits).
 The exact hole law `ln(ρ₀/ρ∞) = −(ln 2/0.638²) Ma² = −1.702 Ma²` was derived and the integral checked

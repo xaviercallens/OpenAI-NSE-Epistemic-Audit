@@ -16,7 +16,7 @@ bounded velocity, unbounded gradients): neglected viscosity acts first, at `ℓ*
 - The kinetic null result of v5.4 excluded more than thermodynamics: constant collision time means
   `μ ∝ ρ`, constant ν. `kinetic_lock_rs` now has `--tau-law inv-rho` (physical gas) and `--force per-volume`.
 - New `experiments/compressible_core.py`: 1D axisymmetric compressible Navier–Stokes–Fourier forced core,
-  physics switched on one piece at a time; 8 tests; control tracks to 1.3e-4; grid-converged.
+  physics switched on one piece at a time; 8 tests; control tracks to 7e-6; grid-converged.
 - **A prediction of ours failed**: quasi-steady arrest at Ma 0.36 (`ℓ_c = 2.76 Re ℓ*`) does not happen; at
   `Re ≈ 1` the collapse outruns its own density hole (needs `u_r/c ≈ 1.7 Ma³/Re`). On the diffusive route
   compressibility and heat only slow the core (+14% real-gas μ, +25% air, −5% constant ν at target Ma 2).
