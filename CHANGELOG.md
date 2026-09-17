@@ -30,6 +30,16 @@ line. History is kept as dated notes, not rewritten.
   scripts/tests updated without behaviour changes.
 - **Checks.** pytest 124/124; benchmark comparison 54/54; paper 0 errors / 0 undefined references; all
   notebooks validate; verified Lean files untouched.
+- **Also in this tag (exploratory).** `05_Community_Research_Directions/QUANTUM_FLUID_MICRO_MACRO_LINK.md`: the
+  micro-macro link through quantum fluids. A quantized vortex has `u r/(hbar/m) = 1` at every radius (a
+  Reynolds-number-one core by theorem) and survives by emptying its axis, as the air core and cavitation do;
+  Landau critical velocity as a tangent to the dispersion curve (c, 0, ~58 m/s for He-4); vortex-lattice
+  energy `-log(sqrt(Im tau)|eta|^2)` minimal at the hexagonal point; a mass-independent floor
+  `l* >= (sqrt2/4pi) a_B ~ 6 pm` (estimate); a GP vortex dipole never exceeds c. Moonshine: no mechanism
+  links M24/K3 to fluids; the shared object is eta and SL(2,Z). `QuantumVortexLink.lean` (11 declarations);
+  11 new tests. Not yet in the paper.
+- **CI.** The updated workflow is parked at `.github/proposed/audit-pipeline.proposed.yml`; the live workflow
+  is unchanged because pushing workflow files needs a token with the `workflow` scope.
 - **Known and left as is.** GitHub Actions runs have been ending in `startup_failure` with zero jobs, which
   points at a repository/account setting rather than the workflow file. `openai_lean_audit_certificate.json`
   is signed and still carries old wording (its generator is fixed). `verify-physical-vacuity.sh` is kept
