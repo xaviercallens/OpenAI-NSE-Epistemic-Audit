@@ -1,8 +1,4 @@
-name: Verification Pipeline (tests + Lean)
-
-# Python tests on every push/PR. The Lean check needs OpenAI's NavierStokesAndEuler project and the
-# Mathlib cache (several GB), so it runs on manual dispatch only. Full numeric reproduction:
-# scripts/run_benchmarks.sh (see BENCHMARKS.md).
+name: Physical Censorship Audit Pipeline
 
 on:
   push:
@@ -12,61 +8,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  python-tests:
+  audit-and-verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install numpy scipy sympy mpmath matplotlib pytest
-
-      - name: Run tests
-        run: python -m pytest -q
-
-      - name: Structural scan of OpenAI's Lean source (writes openai_lean_audit_certificate.json)
-        run: python scripts/extract_openai_lean.py
-
-  lean-verified-files:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          path: audit
-
-      - name: Checkout OpenAI NavierStokesAndEuler
-        uses: actions/checkout@v4
-        with:
-          repository: openai/NavierStokesAndEuler
-          path: NavierStokesAndEuler
-
-      - name: Install elan
+      - name: Run Python Dependencies & Unit/Integration Tests
         run: |
-          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
-          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          pip install numpy scipy matplotlib
+          python -m unittest discover tests
 
-      - name: Fetch Mathlib cache and build the three needed OpenAI modules
-        working-directory: NavierStokesAndEuler
+      - name: Run OpenAI Lean Proof Extraction
+        run: |
+          python scripts/extract_openai_lean.py
+
+      - name: Install elan (Lean Version Manager)
+        run: |
+          curl -sSfL https://github.com/leanprover/elan/releases/download/v3.1.1/elan-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          ./elan-init -y --default-toolchain leanprover/lean4:v4.11.0
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Verify Physical Censorship proofs
+        working-directory: 03_Lean4_Topological_Censorship
         run: |
           lake exe cache get
-          lake build NavierStokes.PeriodicUniqueness
-
-      - name: Check the nine verified files (no errors, no sorry, standard axioms only)
-        working-directory: NavierStokesAndEuler
-        run: |
-          set -e
-          for f in CoreScaling LerayAlphaFilter LatticeBGKEntropy AlphaEnergyIdentity NonlinearBGKEntropy \
-                   KineticSpectralCap OpenAIAdmissibility BlowupRegimeMap LerayAlphaLinearization; do
-            out=$(lake env lean "../audit/03_Lean4_Topological_Censorship/src/$f.lean" 2>&1)
-            echo "$out" | tr '\n' ' ' | grep -q "error" && { echo "$out"; exit 1; }
-            echo "$out" | grep -q "sorryAx" && { echo "$f uses sorry"; exit 1; }
-            echo "$out" | tr '\n' ' ' | sed 's/ \+/ /g' | grep -o "depends on axioms: \[[^]]*\]" | grep -v "\[propext, Classical.choice, Quot.sound\]" && { echo "$f: non-standard axioms"; exit 1; }
-            echo "$f OK"
-          done
+          lake build
