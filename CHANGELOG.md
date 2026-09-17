@@ -1,5 +1,82 @@
 # Changelog
 
+## v5.5.0 — 2026-09-17 — A regime map of blow-up scenarios; a thermodynamic Mach lock; the Leray-α anchor claim withdrawn
+
+### Rereading Tao (2016) and a human-written forced Euler blow-up
+
+`Kn = Ma/Re` (von Kármán) and `u/ℓ ≤ c²/ν ⇔ Ma² ≤ Re` put the three constructions in three places:
+**diffusive route** (OpenAI NSE, `Re ≈ 1`): `Kn = Ma`, everything fails at `ℓ*` — Proposition 5.1 is this
+case; **inertial route** (Tao: stages `(1+ε₀)` smaller and `(1+ε₀)^{5/2}` faster, `Re → ∞`): incompressibility
+fails first, inside the continuum, at `Re·ℓ*`; **bounded-velocity route** (forced Euler with smooth force:
+bounded velocity, unbounded gradients): neglected viscosity acts first, at `ℓ*/Ma > ℓ*`. Paper §9.4;
+`BlowupRegimeMap.lean` (13 declarations, incl. the atomistic bound `|v| ≤ √(2E/m)`).
+
+### Compressibility and thermodynamics on the forced core (paper §9.3)
+
+- The kinetic null result of v5.4 excluded more than thermodynamics: constant collision time means
+  `μ ∝ ρ`, constant ν. `kinetic_lock_rs` now has `--tau-law inv-rho` (physical gas) and `--force per-volume`.
+- New `experiments/compressible_core.py`: 1D axisymmetric compressible Navier–Stokes–Fourier forced core,
+  physics switched on one piece at a time; 8 tests; control tracks to 1.3e-4; grid-converged.
+- **A prediction of ours failed**: quasi-steady arrest at Ma 0.36 (`ℓ_c = 2.76 Re ℓ*`) does not happen; at
+  `Re ≈ 1` the collapse outruns its own density hole (needs `u_r/c ≈ 1.7 Ma³/Re`). On the diffusive route
+  compressibility and heat only slow the core (+14% real-gas μ, +25% air, −5% constant ν at target Ma 2).
+- **Positive result — a thermodynamic Mach lock on the inertial route**: for `Re ≳ 16` air does not follow
+  the driven swirl past local **Ma = 0.70** (target Ma 4 and 8 alike; 0.81 with a per-volume force); the
+  force's work goes into heat and evacuation (`T₀` 2.0, `ρ₀` 0.12, `ν₀` ×15 at target Ma 8). A lock on Mach
+  number, not on velocity or core size; open-loop force; 1D ideal gas; and not a regularity statement
+  (compressible NS has proved implosion singularities — MRRS 2022, Buckmaster–Cao-Labora–Gómez-Serrano 2025).
+- Kinetic cross-check (`τ ∝ 1/ρ` vs constant τ): same direction, small at the resolvable Re ≤ 3
+  (peak Ma 0.72 vs 0.77 at Re 3, target Ma 0.75; larger beyond the solver's validated Mach range); the BGK gas is isothermal, so the thermal kinetic test is still to be done.
+- Refinements: measured heating coefficient vs `u²/c_p` is 0.35 (Ma 0.4) → 1 (Ma 1); exact Lamb–Oseen
+  cavitation coefficient 1.70 moves the water threshold to u ≈ 7.6 m/s, 130 nm, 17 ns (paper §5.6).
+
+### The Leray-α "physical anchor" claim is withdrawn (paper §9.5)
+
+"α = ℓ* makes Leray-α a sound representation of the fluid at its continuum limit" is false. Formal reason
+(`LerayAlphaLinearization.lean`, 4 declarations): for any bounded bilinear `B` and linear filter `F`,
+`u ↦ B(Fu,u)` has zero derivative at rest, so α is absent from the linear dynamics, which stay `νk²` —
+above any kinetic cap `1/τ`. Plus: wrong direction (kinetic theory reduces damping), none of Ma/Kn/Eckert
+effects represented, and ℓ* is the relevant scale on one route only. The global-regularity theorem stands
+as a theorem about a different equation.
+
+### Also
+
+- Lean total: 74 declarations in nine files. Benchmark extended to the new files and results.
+- Write-up: `05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md`.
+
+## v5.4.1 — 2026-09-17 — Reproducibility benchmark; one figure corrected; documentation brought up to date
+
+### Correction to v5.4.0
+
+The paper (§9.2), this changelog and `DUAL_SCALE_LOCK_PROGRAMME.md` §8 quoted the Re = 0.25
+grid-refinement endpoint of the kinetic collapse as **0.86λ**. That value belongs to a different
+metric (minimum core size over the run); with the metric used for the other endpoints (core size at
+the first 10% lag) it is **0.96λ**. The conclusion is unchanged: the apparent arrest moves with the
+grid (0.96λ → 0.35λ). Found by the new benchmark's re-derivation check.
+
+### Reproducibility benchmark
+
+- `BENCHMARKS.md`, `scripts/run_benchmarks.sh`, `scripts/compare_benchmarks.py`: re-runs pytest (116),
+  cargo tests (5), all seven Lean files (57 declarations, standard axioms), the exact BGK spectrum, the
+  32³ forced-core and axial gate-vs-drain runs and the Rust solver gates G1–G5 (with the
+  rusty-SUNDIALS CVODE cross-check), and re-derives the 96³ and kinetic-collapse numbers from the
+  committed data. **44/44 checks pass; re-simulated numbers are bit-identical**; 6 min 39 s on a 4-core laptop CPU.
+
+### Documentation
+
+- Root `README.md`: current-status section with the lock-theory chain; stale BKM framing, a Kn = 1
+  table row (now matching paper Table 6), overreaching LeanFlow claims and dead links fixed.
+- `01_Verification_Paper/README.md` rewritten (it still cited the withdrawn Version-2 record and the
+  wrong repository name); findings checked against the paper.
+- `03_Lean4_Topological_Censorship/README.md`: all seven verified files, what each proves and does not,
+  correct build instructions; legacy and draft files labelled honestly.
+- `05_Community_Research_Directions/README.md` re-indexed; dated update notes in `experiments/RESULTS.md`,
+  `LERAY_ALPHA_DUAL_SCALE_LOCK.md`, `WEEK1_LOCK_RESULTS.md`, `DUALSCALE_ASSESSMENT_AND_NEXT_DIRECTIONS.md`.
+- `dataset/README.md` and `07_Tout_Public_Memo/MEMO.md` brought to v5.4; Lean toolchain version in
+  `REPRODUCTION_PROTOCOL.md` corrected (v4.11.0 → v4.34.0-rc2).
+- Zenodo and Hugging Face metadata updated; new files in both bundles: the two new Lean files, the
+  kinetic solver README, kinetic and 96³ data, figure, and the benchmark.
+
 ## v5.4.0 — 2026-09-17 — Link 1 unconditional; the kinetic model does not arrest a driven collapse
 
 ### Lean 4: the admissibility bridge no longer has a hypothesis
@@ -26,7 +103,7 @@ dt = τ/20 — thin margin, fails at τ/10). Driven by the forced-core target:
 
 - no arrest at `k_ωλ ≈ √(π/2)`; the kinetic core runs up to 12% *ahead* of the NSE target;
 - the apparent stopping point moves with the grid, not with λ (λ = 0.065: Δx 0.67λ → 0.17λ moves it
-  0.98λ → 0.52λ at Re 1, 0.86λ → 0.35λ at Re 0.25); NSE control on the same grid tracks to 4e-4;
+  0.98λ → 0.52λ at Re 1, 0.96λ → 0.35λ at Re 0.25; core size at the first 10% lag); NSE control on the same grid tracks to 4e-4;
 - robust within the validated range: no arrest at or above ≈ 0.9λ. Below it, runs exceed Mach 1 and
   the positivity gate. Isothermal model — no thermodynamic lock by construction.
 

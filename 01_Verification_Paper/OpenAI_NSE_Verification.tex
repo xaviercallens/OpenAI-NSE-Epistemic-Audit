@@ -71,7 +71,15 @@ viscosity, caps the relaxation rate at the collision frequency, and ends the hyd
 $k\lambda=\sqrt{\pi/2}$; a nonlinear discrete-velocity BGK simulation of the same forced collapse
 confirms that the kinetic model does not arrest it there. What operates where the continuum ends is
 not a regularization of the hydrodynamic equations but the termination of the hydrodynamic
-description itself. On the formal side, we prove in Lean~4, on OpenAI's own definitions and with no
+description itself --- on the route this construction takes. Rereading Tao's averaged-equation blow-up
+and a recent human-written Euler blow-up through the relation $\mathrm{Kn}=\mathrm{Ma}/\mathrm{Re}$
+shows that the three scenarios meet different physics first: kinetic termination, compressibility and
+heat inside the continuum, and plain viscosity. On the second, a one-dimensional compressible
+Navier--Stokes--Fourier simulation finds that air does not follow a driven swirl past a local Mach
+number of $0.70$; on the first, neither compressibility nor heat stops the core before $\ell_*$. The
+claim that a Leray-$\alpha$ filter of width $\ell_*$ represents the fluid at its continuum limit is
+withdrawn, with a formal reason: the filter width does not appear in the linearized dynamics. On the
+formal side, we prove in Lean~4, on OpenAI's own definitions and with no
 additional hypothesis, that any object with their candidate properties exceeds every velocity-gradient
 bound arbitrarily close to the singular time.
 \end{abstract}
@@ -489,6 +497,13 @@ $5$\,ps, it stops being the fluid the incompressible model describes before, or 
 Proposition~\ref{prop:scales}. For gases there is no such limit and Eq.~\eqref{eq:lstar} stands
 alone.
 
+These figures take the core pressure deficit to be $\tfrac12\rho u^2$. For a Gaussian (Lamb--Oseen)
+core the deficit is exactly $(\ln2/0.638^2)\,\rho u_{\max}^2=1.70\,\rho u_{\max}^2$, which brings the
+threshold forward to $u\approx7.6$\,m/s, a core of about $130$\,nm and $17$\,ns before blow-up; the
+construction's profile is not Gaussian, so the two values bracket rather than fix the number. Once a
+vapour core opens, a hollow vortex caps the swirl speed at $\sqrt{2(p_\infty-p_v)/\rho}\approx14$\,m/s:
+for a liquid, the first thermodynamic event is a phase change, and it bounds the velocity.
+
 \subsection{A single admissibility condition}
 \label{sec:admissibility}
 
@@ -582,6 +597,13 @@ molecular length is the operative cutoff~\cite{Bandak2022}). Whether a viscous, 
 reproduce the first few stages of the cascade before the fine scales are washed out is a computable
 question (\S\ref{sec:outlook}), not a slogan. Earlier drafts of this audit described the fine scales
 as ``sub-Planckian''; the Planck length is irrelevant here --- the cutoff is molecular.
+
+A recent human-written construction makes the point sharper. For the Euler equations with a force
+that is smooth up to and including the blow-up time, \cite{EulerSmoothForcing2026} obtains a
+singularity in which the circulation and the meridional velocity remain bounded while the gradient
+of the circulation and the vorticity diverge. In a blow-up of that kind the Mach number never grows,
+and the scale at which a real fluid departs from it is the viscous one, $\nu/u=\ell_*/\mathrm{Ma}$,
+which for a subsonic flow lies \emph{above} $\ell_*$ (\S\ref{sec:regime-map}).
 
 % ====================================================================
 \section{Properties of the Specific Construction, and What Was Removed}
@@ -876,7 +898,7 @@ exact shear decay rates of Eq.~\eqref{eq:bgk-shear} within $2\%$ for $k\lambda\l
 core does not arrest. It runs slightly \emph{ahead} of the Navier--Stokes target (by up to $12\%$ in
 core size), as a model with weaker small-scale damping should, and its apparent stopping point moves
 with the grid rather than with $\lambda$: at fixed $\lambda$, refining the grid spacing from $0.67\lambda$
-to $0.17\lambda$ moves it from $0.98\lambda$ to $0.52\lambda$ at $\mathrm{Re}=1$ and from $0.86\lambda$
+to $0.17\lambda$ moves it from $0.98\lambda$ to $0.52\lambda$ at $\mathrm{Re}=1$ and from $0.96\lambda$
 to $0.35\lambda$ at $\mathrm{Re}=0.25$, with $k_\omega\lambda$ at that point rising to $4$--$5$. A
 Navier--Stokes control on the same grid and forcing tracks its target to $4\times10^{-4}$. Within the
 solver's validated range the robust statement is that there is no arrest at or above
@@ -893,6 +915,189 @@ autonomous dynamics at a scale fixed by the mean free path. That returns this pa
 of \S\ref{sec:mach}, now with a mechanism rather than only a scale. A phenomenological Mach cap
 applied to a dyadic cascade makes a complementary point: in a cascade it engages at the
 \emph{largest} scale, while on the diffusive collapse it engages at exactly $\ell_*$.
+
+\subsection{Compressibility and thermodynamics on the forced core}
+\label{sec:compressible}
+
+The kinetic test above excluded more than it appeared to. A BGK gas with constant collision time has
+$\mu\propto\rho$, hence constant $\nu$; a real gas has $\tau\propto1/\rho$, so $\mu$ is independent of
+density and $\nu=\mu/\rho$ rises as the core evacuates. That feedback, and the energy equation, were
+both absent by construction. We therefore applied the same force --- the residual of the
+\emph{incompressible, constant-viscosity} equations, which is also the model OpenAI's force is built
+for --- to an axisymmetric compressible Navier--Stokes--Fourier fluid, one-dimensional in radius,
+switching on one piece of physics at a time: the viscosity law ($\mu\propto\rho$, $\mu$ constant,
+$\mu\propto T^{0.76}$), the thermodynamics (isothermal, or the full energy equation for air with
+$\gamma=1.4$, $\mathrm{Pr}=0.71$ and viscous heating), and the force convention (per unit mass or per
+unit volume). The low-Mach control tracks its target to $1.3\times10^{-4}$, and all numbers below are
+unchanged to three digits on doubling the grid.
+
+For the Gaussian core the cyclostrophic density hole is exact,
+$\ln(\rho_0/\rho_\infty)=-(\ln2/0.638^2)\,\mathrm{Ma}^2=-1.70\,\mathrm{Ma}^2$, and a quasi-steady
+argument then predicts arrest at $\mathrm{Ma}=0.36$, where $\nu/\hat\rho$ overtakes the force's
+anti-diffusion $(5/4)\nu$. \emph{The prediction fails}: no run arrests. At $\mathrm{Re}\approx1$ the
+hole cannot form fast enough --- evacuating it quasi-steadily needs a radial outflow
+$u_r/c_s\approx1.7\,\mathrm{Ma}^3/\mathrm{Re}$, supersonic by $\mathrm{Ma}\approx0.8$ --- so the
+collapse outruns its own compressible response. With the target driven to $\mathrm{Ma}=2$ at
+$\mathrm{Re}=1$, the core lags by $14\%$ with the real-gas viscosity law and by $25\%$ with the full
+thermodynamics of air (core temperature $1.44\,T_\infty$), and runs $5\%$ \emph{ahead} with constant
+$\nu$, the continuum twin of the kinetic run. Heat acts on the collapse only through the viscosity law:
+with the energy equation on but $\mu$ held fixed the lag returns to $14\%$. On the diffusive route,
+then, neither compressibility nor heat stops the driven core before $\ell_*$; they slow it, and the
+state they produce has a local Knudsen number of $4$--$8$, outside the model that produced it. (The
+heating estimate $\Delta T\simeq u^2/c_p$ of \S\ref{sec:mach} is an upper-order estimate: the measured
+coefficient is $0.35$ at $\mathrm{Ma}\approx0.4$, rising to about one near $\mathrm{Ma}\approx1$.)
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{5}{c}{core Reynolds number} \\
+model (force per unit mass unless stated) & $0.25$ & $1$ & $4$ & $16$ & $64$ \\
+\midrule
+$\nu$ constant, isothermal            & $3.88$ & $3.16$ & $2.11$ & $1.91$ & $1.90$ \\
+real-gas $\mu$, isothermal, per volume & $4.16$ & $4.66$ & $4.95$ & $4.98$ & $4.98$ \\
+real-gas $\mu$, isothermal            & $3.37$ & $1.97$ & $1.20$ & $1.10$ & $1.11$ \\
+air, full thermodynamics              & $1.11$ & $0.92$ & $0.74$ & $\mathbf{0.70}$ & $\mathbf{0.70}$ \\
+\bottomrule
+\end{tabular}
+\caption{Peak \emph{local} Mach number of the forced core at the instant the incompressible target
+reaches $\mathrm{Ma}=4$. Driving the target on to $\mathrm{Ma}=8$ at $\mathrm{Re}=16$ leaves air at
+$0.70$ and moves the isothermal real gas from $1.10$ to $1.22$. With the energy equation the lock also
+holds for a force per unit volume ($0.81$ at $\mathrm{Re}=16$), where the isothermal case runs away and
+evacuates its core to $\rho_0=10^{-4}\rho_\infty$.}
+\label{tab:mach-lock}
+\end{table}
+
+Along the inertial route the picture changes (Table~\ref{tab:mach-lock}). For
+$\mathrm{Re}\gtrsim16$ --- where the compressible continuum model is valid, the local Knudsen number
+being $0.25$ at $\mathrm{Re}=64$ --- a gas with an energy equation does not follow the driven swirl
+past a local Mach number of $0.70$, however far the target is driven. The work of the force goes into
+heat and into evacuating the core: at $\mathrm{Re}=16$, as the target goes from $\mathrm{Ma}=1$ to $8$,
+the core temperature rises from $1.10$ to $2.03\,T_\infty$, its density falls from $0.38$ to
+$0.12\,\rho_\infty$, its kinematic viscosity rises fifteen-fold, and the swirl Mach number stops
+rising. This is the first positive ``lock'' result of this programme, and three qualifications
+belong with it. It is a lock on the \emph{Mach number}: the velocity still creeps up as
+$0.70\,c_s(T_0)$, and the core still shrinks, at half the unimpeded rate. It is a statement about an
+open-loop force built for the incompressible model, in a one-dimensional axisymmetric ideal gas with
+constant $\gamma$. And it is not a regularity statement: the compressible Navier--Stokes equations
+have their own proved finite-time singularities, by implosion~\cite{MRRS2022,BCG2025}, so each model in
+the hierarchy hands its breakdown to the next. A cross-check in the kinetic solver with
+$\tau\propto1/\rho$ agrees in direction but is small where that solver is valid (peak Mach $0.72$
+against $0.77$ for constant $\tau$ at $\mathrm{Re}=3$, target $\mathrm{Ma}=0.75$); the solver is
+isothermal and limited to $\mathrm{Re}\le3$ and to Mach numbers below about $0.6$, so
+a thermal kinetic test remains to be done.
+
+\subsection{A regime map: which physics a blow-up scenario meets first}
+\label{sec:regime-map}
+
+Proposition~\ref{prop:scales} is a statement about one route to a singularity. Rereading two others
+against it --- Tao's blow-up for an averaged Navier--Stokes equation~\cite{Tao2016} and a recent
+human-written blow-up for the Euler equations with a force smooth up to the blow-up
+time~\cite{EulerSmoothForcing2026} --- shows that it is one case of something more general. For a
+flow feature of velocity $u$ and size $\ell$, put $\mathrm{Re}=u\ell/\nu$, $\mathrm{Ma}=u/c_s$ and
+$\mathrm{Kn}=\ell_*/\ell$. Then identically
+\begin{equation}
+  \mathrm{Kn}=\frac{\mathrm{Ma}}{\mathrm{Re}},\qquad\qquad
+  \frac{u}{\ell}\le\frac{c_s^2}{\nu}\iff\mathrm{Ma}^2\le\mathrm{Re},
+  \label{eq:von-karman}
+\end{equation}
+the first being von K\'arm\'an's relation and the second the admissibility bound of
+Eq.~\eqref{eq:admissible} rewritten. Which assumption of the incompressible continuum model fails
+first is decided by where a scenario travels in the $(\mathrm{Re},\mathrm{Ma})$ plane, and the three
+constructions travel differently.
+
+\emph{The diffusive route} ($\mathrm{Re}\approx1$; the OpenAI Navier--Stokes construction). Here
+$\mathrm{Kn}=\mathrm{Ma}$: compressibility and rarefaction fail together, at $\ell=\ell_*$. This is
+Proposition~\ref{prop:scales}, and it is the only route on which the kinetic scale is the relevant
+one.
+
+\emph{The inertial route} ($\mathrm{Re}\to\infty$). In Tao's construction each stage is
+$(1+\epsilon_0)$ times smaller and about $(1+\epsilon_0)^{5/2}$ times faster than the last, and the
+time between stages is ``significantly shorter than the dissipation time at that spatial scale''
+\cite[\S1.3]{Tao2016}. Velocity therefore grows as $\ell^{-3/2}$ and the stage Reynolds number as
+$\ell^{-1/2}$, without bound. By Eq.~\eqref{eq:von-karman} the sonic point is reached at
+$\ell=\mathrm{Re}\,\ell_*\gg\ell_*$, where $\mathrm{Kn}=1/\mathrm{Re}\ll1$: the first assumption to
+fail is incompressibility, deep inside the continuum, and the model that takes over is the
+compressible Navier--Stokes--Fourier system rather than kinetic theory. Any blow-up driven by
+inertia rather than by a forcing against viscosity --- including the boundary scenario
+of~\cite{HouLuo2014,ChenHou2022} if it were realized in a viscous fluid --- is of this kind. Two
+remarks of Tao's bear on this paper directly: his mechanism has to be ``noise-tolerant'' to be built
+from real fluid, which is the question of Direction~3 (\S\ref{sec:directions}); and his theorem shows
+that the energy identity together with harmonic-analysis estimates cannot exclude blow-up, so a
+regularization that works does so by changing the equation at small scales, not by exploiting
+structure the equation already has.
+
+\emph{The bounded-velocity route} ($\mathrm{Ma}$ bounded, $\ell\to0$). In the forced Euler
+construction of~\cite{EulerSmoothForcing2026} the circulation and the meridional velocity stay
+bounded while $\|\nabla\Gamma\|_\infty$ and $\|\omega\|_\infty$ diverge --- ``the amplitudes
+themselves can be small while their spatial derivatives increase.'' The Mach number never grows, so
+none of \S\ref{sec:mach} applies. What happens instead is that $\mathrm{Re}=u\ell/\nu$ falls through
+one at $\ell_\nu=\nu/u=\ell_*/\mathrm{Ma}$, which for a subsonic flow is \emph{larger} than $\ell_*$:
+the neglected viscosity acts before the continuum ends, by the factor $1/\mathrm{Ma}$. This sharpens
+\S\ref{sec:euler}: for Euler constructions of this type the missing physics is viscosity, and the
+molecular scale is never reached.
+
+So the single scale of Proposition~\ref{prop:scales} is a property of the diffusive route, not of
+blow-up in general, and the ``lock'' a real fluid would present depends on the route: kinetic
+termination on the first, compressibility and heat on the second, plain viscosity on the third. The
+relations above, the three orderings and the unbounded growth of the stage Reynolds number along a
+cascade with Tao's ratios are formalized in \texttt{BlowupRegimeMap.lean} (thirteen declarations,
+standard axioms).
+
+\subsection{The Leray-\texorpdfstring{$\alpha$}{alpha} anchor claim, re-examined}
+\label{sec:leray-claim}
+
+Earlier documents of this programme, following advice we recorded verbatim, put the dual-scale
+intuition in the following form. \emph{(i)~Dual scale:} in the Leray-$\alpha$ model the fluid is
+transported by $\bar u=(1-\alpha^2\Delta)^{-1}u$, so $\alpha$ is a length above which $\bar u\approx u$
+and below which the filter engages. \emph{(ii)~Lock:} the three-dimensional Leray-$\alpha$ equations
+have global smooth solutions, so ``the singularity is mathematically impossible'' and $\alpha$ ``acts
+as an absolute lock on gradient growth.'' \emph{(iii)~Physical anchor:} setting $\alpha=\ell_*$ makes
+Leray-$\alpha$ ``a mathematically sound representation of the fluid hitting its continuum limit.''
+We can now say precisely what survives.
+
+Claim~(i) is a correct description of the model. Claim~(ii) is a correct
+theorem~\cite{FHT2001,CHOT2005} about a different equation: it says nothing about
+Navier--Stokes, and in the light of~\cite{Tao2016} it could not, since it is obtained by weakening
+the nonlinearity by two derivatives at small scales --- by leaving the supercritical class, not by
+using finer structure. It is also not a lock on the constructions at issue: on a
+$\mathrm{Re}\approx1$ forced collapse the filter changes the core size by $0.2$--$0.4\%$
+(\S\ref{sec:gate-drain}), and on the pure swirl column its nonlinearity is a gradient and does
+nothing at all.
+
+Claim~(iii) is false, for four reasons of increasing generality.
+\begin{enumerate}
+\item \emph{The filter width does not appear in the linear dynamics.} Leray-$\alpha$ and
+  LANS-$\alpha$ alter only the quadratic term, and the derivative at rest of $u\mapsto
+  B(F_\alpha u,u)$ vanishes for every bounded bilinear $B$ and every bounded linear $F_\alpha$
+  (\texttt{LerayAlphaLinearization.lean}). Small disturbances therefore relax in Leray-$\alpha$
+  exactly as in Navier--Stokes, at the rate $\nu k^2$, for every $\alpha$. In the gas they relax at
+  $\nu k^2[1-(k\lambda)^2+\dots]$, never faster than $1/\tau$, and not at all beyond
+  $k\lambda=\sqrt{\pi/2}$ (Eqs.~\ref{eq:bgk-shear}--\ref{eq:bgk-termination}); $\nu k^2$ exceeds
+  any such cap. No value of $\alpha$ reconciles the two, because the part of the dynamics the
+  continuum limit changes first does not contain $\alpha$.
+\item \emph{It regularizes in the wrong direction.} The filter removes small-scale transport and
+  leaves small-scale damping intact; kinetic theory leaves transport and \emph{reduces} small-scale
+  damping (the Burnett coefficient is $+1$).
+\item \emph{What the continuum limit brings is not a closure of the same equations.} At $\ell_*$ the
+  Mach, Knudsen and Eckert numbers are all of order one (Proposition~\ref{prop:scales}). A model
+  that remains incompressible, isothermal and Newtonian at that scale represents none of the three
+  effects, whatever it does to the transport velocity; \S\ref{sec:compressible} measures two of them.
+\item \emph{$\ell_*$ is the relevant scale on one route only} (\S\ref{sec:regime-map}). On the
+  inertial route the model fails at $\mathrm{Re}\,\ell_*$ by compressibility, and on the
+  bounded-velocity route at $\ell_*/\mathrm{Ma}$ by viscosity; a filter at $\ell_*$ is placed
+  below both.
+\end{enumerate}
+None of this detracts from Leray-$\alpha$ as a turbulence closure at scales far above $\ell_*$, which
+is what it was designed for and where its global regularity is an asset. What is withdrawn is the
+identification of its filter width with the scale at which the continuum ends. The dual-scale
+intuition itself survives in a different form, which is the content of
+Eq.~\eqref{eq:von-karman}: there are two scales in every blow-up scenario, the scale of the flow and
+the scale $\ell_*$ fixed by the molecules, and their ratio is $\mathrm{Ma}/\mathrm{Re}$. The only
+unconditional bound in the hierarchy of models is at its bottom: $N$ particles of mass $m$ with
+kinetic energy at most $E$ have speeds at most $\sqrt{2E/m}$ (formalized in the same file), and no
+continuum or kinetic equation inherits it.
 
 % ====================================================================
 \section{Discussion}
@@ -1057,10 +1262,12 @@ $|\omega|/(c_s^2/\nu)=0.05$ --- with byte-identical numerics in both cases. Mode
 property of the discretization, and a solver that reports its own departure from the modelled
 regime seems to us more useful than one that regularizes the departure away.
 
-We want to be explicit about the current state of this project's own attempt at pillar 3. Seven
+We want to be explicit about the current state of this project's own attempt at pillar 3. Nine
 Lean files in this repository compile with no \texttt{sorry} and no axioms beyond the standard
-three, together $57$ declarations checked with \texttt{\#print axioms} (earlier versions quoted a
-count of $45$ theorems under a different counting convention). Two are new in this version: the
+three, together $74$ declarations checked with \texttt{\#print axioms} (earlier versions quoted a
+count of $45$ theorems under a different counting convention). Two were added in version~5.5.0 and are described in \S\ref{sec:regime-map} and
+\S\ref{sec:leray-claim}: the regime map of blow-up scenarios, and the absence of the Leray-$\alpha$
+filter width from the linearization. Two were new in version~5.4.0: the
 H-theorem, conservation and positivity of the nonlinear discrete-velocity BGK step used in
 \S\ref{sec:gate-drain}, and the exact cap $-1/\tau\le\operatorname{Re}\mu\le0$ on the eigenvalues of a
 skew streaming operator plus projected relaxation. Four of the others are free-standing: the scaling chain of
@@ -1269,7 +1476,10 @@ derived from kinetic theory, and the exact kinetic shear spectrum damps small sc
 viscosity, caps the rate at the collision frequency, and ends the hydrodynamic mode at
 $k\lambda=\sqrt{\pi/2}$ --- and a nonlinear kinetic simulation of the forced collapse finds no arrest
 there. The lock that acts where the continuum ends is the end of the hydrodynamic
-description, which is where this paper began. The three directions of \S\ref{sec:directions}
+description, which is where this paper began. That conclusion belongs to the diffusive route the
+construction takes. On an inertial route the first physics to arrive is compressibility and heat, and
+there a real gas does lock --- in Mach number, at about $0.7$, not in velocity or size
+(\S\ref{sec:compressible}, \S\ref{sec:regime-map}). The three directions of \S\ref{sec:directions}
 follow, and the second of them
 --- an admissibility criterion stated on the coherence of vorticity direction rather than on its
 magnitude, after Constantin and Fefferman~\cite{ConstantinFefferman1993} --- still strikes us as the
@@ -1345,10 +1555,19 @@ equation was missing a term). The mathematical content --- a saturating regulari
 Leray-$\alpha$ family with a testable cutoff law --- survives with the physical motivation removed;
 see~\cite{Callens2026v2} for the full account of what was found and corrected.
 
+\paragraph{Withdrawn in version 5.5.0.} Documents of this programme, and the framing of
+\S\ref{sec:cutoff-tested} in earlier versions, entertained the identification of a Leray-$\alpha$ filter
+width with the validity scale $\ell_*$. \S\ref{sec:leray-claim} withdraws it and gives the reasons. A
+quasi-steady prediction made during this version's work, that the density hole would arrest the forced
+core at $\mathrm{Ma}=0.36$, also failed and is reported as such in \S\ref{sec:compressible}.
+
 \paragraph{Forecasts not borne out.} Version~5.3.0 stated that a $96^3$ forced-core sweep would
 reach the $B/F=1$ crossing for the upper half of its band. It reached it for none; the result and the
 reason are reported in \S\ref{sec:forced-core}. The same version described the admissibility result
 of Direction~2 as conditional on an unformalized lemma; that lemma is now proved.
+Version~5.4.0 quoted one grid-refinement endpoint of the kinetic collapse (\S\ref{sec:gate-drain}) as
+$0.86\lambda$, a value of a different metric; with the metric used for the other endpoints it is
+$0.96\lambda$, corrected here, with the conclusion unchanged.
 
 % ====================================================================
 \section{The \texttt{r/FluidMechanics} Discussion, in Full}
@@ -1426,6 +1645,22 @@ edge cases like this one; that suggestion is the direct motivation for \S\ref{se
   R. Penrose,
   ``Gravitational collapse: The role of general relativity,''
   \emph{Riv.\ Nuovo Cimento}\ \textbf{1}, 252--276, 1969.
+\bibitem{EulerSmoothForcing2026}
+  ``Blowup for the Euler equations with smooth forcing,'' manuscript (2026), companion to
+  L.~Alp\"oge and T.~Buckmaster, ``Blowup for the Boussinesq equations with smooth forcing'';
+  \url{https://cims.nyu.edu/~tristanb/euler.pdf} (consulted 17 September 2026; the copy consulted
+  carries no author line).
+
+\bibitem{MRRS2022}
+  F. Merle, P. Rapha\"el, I. Rodnianski, and J. Szeftel,
+  ``On the implosion of a compressible fluid II: Singularity formation,''
+  \emph{Ann. of Math.} \textbf{196} (2022), 779--889.
+
+\bibitem{BCG2025}
+  T. Buckmaster, G. Cao-Labora, and J. G\'omez-Serrano,
+  ``Smooth imploding solutions for 3D compressible fluids,''
+  \emph{Forum Math. Pi} \textbf{13} (2025), e6.
+
 \bibitem{Tao2016}
   T. Tao,
   ``Finite time blowup for an averaged three-dimensional Navier-Stokes equation,''

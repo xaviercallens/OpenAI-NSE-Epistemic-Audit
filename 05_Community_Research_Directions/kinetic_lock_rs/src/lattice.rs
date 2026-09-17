@@ -335,8 +335,21 @@ impl PointScratch {
 /// sequence can be merged. Returns (rho, u) before the update.
 #[inline]
 pub fn collide_force_point(lat: &Lattice, f: &mut [f64], a: f64, du: [f64; 2], s: &mut PointScratch) -> (f64, f64, f64) {
+    collide_force_point_with(lat, f, |_| a, du, false, s)
+}
+
+/// As `collide_force_point`, with the relaxation factor a function of the local density. A
+/// physical gas has collision time tau ~ 1/rho (viscosity mu = p tau independent of density),
+/// i.e. a(rho) = exp(-s rho / (tau_ref rho_ref)); constant tau makes mu ~ rho and nu constant.
+/// rho is a collision invariant, so the relaxation is still exact over the sub-step.
+#[inline]
+pub fn collide_force_point_with(lat: &Lattice, f: &mut [f64], a_of_rho: impl Fn(f64) -> f64, du: [f64; 2], du_per_volume: bool, s: &mut PointScratch) -> (f64, f64, f64) {
     let q = lat.q;
     let (rho, jx, jy) = lat.moments(f);
+    let a = a_of_rho(rho);
+    // du_per_volume: the prescribed field is a force per unit volume at rho_ref = 1, so the
+    // velocity increment is du / rho; otherwise it is an acceleration (force per unit mass).
+    let du = if du_per_volume { [du[0] / rho, du[1] / rho] } else { du };
     let lim = 0.95 * lat.gh.v[q - 1];
     let ux = jx / rho;
     let uy = jy / rho;

@@ -6,6 +6,15 @@
 RK4 integrator used for cross-validation and the `DyadicShellSolver` used for the wide-range
 cascade test. Nothing in that repository was modified.
 
+> **Update (2026-09-17, v5.4.0).** The "real test" called for in §2 below — reproducing a Re ≈ 1
+> collapsing core with its own forcing — has since been built and run: see
+> `../DIRECTION1_RESULTS.md`. At 32³ the barrier's engagement collapses onto one variable
+> `α′/(ντ)`; at 96³ no run reaches `B/F = 1` (that detector proved ill-posed), but every core
+> stalls at `ℓ ≈ 1.2–1.5 √α′` with exponents `ℓ +0.42`, `u −0.43…−0.47` approaching the law —
+> not yet a converged arrest. The kinetic regime beneath `ℓ*` is covered by
+> `results/lock_k_kinetic_spectrum.json` (linear) and `../kinetic_lock_rs/` (nonlinear: no arrest).
+> The results in this file are unchanged.
+
 This implements the five directions proposed in `../DUALSCALE_ASSESSMENT_AND_NEXT_DIRECTIONS.md`.
 The headline outcome is a **negative result on the cutoff law**, obtained cleanly enough to say
 precisely what would be required to test it properly.

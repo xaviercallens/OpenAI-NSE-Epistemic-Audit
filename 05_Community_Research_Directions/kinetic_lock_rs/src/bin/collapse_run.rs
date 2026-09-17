@@ -51,6 +51,8 @@ fn main() {
         lstart_over_lambda: arg("--lstart").map(|x| x.parse().unwrap()).unwrap_or(20.0),
         dt_over_tau: arg("--dt-over-tau").map(|x| x.parse().unwrap()).unwrap_or(0.05),
         sample_every: arg("--sample-every").map(|x| x.parse().unwrap()).unwrap_or(10),
+        tau_inv_rho: arg("--tau-law").map(|x| x == "inv-rho").unwrap_or(false),
+        force_per_volume: arg("--force").map(|x| x == "per-volume").unwrap_or(false),
     };
     let out = arg("--out").expect("--out");
     eprintln!("collapse_run {cfg:?}");

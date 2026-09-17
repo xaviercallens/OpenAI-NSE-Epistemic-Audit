@@ -8,7 +8,7 @@
 //! A(s, g) is exact BGK relaxation exp(-s/tau) with the exact-difference force
 //! u -> u + g s (see `collide_force_point`). Consecutive half-steps may be merged.
 
-use crate::lattice::{collide_force_point, Lattice, PointScratch};
+use crate::lattice::{collide_force_point_with, Lattice, PointScratch};
 use num_complex::Complex64 as C;
 use rayon::prelude::*;
 use rustfft::{Fft, FftPlanner};
@@ -29,6 +29,10 @@ pub struct Kinetic {
     pub lat: Lattice,
     pub n: usize,
     pub tau: f64,
+    /// true: tau_local = tau / rho (physical gas, mu independent of density; rho_ref = 1).
+    pub tau_inv_rho: bool,
+    /// true: forcing is a force per unit volume (increment du / rho) instead of per unit mass.
+    pub force_per_volume: bool,
     pub f: Vec<f64>,
     fwd: Arc<dyn Fft<f64>>,
     inv: Arc<dyn Fft<f64>>,
@@ -81,7 +85,7 @@ impl Kinetic {
         let inv = planner.plan_fft_inverse(n);
         let kgrid = (0..n).map(|i| if i < n / 2 { i as f64 } else { i as f64 - n as f64 }).collect();
         let f = vec![0.0; n * n * q * q];
-        Kinetic { lat, n, tau, f, fwd, inv, kgrid, phase_dt: f64::NAN, phase: vec![] }
+        Kinetic { lat, n, tau, tau_inv_rho: false, force_per_volume: false, f, fwd, inv, kgrid, phase_dt: f64::NAN, phase: vec![] }
     }
 
     pub fn npts(&self) -> usize {
@@ -222,7 +226,9 @@ impl Kinetic {
     /// Returns the momentum added (sum over points of rho * du) and the number of points whose
     /// velocity had to be clamped to the lattice span (non-zero = invalid state).
     pub fn collide_force(&mut self, s_collide: f64, force: Option<(&[f64], &[f64])>, s_force: f64) -> ((f64, f64), usize) {
-        let a = (-s_collide / self.tau).exp();
+        let rate = s_collide / self.tau;
+        let inv_rho = self.tau_inv_rho;
+        let per_vol = self.force_per_volume;
         let n = self.n;
         let nq2 = self.lat.nq2();
         let q = self.lat.q;
@@ -240,9 +246,10 @@ impl Kinetic {
                         Some((gx, gy)) => [gx[p] * s_force, gy[p] * s_force],
                         None => [0.0, 0.0],
                     };
-                    let (rho, _, _) = collide_force_point(&lat, &mut block[ix * nq2..(ix + 1) * nq2], a, du, s);
-                    imp.0 .0 += rho * du[0];
-                    imp.0 .1 += rho * du[1];
+                    let (rho, _, _) = collide_force_point_with(&lat, &mut block[ix * nq2..(ix + 1) * nq2], |rho| if inv_rho { (-rate * rho).exp() } else { (-rate).exp() }, du, per_vol, s);
+                    let w = if per_vol { 1.0 } else { rho };
+                    imp.0 .0 += w * du[0];
+                    imp.0 .1 += w * du[1];
                     imp.1 += s.clamped as usize;
                 }
                 imp

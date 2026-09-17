@@ -73,11 +73,31 @@ FILES_TO_PACKAGE = [
     ("03_Lean4_Topological_Censorship/src/OpenAIAdmissibility.lean", "OpenAIAdmissibility.lean"),
     ("05_Community_Research_Directions/experiments/lock_k_kinetic_spectrum.py", "lock_k_kinetic_spectrum.py"),
     ("05_Community_Research_Directions/experiments/results/lock_k_kinetic_spectrum.png", "figure_lock_k_kinetic_spectrum.png"),
+    # --- v5.4.x: unconditional Lean bridge, nonlinear kinetic test, 96^3 sweep, benchmarks ---
+    ("03_Lean4_Topological_Censorship/src/NonlinearBGKEntropy.lean", "NonlinearBGKEntropy.lean"),
+    ("03_Lean4_Topological_Censorship/src/KineticSpectralCap.lean", "KineticSpectralCap.lean"),
+    ("05_Community_Research_Directions/kinetic_lock_rs/README.md", "KINETIC_LOCK_RS_README.md"),
+    ("05_Community_Research_Directions/experiments/results/kinetic_lock.png", "figure_kinetic_lock.png"),
+    ("05_Community_Research_Directions/experiments/results/kinetic_lock_gates.json", "kinetic_lock_gates.json"),
+    ("05_Community_Research_Directions/experiments/results/kinetic_lock_collapse.json", "kinetic_lock_collapse.json"),
+    ("05_Community_Research_Directions/experiments/results/forced_core_96_v3.json", "forced_core_96_v3.json"),
+    # --- v5.5.0: regime map, compressible/thermal forced core, Leray-alpha linearization ---
+    ("03_Lean4_Topological_Censorship/src/BlowupRegimeMap.lean", "BlowupRegimeMap.lean"),
+    ("03_Lean4_Topological_Censorship/src/LerayAlphaLinearization.lean", "LerayAlphaLinearization.lean"),
+    ("05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md", "THERMO_COMPRESSIBLE_LOCK_STUDY.md"),
+    ("05_Community_Research_Directions/experiments/compressible_core.py", "compressible_core.py"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_study.json", "compressible_core_study.json"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_re_sweep.json", "compressible_core_re_sweep.json"),
+    ("05_Community_Research_Directions/experiments/results/kinetic_lock_gas_law.json", "kinetic_lock_gas_law.json"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core.png", "figure_compressible_core.png"),
+    ("BENCHMARKS.md", "BENCHMARKS.md"),
+    ("scripts/run_benchmarks.sh", "run_benchmarks.sh"),
+    ("scripts/compare_benchmarks.py", "compare_benchmarks.py"),
 ]
 
 METADATA = {
     "metadata": {
-        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.3.0)",
+        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.5.0)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
@@ -102,7 +122,7 @@ METADATA = {
             "independent one; the external force has no independent physical origin, by construction; "
             "and the Euler datum requires coherent structure below the molecular length, where the "
             "missing physics is viscosity itself, not any exotic short-distance cutoff.</p>"
-            "<p><strong>New in v5.2.0 and v5.3.0.</strong> The cutoff-regularization hypothesis the paper previously "
+            "<p><strong>New in v5.2.0 to v5.5.0.</strong> The cutoff-regularization hypothesis the paper previously "
             "stated as untested is tested with a validated 3D pseudo-spectral solver (Taylor-Green "
             "Re=1600 dissipation peak at t=9.14 against a published 9.0). It is exact given its premise, "
             "but the premise -- a Re~1 diffusive core -- is not produced by generic data. A manufactured "
@@ -110,17 +130,35 @@ METADATA = {
             "barrier's engagement reduces to a single variable, and transport-filtering regularizations "
             "of the Leray-alpha and LANS-alpha type are one to two orders of magnitude weaker than "
             "dissipation, because they can act only through a nonlinearity that is a few percent of the "
-            "dynamics (the gate-drain crossover Reynolds number is an exact norm ratio, 8 to 142). The "
-            "continuum validity scale is shown to be the mean free path with a derived kinetic-theory "
-            "constant (0.67 for air). The exact shear-mode spectrum of the BGK kinetic model then shows that "
-            "kinetic theory does not act like a stronger drain: its damping is below viscosity, capped at "
-            "the collision rate, and the hydrodynamic mode ceases to exist at k lambda = sqrt(pi/2), so the "
-            "lock at the continuum limit is the end of the hydrodynamic description (v5.3.0 corrects the "
-            "v5.2.0 wording on this point). The bundle adds 45 Lean 4 theorems on the three standard "
-            "axioms (the Proposition 5.1 scaling chain, Leray-alpha filter bounds, an H-theorem for the "
-            "discrete BGK collision step, the gate-drain energy identity, and the first statements on "
-            "OpenAI's own ProblemStatement objects, conditional on an elementary periodic-cell lemma that "
-            "is stated as a labelled hypothesis).</p>"
+            "dynamics (the gate-drain crossover Reynolds number is an exact norm ratio, 8 to 142). At 96^3 "
+            "the barrier stalls the forced core near 1.2-1.5 sqrt(alpha') with exponents approaching the "
+            "cutoff law (0.42 and -0.43 against 0.5 and -0.5), not yet converged; a forecast that the "
+            "barrier/forcing ratio would cross one was not borne out and is recorded as such. The "
+            "continuum validity scale is the mean free path with a derived kinetic-theory constant (0.67 "
+            "for air). The exact BGK shear-mode spectrum shows that kinetic theory is not a stronger drain: "
+            "its damping is below viscosity, capped at the collision rate, and the hydrodynamic mode ends "
+            "at k lambda = sqrt(pi/2). A nonlinear test with a validated discrete-velocity BGK solver in "
+            "Rust, driven by the same manufactured collapse, finds no arrest there: the kinetic core runs "
+            "up to 12% ahead of Navier-Stokes and its apparent stopping point moves with the grid, not the "
+            "mean free path (a null result for the kinetic lock as an arrest mechanism, robust down to "
+            "about 0.9 mean free paths). The bundle includes 57 Lean 4 declarations on the three standard "
+            "axioms in seven files, among them the statement, proved on OpenAI's own ProblemStatement "
+            "definitions and periodic-integration library with no remaining hypothesis, that any object "
+            "with their candidate properties exceeds every velocity-gradient bound arbitrarily close to "
+            "the singular time. A reproducibility benchmark (BENCHMARKS.md, run_benchmarks.sh) re-runs "
+            "the tests, Lean files, solver gates and fast simulations and compares every regenerated "
+            "number with the committed results. v5.4.1 corrects one figure in the v5.4.0 paper (a "
+            "grid-refinement endpoint quoted as 0.86 instead of 0.96 mean free paths). v5.5.0 rereads Tao's "
+            "averaged-equation blow-up and a human-written forced Euler blow-up through the relation "
+            "Kn = Ma/Re: the three scenarios meet different physics first (kinetic termination at l*, "
+            "compressibility inside the continuum at Re l*, plain viscosity at l*/Ma). A one-dimensional "
+            "compressible Navier-Stokes-Fourier simulation of the forced core finds that on OpenAI's route "
+            "neither compressibility nor heat stops the core before l* (an arrest prediction of ours failed), "
+            "while on the inertial route (Re of 16 or more) air does not follow the driven swirl past a local "
+            "Mach number of 0.70 -- a lock on Mach number, not on velocity or size, in a model whose own "
+            "equations have proved implosion singularities. The claim that a Leray-alpha filter of width l* "
+            "represents the fluid at its continuum limit is withdrawn, with a formal reason: the filter width "
+            "does not appear in the linearized dynamics. Lean: 74 declarations in nine files.</p>"
             "<p>This version supersedes all previous public drafts of this project, including "
             "one previously deposited under this same Zenodo record. Claims withdrawn in this revision "
             "-- \"plasma temperatures\", a global enstrophy-censorship axiom with no stated derivation, "
@@ -158,7 +196,7 @@ METADATA = {
             "Cavitation",
             "Neuro-Symbolic AI"
         ],
-        "version": "5.3.0",
+        "version": "5.5.0",
         "license": "cc-by-4.0",
         "access_right": "open",
         "related_identifiers": [
@@ -168,7 +206,7 @@ METADATA = {
                 "scheme": "url"
             },
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.3.0",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.5.0",
                 "relation": "isIdenticalTo",
                 "scheme": "url"
             },

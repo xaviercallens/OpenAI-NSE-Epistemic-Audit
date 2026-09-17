@@ -1,0 +1,6 @@
+gas_re3_inv     --lambda 0.065 --re 3   --lstart 20 --n 144 --tau-law inv-rho
+gas_re3_const   --lambda 0.065 --re 3   --lstart 20 --n 144
+gas_re0.5_inv   --lambda 0.065 --re 0.5 --lstart 20 --n 144 --tau-law inv-rho
+gas_re0.5_const --lambda 0.065 --re 0.5 --lstart 20 --n 144
+gas_re2_inv_vol --lambda 0.065 --re 2   --lstart 20 --n 144 --tau-law inv-rho --force per-volume
+gas_re2_inv_n288 --lambda 0.065 --re 2  --lstart 20 --n 288 --tau-law inv-rho

@@ -240,7 +240,7 @@ For the z-invariant column every α-model nonlinearity is a pure gradient and pr
 (`N_Leray`, `N_LANS` ≈ 10⁻⁷ relative, confirmed numerically). **Leray-α and LANS-α are inert on
 this bed.** It tests the dissipative barrier only. Testing the transport gates — the family the
 programme's central conjecture is about — needs axial structure (the construction's `ℓ_z`, `u_z`)
-so that swirl–axial coupling makes `N(U) ≠ 0`. That is stage 2, in progress
+so that swirl–axial coupling makes `N(U) ≠ 0`. That is stage 2, now complete (see "Stage 2" above)
 (`forced_core_axial.py`).
 
 ## What this does and does not show

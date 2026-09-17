@@ -1,0 +1,128 @@
+# Reproducibility benchmark
+
+Every quantitative claim this project makes about its own simulations and proofs is paired below with a
+regenerated value. `scripts/run_benchmarks.sh` re-runs the test suites, the Lean files, the kinetic
+solver's validation gates and the fast simulations from scratch, and `scripts/compare_benchmarks.py`
+checks each regenerated number against the committed result it came from. Long runs (the 96³ sweep,
+about 6 h; the kinetic collapse runs, about 5 h) are not re-simulated; their headline numbers are
+re-derived from the committed data, and that distinction is marked in the tables.
+
+## Result for v5.4.1
+
+**44 / 44 checks pass.** Run 2026-09-17 on the release commit, `--full` tier, 6 min 39 s wall time.
+Every re-simulated quantity came back **bit-identical** to the committed value: the solvers are
+deterministic on a fixed machine and library stack, so any difference in a future run is a real
+change, not noise. Raw output: `benchmark_runs/v5.4.1/` (not committed; regenerate with the command
+below).
+
+Environment: Intel i7-4930MX (4 cores / 8 threads), Linux 6.8, Python with NumPy 1.26.4 and SciPy
+1.17.1, rustc 1.97.1, Lean 4.34.0-rc2 with Mathlib v4.34.0-rc2 inside OpenAI's `NavierStokesAndEuler`
+project. Bit-identity is expected on the same stack; across different BLAS/FFT builds or CPUs, expect
+agreement to roughly 1e-12 relative on the simulation numbers. The comparison tolerances allow for that.
+
+### Test suites
+
+| check | reproduced |
+|---|---|
+| `pytest` (all Python tests) | 116 passed, 0 failed |
+| `cargo test` (`kinetic_lock_rs`) | 5 passed |
+
+### Lean 4 — every verified file compiles, no `sorry`, only the standard axioms
+
+Each declaration's `#print axioms` output must be exactly `[propext, Classical.choice, Quot.sound]`.
+
+| file | declarations | errors | `sorryAx` | non-standard axioms |
+|---|---|---|---|---|
+| `CoreScaling.lean` | 10 | 0 | no | 0 |
+| `LerayAlphaFilter.lean` | 7 | 0 | no | 0 |
+| `LatticeBGKEntropy.lean` | 7 | 0 | no | 0 |
+| `AlphaEnergyIdentity.lean` | 5 | 0 | no | 0 |
+| `NonlinearBGKEntropy.lean` | 7 | 0 | no | 0 |
+| `KineticSpectralCap.lean` | 6 | 0 | no | 0 |
+| `OpenAIAdmissibility.lean` (imports OpenAI's `ProblemStatement`, `PeriodicIntegration`, `PeriodicUniqueness`) | 15 | 0 | no | 0 |
+| **total** | **57** | | | |
+
+### Link 4, linear — exact BGK shear spectrum (re-simulated)
+
+| claim (paper §9.2) | committed | reproduced |
+|---|---|---|
+| hydrodynamic mode ends at `kλ = √(π/2) = 1.2533141373155` | 1.2533141373147 (bisection) | 1.2533141373147 |
+| first kinetic correction `Γ = νk²[1 − c(kλ)²]`, `c = 1` | 0.99999892 | 0.99999892 |
+| damping never exceeds the collision rate `1/τ` | true | true |
+| barrier / kinetic damping at `kλ = 1` | 1.4339607 | 1.4339607 |
+| two independent methods agree (q ≤ 0.5) | 2.6e-12 | 2.6e-12 |
+
+### Direction 1 — forced collapsing core, 32³ (re-simulated)
+
+| claim (paper §9.1–9.2) | committed | reproduced |
+|---|---|---|
+| control tracks analytic target, whole-field relative L2 error | 1.722e-7 | 1.722e-7 |
+| B/F pooled prefactor C | 0.17523 | 0.17523 |
+| B/F pooled slope | 0.85093 | 0.85093 |
+| per-run C spread | 5.25% | 5.25% |
+| B/F collapses onto α′/(ντ) | true | true |
+| axial control L2 error | 6.502e-7 | 6.502e-7 |
+| lag at end, Leray-α (α = 0.25 / 0.35 / 0.5) | 0.17% / 0.23% / 0.31% | identical |
+| lag at end, LANS-α (α = 0.25 / 0.35 / 0.5) | 0.26% / 0.32% / 0.37% | identical |
+| lag at end, hyperviscous barrier (α = 0.25 / 0.35 / 0.5) | 4.8% / 19.2% / 45.0% | identical |
+
+This is the source of "the gates lag 0.2–0.4%, the barrier 5–45%".
+
+### Direction 1 — 96³ sweep (re-derived from `forced_core_96_v3.json`)
+
+| claim (paper §9.1) | quoted | re-derived |
+|---|---|---|
+| runs crossing B/F ≥ 1 | 0 of 6 | 0 |
+| window-end exponent of ℓ vs α′ (clean band) | +0.42 | +0.423 |
+| window-end exponent of u_max vs α′ (clean band) | −0.43 | −0.429 |
+| control collapse rate d ln ℓ / d ln τ | 0.500 | 0.500 |
+
+### Link 4, nonlinear — Rust discrete-velocity BGK solver
+
+Gates re-run (`gates --dt-over-tau 0.05`, including the rusty-SUNDIALS CVODE cross-check G3):
+
+| gate | criterion (from `kinetic_lock_rs/README.md`) | reproduced |
+|---|---|---|
+| G1 | Newton equilibrium matches target moments | pass |
+| G2 | mass/momentum conserved, discrete H non-increasing | pass |
+| G3 | agreement with CVODE; second-order convergence | pass |
+| G4 | shear decay within 2% of exact BGK for kλ ≤ 1 | pass (thin margin, 1.97%; fails at dt = τ/10) |
+| G5 | positivity in Taylor–Green flows to Mach 0.6 | pass |
+| — | lattice vs exact BGK reference points, max rel. diff | 5.6e-12 (identical) |
+
+Collapse results (re-derived from `kinetic_lock_collapse.json`):
+
+| claim (paper §9.2) | quoted | re-derived |
+|---|---|---|
+| apparent arrest moves with grid, λ = 0.065, Re = 1 (Δx 0.67λ → 0.34λ → 0.17λ; core size at first 10% lag) | 0.98λ → 0.52λ | 0.98 → 0.70 → 0.52 |
+| same, Re = 0.25 | 0.96λ → 0.35λ | 0.96 → 0.54 → 0.35 |
+| NSE control on the same grid, max \|lag\| through the kinetic event | ≤ 4e-4 | 3.7e-4 |
+| kinetic core ahead of NSE target | up to 12% | 12.2% |
+
+## What the benchmark caught
+
+Building the re-derivation checks exposed one wrong figure in the v5.4.0 paper, CHANGELOG and
+programme document: the Re = 0.25 grid-refinement endpoint was quoted as 0.86λ, a value of a different
+metric (minimum core size over the run), while the other three endpoints used the core size at the
+first 10% lag. With one metric throughout it is 0.96λ. Corrected in v5.4.1.
+
+## What this benchmark does not do
+
+- It does not re-run the 96³ sweep or the kinetic collapse runs; it re-derives their quoted numbers
+  from the committed data. A full re-simulation needs about 11 CPU-hours.
+- It does not check the older analytical directive scripts beyond what `pytest` covers.
+- It checks that the Lean files compile with standard axioms; it does not check that their statements
+  mean what the prose says. For that, read each file's header, which states what it does not prove.
+- Passing it shows the committed numbers are what the code produces. It does not show the models are
+  the right models.
+
+## Run it
+
+```bash
+scripts/run_benchmarks.sh          # quick tier: tests, spectrum, 32^3 forced core, Rust gates, Lean
+scripts/run_benchmarks.sh --full   # adds the 32^3 axial gate-vs-drain runs
+# options: BENCH_OUT=<dir>  OPENAI_LEAN=<path to NavierStokesAndEuler>  RAYON_NUM_THREADS=<n>
+```
+
+The script never writes under `experiments/results/`; it copies the experiment scripts into the run
+directory and compares from there. It exits non-zero if any check fails.

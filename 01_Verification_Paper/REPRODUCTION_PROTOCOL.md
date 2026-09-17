@@ -9,7 +9,7 @@ This protocol provides step-by-step instructions for peer reviewers, fluid dynam
 - Linux or macOS system (x86_64 or aarch64)
 - Python $\ge$ 3.10 with `numpy`, `scipy`, `sympy`, `requests`
 - `git`
-- (Optional for Lean 4 formalization) `elan` and `lake` with Lean 4 toolchain `leanprover/lean4:v4.11.0`
+- (Optional for Lean 4 formalization) `elan` and `lake` with Lean 4 toolchain `leanprover/lean4:v4.34.0-rc2` (Mathlib v4.34.0-rc2, matching OpenAI's NavierStokesAndEuler project)
 
 Install Python dependencies:
 ```bash

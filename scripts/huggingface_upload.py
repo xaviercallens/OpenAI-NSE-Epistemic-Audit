@@ -85,7 +85,37 @@ FILES_TO_UPLOAD = [
     ("05_Community_Research_Directions/experiments/lock_k_kinetic_spectrum.py", "code/lock_k_kinetic_spectrum.py"),
     ("05_Community_Research_Directions/experiments/results/lock_k_kinetic_spectrum.png", "figures/lock_k_kinetic_spectrum.png"),
     ("05_Community_Research_Directions/experiments/results/lock_k_kinetic_spectrum.json", "data/lock_k_kinetic_spectrum.json"),
+    # --- v5.4.x additions ---
+    ("03_Lean4_Topological_Censorship/src/NonlinearBGKEntropy.lean", "lean4/NonlinearBGKEntropy.lean"),
+    ("03_Lean4_Topological_Censorship/src/KineticSpectralCap.lean", "lean4/KineticSpectralCap.lean"),
+    ("03_Lean4_Topological_Censorship/README.md", "lean4/README.md"),
+    ("05_Community_Research_Directions/kinetic_lock_rs/README.md", "research/KINETIC_LOCK_RS_README.md"),
+    ("05_Community_Research_Directions/experiments/plot_kinetic_lock.py", "code/plot_kinetic_lock.py"),
+    ("05_Community_Research_Directions/experiments/results/kinetic_lock.png", "figures/kinetic_lock.png"),
+    ("05_Community_Research_Directions/experiments/results/kinetic_lock_gates.json", "data/kinetic_lock_gates.json"),
+    ("05_Community_Research_Directions/experiments/results/kinetic_lock_collapse.json", "data/kinetic_lock_collapse.json"),
+    ("05_Community_Research_Directions/experiments/results/forced_core_96_v3.json", "data/forced_core_96_v3.json"),
+    ("dataset/README.md", "dataset_README.md"),
+    # --- v5.5.0 additions ---
+    ("03_Lean4_Topological_Censorship/src/BlowupRegimeMap.lean", "lean4/BlowupRegimeMap.lean"),
+    ("03_Lean4_Topological_Censorship/src/LerayAlphaLinearization.lean", "lean4/LerayAlphaLinearization.lean"),
+    ("05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md", "research/THERMO_COMPRESSIBLE_LOCK_STUDY.md"),
+    ("05_Community_Research_Directions/experiments/compressible_core.py", "code/compressible_core.py"),
+    ("05_Community_Research_Directions/experiments/compressible_core_study.py", "code/compressible_core_study.py"),
+    ("05_Community_Research_Directions/experiments/compressible_core_re_sweep.py", "code/compressible_core_re_sweep.py"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_study.json", "data/compressible_core_study.json"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_re_sweep.json", "data/compressible_core_re_sweep.json"),
+    ("05_Community_Research_Directions/experiments/results/kinetic_lock_gas_law.json", "data/kinetic_lock_gas_law.json"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core.png", "figures/compressible_core.png"),
+    ("BENCHMARKS.md", "BENCHMARKS.md"),
+    ("scripts/run_benchmarks.sh", "code/run_benchmarks.sh"),
+    ("scripts/compare_benchmarks.py", "code/compare_benchmarks.py"),
 ]
+
+# Version DOI minted by Zenodo for this release. Fill in after publishing on Zenodo; the script refuses
+# to run while it is PENDING so the card never goes out with a missing or wrong DOI.
+RELEASE = "v5.5.0"
+ZENODO_VERSION_DOI = "PENDING"
 
 DATASET_CARD = """---
 license: cc-by-4.0
@@ -109,14 +139,14 @@ language:
   - en
 size_categories:
   - n<1K
-pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.3.0)"
+pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.5.0)"
 ---
 
 # The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation
 
 **Socrate AI Lab / MechanicaFluidorum Program** &middot; Lead: Xavier Callens
-**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.3.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.3.0))
-**Zenodo:** concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (always resolves to the latest version) &middot; v5.3.0: [10.5281/zenodo.22777467](https://doi.org/10.5281/zenodo.22777467)
+**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.5.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.5.0))
+**Zenodo:** concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (always resolves to the latest version) &middot; v5.5.0: [10.5281/zenodo.@DOI@](https://doi.org/10.5281/zenodo.@DOI@)
 
 ## What this is
 
@@ -139,7 +169,7 @@ expressible as one local vorticity bound |&omega;| &lesssim; c<sub>s</sub><sup>2
 Beale-Kato-Majda theorem turns into a genuine admissibility criterion. For liquids, cavitation is
 reached three decades earlier still.
 
-## Results added in v5.2.0 and v5.3.0
+## Results added in v5.2.0 to v5.5.0
 
 - **3D solver validated.** Pseudo-spectral Navier-Stokes solver reproduces the Taylor-Green
   Re = 1600 benchmark: dissipation peak at t = 9.14 against the published t = 9.0.
@@ -148,22 +178,41 @@ reached three decades earlier still.
   -1/3), where the law predicts k^+1.
 - **Forced collapsing core.** A manufactured Re = 1 collapse is tracked to 1.7e-7; the barrier's
   engagement collapses onto the single variable alpha'/(nu tau) (per-run prefactor 0.188 +/- 0.010).
+- **96^3 sweep (v5.4).** The forecast that barrier dissipation would overtake the forcing (B/F = 1)
+  failed: 0 of 6 runs cross. The core instead stalls at l ~ 1.2-1.5 sqrt(alpha') (collapse rate
+  0.04-0.16 against 0.500 without barrier), with window-end exponents l +0.42, u -0.43 against the
+  law's +0.5, -0.5. Not yet converged.
 - **Gate vs drain.** On that collapse, Leray-alpha / LANS-alpha lag it by 0.2-0.4%, a hyperviscous
   barrier by 5-45%. The crossover Reynolds number
-  Re_x = ||(L_barrier - L_nu) U|| / ||N_alpha(U) - N(U)|| ranges 8-142.
+  Re_x = ||(L_barrier - L_nu) U|| / ||N_alpha(U) - N(U)|| ranges 8-142. A ranking of two models.
 - **Kinetic anchor.** l*/lambda = cbar/(2 c_s) = 0.67 for air: the validity scale is the mean free
   path, with a derived constant.
-- **Kinetic lock (v5.3.0) -- a correction to v5.2.0.** The exact BGK shear-mode spectrum damps small
-  scales LESS than viscosity (Gamma = nu k^2 [1 - (k lambda)^2 + ...]), never exceeds the collision
-  rate 1/tau, and the hydrodynamic mode ceases to exist at k lambda = sqrt(pi/2) = 1.2533. At
-  k lambda = 1 the barrier damps 1.43x harder than kinetic theory. So the lock at l* is the end of the
-  hydrodynamic description, not a stronger drain; v5.2.0's "the lock at l* is dissipative, supplied by
-  kinetic theory" is withdrawn in that sense.
-- **Lean 4.** 45 theorems on the three standard axioms: scaling chain, Leray-alpha filter bounds,
-  discrete BGK H-theorem, gate/drain energy identity, and (v5.3.0) the first statements on OpenAI's
-  own `ProblemStatement` objects -- any object with their CandidateProperties exceeds every gradient
-  bound before t = 1, given an elementary periodic-cell lemma (not Beale-Kato-Majda) that is stated as
-  a labelled hypothesis because Mathlib lacks the needed torus integration by parts.
+- **Kinetic lock, linear (v5.3.0).** The exact BGK shear-mode spectrum damps small scales LESS than
+  viscosity (Gamma = nu k^2 [1 - (k lambda)^2 + ...]), never exceeds the collision rate 1/tau, and
+  the hydrodynamic mode ceases to exist at k lambda = sqrt(pi/2) = 1.2533.
+- **Kinetic lock, nonlinear (v5.4) -- a null result.** A validated 2D discrete-velocity BGK solver in
+  Rust, driven by the same manufactured collapse, does NOT arrest it near k lambda = sqrt(pi/2): the
+  kinetic core runs up to 12% ahead of Navier-Stokes, and its apparent stopping point moves with the
+  grid (0.98 -> 0.52 lambda at Re 1 as dx goes 0.67 -> 0.17 lambda) while a Navier-Stokes control on
+  the same grid tracks its target to 4e-4. Robust down to ~0.9 lambda; isothermal, 2D.
+- **Lean 4.** 74 declarations in nine files on the three standard axioms: scaling chain, Leray-alpha
+  filter bounds, discrete and nonlinear BGK H-theorems, the kinetic eigenvalue cap -1/tau <= Re mu <= 0,
+  the gate/drain energy identity, and -- with no remaining hypothesis since v5.4.0 -- the statement on
+  OpenAI's own `ProblemStatement` objects that any object with their CandidateProperties exceeds every
+  velocity-gradient bound arbitrarily close to t = 1.
+- **Regime map (v5.5.0).** Kn = Ma/Re sorts blow-up scenarios by the physics they meet first: OpenAI's
+  construction (Re ~ 1) meets everything at l*; Tao's averaged-equation blow-up (Re -> infinity) meets
+  compressibility first, inside the continuum; a human-written forced Euler blow-up with bounded velocity
+  meets viscosity first. Proved in `lean4/BlowupRegimeMap.lean`.
+- **Compressible / thermal forced core (v5.5.0).** On OpenAI's route neither compressibility nor heat
+  stops the driven core before l* (lag 14-25%; an arrest prediction of ours failed). On the inertial
+  route (Re >= 16) air locks at local Mach 0.70 however far the target is driven -- a lock on Mach
+  number, not on velocity or size; 1D ideal gas, open-loop force; the compressible equations have their
+  own proved implosion singularities. `code/compressible_core.py`, `data/compressible_core_*.json`.
+- **Leray-alpha anchor claim withdrawn (v5.5.0).** alpha does not appear in the linearized dynamics of
+  any alpha-model (`lean4/LerayAlphaLinearization.lean`), so it cannot be calibrated to l*.
+- **Reproducibility benchmark (v5.4.1).** `BENCHMARKS.md`; `code/run_benchmarks.sh` re-runs tests,
+  Lean files, solver gates and fast simulations and checks every regenerated number against the data.
 
 ## What changed from earlier releases (important)
 
@@ -185,10 +234,10 @@ with inline withdrawal notices -- **do not cite them for their original claims.*
 - `outputs/`: their console output logs (regenerated 2026-09-15; times are explicitly labelled
   dimensionless &tau; vs. physical seconds t = T&tau;)
 - `superseded/`: the retracted paper and Lean file, with withdrawal notices, for the historical record
-- `lean4/`: the v5.2.0 Lean 4 files (standard axioms only)
+- `lean4/`: the seven verified Lean 4 files and their README (standard axioms only)
 - `research/`: programme notes and experiment write-ups
 - `code/`: the 3D solver and forced-core test beds
-- `figures/`, `data/`: figures and JSON outputs of the v5.2.0 experiments
+- `figures/`, `data/`: figures and JSON outputs of the experiments (v5.2.0 onwards)
 - `CHANGELOG.md`, `PEER_REVIEW_2026-09-15.md`, `PROJECT_README.md`: project documentation
 
 ## Citation
@@ -211,8 +260,11 @@ def main():
         print("[-] Error: set HF_TOKEN (or HUGGINGFACE_TOKEN).", file=sys.stderr)
         sys.exit(1)
 
+    if ZENODO_VERSION_DOI == "PENDING":
+        print("[-] Error: set ZENODO_VERSION_DOI (the record number minted for this release) first.", file=sys.stderr)
+        sys.exit(1)
     api = HfApi(token=token)
-    print(f"[*] Syncing corrected v5.2.0 content to {REPO_TYPE} repo: {REPO_ID}")
+    print(f"[*] Syncing {RELEASE} content to {REPO_TYPE} repo: {REPO_ID}")
 
     missing = [rel for rel, _ in FILES_TO_UPLOAD if not os.path.exists(os.path.join(REPO_ROOT, rel))]
     if missing:
@@ -229,16 +281,16 @@ def main():
             path_in_repo=path_in_repo,
             repo_id=REPO_ID,
             repo_type=REPO_TYPE,
-            commit_message="v5.3.0: kinetic spectrum correction, first Lean bridge to OpenAI objects",
+            commit_message=f"{RELEASE}: unconditional Lean bridge, nonlinear kinetic null result, 96^3 sweep, benchmarks",
         )
 
     print("  -> README.md (dataset card)")
     api.upload_file(
-        path_or_fileobj=DATASET_CARD.encode("utf-8"),
+        path_or_fileobj=DATASET_CARD.replace("@DOI@", ZENODO_VERSION_DOI).encode("utf-8"),
         path_in_repo="README.md",
         repo_id=REPO_ID,
         repo_type=REPO_TYPE,
-        commit_message="v5.3.0: update dataset card",
+        commit_message=f"{RELEASE}: update dataset card",
     )
 
     print("  -> REPO_README.md (pointer replacing outdated card)")

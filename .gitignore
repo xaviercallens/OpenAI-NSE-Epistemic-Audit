@@ -65,3 +65,4 @@ skills/
 # Claude Code session artifacts and local clone of the OpenAI repo
 .claude/
 01_Verification_Paper/NavierStokesAndEuler/
+benchmark_runs/

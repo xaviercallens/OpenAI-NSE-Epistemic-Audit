@@ -14,6 +14,7 @@ All numbers below are in `experiments/results/kinetic_lock_collapse.json`, and t
    - This is the linear result in nonlinear form: kinetic damping is *below* νk² (the Burnett coefficient is +1).
    - The effect is amplified by the forcing, which cancels 4/5 of the viscous term: the net contraction is ¼νk².
    - A drain would give a positive lag. None is seen.
+   - *Caveat (independent check, 2026-09-17).* The maximum lead is reached early, with the core still at ℓ ≈ 2λ (k_ωλ ≈ 0.7, Mach ≈ 0.55, density deviation up to 28% at Re = 1). The lead is identical across λ and N because every run starts from the same dimensionless state, not because of a λ-independent kinetic effect; part of it is a compressible start-up transient. Read the sign as consistent with sub-viscous kinetic damping, not the −11/−12% magnitude as a measurement of it.
 2. **The lag > 10% event and min ℓ_kin move with the grid.** The table is the resolution ladder at λ = 0.065:
 
    | N | dx/λ | grid floor ℓ_ref,min/λ | Re=1: ℓ_kin/λ at lag>10% | k_ωλ | Mach | Re=0.25: ℓ_kin/λ | k_ωλ | Mach |
@@ -165,3 +166,21 @@ python3 ../experiments/plot_kinetic_lock.py
 - **DualScale solver (`crates/leanflow-core`): not used.** It provides the dual-scale hyperviscous and α-model dissipation (`r_eff`, `k_eff`, `dualscale_dissipation_rate`, `FourierVelocity2D`). This test is about a kinetic cutoff, not a hyperviscous barrier. The only overlapping piece, a 2D Fourier velocity field, is 30 lines here. Linking a crate with uncommitted user work, for that, was not justified.
 - **External crates (all offline, from the local registry):** `rustfft` 6.4.1, `rayon` 1.12, `num-complex` 0.4.6, `nalgebra` 0.34 (dense eigenvalues for G4, OLS), `serde_json`.
 
+
+## Stage 4 (v5.5.0): physical-gas collision law and force convention
+
+The runs above use a constant collision time, which makes `μ = pτ ∝ ρ` and the kinematic viscosity
+constant. A real gas has `τ ∝ 1/ρ` (`μ` independent of density), so `ν` rises as the core evacuates; that
+feedback was absent by construction. Two options were added to `collapse_run` (defaults unchanged, so every
+earlier result reproduces):
+
+* `--tau-law inv-rho` — `τ_local = τ/ρ` (`ρ_ref = 1`); the relaxation is still exact over a sub-step
+  because ρ is a collision invariant (`collide_force_point_with`);
+* `--force per-volume` — the prescribed field is a force per unit volume (increment `du/ρ`).
+
+`jobs_stage4a.txt`, `jobs_stage4b.txt`: λ = 0.065, N = 144, start at 12.3λ, Re ∈ {0.5, 1, 2, 3}, both
+collision laws. Result (valid for ℓ ≳ 1.5λ): same direction as the continuum study, small at these
+Reynolds numbers — at Re = 3, target Ma 0.75, peak Ma **0.72 (τ ∝ 1/ρ) vs 0.77 (constant τ)**, the largest difference near the validated Mach range (G5: Ma ≤ 0.6); at target Ma 2 it is 1.66 vs 1.85, but that point has negative populations of 1.5×10⁻⁴ and is outside the validated range, lag +8% vs
++5%; at Re ≤ 1 indistinguishable, the core stays ahead of the target. This solver is isothermal and cannot
+reach Re ≳ 4 on an affordable grid, so it cannot show the thermodynamic Mach lock found in
+`../experiments/compressible_core.py`; see `../THERMO_COMPRESSIBLE_LOCK_STUDY.md` §3.4.

@@ -4,6 +4,19 @@
 **Code:** `experiments/spectral3d.py` (`leray_alpha=`) · **Data:** `experiments/results/leray_alpha_vs_nse.json`
 **Tests:** `tests/test_spectral3d.py::TestLerayAlpha` (6 cases)
 
+> **Update (2026-09-17, v5.4.0) — read before building on this note.**
+> 1. *Gate vs drain is a ranking of two models.* The Re = 200 result below stands, but on a forced
+>    Re ≈ 1 collapse (the regime that reaches `ℓ*`) Leray-α and LANS-α lag the collapse by only
+>    0.2–0.4% against 5–45% for the hyperviscous barrier, because the nonlinearity they filter is a
+>    few percent of the dynamics (`DIRECTION1_RESULTS.md`, stage 2). Neither is a claim about real fluids.
+> 2. *The physics at `ℓ*` is neither.* The exact BGK shear spectrum damps small scales **less** than
+>    viscosity and ends the hydrodynamic mode at `kλ = √(π/2)`; a nonlinear kinetic simulation of a
+>    forced core finds no arrest there (`kinetic_lock_rs/`). The v5.2.0 reading "the lock at `ℓ*` is
+>    dissipative, as kinetic theory supplies" was withdrawn in v5.3.0.
+> 3. *Lean path, item 3* below is done and needed no Leray-α hypothesis: `OpenAIAdmissibility.lean`
+>    proves on OpenAI's own objects, unconditionally, that every candidate exceeds every gradient
+>    bound near `t = 1`. Items 1 and 2 are `LerayAlphaFilter.lean` and `AlphaEnergyIdentity.lean`.
+
 ## Why the pivot is right
 
 The intuition behind the earlier "dual-scale" and T-duality drafts was that a physical fluid must

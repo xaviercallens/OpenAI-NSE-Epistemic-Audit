@@ -122,7 +122,7 @@ the earlier "kernel-verified" drafts. The convention is now fixed in these files
 
 | lock | week-1 status |
 |---|---|
-| K kinetic | anchor confirmed (`ℓ*/λ = 0.67` derived and measured); DSMC not started |
+| K kinetic | anchor confirmed (`ℓ*/λ = 0.67` derived and measured); DSMC not started *(see update below)* |
 | C compressibility | shell-model version done; large-scale in cascades, `ℓ*` on collapse |
 | T thermodynamic | unchanged (paper §5) |
 | F fluctuation | **blocked on Direction 1**: needs a localized packet in local strain |
@@ -133,6 +133,16 @@ The single most valuable next step is unchanged and now over-determined: **the f
 (Direction 1)**. Lock A's derivation conjecture, Lock C's collapse regime, and Lock F's rate
 competition all require a `Re ≈ 1` collapsing core that generic data does not supply. Three of six
 locks are waiting on the same object.
+
+> **Update (2026-09-17, v5.4.0).** Since week 1: the forced-core bed was built (`DIRECTION1_RESULTS.md`;
+> 96³ cores stall near `√α′`, not yet converged). **Lock K** was tested twice: the exact linear BGK
+> spectrum shows a *termination* at `kλ = √(π/2)` with damping below viscous (v5.3.0), and a nonlinear
+> Rust discrete-velocity BGK simulation of the forced collapse (`kinetic_lock_rs/`, used instead of
+> DSMC or lattice-Boltzmann) finds **no arrest** at that scale — a null result for Lock K as an arrest
+> mechanism. The magnitude-based admissibility bound is now formal on OpenAI's own objects and
+> unconditional (`OpenAIAdmissibility.lean`); **Lock G** (Constantin–Fefferman direction coherence)
+> is still not started.
+> Current status of every link: `DUAL_SCALE_LOCK_PROGRAMME.md` §8.
 
 ## Tests
 

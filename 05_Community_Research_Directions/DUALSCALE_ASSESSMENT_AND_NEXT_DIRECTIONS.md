@@ -164,6 +164,15 @@ integrable. Citing these files as certifying regularity inverts their actual con
 > competition between shear amplification and noise-driven **decoherence**, which would speak to
 > whether the datum can be prepared at all rather than to where the model fails en route.
 >
+> **Further update (2026-09-17, v5.4.0).** Direction (1) is built: the forced-core bed
+> (`DIRECTION1_RESULTS.md`) supplies the premise, and at 96³ a dissipative barrier stalls the core
+> near `ℓ ≈ 1.2–1.5 √α′` with exponents approaching the cutoff law, not yet converged. The kinetic
+> physics beneath `ℓ*` was then tested directly: linearly (termination at `kλ = √(π/2)`, damping
+> below viscous) and nonlinearly (`kinetic_lock_rs/`, no arrest of a forced core). The formal
+> admissibility bridge on OpenAI's objects is unconditional (`OpenAIAdmissibility.lean`). The
+> DualScale solver's hyperviscous barrier was not needed for the kinetic test, and the corrections
+> recommended in §D below concern that external report and are unaffected.
+>
 > The original plan is retained below as written, since the estimates in it are what the work was
 > costed against and two of them proved wrong in instructive ways: the DNS route (A2/B1) was
 > defeated by a resolution constraint not anticipated here, and the shell model turned out to carry

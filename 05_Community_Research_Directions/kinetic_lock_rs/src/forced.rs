@@ -160,6 +160,10 @@ pub struct CollapseConfig {
     pub lstart_over_lambda: f64,
     pub dt_over_tau: f64,
     pub sample_every: usize,
+    /// physical gas: tau_local = tau / rho (mu independent of density)
+    pub tau_inv_rho: bool,
+    /// forcing as force per unit volume instead of per unit mass
+    pub force_per_volume: bool,
 }
 
 /// Even 2^a 3^b (fast rustfft lengths) nearest to x in log distance.
@@ -202,6 +206,8 @@ pub fn run_collapse(cfg: CollapseConfig, verbose: bool) -> Value {
     let (ux0, uy0) = (sp.inverse(&uxh), sp.inverse(&uyh));
     let rho0 = balanced_density(&sp, &ux0, &uy0);
     let mut kin = Kinetic::new(cfg.q, n, tau);
+    kin.tau_inv_rho = cfg.tau_inv_rho;
+    kin.force_per_volume = cfg.force_per_volume;
     kin.set_equilibrium(&rho0, &ux0, &uy0);
     let s0 = kin.sums();
     let vmax = kin.lat.gh.v[cfg.q - 1];
@@ -311,6 +317,7 @@ pub fn run_collapse(cfg: CollapseConfig, verbose: bool) -> Value {
     let nse = run_nse_control(&tgt, &sp, t0, h, cfg.lambda, cfg.sample_every);
     json!({
         "config": {
+            "tau_law": if cfg.tau_inv_rho { "inv_rho" } else { "const" }, "force": if cfg.force_per_volume { "per_volume" } else { "per_mass" },
             "lambda": cfg.lambda, "tau": tau, "nu": nu, "re_core": cfg.re_core, "Q": cfg.q, "N": n,
             "dx": sp.dx, "dx_over_lambda": sp.dx / cfg.lambda, "l0": cfg.l0, "T": tgt.t_blowup,
             "gamma": tgt.gamma, "l_start": l_start, "t_start": t0, "dt": h, "dt_over_tau": h / tau,

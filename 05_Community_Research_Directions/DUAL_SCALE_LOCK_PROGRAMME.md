@@ -281,7 +281,7 @@ dual-scale lock is a modelling convenience. Either outcome is worth the DSMC run
   kinetic core runs slightly *ahead* of the Navier–Stokes target (lag down to −11 to −12%;
   kinetic damping is weaker than viscous, as the linear Burnett sign predicts), and its apparent
   stopping point moves with the grid — at λ = 0.065, refining `Δx` from 0.67λ to 0.17λ moves it
-  from 0.98λ to 0.52λ (Re = 1) and from 0.86λ to 0.35λ (Re = 0.25), with `k_ωλ` rising to 4–5 —
+  from 0.98λ to 0.52λ (Re = 1) and from 0.96λ to 0.35λ (Re = 0.25) — core size at the first 10% lag — with `k_ωλ` rising to 4–5 —
   while the NSE control on the same grid tracks the target to |lag| ≤ 4×10⁻⁴. Robustly, within
   the solver's validated range: no arrest at or above ≈ 0.9λ. Below that the runs reach
   Mach 1–3, 20–98% density holes and negative `f` beyond the G5 limit, so they bound, rather
@@ -292,3 +292,27 @@ dual-scale lock is a modelling convenience. Either outcome is worth the DSMC run
   stopped, if at all, by something else (compressibility, thermodynamics — Locks C, T), not by
   the kinetic cutoff. Limits: 2D, isothermal BGK (no energy equation, so Lock T is absent by
   construction), `Δx ≥ λ/6`, forcing taken from the incompressible solution.
+
+## 9. Status update (2026-09-17, v5.5.0): Locks C and T tested; the α-model anchor withdrawn
+
+Full account: `THERMO_COMPRESSIBLE_LOCK_STUDY.md`. In brief:
+
+* **Regime map.** `Kn = Ma/Re` sorts blow-up scenarios by the physics they meet first: the diffusive route
+  (OpenAI, `Re ≈ 1`) meets everything at `ℓ*`; the inertial route (Tao 2016, `Re → ∞`) meets
+  compressibility first, at `Re·ℓ*`, inside the continuum; the bounded-velocity route (the human-written
+  forced Euler blow-up) meets viscosity first, at `ℓ*/Ma`. Lock K is the relevant lock on the first route
+  only. Proved in `BlowupRegimeMap.lean`.
+* **Locks C and T (compressibility, thermodynamics).** §8's constant-τ kinetic run had `μ ∝ ρ` and so
+  excluded the density feedback as well as heat. With a real-gas viscosity law and an energy equation
+  (`experiments/compressible_core.py`): on the diffusive route nothing stops the driven core before `ℓ*`
+  (a quasi-steady arrest prediction of ours failed — the collapse outruns its own density hole); on the
+  inertial route, `Re ≳ 16`, **air locks at local Mach 0.70** however far the target is driven. A lock on
+  Mach number, not on velocity or size; the compressible equations have their own implosion singularities.
+* **Lock A (the α-model).** The conjecture of §3 that LANS-α with `α ≈ ℓ*` is a derived intermediate is
+  now answered in the negative at linear order, which is enough: α is absent from the linearized dynamics
+  of every α-model (`LerayAlphaLinearization.lean`), while the kinetic linear dynamics differs from `νk²`
+  at exactly that scale. The "physical anchor" reading is withdrawn; Leray-α remains what it was designed
+  to be, a closure for scales far above `ℓ*`.
+* **What is left of the dual-scale intuition:** two scales, the flow's and the molecules', whose ratio
+  `Ma/Re` decides which physics arrives first; and one unconditional bound, at the bottom of the
+  hierarchy (`|v| ≤ √(2E/m)` for finitely many particles), which no continuum or kinetic model inherits.
