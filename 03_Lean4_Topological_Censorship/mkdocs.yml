@@ -1,4 +1,4 @@
-site_name: "03_Lean4_Topological_Censorship"
+site_name: "Lean 4 formalization — blueprint (drafts; verified files listed in the folder README)"
 repo_url: ""
 
 # `autoform render` writes this directory from blueprint/. The vault stays the

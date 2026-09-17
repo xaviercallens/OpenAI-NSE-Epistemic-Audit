@@ -21,7 +21,7 @@
 
 </div>
 
-> **Note on earlier versions.** In September 2026 this project dropped its original "physical vacuity"/"censorship" framing and its string-theory/T-duality motivation after community and scientific review. Claims withdrawn along the way (plasma temperatures, the raw 10²⁸ condition number as fragility, the global enstrophy constant, the T-duality link, and v5.2.0's "dissipative kinetic lock") are itemized in [`CHANGELOG.md`](CHANGELOG.md) and in Appendix A of the paper. Zenodo versions 2.0.0 (`10.5281/zenodo.22725347`, `22727801`) carry withdrawn claims and should not be cited.
+> **Note on earlier versions.** In September 2026 this project dropped its original "physical vacuity"/"censorship" framing and its string-theory/T-duality motivation after community and scientific review. Claims withdrawn along the way (plasma temperatures, the raw 10²⁸ condition number as fragility, the global enstrophy constant, the T-duality link, v5.2.0's "dissipative kinetic lock", and v5.5.0's withdrawal of the Leray-α "physical anchor at ℓ*") are itemized in [`CHANGELOG.md`](CHANGELOG.md) and in Appendix A of the paper. Zenodo versions 2.0.0 (`10.5281/zenodo.22725347`, `22727801`) carry withdrawn claims and should not be cited.
 
 ---
 
@@ -33,7 +33,7 @@ In September 2026, an OpenAI multi-agent system produced a **Lean 4 formalized p
 
 ---
 
-## 📍 Current status (v5.5.0, 2026-09-17)
+## 📍 Current status (v5.5.1, 2026-09-17)
 
 The research question behind the later versions is a "lock" chain: does something physical necessarily intervene where the construction goes? Each link, with its evidence and its honest status:
 
@@ -56,7 +56,7 @@ Open gaps, stated plainly:
 - **Liquids are not dilute gases:** link 3 is a gas result; in water, cavitation is the first constitutive limit.
 - **Cutoff law** $u_{\max}\sim\nu/\sqrt{\alpha'}$: on a manufactured Re ≈ 1 core a dissipative barrier stalls the core at $\ell \approx 1.2$–$1.5\sqrt{\alpha'}$ at 96³, with exponents approaching the law; a converged arrest is not yet shown. Leray-α/LANS-α are one to two orders weaker there — a ranking of two *models*, not a statement about real fluids.
 
-Details: [`05_Community_Research_Directions/DUAL_SCALE_LOCK_PROGRAMME.md`](05_Community_Research_Directions/DUAL_SCALE_LOCK_PROGRAMME.md) §8 · [`DIRECTION1_RESULTS.md`](05_Community_Research_Directions/DIRECTION1_RESULTS.md) · reproducible checks and their measured numbers: [`BENCHMARKS.md`](BENCHMARKS.md).
+Details: [`05_Community_Research_Directions/DUAL_SCALE_LOCK_PROGRAMME.md`](05_Community_Research_Directions/DUAL_SCALE_LOCK_PROGRAMME.md) §8–9 · [`THERMO_COMPRESSIBLE_LOCK_STUDY.md`](05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md) · [`DIRECTION1_RESULTS.md`](05_Community_Research_Directions/DIRECTION1_RESULTS.md) · reproducible checks and their measured numbers: [`BENCHMARKS.md`](BENCHMARKS.md).
 
 ---
 
@@ -94,12 +94,12 @@ This analysis uses a **Dual-Framework**: Lean 4 for the mathematics, and explici
 | Criterion | Expected | Found |
 |---|---|---|
 | `sorry` / `admit` in core proof | 0 | ✅ 0 |
-| Custom `axiom` bypasses in physics | 0 | ✅ 0 (Non-vacuous flow explicitly checked) |
+| Custom `axiom` bypasses in physics | 0 | ✅ 0 (the constructed flow is non-trivial: checked) |
 | Force smoothness type | `ContDiff ℝ ∞` | ✅ `ContDiff ℝ ∞` |
 | Sobolev weakening | None | ✅ None |
 | Global *L²* energy bound | Uniform | ✅ ∃ E, ∀ t, kineticEnergy u t ≤ E |
 
-These rows describe OpenAI's formalization. This project's own Lean files (seven files, 57 declarations checked with `#print axioms`, no `sorry`) are listed in [`03_Lean4_Topological_Censorship/README.md`](03_Lean4_Topological_Censorship/README.md).
+These rows describe OpenAI's formalization. This project's own Lean files (nine files, 74 declarations checked with `#print axioms`, no `sorry`) are listed in [`03_Lean4_Topological_Censorship/README.md`](03_Lean4_Topological_Censorship/README.md).
 
 **Conclusion:** The AI accurately and brilliantly navigated the Millennium Prize rulebook. The gap highlighted here is strictly physical, shedding light on the boundary between abstract mathematical exploration and real-world fluid dynamics.
 
@@ -109,7 +109,7 @@ These rows describe OpenAI's formalization. This project's own Lean files (seven
 
 ```
 OpenAI-NSE-Epistemic-Audit/
-├── 01_Verification_Paper/               # Flagship paper (v5.4.1, 25 pp) + open peer review
+├── 01_Verification_Paper/               # Flagship paper (v5.5.1, 29 pp) + open peer review
 │   ├── OpenAI_NSE_Verification.pdf
 │   ├── OpenAI_NSE_Verification.tex
 │   ├── PEER_REVIEW_2026-09-15.md
@@ -126,6 +126,8 @@ OpenAI-NSE-Epistemic-Audit/
 │       ├── KineticSpectralCap.lean      # link 4 (linear cap)
 │       ├── LatticeBGKEntropy.lean       # link 5
 │       ├── NonlinearBGKEntropy.lean     # link 5 (nonlinear step)
+│       ├── BlowupRegimeMap.lean         # regime map Kn = Ma/Re (OpenAI / Tao / forced Euler routes)
+│       ├── LerayAlphaLinearization.lean # why the Leray-α "anchor at ℓ*" claim is withdrawn
 │       ├── LerayAlphaFilter.lean, AlphaEnergyIdentity.lean
 │       ├── TopologicalCensorship.lean, NSECensorship.lean, LeanMasterBridge.lean  # legacy toys
 │       └── drafts/                      # unverified drafts (contain sorry/axiom)
@@ -133,9 +135,10 @@ OpenAI-NSE-Epistemic-Audit/
 ├── 05_Community_Research_Directions/    # Lock programme, experiments, workstreams — see its README
 │   ├── DUAL_SCALE_LOCK_PROGRAMME.md
 │   ├── DIRECTION1_RESULTS.md
-│   ├── experiments/                     # 3D spectral solver, forced-core bed, results/
+│   ├── THERMO_COMPRESSIBLE_LOCK_STUDY.md # regime map, compressible/thermal core, Mach lock
+│   ├── experiments/                     # 3D spectral solver, forced-core bed, compressible core, results/
 │   └── kinetic_lock_rs/                 # Rust discrete-velocity BGK solver (link 4 nonlinear test)
-├── BENCHMARKS.md                        # Reproducible checks with measured numbers
+├── BENCHMARKS.md                        # Reproducible checks with measured numbers (54/54 at v5.5.0)
 ├── CHANGELOG.md                         # Versions, corrections and withdrawn claims
 ├── LEGAL_NOTICE_AND_CITIZEN_SCIENCE_DISCLAIMER.md
 ├── scripts/                             # Directives 2–7 analyses & Extractors
@@ -148,7 +151,7 @@ OpenAI-NSE-Epistemic-Audit/
 │   └── directive7_pre_singularity_simulation.py
 ├── dataset/                             # Dataset artifacts
 │   └── animations/                      # Pre-singularity vortex animations
-├── AUDIT_AND_IMPROVEMENT_PLAN.md        # Living roadmap for verification CI
+├── AUDIT_AND_IMPROVEMENT_PLAN.md        # Historical working plan (Sept 2026); current state in CHANGELOG
 └── .github/                             # CI/CD Workflows for automated physical testing
 ```
 
@@ -180,7 +183,7 @@ git clone https://github.com/openai/NavierStokesAndEuler && cd NavierStokesAndEu
 lake exe cache get
 lake build NavierStokes.PeriodicUniqueness          # only needed for OpenAIAdmissibility.lean (3 files)
 for f in CoreScaling LerayAlphaFilter LatticeBGKEntropy AlphaEnergyIdentity \
-         NonlinearBGKEntropy KineticSpectralCap OpenAIAdmissibility; do
+         NonlinearBGKEntropy KineticSpectralCap OpenAIAdmissibility BlowupRegimeMap LerayAlphaLinearization; do
   lake env lean <repo>/03_Lean4_Topological_Censorship/src/$f.lean   # prints #print axioms
 done
 ```
@@ -188,8 +191,9 @@ Do not build OpenAI's full library (~580 files); nothing here needs it. Expected
 
 ### Run the tests and benchmarks
 ```bash
-python3 -m pytest tests/ -q                          # Python solvers, forced-core bed, kinetic spectrum
+python3 -m pytest tests/ -q                          # Python solvers, forced-core bed, compressible core, kinetic spectrum
 cd 05_Community_Research_Directions/kinetic_lock_rs && cargo test --release
+scripts/run_benchmarks.sh --full                     # re-runs everything and compares with the committed numbers
 ```
 See [`BENCHMARKS.md`](BENCHMARKS.md) for every check with its expected number.
 
@@ -198,9 +202,11 @@ See [`BENCHMARKS.md`](BENCHMARKS.md) for every check with its expected number.
 ## 📊 Key Computational Results
 
 <div align="center">
-  <img src="02_Empirical_Observation/DNS_Turbulence_Verification/enstrophy_falsification.png" alt="Enstrophy Falsification vs Kolmogorov Dissipation" width="48%">
+  <img src="02_Empirical_Observation/DNS_Turbulence_Verification/enstrophy_falsification.png" alt="Enstrophy scaling of the construction vs Kolmogorov dissipation (illustrative)" width="48%">
   <img src="dataset/animations/pre_singularity_vortex.gif" alt="Pre-Singularity Vortex Contraction" width="48%">
 </div>
+
+*Left: enstrophy scaling of the construction against a dissipative reference — an illustration of the exponents, not a simulation of the construction, and no quantity in it is capped by physics. Right: animated collapse on the analytic scaling.*
 
 ### Mach Number Self-Invalidation
 | Dimensionless τ (physical time $t = T\tau$, $T = \ell_0^2/\nu = 100$ s for water, $\ell_0 = 1$ cm) | Velocity |u| (m/s) | Mach Ma | Regime |
@@ -220,7 +226,7 @@ The velocity and Mach columns depend on $\ell_0$ only through a factor $(\ell_0^
 | 100 | 2.36 × 10²⁰ | 4.11 × 10⁵ | Bounded |
 | 1000 | 1.78 × 10²⁸ | **4.11 × 10⁵** | **Bounded & Scale-Invariant** |
 
-### 🌪️ DNS & Empirical CFD Verification: The Ultraviolet Bomb vs. Real Turbulence
+### 🌪️ The construction's scalings vs. real turbulence (schematic)
 
 To illustrate the dual-framework, we contrast the AI's scaling limits with a physical turbulence spectrum. The figures below are schematic: the "OpenAI snapshot" curve is a hand-placed spike drawn from the scaling exponents, not a computed spectrum of the construction (no numerical implementation of the 166-page construction exists).
 
@@ -229,7 +235,7 @@ To illustrate the dual-framework, we contrast the AI's scaling limits with a phy
   <img src="dataset/animations/smooth_vortex_dissipation.jpg" alt="Phase Fragility" width="48%">
 </div>
 
-#### 1. The Ultraviolet Bomb vs. The Kolmogorov Cascade (Left)
+#### 1. Where the energy sits vs. the Kolmogorov cascade (Left)
 * **The Physics:** Real physical turbulence (JHTDB DNS, blue line) adheres strictly to the classical Kolmogorov $k^{-5/3}$ cascade, smoothly dissipating kinetic energy at the viscous microscale. 
 * **The AI Singularity (schematic):** The red curve sketches where the construction's energy sits as $\tau \to 0$: at ever higher wavenumbers ($k_{\text{peak}} \sim \tau^{-1/2}$), eventually below the molecular scale. Note that the *total* kinetic energy of the core actually vanishes ($E \sim \tau^{+0.485}$); what diverges is the velocity and the energy *density*, not the amount of energy. (Earlier drafts called this an "Ultraviolet Bomb" at "sub-Planckian" scales; both phrasings were wrong — the relevant physical cutoff is the molecular scale, about $\ell_* = \nu/c \approx 0.7$ nm in water, not the Planck length.)
 
@@ -249,16 +255,16 @@ Inspired by Fields Medalist **Terence Tao's vision of AI as a collaborative "gad
 
 1. **Neural (The Intuition Engine):** LLMs/RL agents propose physical models, flow geometries, and proof strategies.
 2. **Symbolic (The Logic Engine):** Lean 4 (`mathlib`) verifies topological limits, norm bounds, and $C^\infty$ syntax.
-3. **Empirical (The Physics Engine):** A deterministic CFD kernel (`physlib` / `LeanFlow`) acts as a strict semantic grounding node.
+3. **Empirical (The Physics Engine):** a deterministic model-validity check (the *proposed* `physlib` / `LeanFlow`, only partially built) evaluates where a construction sits relative to the model's validity range.
 
-**The Modus Operandi:** If a proposed mathematical step compiles in Lean 4 but leaves the validity range of the model (Mach, Knudsen or Eckert bounds — equivalently $|\omega| \lesssim c^2/\nu$), the Empirical Engine flags the proof state as **"Physically Ill-Typed,"** forcing the AI to search for *physically admissible* mathematics. 
+**The Modus Operandi:** If a proposed mathematical step compiles in Lean 4 but leaves the validity range of the model (Mach, Knudsen or Eckert bounds — equivalently $|\omega| \lesssim c^2/\nu$), the Empirical Engine *labels* the result as a statement about the mathematical model rather than about a physical fluid. It does not reject the proof, which remains correct; it records which model it is about. (Earlier drafts called this flagging proofs as "physically ill-typed"; that framing is withdrawn.) 
 
 ### 🔭 Open Research Directions for Frontier AI Labs
 We invite OpenAI, DeepMind, and the open-source community to pivot these massive multi-agent swarms toward physically grounded challenges:
 
-* **Direction A (Automated Epistemic "Red Teaming"):** Deploy specialized AI swarms to automatically audit abstract proofs for thermodynamic and physical loopholes (automating the exact epistemic audit performed in this repository).
+* **Direction A (Automated Epistemic "Red Teaming"):** Deploy specialized AI swarms to automatically map abstract results onto the physical validity range of the model they are about (automating the exact epistemic audit performed in this repository).
 * **Direction B (Sharper admissibility, not "regularity via censorship"):** Millennium Prize Alternative A (global regularity) remains open, and nothing in this repository bears on it. Note what is *not* a research problem: under a bound $|\omega| \lesssim c^2/\nu$ on $[0,T)$, regularity on $[0,T]$ is already Beale–Kato–Majda, and the formal statement that OpenAI's candidate violates every gradient bound is now an elementary, fully proved Lean lemma (link 1). The open questions are an admissibility criterion on vorticity *direction* coherence (Constantin–Fefferman), the codimension of the blow-up, the cutoff law $u_{\max} \sim \nu/\sqrt{\alpha'}$ on a converged arrest, and thermal decoherence of the construction's pulses (paper §11.5).
-* **Direction C (AI-Generated Turbulence Closures):** Invert the Method of Manufactured Solutions (MMS). Instead of reverse-engineering a singular residual into a phantom force, prompt the AI to discover exact, non-linear subgrid-scale (SGS) closure relationships for CFD, revolutionizing aerospace engineering and climate modeling.
+* **Direction C (AI-Generated Turbulence Closures):** Invert the Method of Manufactured Solutions (MMS). Instead of constructing a force for a prescribed singular flow, prompt the AI to discover exact, non-linear subgrid-scale (SGS) closure relationships for CFD, revolutionizing aerospace engineering and climate modeling.
 
 *(Read our full strategic manifesto: [TAO_NEUROSYMBOLIC_SCIENTIFIC_AI_MANIFESTO.md](05_Community_Research_Directions/TAO_NEUROSYMBOLIC_SCIENTIFIC_AI_MANIFESTO.md))*
 
@@ -268,12 +274,12 @@ We invite OpenAI, DeepMind, and the open-source community to pivot these massive
 
 To make our scientific audit more tangible (and entertaining), we've built a suite of visual tools and conceptual CFD simulations.
 
-* **Section 1 Investigation (Empirical Physics Audit of OpenAI Lean 4 Code):** Read Section 1 of our empirical investigation showing how physical metrics (Mach divergence, intensive energy scaling) self-invalidate official OpenAI Lean 4 code: **[Section 1: Empirical Investigation & Physics Audit](02_Empirical_Observation/SECTION_1_INVESTIGATION_PHYSICS_AUDIT.md)**.
+* **Section 1 Investigation (Empirical Physics Audit of OpenAI Lean 4 Code):** Read Section 1 of our empirical investigation of where the constructed flow's physical metrics (Mach number, intensive energy scaling) leave the incompressible model's validity range — a statement about the model, not an error in OpenAI's Lean 4 code: **[Section 1: Empirical Investigation & Physics Audit](02_Empirical_Observation/SECTION_1_INVESTIGATION_PHYSICS_AUDIT.md)**.
 * **Reproduction Protocol & Scientific Literature References:** Follow our step-by-step reproduction guide, physics deep-dive, literature bibliography (Fefferman, Leray, BKM, ESS, Tao), and Lean 4 formalization: **[Reproduction Protocol & Literature References](12_Reproduction_Protocol_and_Physics_References/REPRODUCTION_PROTOCOL_AND_PHYSICS_REFERENCES.md)**.
 * **Proposed architecture (Neuro-Symbolic Engine, a proposal):** How physical-validity predicates could flag proof states that leave a model's validity range: **[The Neuro-Symbolic Engine (LeanFlow)](11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md)**. This is a design proposal, only partially built; it does not refute or "intercept" OpenAI's proof, which is correct.
 * **OpenAI PoC Proposal (Physics-Informed Proof Search):** A proposal for OpenAI research & reasoning teams on embedding physical-validity checks into Lean 4 proof search: **[OpenAI PoC Proposal](10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md)**.
 * **Empirical DNS and OpenFOAM comparisons:** **[Section 1: Investigation & Physics Audit](02_Empirical_Observation/SECTION_1_INVESTIGATION_PHYSICS_AUDIT.md)**. An external DualScale/OpenFOAM benchmark report was assessed and found not to support several of its claims; see [`DUALSCALE_ASSESSMENT_AND_NEXT_DIRECTIONS.md`](05_Community_Research_Directions/DUALSCALE_ASSESSMENT_AND_NEXT_DIRECTIONS.md). The validated 3D solver and its Taylor–Green benchmark are in `05_Community_Research_Directions/experiments/`.
-* **Superseded draft (historical record):** the Sept-12 **[Thermodynamic Censorship Paper](04_Thermodynamic_Censorship_Paper/Thermodynamic_Censorship_Navier_Stokes.pdf)** has been superseded by the current paper; it is kept for the record and should not be cited for its "censorship" or "plasma" claims. The dual-scale idea survives only as a Leray-α-family regularization with a testable cutoff law $u_{\max} \sim \nu/\sqrt{\alpha'}$ — no string-theory claim — and, separately, as the kinetic lock chain above.
+* **Superseded draft (historical record):** the Sept-12 **[Thermodynamic Censorship Paper](04_Thermodynamic_Censorship_Paper/Thermodynamic_Censorship_Navier_Stokes.pdf)** has been superseded by the current paper; it is kept for the record and should not be cited for its "censorship" or "plasma" claims. What survives of the dual-scale idea is the regime map $\mathrm{Kn}=\mathrm{Ma}/\mathrm{Re}$ and the lock chain above; no string-theory claim, and — since v5.5.0 — no claim that a Leray-α filter of width $\ell_*$ represents the fluid at its continuum limit (paper §9.5).
 * **PyFR & CFD Integration:** Python CFD libraries like **[PyFR](https://www.linkedin.com/pulse/pyfr-awesome-python-cdf-library-dmitry-buzolin/)** could serve as the "Empirical Engine." `scripts/pyfr_lobster_visualization.py` is an illustrative visualization, not a physical result: no solver "shields" reality from a blow-up, and a regularized solver changes the model rather than testing it.
 * **Navier-Stokes Masterclass (2-Hour Training):** Dive deep into the fluid equations with our interactive Jupyter Notebook course. Learn the math, write a CFD solver in Python, and visualize where the incompressible model stops describing a real fluid. Available in **[English](08_Training_Course/Navier_Stokes_Training_EN.ipynb)**, **[Français](08_Training_Course/Navier_Stokes_Training_FR.ipynb)**, and **[中文](08_Training_Course/Navier_Stokes_Training_ZH.ipynb)**.
 
@@ -290,7 +296,7 @@ Whether you want to debate the boundary between abstract Sobolev spaces and flui
 | 🚀 **Welcome** | [🚀 Welcome Post & Overview](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/1) | Research overview, resources, & paper links |
 | 💬 **Community** | [💬 Community Introductions](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/2) | Introduce yourself & your research background |
 | ❓ **Q&A** | [❓ Q&A Megathread (Reddit & Community FAQs)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/3) | Community feedback (r/physics, r/math, r/MachineLearning) & answers |
-| 💡 **Challenges** | [💡 Open Challenges: Thermodynamic Censorship](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/4) | Lean 4 challenge: physical bounds vs blow-up |
+| 💡 **Challenges** | [💡 Open Challenges](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/4) *(thread title predates the withdrawal of the "censorship" framing)* | Lean 4 and physics challenges: validity bounds vs blow-up |
 | 🎉 **Showcase** | [🎉 Show & Tell: Reproductions & OpenFOAM Runs](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/discussions/5) | Share local GPU benchmarks, certificates, & visualizations |
 
 *All community members are invited to participate in the open GitHub Discussions above.*

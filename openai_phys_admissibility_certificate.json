@@ -1,4 +1,5 @@
 {
+  "status_note": "ILLUSTRATIVE EXAMPLE OUTPUT, NOT A RESULT (note added 2026-09-17, v5.5.0). The trajectory metrics below are hand-set demonstration inputs to 10_OpenAI_PoC_Proposal/openai_poc_pi_verifier.py, not measurements of OpenAI's construction. Verdict strings such as 'UNPHYSICAL_BLOWUP_REJECTED' and the recommendation to reject trajectories reflect the withdrawn 'interception' framing: OpenAI's proof is correct, and a validity check can only label a result as a theorem about the incompressible model, not reject it. The 'leanflow_dual_scale' scenario does not represent a validated model: the Leray-alpha 'anchor at l*' reading is withdrawn (paper Sec. 9.5). See CHANGELOG.md.",
   "poc_title": "OpenAI Physics-Informed Formal Proof Search (PI-FPS) Certificate",
   "target_system": "OpenAI Lean 4 Theorem Prover & Neural Operator Verifier",
   "scenarios": {

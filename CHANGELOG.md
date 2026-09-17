@@ -1,5 +1,40 @@
 # Changelog
 
+## v5.5.1 — 2026-09-17 — Repository-wide realignment with the v5.5.0 positions
+
+No new results. Every tracked artefact was re-read against the current positions (proofs correct, physical
+reading not refutation; regime map `Kn = Ma/Re`; link 1 unconditional; kinetic termination not drain; no
+arrest on OpenAI's route; Mach lock 0.70 on the inertial route; Leray-α anchor withdrawn) and brought into
+line. History is kept as dated notes, not rewritten.
+
+- **Paper (29 pp, "Version 5.5.1").** Read end to end as one document: intro roadmap now covers §9;
+  "lock" language for model regularizations replaced; §11.4 recast as the history and outcome of the
+  dual-scale hypothesis instead of a live proposal; Lean status rewritten as nine files / 74 declarations;
+  "thermal kinetic test" added as the most direct next experiment; conclusion covers all three routes;
+  Table 7 no longer implies a physical cutoff would prevent blow-up; the "arrow and bullseye" simile removed.
+- **Research and Lean docs.** Programme doc: Lock A answered negatively, Locks C/T tested, plan status
+  (done / open). Leray-α document marked superseded. Blueprint atlas pages marked draft or withdrawn with
+  their defects; the six `src/drafts/*.lean` carry an UNVERIFIED DRAFT header. The withdrawn
+  "Thermodynamic Censorship" paper's notice now says "do not cite" and points to v5.5.0. WorkStream notes 1–4
+  updated (measured heating coefficient; exact cavitation coefficient 1.70).
+- **Public and educational material.** Memo (FR/EN/ZH), citizen-science and training notebooks (EN/FR/ZH),
+  PoC proposal, neuro-symbolic engine proposal, reproduction protocols and `02_Empirical_Observation`:
+  "censorship", "physically impossible", "intercepts/refutes" and LeanFlow/physlib-as-existing-tool claims
+  removed or relabelled; "67 fs" corrected to 6.7 ps; a DNS page that described a synthetic field and a
+  Gaussian filter as JHTDB queries and an ML-LES run now says what the script does. Two pre-existing notebook
+  corruptions fixed (a vertical-tab character, a broken string literal).
+- **Root, CI, code text.** README checked end to end (tree, commands, links, withdrawn labels);
+  `dataset/README.md` to v5.5.0; historical working documents carry a status header. CI workflow now runs
+  `pytest` and (on manual dispatch) checks the nine verified Lean files inside OpenAI's project. Legacy
+  `zenodo_upload.py` (would have published the withdrawn framing) now refuses to run. Docstrings and labels in
+  scripts/tests updated without behaviour changes.
+- **Checks.** pytest 124/124; benchmark comparison 54/54; paper 0 errors / 0 undefined references; all
+  notebooks validate; verified Lean files untouched.
+- **Known and left as is.** GitHub Actions runs have been ending in `startup_failure` with zero jobs, which
+  points at a repository/account setting rather than the workflow file. `openai_lean_audit_certificate.json`
+  is signed and still carries old wording (its generator is fixed). `verify-physical-vacuity.sh` is kept
+  unchanged because `zenodo_retriever.py` pins its checksum; the docs label it an older runner.
+
 ## v5.5.0 — 2026-09-17 — A regime map of blow-up scenarios; a thermodynamic Mach lock; the Leray-α anchor claim withdrawn
 
 ### Rereading Tao (2016) and a human-written forced Euler blow-up

@@ -1,6 +1,7 @@
 # The dual-scale lock: a programme
 
-**Date:** 2026-09-16 · **Status:** proposal · **Builds on:** `LERAY_ALPHA_DUAL_SCALE_LOCK.md`,
+**Date:** 2026-09-16 · **Status:** proposal, since tested — current status in §8 (v5.4) and §9 (v5.5.0); read those
+first: two of the predictions below failed and the Lock A conjecture has been answered in the negative · **Builds on:** `LERAY_ALPHA_DUAL_SCALE_LOCK.md`,
 `experiments/RESULTS.md`, paper §5, §9, §10.5
 
 ## 0. What "protect Navier–Stokes from blow-up in real physics" can mean
@@ -114,6 +115,12 @@ model, and says so.
 *What.* Finite `c_s`; pressure cannot respond instantaneously; incompressible NSE is the `Ma → 0`
 singular limit of the compressible system.
 *Status.* Derived (Klainerman–Majda).
+> **Tested (v5.5.0, `THERMO_COMPRESSIBLE_LOCK_STUDY.md`).** The prediction below failed on the diffusive route:
+> a forced Re ≈ 1 core is *not* arrested by compressibility before `ℓ*` (it lags 14% with a real-gas
+> viscosity law), and the quasi-steady arrest estimate Ma = 0.36 was wrong — the collapse outruns its own
+> density hole. On the inertial route (Re ≳ 16) compressibility plus the energy equation gives a **Mach
+> lock at 0.70** (not a velocity or size bound). Which lock engages first is route-dependent: `Kn = Ma/Re`.
+
 *Predicts.* A collapsing incompressible core is arrested when its velocity approaches `c_s`, at
 `ℓ*`. Beyond that, compressible dynamics (possibly shocks) — a different singularity type that
 viscosity regularizes into finite-width structures.
@@ -132,6 +139,12 @@ equation gives `ΔT = u²/c_p` (Eckert ~ 1); restoring the equation of state giv
 `ρu² ≈ p_∞ − p_v`.
 *Status.* Derived from the energy equation and the equation of state. In liquids this is the
 *first* lock to engage — nanoseconds before compressibility (paper §5.5).
+> **Update (v5.5.0).** With the exact Lamb–Oseen pressure coefficient (1.70 ρu², not ½ρu²) cavitation is
+> reached at `u ≈ 7.6 m/s` (≈ 130 nm, ≈ 17 ns before blow-up); the ½ρu² figure below brackets it. In a gas
+> the energy equation turned out to act on the collapse only through `μ(T)`; with it, air locks at local
+> Mach 0.70 on the inertial route. The measured heating coefficient against `u²/c_p` is 0.35 at Ma ≈ 0.4,
+> rising to ≈ 1 near Ma ≈ 1. The cavitating-liquid simulation is still open.
+
 *Predicts.* In water, phase change at `u ≈ 14 m/s` (cavitation) or, under tension, at
 `Ma ≈ 0.37` (boiling).
 *Test.* Barotropic-with-cavitation or two-phase model driven by the forced core.
@@ -172,6 +185,14 @@ stronger than any statement about the approach to `t = 1`.
 > hydrodynamic mode. Lock K's role is therefore "the regime in which the gradient-based locks
 > (barrier, gate) stop being defined", not "the strongest drain". Of the six locks, it remains the
 > root; the barrier is now known not to model it.
+>
+> **Answered (v5.5.0) — the conjecture below fails at linear order.** Every α-model changes only the
+> quadratic term, so `α` does not appear in its linearization at rest (`LerayAlphaLinearization.lean`):
+> small disturbances relax at `νk²` for every `α`, whereas the gas relaxes at `νk²[1 − (kλ)² + …] ≤ 1/τ`
+> and not at all beyond `kλ = √(π/2)`. No choice of `α` makes LANS-α the description of a gas near
+> `Kn ~ 1`; the α-model is a closure, not a derived intermediate. The DSMC three-way comparison proposed
+> below is no longer needed to settle this question. The reading "α = ℓ* makes Leray-α a sound
+> representation of the continuum limit" is withdrawn (paper §9.5).
 
 *What.* `ū = (1 − α²Δ)⁻¹u` (Leray-α) or the Lagrangian-averaged variant (LANS-α, Holm–Marsden–Ratiu
 1998). Global 3D well-posedness is a theorem for both.
@@ -221,6 +242,11 @@ is tractable; the theorem itself is not.
 > conjecture in §3 holds — and Lock G is the geometric property that makes the whole thing bite on
 > the construction specifically.
 
+> **Status (v5.5.0).** Falsifier (b) is settled at linear order in the negative (Lock A note, §3), and the
+> "one lock at `ℓ*`" picture holds on the diffusive route only: on the inertial route compressibility
+> engages first at `Re·ℓ*`, on the bounded-velocity route viscosity at `ℓ*/Ma` (`BlowupRegimeMap.lean`).
+> The unifying claim is therefore withdrawn in its general form; what survives is `Kn = Ma/Re`.
+
 Falsifiers: (a) DSMC departs from NSE at a scale unrelated to `ℓ*`; (b) LANS-α at `α = ℓ*` fails to
 track DSMC where NSE fails; (c) the vorticity-direction coherence of the construction survives Lock-F
 noise to scales below `ℓ*`. Any one of these breaks the unification. None of them is known.
@@ -233,6 +259,15 @@ noise to scales below `ℓ*`. Any one of these breaks the unification. None of t
 > honest null: a plane-wave packet on Taylor–Green is not amplified (`σ < 0`), so Lock F is now
 > formally blocked on Direction 1. Three of six locks wait on the same object — the forced-core
 > test bed is the next step, and it is over-determined.
+
+> **Status of the plan (v5.5.0).** Done: 1, 2, 3 (null), 4, 6 (32³/96³ forced core; axial stage 2), 7, 10
+> (unconditional, `OpenAIAdmissibility.lean`), plus a nonlinear discrete-velocity BGK solver (null for
+> arrest) and a 1D compressible Navier–Stokes–Fourier forced core (Mach lock on the inertial route).
+> Item 5 was replaced by the 1D compressible study; 8 (DSMC) is no longer needed for Lock A, but a
+> **thermal** kinetic test (BGK with temperature, or DSMC) is the next experiment for Locks C/T.
+> Open: thermal kinetic test; energy budget of the locked core; cavitating liquid core; 3D stability
+> of the hot evacuated core; 9 (Constantin–Fefferman direction criterion, Lock G, not started);
+> a converged barrier arrest (96³ stalled but not converged).
 
 **This week (existing code).**
 1. LANS-α alongside Leray-α in `spectral3d.py` (different nonlinearity; ~hours). Repeat the
@@ -258,6 +293,10 @@ noise to scales below `ℓ*`. Any one of these breaks the unification. None of t
 * "The singularity is mathematically impossible" — true in Leray-α, and irrelevant to Q-math.
 * "`α = ℓ*` makes the model a sound representation of the continuum limit." It makes it a
   *falsifiable closure* pending Lock K. Sound representations at `ℓ*` are kinetic.
+  **(v5.5.0: stronger — withdrawn outright; `α` is absent from the linear dynamics, so it cannot be
+  calibrated to `ℓ*` at all.)**
+* "Something physical stops the collapse at `ℓ*`." Not shown on OpenAI's route; the description ends
+  there (v5.4–v5.5).
 * "T-duality." The duality here is `Kn`, and it needs no string.
 
 ## 7. What is new in this proposal
@@ -268,6 +307,10 @@ structure from speculation into the Chapman–Enskog hierarchy. Second, the conj
 with `α ≈ ℓ*` is the Lagrangian average over kinetic fluctuations — which, if true, turns the
 α-model from a chosen closure into a derived intermediate, and if false, settles that the
 dual-scale lock is a modelling convenience. Either outcome is worth the DSMC run that decides it.
+
+> **Outcome (v5.5.0).** The first stands. The second is false, and was decided without DSMC: the filter width
+> is absent from the linearized α-model dynamics (§3, Lock A note). The dual-scale lock is, as a
+> regularization, a modelling convenience; as physics, it is the ratio `Kn = Ma/Re`.
 
 ## 8. Status update (2026-09-17): the chain after the nonlinear kinetic test
 

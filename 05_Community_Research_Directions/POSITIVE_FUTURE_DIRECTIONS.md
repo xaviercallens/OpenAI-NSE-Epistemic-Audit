@@ -2,6 +2,16 @@
 
 *MechanicaFluidorum Program · SocrateAI Lab · September 2026*
 
+> **Current-status note (2026-09-17, v5.5.0).** Two items below have moved on. (i) Item 4 has been done, in a
+> different and weaker form than stated: `03_Lean4_Topological_Censorship/src/OpenAIAdmissibility.lean` proves on
+> OpenAI's own `CandidateProperties`, with no remaining hypothesis, that every candidate exceeds every
+> velocity-gradient bound arbitrarily close to the singular time. The step it needed turned out to be an
+> elementary periodic-cell lemma (built on OpenAI's own `PeriodicIntegration` library), not Beale–Kato–Majda.
+> (ii) Item 2's "physically admissible flow fields" should be read as *labelling* results as statements about a
+> model or about a fluid, not as filtering correct proofs; no `physlib` integration was built in this project.
+> The descriptions of what OpenAI's library contains (Sobolev embeddings with explicit constants, Gevrey
+> estimates) are summaries to be checked against their repository before being relied on.
+
 ---
 
 ## 🌟 Overview: Celebrating a Breakthrough in Formal Mathematics
@@ -60,7 +70,8 @@ Machine learning models like Fourier Neural Operators (FNOs) and Physics-Informe
 ### 4. Formalizing the Known Regularity Criteria about OpenAI's Objects
 Instead of searching for abstract blow-ups, researchers can use OpenAI's Lean 4 machinery to formally prove, about OpenAI's own `CandidateProperties`:
 $$\text{If } \sup_{t<T} \|\omega(t)\|_{L^\infty} \le c^2/\nu \ (\text{equivalently } Ma, Kn \lesssim 1 \text{ everywhere}), \quad \text{then } u \text{ is smooth on } [0,T].$$
-- **Status**: this is the Beale–Kato–Majda theorem (and its $\dot H^1$ cousin, Leray's criterion), not a new axiom — so the deliverable is a known theorem stated about the real objects, which is useful to the whole community. It says that a solution which stays within the model's validity range cannot blow up; it does *not* settle Statement A, which remains open.
+- **Update (v5.4.0)**: done on OpenAI's objects in the weaker, velocity-to-gradient form — see the note at the top.
+- **Status (as originally written)**: this is the Beale–Kato–Majda theorem (and its $\dot H^1$ cousin, Leray's criterion), not a new axiom — so the deliverable is a known theorem stated about the real objects, which is useful to the whole community. It says that a solution which stays within the model's validity range cannot blow up; it does *not* settle Statement A, which remains open.
 
 ---
 

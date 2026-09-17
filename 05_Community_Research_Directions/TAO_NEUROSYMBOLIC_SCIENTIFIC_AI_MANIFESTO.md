@@ -4,6 +4,25 @@
 
 *MechanicaFluidorum Program · Non-Profit Citizen Science Initiative for Neuro-Symbolic Science · September 2026*
 
+> **Current-status note (2026-09-17, v5.5.0) — read with the text below.** This manifesto was written early
+> in the project, and three of its phrases no longer match what the project found or built.
+> 1. *"Loopholes that bypass physical reality."* OpenAI's proofs are correct answers to the questions the
+>    Clay problem poses about a mathematical model; they are not loopholes. What this project adds is a
+>    physical reading (paper §5, §9), not a correction.
+> 2. *"Prevents unphysical shortcuts (Thermodynamic Censorship)"* and *"automatically discard candidate
+>    proofs."* The "censorship" framing is withdrawn (see `../CHANGELOG.md`). A physical-validity layer should
+>    **label** a result as a theorem about a model versus a statement about a fluid; it should not reject a
+>    correct proof. No `physlib` world model was built here: the `physlib`-based Lean drafts contain a custom
+>    axiom and a `True` placeholder and are not verified results. What is verified is
+>    `OpenAIAdmissibility.lean` (every candidate leaves the admissibility bound near the singular time) and
+>    `BlowupRegimeMap.lean` (which physical assumption a blow-up scenario violates first, by `Kn = Ma/Re`).
+> 3. The fixed thresholds below (`Ma ≤ 0.3`, `Kn ≤ 0.1`) are engineering conventions, not bounds a theorem
+>    prover can enforce; which one matters first depends on the route to the singularity (paper §9.4).
+>
+> Terence Tao's own 2016 averaged-Navier–Stokes paper is the better guide here: it shows what harmonic
+> analysis and the energy identity cannot exclude, and asks whether a blow-up mechanism could be built from
+> real, noisy fluid — a physical question, which is how this project now frames its work.
+
 ---
 
 ## 🌟 1. Introduction: From Unconstrained Optimization to Grounded Discovery

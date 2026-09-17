@@ -21,7 +21,7 @@
 
 \title{\textbf{The OpenAI Navier--Stokes and Euler Blow-Up Proofs:\\ A Physical Reading, Not a Physical Refutation}}
 \author{The MechanicaFluidorum Program \\ \textit{SocrateAI Lab}}
-\date{September 2026}
+\date{September 2026 \\ \small Version 5.5.1}
 
 \begin{document}
 
@@ -47,7 +47,7 @@ viscous heating then become order-one effects at a single length $\ell_*=\nu/c_s
 water, $45$\,nm in air), reached a few picoseconds (water) or nanoseconds (air) before the
 mathematical singularity: the three validity limits are one limit, and it can be written as a local
 vorticity bound $|\omega|\lesssim c_s^2/\nu$. For liquids at ambient pressure a fourth limit,
-cavitation, is reached three decades earlier, when the core is still $\sim70$\,nm wide. We also show
+cavitation, is reached three decades earlier, when the core is still $70$--$130$\,nm wide. We also show
 that (i) intensive local energy density and enstrophy diverge ($\sim\tau^{-1.010}$,
 $\sim\tau^{-0.515}$) while the Prize's global $L^2$ bound is respected; (ii) the apparent $10^{28}$
 condition number of the proof's moment-matching system is a non-dimensionalization artifact
@@ -64,7 +64,7 @@ arrest scale instead obeys inertial-range scaling, and the hypothesis cannot be 
 reproducing the construction's own forcing. We then supply that forcing. On a manufactured
 $\mathrm{Re}\approx1$ collapse the barrier's engagement reduces to a function of a single
 variable, while transport-filtering regularizations of the Leray-$\alpha$ and LANS-$\alpha$ type
-are the weaker lock by one to two orders of magnitude, because on such a collapse they can act only
+are weaker by one to two orders of magnitude, because on such a collapse they can act only
 through a nonlinearity that is a few percent of the dynamics. Nor is the missing lock a stronger
 drain: the exact shear-mode spectrum of the BGK kinetic model damps small scales \emph{less} than
 viscosity, caps the relaxation rate at the collision frequency, and ends the hydrodynamic mode at
@@ -125,10 +125,15 @@ Since the Lean~4 kernel forecloses algebraic error, this paper's contribution is
 that sense. It is instead a quantitative account of how far OpenAI's specific constructed solution
 travels from the physical regime the Navier--Stokes model is normally used to describe, built from
 scaling analysis, the dimensional structure of the proof's own lemmas, and constitutive physics
-(\S\S\ref{sec:syntax}--\ref{sec:numerics}). An outlook (\S\ref{sec:outlook}) then proposes research
-directions, an architecture for grounding AI proof search in physical admissibility, and one
-testable hypothesis on cutoff regularizations. A note on how this version differs from earlier
-public versions is given in Appendix~\ref{app:versions}.
+(\S\S\ref{sec:syntax}--\ref{sec:numerics}). Section~\ref{sec:cutoff-tested} then tests what, if
+anything, stops such a collapse: a cutoff regularization and its premise, a manufactured
+$\mathrm{Re}\approx1$ forced core, transport filters against dissipation, kinetic theory (linear and
+nonlinear), and compressibility and heat; it closes with a regime map that places this construction,
+Tao's averaged-equation blow-up and a forced Euler blow-up on one diagram, and with the withdrawal of
+our earlier identification of a Leray-$\alpha$ filter width with the continuum limit. An outlook
+(\S\ref{sec:outlook}) sets out research directions and an architecture for grounding AI proof search
+in physical admissibility, including Lean~4 statements proved on OpenAI's own definitions. A note on
+how this version differs from earlier public versions is given in Appendix~\ref{app:versions}.
 
 % ====================================================================
 \section{The Syntactic Health: Lean~4 Purity and Gevrey Cutoffs}
@@ -307,7 +312,8 @@ community discussion of an early version of this audit (\S\ref{sec:outlook}), wh
 correctly noted that the thermal argument is an estimate built on top of the incompressible model
 from outside, not a consequence derivable within it --- we agree, and flag deriving it properly
 (coupling an actual energy/temperature equation, or a cavitation/phase-change model) as an open
-direction in \S\ref{sec:outlook}.
+direction in \S\ref{sec:outlook}. A first step, a compressible Navier--Stokes--Fourier version of a
+forced collapsing core, is reported in \S\ref{sec:compressible}.
 
 The contrast with turbulence is worth stating without a figure. In physical turbulence the
 Kolmogorov cascade~\cite{Kolmogorov1941} ends at the microscale $\eta=(\nu^3/\varepsilon)^{1/4}$,
@@ -378,7 +384,9 @@ Equation~\eqref{eq:lstar} is the one-line physical content of this audit. In wat
 $\ell_*\approx0.67$\,nm (about two molecular diameters) and $t_*\approx0.44$\,ps; in air,
 $\ell_*\approx45$\,nm (essentially the mean free path) and $t_*\approx0.13$\,ns. The statement is
 generic: it uses only $\mathrm{Re}_r=O(1)$, i.e.\ Leray-type self-similar scaling, and would apply to
-any Navier--Stokes singularity of this type, not only to OpenAI's construction.
+any Navier--Stokes singularity of this type, not only to OpenAI's construction. It does not apply to
+blow-up in general: scenarios in which the local Reynolds number grows or the velocity stays bounded
+meet other physics first (\S\ref{sec:regime-map}).
 Table~\ref{tab:limits} evaluates the conventional thresholds ($\mathrm{Ma}=0.3$, where density
 variations $\Delta\rho/\rho\approx\mathrm{Ma}^2/2$ reach a few percent~\cite{LandauLifshitz1987,Batchelor1967};
 $\mathrm{Kn}=0.1$, beyond which slip and non-continuum effects appear) for three fluids.
@@ -475,7 +483,9 @@ past the point where the model has ended, and the $\tau^{-1.010}$ law of Table~\
 must not be extrapolated there. Two caveats: the estimate assumes the heat stays in the core over
 the collapse time, which holds when the thermal diffusion length $\sqrt{\alpha t}=\mathrm{Pr}^{-1/2}\ell_r$
 does not exceed $\ell_r$ --- true for water ($\mathrm{Pr}\approx7$), marginal for air
-($\mathrm{Pr}\approx0.7$), where $\Delta T$ is an upper estimate; and the model's own energy balance
+($\mathrm{Pr}\approx0.7$), where $\Delta T$ is an upper estimate (a compressible simulation with an
+energy equation finds a coefficient of $0.35$ at $\mathrm{Ma}\approx0.4$, rising to about one near
+$\mathrm{Ma}\approx1$; \S\ref{sec:compressible}); and the model's own energy balance
 is exact and its dissipation is positive, so \emph{no thermodynamic law is violated} --- what fails
 is the constitutive assumption of a decoupled, constant temperature.
 
@@ -527,7 +537,9 @@ $\int_0^T\|\omega(t)\|_{L^\infty}\,dt<\infty$ is smooth on $[0,T]$; a solution t
 Eq.~\eqref{eq:admissible} on $[0,T)$ therefore does not blow up at $T$, and any blow-up must first
 leave the admissible set --- in this construction at $\ell_*$, or in a liquid at the cavitation
 scale. The condition says nothing about whether real flows approach the bound; it says where the
-model must be replaced by another.
+model must be replaced by another. In local variables it reads $\mathrm{Ma}^2\le\mathrm{Re}$
+(\S\ref{sec:regime-map}), and that OpenAI's candidate objects necessarily violate it near $t=1$ is
+proved in Lean on their own definitions (Direction~2, \S\ref{sec:directions}).
 
 \subsection{What laboratory vortices do instead}
 
@@ -568,9 +580,8 @@ without already knowing the singular solution it is meant to produce. The paper 
 about this itself: ``An exponentially small external force seeds each pulse; the background shear
 supplies its subsequent growth.'' The force \emph{seeds} --- it does not \emph{drive}.
 
-It is, in that sense, the mathematical equivalent of shooting an arrow into a wall and painting a
-bullseye around it: a legitimate demonstration that the wall \emph{can} be hit, not a claim about
-where arrows normally land.
+It is, in that sense, a demonstration that the singular endpoint \emph{can} be reached by a smooth
+force, not a claim about which forces occur in nature or where flows normally go.
 
 % ====================================================================
 \section{The Unforced Euler Singularity: Coherent Structure Below Any Physical Cutoff}
@@ -632,7 +643,7 @@ properties of that solution, not defects in the proof.
   A 2D similarity profile with swirl; it need not represent generic three-dimensional turbulence. \\
 4. No dissipative floor &
   Corrections summed with shrinking cutoffs down to $\ell_r\to0$ &
-  There is no Kolmogorov scale $\eta$; a physical cutoff enforcing Eq.~\eqref{eq:admissible} would prevent blow-up by Beale--Kato--Majda. \\
+  There is no Kolmogorov scale $\eta$. A solution that stayed within Eq.~\eqref{eq:admissible} could not blow up (Beale--Kato--Majda); whether any physical mechanism enforces the bound is a separate question, tested in \S\ref{sec:cutoff-tested}. \\
 5. Engineered lifetime &
   \texttt{SmoothCutoffs.lean} time switch &
   Forcing is compactly supported in time; the lifespan $T^*=1$ is a choice, not a feature of the equations. \\
@@ -645,19 +656,20 @@ properties of that solution, not defects in the proof.
 \subsection{What this paper does not contain, and why}
 
 No numerical realization of the 166-page OpenAI construction exists, in this project or, to our
-knowledge, elsewhere; the scripts distributed with this repository are exponent, unit and
-consistency checks on the scaling laws above, and are labelled as such --- not simulations of the
-construction itself. Two figures that appeared in earlier public drafts of this audit are
+knowledge, elsewhere. The scripts behind \S\S\ref{sec:thermo}--\ref{sec:euler} are exponent, unit and
+consistency checks on the scaling laws above, and the simulations of \S\ref{sec:cutoff-tested} are
+of a surrogate --- a manufactured Gaussian core with the construction's diffusive scaling --- and are
+labelled as such; none is a simulation of the construction itself. Two figures that appeared in earlier public drafts of this audit are
 deliberately absent here: a Taylor--Green-vortex comparison whose resolution and normalization were
 not documented to a reproducible standard, and a spectrum plot contrasting real turbulence data with
 a hand-drawn schematic of an ``OpenAI pre-singularity spectrum'' rather than a computed one. Neither
 met the standard we hold the rest of this paper to, so neither is reproduced. Appendix~\ref{app:versions}
 records this and the other differences from earlier versions in one place. What a genuine numerical
-companion should contain instead is listed in \S\ref{sec:outlook}: the cutoff law, the codimension
-count and the fluctuating-hydrodynamics questions.
+companion should contain beyond \S\ref{sec:cutoff-tested} is listed in \S\ref{sec:directions}: the
+construction's own profile, the codimension count and the fluctuating-hydrodynamics questions.
 
 % ====================================================================
-\section{Testing the Cutoff Regularization Hypothesis}
+\section{Testing the Cutoff Hypothesis: What Acts Where the Model Ends}
 \label{sec:cutoff-tested}
 
 We implemented a three-dimensional pseudo-spectral Navier--Stokes solver (rotational form, FFT
@@ -715,7 +727,7 @@ inertial range governs, while at $\sqrt{\alpha'}\sim\eta$ the barrier acts where
 does and $\alpha'$ stops being an independent parameter. The window in which a cutoff
 regularization could say anything new about a physical fluid is correspondingly narrow.
 
-\paragraph{A distinct lock: Leray-$\alpha$ gates transfer rather than draining energy.}
+\paragraph{A distinct regularization: Leray-$\alpha$ gates transfer rather than draining energy.}
 The regularization tested above modifies \emph{dissipation},
 $\nu|k|^2\mapsto\nu|k|^2\max(1,\alpha'|k|^2)$. The Leray-$\alpha$ model~\cite{FHT2001,CHOT2005}
 modifies \emph{transport} instead,
@@ -730,7 +742,7 @@ the negative result above concerns the first. It transfers to the second only in
 part: arrest at the filter scale for a $\mathrm{Re}\approx1$ core still gives $t_c\sim\alpha^2/\nu$
 and $u_{\max}\sim\nu/\alpha$, and generic data still does not supply that core.
 
-What does not transfer is the mechanism, and here the two locks differ in kind. The Leray-$\alpha$
+What does not transfer is the mechanism, and here the two regularizations differ in kind. The Leray-$\alpha$
 nonlinearity does no work on $u$: since $\bar u$ is solenoidal,
 $\int u\cdot(\bar u\cdot\nabla)u\,dx=-\int(\nabla\cdot\bar u)\,|u|^2/2\,dx=0$, so the inviscid
 system conserves $\tfrac12\int|u|^2$ exactly (to a drift of $3\times10^{-16}$ over two hundred steps
@@ -741,9 +753,11 @@ factor of $3.3$ between $\alpha=0$ and $\alpha=0.4$, while the fraction of energ
 more than plain Navier--Stokes. Hyperviscosity destroys energy that reaches small scales;
 Leray-$\alpha$ prevents it from arriving. One is a drain and the other a gate. Neither result bears
 on the regularity of the Navier--Stokes equations themselves --- a theorem about a modified equation
-does not constrain the unmodified one. Which of the two is the relevant lock turns out to depend on
-the Reynolds number of what is being locked, and \S\ref{sec:gate-drain} measures that dependence on
-the collapse the cutoff law is actually about.
+does not constrain the unmodified one. Which of the two acts more strongly turns out to depend on
+the Reynolds number of the flow they act on, and \S\ref{sec:gate-drain} measures that dependence on
+the collapse the cutoff law is actually about; whether either represents what a real fluid does at
+$\ell_*$ is a different question, answered in the negative in \S\ref{sec:gate-drain} and
+\S\ref{sec:leray-claim}.
 
 \subsection{Supplying the premise: a forced collapsing core}
 \label{sec:forced-core}
@@ -838,9 +852,10 @@ Proposition~\ref{prop:scales} places a core with $\mathrm{Re}_r=O(1)$ at $\ell_*
 means $\alpha/\ell\to1$ --- precisely the regime in which a transport filter has two orders of
 magnitude less leverage than dissipation. We had conjectured that LANS-$\alpha$ with
 $\alpha\approx\ell_*$, being a Lagrangian average, might be \emph{derived} rather than posited as the
-lock at the continuum limit. This measurement relocates that conjecture rather than refuting it: a
-transport filter is the stronger lock for transfer-driven dynamics at $\mathrm{Re}\gtrsim10$--$100$,
-the regime where the cutoff law's premise fails, and the weaker one on the collapse. (Both
+regularization at the continuum limit. This measurement first relocated that conjecture: a transport
+filter is the stronger regularization for transfer-driven dynamics at $\mathrm{Re}\gtrsim10$--$100$,
+the regime where the cutoff law's premise fails, and the weaker one on the collapse. The
+identification of the filter width with $\ell_*$ is withdrawn altogether in \S\ref{sec:leray-claim}. (Both
 regularizations are models; the comparison ranks them against each other, and says nothing yet
 about which, if either, resembles what a real fluid does at $\ell_*$. That question is taken up
 below, and the answer is neither.) It is consistent
@@ -908,13 +923,14 @@ it contains no thermodynamic limit by construction. This is consistent with the 
 than in tension with it: a model whose damping is capped at $1/\tau$ offers a body force no
 additional resistance to overcome.
 
-So the lock at $\ell_*$ is neither of the two regularizations tested above. It is not a stronger
-drain, and not a gate on transfer. It is the end of the hydrodynamic description: the velocity
-gradient on which Navier--Stokes, the barrier and the $\alpha$-models all act stops having
-autonomous dynamics at a scale fixed by the mean free path. That returns this paper to the reading
-of \S\ref{sec:mach}, now with a mechanism rather than only a scale. A phenomenological Mach cap
-applied to a dyadic cascade makes a complementary point: in a cascade it engages at the
-\emph{largest} scale, while on the diffusive collapse it engages at exactly $\ell_*$.
+So what acts at $\ell_*$ on this route is neither of the two regularizations tested above. It is not
+a stronger drain, and not a gate on transfer. It is the end of the hydrodynamic description: the
+velocity gradient on which Navier--Stokes, the barrier and the $\alpha$-models all act stops having
+autonomous dynamics at a scale fixed by the mean free path --- a termination, not an arrest. That
+returns this paper to the reading of \S\ref{sec:mach}, now with a mechanism rather than only a scale.
+A phenomenological Mach cap applied to a dyadic cascade makes a complementary point, and anticipates
+\S\ref{sec:regime-map}: in a cascade it engages at the \emph{largest} scale, while on the diffusive
+collapse it engages at exactly $\ell_*$.
 
 \subsection{Compressibility and thermodynamics on the forced core}
 \label{sec:compressible}
@@ -1113,7 +1129,8 @@ abstract mathematical continuum $\mathbb{R}^3$ without describing anything a rea
 does: (1) intensive local energy density and enstrophy diverge ($\sim\tau^{-1.010}$,
 $\sim\tau^{-0.515}$) while the global energy vanishes; (2) compressibility, rarefaction and viscous
 heating all become order-one at a single scale $\ell_*=\nu/c_s$ --- a few picoseconds before blow-up
-in water, nanoseconds in air, essentially independently of the initial vortex size --- and in a
+in water, nanoseconds in air, essentially independently of the initial vortex size, a coincidence
+that belongs to the diffusive route this construction takes (\S\ref{sec:regime-map}) --- and in a
 liquid cavitation intervenes three decades earlier still; (3) the moment-matching system's apparent
 ill-conditioning is a non-dimensionalization artifact, not physical fragility; (4) the force is
 backward-specified and has no independent physical origin; and (5) the Euler datum needs coherent
@@ -1132,7 +1149,10 @@ a mark against their mathematical content. Three implications follow:
         diameters in water --- and, in a liquid, to sustain tensions of order $10^2$\,MPa for
         picoseconds. It is not an observable. What \emph{is} observable is the question of how a
         real fluid leaves the model: cavitation, compressibility, rarefaction and heating, in an
-        order that Proposition~\ref{prop:scales} makes explicit.
+        order that Proposition~\ref{prop:scales} makes explicit. None of the mechanisms we could
+        test --- kinetic relaxation, compressibility, viscous heating --- stops a driven
+        $\mathrm{Re}\approx1$ core before $\ell_*$ (\S\ref{sec:cutoff-tested}); what a real fluid
+        presents instead depends on the route to the singularity.
   \item \textbf{For AI-assisted mathematics}: A kernel-checked proof of a physically motivated
         equation is not automatically a physical result, and the gap between the two is worth
         making explicit --- and, where possible, checkable --- as part of the proof pipeline
@@ -1147,8 +1167,10 @@ the very core structure that generic data does not produce. The asymmetry is wor
 easier to identify where a model fails than to establish that a proposed repair does anything, and
 the standard of evidence we applied to OpenAI's construction is the one we then had to apply to our
 own suggestion. That the suggestion survived only as a conditional statement, with its premise
-promoted from an implicit assumption to the object actually under test, seems to us the useful
-outcome rather than a disappointing one.
+promoted from an implicit assumption to the object actually under test --- and that its most
+ambitious form, a Leray-$\alpha$ filter of width $\ell_*$ as a representation of the fluid at its
+continuum limit, did not survive at all (\S\ref{sec:leray-claim}) --- seems to us the useful outcome
+rather than a disappointing one.
 
 % ====================================================================
 \section{Outlook: Repositioning, Community Directions, and Physically-Grounded AI}
@@ -1206,7 +1228,8 @@ the same discussion:
         not a derived consequence. A genuine energy/temperature-coupled extension, or a
         cavitation/boiling model, is needed before the thermal argument can be sharpened past an
         order-of-magnitude check. This direction is developed in \texttt{WorkStream2\_ThermalEquation}
-        and \texttt{WorkStream4\_MechanicalCavitation}.
+        and \texttt{WorkStream4\_MechanicalCavitation}; a first quantitative step, a forced core in a
+        compressible fluid with an energy equation, is reported in \S\ref{sec:compressible}.
   \item \textbf{Teaching proof-search AI systems basic thermodynamics.} The most actionable
         suggestion distilled from the discussion was, in essence, to teach AI proof assistants
         basic thermodynamics so they catch these edge cases. That suggestion directly motivates
@@ -1214,7 +1237,8 @@ the same discussion:
 \end{enumerate}
 Full attribution for each of these points is given in Appendix~\ref{app:reddit}.
 
-None of these four directions is resolved by this paper; we record them as open invitations,
+None of these four directions is resolved by this paper (the third has a first step, the fourth a
+partial implementation, below); we record them as open invitations,
 consistent with the standing call for contributions in
 \texttt{05\_Community\_Research\_Directions/README.md}.
 
@@ -1239,7 +1263,8 @@ realistically buildable rather than what is aspirational:
         as a mathematical theorem). For incompressible Navier--Stokes the list is short and
         dimensionally derived (\S\ref{sec:admissibility}): the local vorticity bound
         $|\omega|\lesssim c_s^2/\nu$ of Eq.~\eqref{eq:admissible}, which encodes
-        $\mathrm{Ma}\lesssim1$ and $\mathrm{Kn}\lesssim1$ at once; for liquids, a core pressure
+        $\mathrm{Ma}\lesssim1$ and $\mathrm{Kn}\lesssim1$ at once (equivalently
+        $\mathrm{Ma}^2\le\mathrm{Re}$, \S\ref{sec:regime-map}); for liquids, a core pressure
         deficit $\rho u^2$ below the tensile strength; and, where an energy equation is present,
         an Eckert number $u^2/(c_p\Delta T)$ that stays small. Each predicate is a scaling
         estimate with $O(1)$ prefactors, and should be reported as such.
@@ -1248,7 +1273,7 @@ realistically buildable rather than what is aspirational:
 A rational-arithmetic reflection bridge (\texttt{openai\_poc\_pi\_verifier.py}) already implements a
 narrow version of pillar 3's Mach/Knudsen checks in Lean, using exact rational arithmetic evaluated
 via \texttt{\#eval}; it is a reasonable starting point for the broader gate above, though it does
-not yet reach into the OpenAI proof objects themselves.
+not reach into the OpenAI proof objects themselves --- the Lean statement of Direction~2 does.
 
 The same gate is also useful outside theorem proving, and we have implemented it as a runtime
 monitor in the solver of \S\ref{sec:cutoff-tested}: each step, the flow is checked against
@@ -1264,29 +1289,28 @@ regime seems to us more useful than one that regularizes the departure away.
 
 We want to be explicit about the current state of this project's own attempt at pillar 3. Nine
 Lean files in this repository compile with no \texttt{sorry} and no axioms beyond the standard
-three, together $74$ declarations checked with \texttt{\#print axioms} (earlier versions quoted a
-count of $45$ theorems under a different counting convention). Two were added in version~5.5.0 and are described in \S\ref{sec:regime-map} and
-\S\ref{sec:leray-claim}: the regime map of blow-up scenarios, and the absence of the Leray-$\alpha$
-filter width from the linearization. Two were new in version~5.4.0: the
-H-theorem, conservation and positivity of the nonlinear discrete-velocity BGK step used in
+three, together $74$ declarations checked with \texttt{\#print axioms}. One states results about
+OpenAI's \emph{actual} objects: it imports their \texttt{ProblemStatement} and periodic-integration
+library unchanged, is described under Direction~2 of \S\ref{sec:directions}, and assumes nothing
+beyond their definitions. Four support the physical reading: the scaling chain of
+Proposition~\ref{prop:scales} as an equality chain from the diffusive core scalings (core Reynolds
+number one, the Mach and Knudsen times, Eckert number one, and their coincidence at $\ell_*$); the
+regime map of blow-up scenarios of \S\ref{sec:regime-map}; and two statements about the kinetic model
+--- the H-theorem, conservation and positivity of the discrete-velocity BGK step used in
 \S\ref{sec:gate-drain}, and the exact cap $-1/\tau\le\operatorname{Re}\mu\le0$ on the eigenvalues of a
-skew streaming operator plus projected relaxation. Four of the others are free-standing: the scaling chain of
-Proposition~\ref{prop:scales} as an equality chain from the diffusive core scalings (core
-Reynolds number one, the Mach and Knudsen times, Eckert number one, and their coincidence at
-$\ell_*$); the bounds on the Leray-$\alpha$ filter symbol; an H-theorem for the discrete BGK
-collision step; and the finite-dimensional identity behind the gate--drain distinction of
-\S\ref{sec:gate-drain}, that a projected skew-adjoint term changes the energy only at second order in
-the step while a dissipative one removes it at first order. The fifth is the first to state results
-about OpenAI's \emph{actual} objects: it imports their \texttt{ProblemStatement} and periodic
-integration library unchanged and is described under Direction~2 of \S\ref{sec:directions}; as of this
-version it assumes nothing beyond their definitions. Each
-file's header states what it does not prove.
+skew streaming operator plus projected relaxation. Four concern the regularizations: the bounds on
+the Leray-$\alpha$ filter symbol; an H-theorem for a simpler discrete BGK collision step; the
+finite-dimensional identity behind the gate--drain distinction of \S\ref{sec:gate-drain}, that a
+projected skew-adjoint term changes the energy only at second order in the step while a dissipative
+one removes it at first order; and the absence of the filter width from the linearization of every
+$\alpha$-model, which is the formal reason given in \S\ref{sec:leray-claim}. Each file's header states
+what it does not prove.
 
-\subsection{A Hypothesis on Cutoff Regularizations: Testable Questions, Not a Metric}
+\subsection{The Dual-Scale Cutoff Hypothesis: History and Outcome}
 
-Finally, and separately from the buildable architecture above, we state one further-out idea
-explicitly as a \textbf{hypothesis for future investigation}. Earlier drafts of this project
-proposed a ``dual-scale'' effective wavenumber saturating at large $|k|$,
+Earlier versions of this paper stated one further-out idea, separately from the buildable
+architecture above, as a hypothesis for future investigation. We record its history and outcome here
+rather than as a live proposal. Earlier drafts of this project proposed a ``dual-scale'' effective wavenumber saturating at large $|k|$,
 \begin{equation}
   k_{\text{eff}}(k) = \min\left(|k|, \dfrac{1}{\alpha' |k|}\right)\quad(k\neq0),\qquad
   k_{\text{eff}}\le 1/\sqrt{\alpha'},
@@ -1303,9 +1327,14 @@ reviewed and its physical claim withdrawn (its central Lean theorem ended in a b
 and its vorticity equation lacked a term); it now carries a withdrawal notice in this repository,
 and the companion note~\cite{Callens2026v2} records the corrections.
 
-What survives is a hypothesis with a definite test, which earlier versions of this paper
-recorded as not yet performed. We have since performed it; \S\ref{sec:cutoff-tested} reports
-the outcome, and the research directions that follow from it are set out in
+What survived that review was a hypothesis with a definite test --- the cutoff law
+$u_{\max}\sim\nu/\sqrt{\alpha'}$ --- which earlier versions recorded as not yet performed. It has
+since been performed (\S\ref{sec:cutoff-tested}). The law is exact given a $\mathrm{Re}\approx1$ core
+and untestable without one; on a manufactured core a dissipative barrier stalls the collapse near
+$\sqrt{\alpha'}$ without a converged arrest; and the reading of the cutoff length as the scale at which
+a real fluid leaves the continuum is withdrawn (\S\ref{sec:leray-claim}). What remains of the
+dual-scale idea is the relation $\mathrm{Kn}=\mathrm{Ma}/\mathrm{Re}$ between the flow's scale and the
+molecular one (\S\ref{sec:regime-map}). The research directions that follow are set out in
 \S\ref{sec:directions}.
 
 \subsection{Three directions, in detail}
@@ -1314,7 +1343,7 @@ the outcome, and the research directions that follow from it are set out in
 The community suggestions of \S\ref{sec:outlook} are broad. The three directions below are the
 ones we think are both consequential and startable now, and we give each in enough detail to be
 acted on --- including the failure modes, since a direction stated without its failure modes is an
-advertisement rather than a plan. Three shorter items follow.
+advertisement rather than a plan. Four shorter items follow.
 
 \paragraph{Direction 1. A forced-core test bed for cutoff regularizations.}
 The first two stages of this direction are now built and reported in \S\ref{sec:forced-core} and
@@ -1329,7 +1358,9 @@ azimuthal stability of the forced column, which the axisymmetric targets used so
 and which could destroy the core for reasons unrelated to any regularization. Fourth, the
 construction's own profile with $h>0$ in place of the Gaussian surrogate. One of the failure modes
 this direction was designed to catch --- the forcing doing the work the dynamics should do --- is
-now measured rather than merely anticipated: the $B/F$ diagnostic is exactly that ratio.
+now measured rather than merely anticipated: the $B/F$ diagnostic is exactly that ratio. The same
+target has since been used to drive a kinetic gas and a compressible, heat-conducting one
+(\S\S\ref{sec:gate-drain}--\ref{sec:compressible}).
 
 \paragraph{Direction 2. Sharpening the admissibility condition.}
 The bound $|\omega|\lesssim c_s^2/\nu$ of \S\ref{sec:admissibility} is dimensionally forced but
@@ -1340,7 +1371,7 @@ than dissipative; and a bound on vorticity \emph{direction}. The middle term is 
 dual-scale intuition behind earlier drafts of this programme was placed, and
 \S\ref{sec:gate-drain} now limits its reach: a transfer bound is the effective constraint only at
 $\mathrm{Re}\gtrsim10$--$100$, and at $\ell_*$, where $\mathrm{Re}_r=O(1)$, it is the weakest of the
-three. Three concrete questions follow.
+three; \S\ref{sec:leray-claim} withdraws its identification with the continuum limit. Three concrete questions follow.
 
 \emph{Wrong field?} Viscous dissipation density is $2\nu|S|^2$ with $S$ the rate-of-strain tensor,
 not $\nu|\omega|^2$. The two agree in integral ($\int2|S|^2=\int|\omega|^2$ on a domain without
@@ -1388,7 +1419,9 @@ one that selects a unique physical solution. Non-uniqueness of Leray solutions o
 equations~\cite{ABC2022} is not addressed by any bound of this kind, and we do not claim it is.
 
 \paragraph{Direction 3. Coherent pulses under thermal noise.}
-\S\ref{sec:cutoff-tested} reports a calibrated Landau--Lifshitz implementation and one data point.
+The solver of \S\ref{sec:cutoff-tested} includes a Landau--Lifshitz noise term calibrated by the
+fluctuation--dissipation theorem, and one data point has been taken with it (reported with the
+experiment files, not in this paper).
 The data point is not yet the question, because the quantity that matters is coherence rather than
 amplitude: the construction's pulses are phase-locked and shear-amplified in a specific
 arrangement, and a random perturbation of equal energy is a different object. The sharp question is
@@ -1418,7 +1451,12 @@ in view: fluctuating hydrodynamics is itself a coarse-grained model with a valid
 pushing it to nanometre scales repeats, in a new place, exactly the error this audit was written to
 correct.
 
-\paragraph{Three shorter items.} \emph{Codimension.} The number of unstable modes of the
+\paragraph{Four shorter items.} \emph{A thermal kinetic test.} The Mach lock of
+\S\ref{sec:compressible} was found in a continuum model with a Navier--Stokes--Fourier closure, and the
+kinetic solver that could check it is isothermal. A discrete-velocity BGK model with a
+temperature-dependent equilibrium, or direct simulation Monte Carlo, driven by the same forced core
+at $\mathrm{Re}\gtrsim16$, would show whether the lock survives when the continuum closure is removed;
+it is the most direct next experiment. \emph{Codimension.} The number of unstable modes of the
 linearized self-similar profile beyond those generated by symmetries is the rigorous form of
 ``non-generic''; it has been computed for related Euler and Boussinesq profiles by
 computer-assisted and neural-network methods~\cite{ChenHou2022,Wang2025}, and needs eigenvalue
@@ -1450,8 +1488,10 @@ compressibility, rarefaction and heating enter together; the observation that in
 comes first; a single local admissibility condition $|\omega|\lesssim c_s^2/\nu$ that
 Beale--Kato--Majda turns into a theorem; a demonstration that the moment-matching system's apparent
 ill-conditioning is a non-dimensionalization artifact, and that the radiated-acoustic-energy check
-is the Mach criterion in disguise; an honest accounting of the backward-specified force; and a
-description of the Euler datum's dependence on coherent structure below the molecular length. None
+is the Mach criterion in disguise; an honest accounting of the backward-specified force; a
+description of the Euler datum's dependence on coherent structure below the molecular length; and a
+Lean~4 proof, on OpenAI's own definitions and with no additional hypothesis, that any object with
+their candidate properties leaves every such admissible set near the singular time. None
 of these observations makes the mathematics wrong, and none of them, on their own, proves that real
 turbulent fluids cannot develop extreme, short-lived, localized events resembling a scaled-down
 piece of this construction --- that remains a genuinely open empirical and theoretical question, not
@@ -1475,11 +1515,13 @@ behave like the stronger of the two: the validity scale is the mean free path, w
 derived from kinetic theory, and the exact kinetic shear spectrum damps small scales less than
 viscosity, caps the rate at the collision frequency, and ends the hydrodynamic mode at
 $k\lambda=\sqrt{\pi/2}$ --- and a nonlinear kinetic simulation of the forced collapse finds no arrest
-there. The lock that acts where the continuum ends is the end of the hydrodynamic
-description, which is where this paper began. That conclusion belongs to the diffusive route the
-construction takes. On an inertial route the first physics to arrive is compressibility and heat, and
-there a real gas does lock --- in Mach number, at about $0.7$, not in velocity or size
-(\S\ref{sec:compressible}, \S\ref{sec:regime-map}). The three directions of \S\ref{sec:directions}
+there; nor, on this route, do compressibility and heat stop the core before $\ell_*$. What acts where
+the continuum ends is the end of the hydrodynamic description, which is where this paper began. That
+conclusion belongs to the diffusive route the construction takes. On an inertial route the first
+physics to arrive is compressibility and heat, and there a real gas does lock --- in Mach number, at
+about $0.7$, not in velocity or size (\S\ref{sec:compressible}, \S\ref{sec:regime-map}); on a
+bounded-velocity route it is plain viscosity. The identification of a Leray-$\alpha$ filter width with
+$\ell_*$ is withdrawn (\S\ref{sec:leray-claim}). The directions of \S\ref{sec:directions}
 follow, and the second of them
 --- an admissibility criterion stated on the coherence of vorticity direction rather than on its
 magnitude, after Constantin and Fefferman~\cite{ConstantinFefferman1993} --- still strikes us as the
@@ -1490,8 +1532,9 @@ The more useful outcome of this exercise, in our view, is not the verdict but th
 list of where the physical assumptions break down, a set of research directions raised
 independently by the community that received this audit (\S\ref{sec:outlook}), a proposed
 --- and only partially built --- architecture for keeping future AI-generated proofs of physical
-PDEs honestly labeled as mathematical or physical results, and one explicitly speculative
-hypothesis for anyone who wants to push the dual-scale idea further than we have. The AI solved the
+PDEs honestly labeled as mathematical or physical results, and the part of the dual-scale idea that
+survived testing --- the ratio $\mathrm{Ma}/\mathrm{Re}$ between the flow's scale and the molecular
+one --- for anyone who wants to push it further than we have. The AI solved the
 mathematician's problem. Whether, and how, that result connects to the physicist's problem is still
 an open question, and, we think, a more interesting one.
 
@@ -1567,7 +1610,9 @@ reason are reported in \S\ref{sec:forced-core}. The same version described the a
 of Direction~2 as conditional on an unformalized lemma; that lemma is now proved.
 Version~5.4.0 quoted one grid-refinement endpoint of the kinetic collapse (\S\ref{sec:gate-drain}) as
 $0.86\lambda$, a value of a different metric; with the metric used for the other endpoints it is
-$0.96\lambda$, corrected here, with the conclusion unchanged.
+$0.96\lambda$, corrected here, with the conclusion unchanged. Earlier versions also quoted Lean
+counts ($45$ theorems) under a different counting convention; this version counts declarations
+checked with \texttt{\#print axioms}.
 
 % ====================================================================
 \section{The \texttt{r/FluidMechanics} Discussion, in Full}

@@ -1,11 +1,30 @@
 """
-OpenAI PoC: Physics-Informed Verification Bridge (PI-Verifier)
-MechanicaFluidorum Program · SocrateAI Lab · September 2026
+PoC: Physics-Informed Verification Bridge (PI-Verifier) -- model-validity labelling
+MechanicaFluidorum Program · SocrateAI Lab · September 2026 (status note updated for v5.5.0)
 
-This script serves as a working Proof of Concept (PoC) for OpenAI.
-It evaluates proof search trajectories or neural operator outputs against
-physical domain constraints (Mach number, Knudsen limit, entropy production)
-and outputs a formal JSON certificate of physical admissibility.
+What this is: a small illustrative checker that labels a candidate flow state by whether the
+assumptions of the incompressible continuum model still hold (Mach number, Knudsen number,
+non-negative dissipation), and writes a JSON certificate. It is a sketch of a *model-validity
+layer* that could sit alongside a proof assistant.
+
+What this is not:
+- It does not "reject" or "refute" OpenAI's Lean proof. That proof is correct as a theorem
+  about the incompressible Navier-Stokes model; a flow leaving the model's validity range is
+  a statement about which model the theorem is about, not a flaw in it.
+- It is not connected to any Lean proof search, RL loop, CFD run, `physlib` or `LeanFlow`
+  (neither exists as a verified tool in this repository).
+- The two scenarios in `generate_certificate` use hand-picked illustrative numbers, not
+  values extracted from OpenAI's construction or from a simulation.
+
+The verdict strings (`UNPHYSICAL_BLOWUP_REJECTED`, `PHYSICALLY_ADMISSIBLE`) and the scenario
+keys (`openai_unconstrained_sobolev_proof`, `leanflow_dual_scale_proof`) are kept unchanged as
+a stable API for existing tests; read them as "outside / inside the incompressible model's
+validity range" and "unregularized / regularized illustrative state".
+
+For the verified, formal counterpart on OpenAI's own definitions see
+03_Lean4_Topological_Censorship/src/OpenAIAdmissibility.lean; for the physics, the main paper
+(01_Verification_Paper), which uses the local bound |omega| <~ c_s^2/nu (Mach, Knudsen and
+Eckert numbers all of order one at l* = nu/c_s on the construction's diffusive route).
 """
 
 import json
@@ -153,20 +172,20 @@ end OpenAI.Verification.Reflection
         return lean_code
 
     def generate_certificate(self, output_path="openai_phys_admissibility_certificate.json"):
-        print("=== OpenAI Physics-Informed Verifier (PI-Verifier PoC) ===")
-        print("Evaluating candidate OpenAI Lean 4 proof trajectories...\n")
+        print("=== Physics-Informed Verifier (PI-Verifier PoC): model-validity labelling ===")
+        print("Illustrative states only; this does not evaluate or refute OpenAI's Lean proof.\n")
 
-        # Scenario 1: OpenAI Non-Physical Sobolev Blowup Trajectory
-        print("[CHECK] Scenario 1: Evaluating OpenAI Non-Physical Sobolev Blowup...")
+        # Scenario 1: illustrative state beyond the incompressible model's validity range
+        print("[CHECK] Scenario 1: illustrative state near a blow-up (Mach > 1, sub-nm scale)...")
         res_openai = self.evaluate_trajectory(velocity_max=450.0, length_scale_min=1e-12, enstrophy=1e8)
         print(f"   Max Velocity: {res_openai['trajectory_metrics']['max_velocity_m_s']} m/s (Mach {res_openai['trajectory_metrics']['mach_number']:.2f})")
-        print(f"   Verdict: REJECTED [{res_openai['verdict']}]\n")
+        print(f"   Verdict: outside the incompressible model's validity range [{res_openai['verdict']}]\n")
 
-        # Scenario 2: LeanFlow Dual-Scale Regularized Trajectory
-        print("[CHECK] Scenario 2: Evaluating LeanFlow Dual-Scale Regularized Solution...")
+        # Scenario 2: illustrative subsonic, continuum-scale state (not a LeanFlow output)
+        print("[CHECK] Scenario 2: illustrative subsonic continuum-scale state...")
         res_leanflow = self.evaluate_trajectory(velocity_max=85.0, length_scale_min=1e-6, enstrophy=120.0)
         print(f"   Max Velocity: {res_leanflow['trajectory_metrics']['max_velocity_m_s']} m/s (Mach {res_leanflow['trajectory_metrics']['mach_number']:.2f})")
-        print(f"   Verdict: PASSED [{res_leanflow['verdict']}]\n")
+        print(f"   Verdict: inside the model's validity range [{res_leanflow['verdict']}]\n")
 
         certificate = {
             "poc_title": "OpenAI Physics-Informed Formal Proof Search (PI-FPS) Certificate",

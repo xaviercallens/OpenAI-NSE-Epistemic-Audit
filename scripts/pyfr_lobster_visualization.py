@@ -2,8 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-# A funny visualization of a lobster protected by Thermodynamic Censorship
-# inside an OpenAI Navier-Stokes Singularity
+# A funny visualization (illustration only, not a physical result) of a lobster near an OpenAI
+# Navier-Stokes singularity. The "Thermodynamic Censorship shield" of earlier versions is a withdrawn
+# framing: nothing shields a fluid from a blow-up of a model; the model simply stops applying at
+# l* = nu/c_s (see README "Current status").
 
 t = np.linspace(0, 2*np.pi, 1000)
 # Draw a rough "lobster" shape
@@ -27,8 +29,8 @@ plt.style.use('dark_background')
 plt.plot(x_vortex, y_vortex, 'r-', lw=2, alpha=0.6, label="Mathematical Singularity (Infinite Energy)")
 plt.plot(-x_vortex, -y_vortex, 'm-', lw=2, alpha=0.6)
 
-# The Thermodynamic Censorship Shield (Entropy)
-circle = plt.Circle((0, 0), 1.0, color='cyan', fill=False, lw=4, label="Thermodynamic Censorship Shield (Entropy Limit)")
+# The continuum-validity boundary (drawn as a circle; illustrative)
+circle = plt.Circle((0, 0), 1.0, color='cyan', fill=False, lw=4, label="Where the continuum model stops applying (illustrative)")
 plt.gca().add_patch(circle)
 
 # Plot the lobster
@@ -41,7 +43,7 @@ plt.text(-0.4, 0, "🦞 Unharmed!", color='white', fontsize=15, fontweight='bold
 
 plt.xlim(-4, 4)
 plt.ylim(-4, 4)
-plt.title("Why the Lobster Survived the OpenAI Singularity\n(Powered by Thermodynamic Censorship & PyFR Concepts)", fontsize=14)
+plt.title("Why the Lobster Survived the OpenAI Singularity\n(illustration: the model ends at l* = nu/c_s; PyFR concepts)", fontsize=14)
 plt.legend(loc='upper right')
 plt.axis('off')
 

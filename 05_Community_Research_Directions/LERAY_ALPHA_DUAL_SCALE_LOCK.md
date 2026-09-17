@@ -1,9 +1,18 @@
 # The dual-scale lock, restated as Leray-α
 
-**Date:** 2026-09-16 · **Status:** research note — intuition partly substantiated, formalization open
+**Date:** 2026-09-16 · **Status:** research note, superseded in its central claim — see the v5.5.0 update below
 **Code:** `experiments/spectral3d.py` (`leray_alpha=`) · **Data:** `experiments/results/leray_alpha_vs_nse.json`
 **Tests:** `tests/test_spectral3d.py::TestLerayAlpha` (6 cases)
 
+> **Update (2026-09-17, v5.5.0) — the "physical anchor" reading is withdrawn.** Setting `α = ℓ*` does
+> **not** make Leray-α "a mathematically sound representation of the fluid hitting its continuum limit",
+> and the global-regularity theorem is **not** a physical lock: it is a theorem about a different equation.
+> Formal reason (`LerayAlphaLinearization.lean`): every α-model changes only the quadratic term, so `α`
+> is absent from the linearization at rest — small disturbances relax at `νk²` for every `α`, while the gas
+> relaxes at `νk²[1 − (kλ)² + …] ≤ 1/τ` and not at all beyond `kλ = √(π/2)`. What survives of the dual-scale
+> intuition is the regime map `Kn = Ma/Re` (`BlowupRegimeMap.lean`; paper §9.4–9.5;
+> `THERMO_COMPRESSIBLE_LOCK_STUDY.md` §5). The note below is kept as the record of the pivot.
+>
 > **Update (2026-09-17, v5.4.0) — read before building on this note.**
 > 1. *Gate vs drain is a ranking of two models.* The Re = 200 result below stands, but on a forced
 >    Re ≈ 1 collapse (the regime that reaches `ℓ*`) Leray-α and LANS-α lag the collapse by only
@@ -158,7 +167,8 @@ Three statements are tractable now, in increasing difficulty, and each is worth 
    filter and the solenoidal constraint as hypothesis, the nonlinear power `Σ conj(û)·N(û)` vanishes.
    This is the exact statement the test suite checks numerically, and it is the formal content of
    "the lock is a gate, not a drain." Finite-dimensional, so no function-space machinery.
-3. **The reduction, conditional.** On OpenAI's own `VelocityField`: *if* a Leray-α-type bound holds
+3. **The reduction, conditional.** *(Done differently, v5.4.0: unconditional and without any Leray-α
+   hypothesis — `OpenAIAdmissibility.lean`.)* On OpenAI's own `VelocityField`: *if* a Leray-α-type bound holds
    on `[0, T)`, then not `SpeedUnboundedAtOne`, with the analytic regularity theorem entering as an
    explicitly labelled hypothesis. This connects to the actual proof objects, which nothing in the
    repository yet does — and labelling which part is assumed is the whole point.

@@ -5,7 +5,17 @@
 **Program**: MechanicaFluidorum Program / SocrateAI Lab (September 2026)  
 **Verification Framework**: Dual-Framework (Topological Validity + Physical Censorship)
 
-> **Note (2026-09-15 pivot):** This document predates a project-wide reframing away from "physical vacuity"/"censorship" framing and away from string-theory/T-duality claims, after community and scientific feedback identified problems with both. See `REVIEW_AND_NEW_DIRECTION.md` and `paper/where_the_continuum_ends.tex` for the corrected position and specific retractions. Read what follows with that context — several claims below (plasma/vaporization framing, the condition-number figure, specific timing figures, and any string-theory/T-duality/K3×T² material) have since been corrected or withdrawn.
+> **Status (updated 2026-09-17, v5.5.0) — historical document.** This file predates the project's current
+> position and is kept unedited below this note as a record. Current state: [`README.md`](README.md) ("Current
+> status") and [`CHANGELOG.md`](CHANGELOG.md); the paper is `01_Verification_Paper/OpenAI_NSE_Verification.pdf`
+> (v5.5.0, DOI 10.5281/zenodo.22806767), whose Appendix A lists every withdrawn claim. In short: OpenAI's
+> proofs are correct and this project reads them physically rather than refuting them. Withdrawn, wherever
+> they appear below: "physical vacuity", thermodynamic/topological "censorship" (including the Lean files
+> `ThermodynamicCensorship.lean`, `PhysLibThermodynamicCensorship.lean`, `TopologicalCensorship.lean`, which
+> are drafts or toys, not verified results), plasma temperatures and vaporization, femtosecond timings, the
+> raw 10²⁸ condition number as fragility, the string-theory/T-duality link, "intercepting" proofs as
+> "physically ill-typed", the v5.2.0 "dissipative kinetic lock", and the Leray-α "anchor at ℓ*" reading.
+> Nothing in this repository bears on Clay Statement A.
 >
 > **This is a self-authored simulated review exercise, not an actual review conducted by DeepMind or any external institution.** It should not be cited as external validation.
 

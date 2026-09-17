@@ -1,6 +1,10 @@
 """
 Unit & Integration Test Suite for Lean 4 Proof-by-Reflection Bridge and Multi-Precision Stepper.
 MechanicaFluidorum Program · SocrateAI Lab · September 2026
+
+NOTE (2026-09-17): these tests pin the arithmetic of legacy scripts. They do not invoke Lean, and stages
+past l* = nu/c_s (e.g. "sub-Planckian" scales below) are properties of the formula, not physical claims;
+that framing is withdrawn. The verified Lean files are listed in 03_Lean4_Topological_Censorship/README.md.
 """
 
 import os
@@ -112,7 +116,7 @@ class TestAsymptoticMultiprecisionStepper(unittest.TestCase):
         self.assertEqual(step["regime_status"], "SUPERLUMINAL_VIOLATION")
 
     def test_sub_planckian_collapse(self):
-        """At tau = 1e-70 s, spatial scale is sub-Planckian."""
+        """At tau = 1e-70, the formula's spatial scale is below the Planck length (formula property; withdrawn framing)."""
         step = self.stepper.step("1e-70")
         self.assertTrue(step["breaches"]["sub_planckian"])
         self.assertEqual(step["regime_status"], "SUB_PLANCKIAN_COLLAPSE")

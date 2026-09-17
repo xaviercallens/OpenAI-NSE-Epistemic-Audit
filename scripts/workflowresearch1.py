@@ -13,6 +13,12 @@ Integrates the 6 core research streams from research_journal.md:
   Stream 5: Mathematical Divergence-Free Syntax vs. Physical Compressibility
   Stream 6: Structural Instability & Condition Number of the 5-Moment Jacobian
 
+NOTE (2026-09-17, v5.5.0): legacy exploration script, kept for the record. Its "Thermodynamic
+Censorship" stream and "plasma ionization" threshold are withdrawn: with the core at Re ~ 1 the heating
+is Delta T ~ u^2/c_p, a few hundred kelvin at the Mach limit, and the v5.5.0 compressible simulation
+measures an even smaller coefficient (0.35 at Ma 0.4 to ~1 near Ma 1). Current results: CHANGELOG.md and
+05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md.
+
 Outputs:
   - workflow_research1_telemetry.png (4-panel publication figure)
   - workflow_research1_results.json (Full machine-readable dataset)
@@ -43,7 +49,7 @@ P_VAPOR = 3536.0       # Saturation vapor pressure at 300 K (Pa)
 T0 = 300.0             # Initial temperature (K)
 T_BOIL = 373.15        # Boiling point at 1 atm (K)
 T_CRIT = 647.0         # Critical temperature of water (K)
-T_PLASMA = 10000.0     # Plasma ionization threshold (K)
+T_PLASMA = 10000.0     # Plasma ionization threshold (K) -- withdrawn framing, see module note
 
 # Scaling parameters from the OpenAI formalization
 H_PARAM = 0.005        # Anisotropy exponent h = 1/200
@@ -221,7 +227,7 @@ axs[0, 0].invert_xaxis()
 axs[0, 1].loglog(tau_plot, temp_plot, 'r-', lw=2.5, label=r"Core Temperature $T(\tau) \sim \tau^{-1.515}$")
 axs[0, 1].axhline(T_BOIL, color='goldenrod', ls='--', lw=1.5, label="Boiling Threshold (373.15 K)")
 axs[0, 1].axhline(T_CRIT, color='darkorange', ls='--', lw=1.5, label="Critical Point (647 K)")
-axs[0, 1].axhline(T_PLASMA, color='purple', ls='--', lw=1.5, label="Plasma Ionization ($10^4$ K)")
+axs[0, 1].axhline(T_PLASMA, color='purple', ls='--', lw=1.5, label="Plasma ionization ($10^4$ K; not reached — withdrawn claim)")
 axs[0, 1].axvline(tau_boil, color='goldenrod', alpha=0.4)
 axs[0, 1].axvline(tau_plasma, color='purple', alpha=0.4)
 axs[0, 1].set_xlabel(r"Time to Singularity $\tau = 1 - t$ (s)", fontsize=11)

@@ -1,5 +1,9 @@
 # Lessons Learned (LL.md) — Comprehensive Field Feedback & Anti-Pattern Playbook
 
+> **Status (2026-09-17, v5.5.0).** Lessons from the first public posts (Sept 2026). The phrases quoted as
+> anti-patterns below ("physically vacuous", "censorship", "telemetry") are quoted *as mistakes*; none is a
+> current claim of this project. Current position: [`README.md`](README.md) and [`CHANGELOG.md`](CHANGELOG.md).
+
 > *"I do not know enough about the subject to pretend. I am a curious explorer asking simple questions, not an authority delivering an audit or distributing code."*
 
 ---

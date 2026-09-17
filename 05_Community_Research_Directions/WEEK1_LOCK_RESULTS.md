@@ -143,6 +143,13 @@ locks are waiting on the same object.
 > unconditional (`OpenAIAdmissibility.lean`); **Lock G** (Constantin–Fefferman direction coherence)
 > is still not started.
 > Current status of every link: `DUAL_SCALE_LOCK_PROGRAMME.md` §8.
+>
+> **Update (2026-09-17, v5.5.0).** **Locks C and T** tested on the forced core with a compressible
+> Navier–Stokes–Fourier model (`THERMO_COMPRESSIBLE_LOCK_STUDY.md`): no arrest before `ℓ*` on the
+> Re ≈ 1 route; a thermodynamic Mach lock at 0.70 for Re ≳ 16. **Lock A**: the derivation conjecture
+> fails at linear order (`α` is absent from the linearization, `LerayAlphaLinearization.lean`), so the
+> α-model is a closure, not a derived lock. **Lock F** still waits on a coherent-packet test on the forced
+> core; **Lock G** is still not started. Programme status: `DUAL_SCALE_LOCK_PROGRAMME.md` §9.
 
 ## Tests
 

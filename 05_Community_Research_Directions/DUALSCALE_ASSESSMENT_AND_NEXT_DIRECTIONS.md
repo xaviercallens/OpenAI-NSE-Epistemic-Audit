@@ -173,6 +173,13 @@ integrable. Citing these files as certifying regularity inverts their actual con
 > DualScale solver's hyperviscous barrier was not needed for the kinetic test, and the corrections
 > recommended in §D below concern that external report and are unaffected.
 >
+> **Further update (2026-09-17, v5.5.0).** Compressibility and thermodynamics were then tested on the same
+> forced core (`THERMO_COMPRESSIBLE_LOCK_STUDY.md`): nothing stops a Re ≈ 1 core before `ℓ*` (an arrest
+> prediction of ours failed), while on the inertial route (Re ≳ 16) air locks at local Mach 0.70. The
+> regime map `Kn = Ma/Re` explains why the answer depends on the route. The report's framing of a
+> DualScale/Leray-α filter at `ℓ*` as the physical cutoff is withdrawn outright: the filter width does
+> not appear in the linearized dynamics (`LerayAlphaLinearization.lean`).
+>
 > The original plan is retained below as written, since the estimates in it are what the work was
 > costed against and two of them proved wrong in instructive ways: the DNS route (A2/B1) was
 > defeated by a resolution constraint not anticipated here, and the shell model turned out to carry

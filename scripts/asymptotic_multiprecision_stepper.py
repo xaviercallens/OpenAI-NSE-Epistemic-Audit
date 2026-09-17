@@ -11,6 +11,13 @@ Demonstrates exact physical breakdown sequence:
   3. Continuum breakdown (l_r < molecular mean free path)
   4. Superluminal unphysicality (u > c)
   5. Sub-Planckian geometric collapse (l_r < Planck length)
+
+NOTE (2026-09-17, v5.5.0): legacy script, kept for the record. Stages 4-5 go far past the point where the
+model has already stopped describing any fluid: the incompressible continuum model fails at l* = nu/c_s
+(stages 1-3 coincide there on the diffusive route; paper Proposition 5.1), so the "sub-Planckian" and
+"superluminal" stages are properties of the formula, not physics -- the "sub-Planckian" framing is
+withdrawn. tau here is the dimensionless time of the construction; treating it directly as seconds was
+the femtosecond/picosecond unit error corrected in v5.0.0 (physical t = T tau, T = l0^2/nu).
 """
 
 import os

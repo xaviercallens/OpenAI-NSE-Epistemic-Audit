@@ -30,6 +30,8 @@ an Eckert number of order one: the kinetic energy per unit mass of the core is c
 
 \emph{Caveat.} The estimate assumes the heat stays in the core over the collapse time. The thermal diffusion length $\sqrt{\alpha t}$ compares with $\ell_r=\sqrt{\nu t}$ as $\mathrm{Pr}^{-1/2}$: for water ($\mathrm{Pr}\approx7$) conduction removes only a fraction of the heat, so the estimate stands; for gases ($\mathrm{Pr}\approx0.7$) it is an upper bound. Either way the conclusion is that the constant-temperature, constant-density assumptions of the model stop holding at $\ell_*$, not that any particular phase change is predicted.
 
+\paragraph{Update (17 September 2026, v5.5.0): the estimate measured.} A compressible Navier--Stokes--Fourier simulation of a forced collapsing core (\texttt{experiments/compressible\_core.py}; paper \S9.3) gives the actual temperature rise in a gas: the coefficient in $\Delta T = C\,u^2/c_p$ is $C\approx0.35$ at $\mathrm{Ma}\approx0.4$, rising to $C\approx1$ near $\mathrm{Ma}\approx1$, so $u^2/c_p$ is an upper-order estimate, as the caveat anticipated. Two further findings: heat acts on the collapse only through the temperature dependence of viscosity; and on a Reynolds-number-one core (the route of the OpenAI construction) it does not stop the collapse before $\ell_*$, whereas on a high-Reynolds-number (inertial) route air does not follow a driven swirl past a local Mach number of about $0.70$ --- a lock on the Mach number, not on velocity or core size, in a one-dimensional ideal-gas model.
+
 \section{Acknowledgments}
 Thank you to \texttt{u/vibe0009} and \texttt{u/Little-Name9809} for prompting this explicit thermal derivation. \textit{Rendons \`a C\'esar ce qui appartient \`a C\'esar.}
 

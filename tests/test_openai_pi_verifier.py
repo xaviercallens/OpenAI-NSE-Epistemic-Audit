@@ -4,6 +4,13 @@ MechanicaFluidorum Program · SocrateAI Lab · September 2026
 
 Demonstrates that the PI-Verifier correctly detects and rejects trajectories
 that violate physical laws (Mach limit, Knudsen continuum limit, 2nd Law of Thermodynamics).
+
+NOTE (2026-09-17, v5.5.0): these tests pin the behaviour of the proposal-stage PoC in
+10_OpenAI_PoC_Proposal/. Its verdict strings ('UNPHYSICAL_BLOWUP_REJECTED', 'PHYSICALLY_ADMISSIBLE')
+come from the withdrawn "reject/intercept" framing: OpenAI's proof is correct, and a validity check can
+only label a result as a theorem about the incompressible model. The trajectory metrics are hand-set
+demonstration inputs, and the "leanflow_dual_scale" scenario is not a validated model (the Leray-alpha
+"anchor at l*" reading is withdrawn, paper Sec. 9.5).
 """
 
 import os

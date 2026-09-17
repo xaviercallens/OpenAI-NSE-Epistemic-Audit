@@ -11,7 +11,7 @@
 
 1. **Non-Profit Citizen Science Initiative**: This project is conducted as an independent, non-profit citizen science effort dedicated to scientific truth, academic peer review, and open-source verification of automated mathematical proofs.
 2. **Fair Use & Scientific Critique**: All analysis, cross-examination, and evaluation of public AI announcements, blog posts, and mathematical formalizations released by OpenAI, Inc. or associated entities are conducted strictly under the doctrines of **Fair Use**, **Scientific Critique**, **Academic Freedom**, and **Public Interest Research**.
-3. **Independent Scientific Oversight**: This repository does not claim ownership over OpenAI's Lean 4 source code or proprietary models. All original contributions (including `physlib` integrations, thermodynamic censorship proofs, Python simulations, and domain-aware heuristics) are licensed open-source under CC-BY 4.0 and MIT licenses.
+3. **Independent Scientific Oversight**: This repository does not claim ownership over OpenAI's Lean 4 source code or proprietary models. All original contributions (including Lean 4 formalizations, Python and Rust simulations, and domain-aware heuristics) are licensed open-source under CC-BY 4.0 and MIT licenses.
 
 ---
 

@@ -14,6 +14,11 @@ cascade test. Nothing in that repository was modified.
 > not yet a converged arrest. The kinetic regime beneath `ℓ*` is covered by
 > `results/lock_k_kinetic_spectrum.json` (linear) and `../kinetic_lock_rs/` (nonlinear: no arrest).
 > The results in this file are unchanged.
+>
+> **Update (v5.5.0).** Compressibility and thermodynamics on the forced core: `compressible_core.py`,
+> `../THERMO_COMPRESSIBLE_LOCK_STUDY.md` (no arrest before `ℓ*` at Re ≈ 1; Mach lock 0.70 for Re ≳ 16).
+> The Leray-α comparisons below remain valid as model comparisons; the reading of Leray-α at `α = ℓ*`
+> as the physical continuum limit is withdrawn.
 
 This implements the five directions proposed in `../DUALSCALE_ASSESSMENT_AND_NEXT_DIRECTIONS.md`.
 The headline outcome is a **negative result on the cutoff law**, obtained cleanly enough to say

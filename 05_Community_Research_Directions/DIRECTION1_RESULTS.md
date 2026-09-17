@@ -69,7 +69,7 @@ local slopes (the curve is concave in log-log) are exactly what that predicts.
 below the resolved window floor `τ_min = 24`. The core lags the target by 63–123% at window end,
 increasing monotonically with α′. The 96³ run with a 2.5-cell window reaches `α′/(ντ) ≈ 18` and
 should cross for the upper half of its band — that is the direct test of the crossing exponents,
-and it is running.
+and it is running. *(It did not cross — see the 96³ section below.)*
 
 ### The 96³ sweep (2026-09-17): no B/F crossing — the forecast was wrong, the arrest shows as a stall
 

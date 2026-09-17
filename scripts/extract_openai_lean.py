@@ -263,10 +263,11 @@ def generate_audit_certificate(git_sha, degraded, lean_catalog, verification_res
                 "which are actually derived from scanning the cloned repository's Lean "
                 "source. check_6-9 are static reference figures from this project's own "
                 "physical-verification paper (see each check's 'source' field) and are "
-                "NOT derived from this scan. Any physical-realizability or "
-                "'censorship' verdict is a separate, explicitly-labeled hypothesis "
-                "discussed in OpenAI_NSE_Verification.tex Sec. 10.4 -- not something "
-                "this script establishes -- and is intentionally not asserted here."
+                "NOT derived from this scan. It makes no claim about physical fluids: "
+                "the physical reading (model validity at l* = nu/c_s; the earlier "
+                "'censorship' framing is withdrawn) is in OpenAI_NSE_Verification.tex "
+                "Secs. 5 and 9 -- not something this script establishes -- and is "
+                "intentionally not asserted here."
             ),
         },
         "verification_protocol": verification_results,

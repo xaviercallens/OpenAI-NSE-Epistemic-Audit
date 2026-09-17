@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-# Path to LeanFlow JHTDB data
+# Path to the external DualScale/OpenFOAM JHTDB comparison (local path; not in this repository).
+# That report was assessed and several claims did not hold: 05_Community_Research_Directions/DUALSCALE_ASSESSMENT_AND_NEXT_DIRECTIONS.md
 leanflow_data_path = "/home/xavkal/xdev/SocrateAI-Numeric-DualScale-Solver/SocrateAI-Numeric-DualScale-Solver/data/output/jhtdb_openfoam_real_comparison.json"
 
 with open(leanflow_data_path, "r") as f:

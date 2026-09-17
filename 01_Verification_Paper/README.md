@@ -5,7 +5,7 @@
 **The MechanicaFluidorum Program | Socrate AI Lab**
 *Non-Profit Research Organization (French Association Loi 1901 for Neuro-Symbolic Scientific AI)*
 
-**Current version:** v5.4.1 (2026-09-17), 25 pages.
+**Current version:** v5.5.0 (2026-09-17), 29 pages.
 
 ---
 
@@ -15,7 +15,7 @@
 *   **Open peer review and authors' response:** [`PEER_REVIEW_2026-09-15.md`](PEER_REVIEW_2026-09-15.md)
 *   **Reproduction Protocol:** [`REPRODUCTION_PROTOCOL.md`](REPRODUCTION_PROTOCOL.md) (step-by-step protocol for the original directives; for the solvers, Lean files and their expected numbers see [`../BENCHMARKS.md`](../BENCHMARKS.md))
 *   **Check Script:** [`verify_openai.py`](verify_openai.py) (AST inspector for OpenAI Lean 4 source)
-*   **Verification Script:** [`verify-physical-vacuity.sh`](verify-physical-vacuity.sh) (automated test runner; filename kept from the withdrawn framing)
+*   **Verification Script:** [`verify-physical-vacuity.sh`](verify-physical-vacuity.sh) (older runner for the original directives; filename kept from the withdrawn framing — the maintained runner is [`../scripts/run_benchmarks.sh`](../scripts/run_benchmarks.sh))
 *   **Zenodo Synchronizer:** [`zenodo_push.py`](zenodo_push.py)
 
 ---
@@ -32,12 +32,15 @@ Every row below is checked against the current paper text.
 | **Moment Jacobian** (§3) | $A = DBD$ (Prop. B.8 of the OpenAI paper) | $\kappa(B) \approx 4.11 \times 10^5$ for all $X_R$; the raw $\kappa \sim 10^{28}$ was an artifact of unscaled dimensions, not fine-tuning |
 | **Global kinetic energy** | $E \sim \tau^{+0.485} \to 0$ | Bounded — Clay Alternative C's energy condition is respected |
 | **Local energy density / enstrophy** | $e_{\text{local}} \sim \tau^{-1.010}$; $\Omega \sim \tau^{-0.515}$; $\lvert\omega\rvert^2 \sim \tau^{-2.010}$ | Viscous heating $\Delta T \simeq u^2/c_p$: 48 K at Ma 0.3 and 540 K at Ma 1 in water. The decoupled-temperature assumption fails; no thermodynamic law is violated |
-| **Mach number** (§5.4, Table 6) | $\text{Ma} \to \infty$ as $\tau \to 0$ | Water, $\ell_0 = 1$ cm: Ma 0.3 at $t \approx 6.7$ ps before blow-up, Ma 1 at 0.6 ps; unit-free $t \simeq \nu/(0.3c)^2$ |
+| **Mach number** (§5.3, Table 6) | $\text{Ma} \to \infty$ as $\tau \to 0$ | Water, $\ell_0 = 1$ cm: Ma 0.3 at $t \approx 6.7$ ps before blow-up, Ma 1 at 0.6 ps; unit-free $t \simeq \nu/(0.3c)^2$ |
 | **One scale** (Prop. 5.1) | Core Reynolds number stays 1 | Compressibility, rarefaction and heating become order one together at $\ell_* = \nu/c_s$: 0.67 nm (water), 45 nm (air) |
-| **Cavitation (liquids)** (§5.6) | core pressure deficit $\sim \rho u^2$ | Vapour pressure reached at $u \approx 14$ m/s, $\approx 5$ ns before blow-up (core $\approx 70$ nm); if the liquid holds tension (30–140 MPa), at $\approx 17$–4 ps — before or with Ma 0.3 |
-| **Admissibility** (§5.7; §11.5 Direction 2) | $\lvert\nabla u\rvert \lesssim c_s^2/\nu$; proved in Lean on OpenAI's own objects that every candidate exceeds every gradient bound near $t=1$ | Unconditional since v5.4.0; the formal content is close to "velocity blow-up forces gradient blow-up" — valuable as a bridge to the proof objects, not as new physics |
+| **Cavitation (liquids)** (§5.6) | core pressure deficit $\tfrac12\rho u^2$ (estimate) or $1.70\,\rho u^2$ (exact for a Gaussian core) | Vapour pressure reached at $u \approx 14$ m/s, $\approx 5$ ns before blow-up (core $\approx 70$ nm) with the estimate; $u\approx7.6$ m/s, core $\approx130$ nm, $\approx17$ ns with the exact coefficient; if the liquid holds tension (30–140 MPa), at $\approx 17$–4 ps — before or with Ma 0.3 |
+| **Admissibility** (§5.7, Eq. 5; §11.5 Direction 2) | $\lvert\nabla u\rvert \lesssim c_s^2/\nu$; proved in Lean on OpenAI's own objects that every candidate exceeds every gradient bound near $t=1$ | Unconditional since v5.4.0; the formal content is close to "velocity blow-up forces gradient blow-up" — valuable as a bridge to the proof objects, not as new physics |
 | **Cutoff regularization** (§9) | Cutoff law $u_{\max}\sim\nu/\sqrt{\alpha'}$ exact given a Re ≈ 1 core; generic data never supply one | On a manufactured core a dissipative barrier stalls the collapse near $(1.2$–$1.5)\sqrt{\alpha'}$ at 96³ (not yet converged); Leray-α/LANS-α act 1–2 orders more weakly there — a ranking of models |
 | **Kinetic regime** (§9.2) | Exact BGK shear spectrum: damping below $\nu k^2$, capped at $1/\tau$, mode ends at $k\lambda=\sqrt{\pi/2}$ | A nonlinear discrete-velocity BGK simulation of the forced collapse finds **no arrest** there: the kinetic cutoff ends the hydrodynamic description, it does not stop a driven core |
+| **Compressibility and heat** (§9.3, Table 9) | 1D compressible Navier–Stokes–Fourier core driven by the same force | On the construction's route ($\mathrm{Re}\approx1$) neither stops the core before $\ell_*$ (it lags 14–25%; a quasi-steady arrest prediction of ours failed). On an inertial route ($\mathrm{Re}\gtrsim16$) air stops following the driven swirl at local Mach $\approx0.70$ — a lock on Mach number, not on velocity or size |
+| **Regime map** (§9.4) | $\mathrm{Kn}=\mathrm{Ma}/\mathrm{Re}$ (Lean: `BlowupRegimeMap.lean`) | The single scale $\ell_*$ belongs to the diffusive route; Tao-type inertial blow-up meets compressibility first at $\mathrm{Re}\,\ell_*$; forced Euler with bounded velocity meets viscosity first at $\ell_*/\mathrm{Ma}$ |
+| **Leray-α at $\ell_*$** (§9.5) | Filter width absent from the linearized dynamics (Lean: `LerayAlphaLinearization.lean`) | The claim that a Leray-α filter of width $\ell_*$ represents the fluid at its continuum limit is **withdrawn**; its global regularity is a theorem about a different equation |
 | **Euler datum** | stagewise sum of shear-amplified oscillatory packets with unbounded frequencies | The missing physics is viscosity itself (and thermal noise); whether the packets' coherence survives thermal noise is open |
 
 **Verdict:** The OpenAI proof is correct within Lean 4. Read physically, the construction leaves the domain of validity of the incompressible continuum model at $\ell_* \sim \nu/c_s$, a few picoseconds before the singularity. Whether unforced real fluids can develop finite-time singularities (Statement A) remains open; nothing here settles it.

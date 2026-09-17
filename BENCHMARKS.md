@@ -11,7 +11,8 @@ re-derived from the committed data, and that distinction is marked in the tables
 
 **54 / 54 checks pass.** Run 2026-09-17, `--full` tier (wall time 31 min on a machine also running two
 kinetic production jobs; about 9 min unloaded). Everything in the v5.4.1 tables below reproduced again,
-bit-identically, and `pytest` now runs 124 tests. New in this version:
+bit-identically, and `pytest` now runs 124 tests. New in this version (10 checks; the "Lean total" row is a
+sum, not a separate check):
 
 | check | committed / quoted | reproduced |
 |---|---|---|

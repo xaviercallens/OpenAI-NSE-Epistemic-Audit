@@ -7,6 +7,11 @@ function of wavenumber, by computing the exact shear-mode spectrum of the
 linearized BGK equation and setting it against the three candidates already in
 the programme: plain viscosity, the hyperviscous barrier, and the transport gate.
 
+Outcome (recorded 2026-09-17): the v5.2.0 premise quoted above did not survive. The spectrum shows
+kinetic theory is not a stronger drain -- damping is below viscous, capped at 1/tau, and the shear mode
+ends at k lambda = sqrt(pi/2) -- so v5.3.0 withdrew "dissipative, supplied by kinetic theory"; the
+nonlinear test (kinetic_lock_rs) then found no arrest there either (v5.4.0).
+
 Model and derivation
 --------------------
 Linearized BGK, units v_th = sqrt(kT/m) = 1, collision time tau, so the kinematic

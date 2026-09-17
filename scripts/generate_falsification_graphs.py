@@ -63,7 +63,7 @@ def generate_falsification_graphs(out_path=None):
     ax2.loglog(tau, mach_number, 'g-', linewidth=2, label='Local Mach Number ($Ma$)')
     ax2.axhline(0.3, color='r', linestyle='--', label='Incompressibility Threshold ($Ma = 0.3$)')
     ax2.axvline(tau_mach_breach, color='orange', linestyle='-', linewidth=2)
-    ax2.fill_between(tau[mach_breach_idx:], 0.3, mach_number[mach_breach_idx:], color='red', alpha=0.2, label='Unphysical (Compressible/Shock Regime)')
+    ax2.fill_between(tau[mach_breach_idx:], 0.3, mach_number[mach_breach_idx:], color='red', alpha=0.2, label='Outside incompressible-model validity (Ma > 0.3)')
 
     ax2.set_xlim(1e-2, 1e-15)
     ax2.set_ylim(1e-6, 1e3)

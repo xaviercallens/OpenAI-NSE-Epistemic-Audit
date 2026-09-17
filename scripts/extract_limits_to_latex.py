@@ -1,3 +1,7 @@
+"""Legacy: extracts the physlib validity constants from the draft Lean file into the table of the superseded
+Sept-12 paper (04_Thermodynamic_Censorship_Paper). Kept so that paper's table stays reproducible; the
+"censorship" framing of both is withdrawn (see CHANGELOG.md). The current admissibility statement is
+03_Lean4_Topological_Censorship/src/OpenAIAdmissibility.lean."""
 import re
 import os
 

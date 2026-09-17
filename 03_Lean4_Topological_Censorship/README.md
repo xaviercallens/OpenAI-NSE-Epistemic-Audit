@@ -27,7 +27,7 @@ git clone https://github.com/openai/NavierStokesAndEuler && cd NavierStokesAndEu
 lake exe cache get                                   # Mathlib oleans
 lake build NavierStokes.PeriodicUniqueness           # 3 files; only OpenAIAdmissibility.lean needs it
 lake env lean <path>/src/OpenAIAdmissibility.lean
-lake env lean <path>/src/CoreScaling.lean            # likewise for the other five files
+lake env lean <path>/src/CoreScaling.lean            # likewise for the other seven files
 ```
 
 Do **not** build OpenAI's full library (~580 files); nothing here needs it. Expected: no errors, no warnings, every `#print axioms` line `[propext, Classical.choice, Quot.sound]`. (A `grep sorry` finds one hit per file: the docstring sentence stating there is none.)
@@ -44,7 +44,7 @@ Both `TopologicalCensorship.lean` and `LeanMasterBridge.lean` compile with 0 err
 
 ## Drafts (`src/drafts/`) — not verified
 
-`AtlasReferenceVerification`, `BallIdentity`, `ThermodynamicAdmissibility`, `ThermodynamicCensorship` contain `sorry`; `PhysLibThermodynamicCensorship` declares a custom `axiom` and has a `True` placeholder; `PhysicalInvalidationProof` claims "0 sorry" in prose but belongs to the withdrawn "physical invalidation" framing. Do not cite any of them as results.
+`AtlasReferenceVerification`, `BallIdentity`, `ThermodynamicAdmissibility`, `ThermodynamicCensorship` contain `sorry`; `PhysLibThermodynamicCensorship` declares a custom `axiom` and has a `True` placeholder; `PhysicalInvalidationProof` claims "0 sorry" in prose but does not compile against the current toolchain (17 errors; `AtlasReferenceVerification` likewise, 38 errors — re-checked 2026-09-17) and belongs to the withdrawn "physical invalidation" framing. The blueprint pages under `blueprint/roadmap/atlas_references/` that point at these drafts are marked accordingly. Do not cite any of them as results.
 
 ---
 *Maintained by the MechanicaFluidorum Program | Socrate AI Lab (French Non-Profit Association Loi 1901 for Neuro-Symbolic Scientific AI)*

@@ -1,121 +1,112 @@
-# 🔬 Section 1: Empirical Investigation & Physics Audit of Official OpenAI Lean 4 Code
+# 🔬 Section 1: Physical Metrics of the Official OpenAI Lean 4 Construction
 
-**Ingesting OpenAI's Lean 4 Code, Calculating Physical Metrics, and Demonstrating Thermodynamic Model Self-Invalidation**
+**Reading OpenAI's Lean 4 code, extracting its scalings, and computing where the incompressible model stops describing a real fluid**
 
-*MechanicaFluidorum Program · SocrateAI Lab · September 2026*
+*MechanicaFluidorum Program · SocrateAI Lab · September 2026 · revised for v5.5.0*
 
----
-
-## 📌 1. Executive Overview
-
-In September 2026, OpenAI deployed a multi-agent system of a reported ~10,000 reinforcement learning agents (figure not confirmed in OpenAI's own technical writeup) to formalize a proof of finite-time blowup for the forced 3D Navier-Stokes and Euler equations in **Lean 4**.
-
-The official Lean 4 codebase ([`openai/NavierStokesAndEuler`](https://github.com/openai/NavierStokesAndEuler)) **compiles cleanly** with zero syntax errors. However, because Lean 4 checks only pure logical consistency within abstract function spaces ($H^s$), the formalization operates without physical domain boundaries.
-
-In this investigation section, we ingest the official Lean 4 construction, extract its mathematical parameters, calculate its physical metrics, and demonstrate that **laws of physics (thermodynamics, acoustic compressibility, and molecular motion) forbid the blowup from occurring in the real universe**.
+> **Status (v5.5.0).** Earlier versions of this section said that "laws of physics forbid the blow-up", quoted a
+> Mach-0.3 breach "67 femtoseconds" before blow-up, and described a "LeanFlow" engine whose theorem "blocks and
+> refuses" OpenAI's proof. All three are withdrawn. The dimensionless time $\tau$ was misread as seconds (the correct
+> figure is about 6.7 **picoseconds**); no law of thermodynamics is violated inside the model; and the old
+> "interception" theorem rested on an underived global enstrophy bound and is an unverified draft. OpenAI's proofs
+> are correct. See `../CHANGELOG.md` and Appendix A of the paper.
 
 ---
 
-## 📥 2. Ingestion & Compilation of Official OpenAI Lean 4 Code
+## 📌 1. Overview
 
-### A. Repository Ingestion
-The official OpenAI codebase is cloned and audited directly within our verification repository:
+In September 2026 an OpenAI multi-agent system produced Lean 4 proofs of finite-time blow-up for the forced 3D
+Navier–Stokes equations and for Euler. (Press figures of "~10,000 agents" are not stated in OpenAI's own
+publications.) The official code, [`openai/NavierStokesAndEuler`](https://github.com/openai/NavierStokesAndEuler),
+compiles, and the proofs are correct theorems about the incompressible continuum model.
+
+This section extracts the construction's scalings and computes when the constructed flow leaves the regime in which
+that model describes a real fluid. It is a physical reading of a correct theorem, not a refutation, and it says
+nothing about Clay "Statement A" (unforced flow), which remains open.
+
+---
+
+## 📥 2. The official code
+
 ```bash
-# Ingest official OpenAI Lean 4 formalization
-git clone https://github.com/openai/NavierStokesAndEuler.git openai_repo
-cd openai_repo
-lake build  # Compiles cleanly with ZERO syntax errors
+git clone https://github.com/openai/NavierStokesAndEuler.git
+cd NavierStokesAndEuler
+lake build NavierStokes.ProblemStatement   # the full library is ~580 files; build only what you need
 ```
 
-### B. Why Lean 4 Accepts the Proof
-Lean 4 verifies that the mathematical statement:
-$$\exists f \in C^\infty, \exists T^* > 0, \quad \lim_{t \to T^{*-}} \int_{\mathbb{R}^3} |\nabla \times u(x,t)|^2 dx = \infty$$
-is logically derived from the incompressible Navier-Stokes definitions. The Lean 4 type-checker does not know that real fluids are made of molecules or that sound speeds are finite ($c_s = 343 \text{ m/s}$ in air, $1500 \text{ m/s}$ in water).
+Lean checks that the theorems follow from the definitions of the incompressible equations. Sound speed and molecular
+structure are not part of those definitions — correctly so: they are not part of the model the Clay problem is about.
 
 ---
 
-## 📊 3. Physical Telemetry & Metric Calculations (Directives 2–5)
+## 📊 3. Scalings and validity times (Directives 2–5)
 
-Using our Python verification scripts, we extract the physical metrics of the OpenAI collapsing vortex core as a function of remaining time $\tau = T^* - t$:
+Times below: $\tau$ is the construction's **dimensionless** time to blow-up; physical time is $t=T\tau$ with
+$T=L_0^2/\nu=100$ s for a 1 cm water vortex.
 
-| Directive & Script | Physical Metric Calculated | Mathematical Limit | Physical Conclusion |
+| Script | Quantity | Result | Reading |
 | :--- | :--- | :--- | :--- |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | Global Kinetic Energy $E(t)$ | $E \sim \tau^{+0.485} \to 0$ | ✅ Bounded globally in $L^2$ (Paper claim verified) |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | Intensive Energy Density $e_{\text{local}}$ | $e_{\text{local}} \sim \tau^{-1.010} \to \infty$ | 🔴 Diverges to $\infty$ (Local isothermal assumption fails) |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | Vortex Enstrophy $\Omega(t)$ | $\Omega(t) \sim \tau^{-0.515} \to \infty$ | 🔴 Diverges to $\infty$ (Unbounded viscous heating) |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | $L^3$ Lebesgue Norm $\|u\|_{L^3}$ | $\|u\|_{L^3} \sim \tau^{-0.00667} \to \infty$ | 🔴 Diverges (Breaches Escauriaza-Seregin-Šverák bound) |
-| **Directive 2** (`directive2_thermodynamic_paradox.py`) | $H^{3/2}$ Sobolev Norm $\|u\|_{H^{3/2}}$ | $\|u\|_{H^{3/2}} \sim \tau^{-0.5075} \to \infty$ | 🔴 Diverges (Unbounded high-frequency derivatives) |
-| **Directive 3** (`directive3_jacobian_instability.py`) | Moment Matrix Preconditioning | $\kappa(B) \approx 4.11 \times 10^5$ | ✅ Numerically stable, but physically absurd aspect ratio ($h=1/200$) |
-| **Directive 4** (`directive4_gevrey_regularity.py`) | Gevrey Regularity Index | $s = 1.5$ (Gevrey-1.5) | ✅ $C^\infty$ smooth, non-analytic cutoff force $f$ |
-| **Directive 5** (`directive5_mach_divergence.py`) | Mach Number Breach $Ma(t)$ | $Ma = 0.3$ at $\tau = 6.7 \times 10^{-14}$ s | 🔴 Incompressibility model self-invalidates at 67 fs |
-| **Directive 5** (`directive5_mach_divergence.py`) | Sonic Barrier Breach $Ma(t)$ | $Ma = 1.0$ at $\tau = 6.2 \times 10^{-15}$ s | 🔴 Shock waves form; acoustic energy radiates away |
-| **Directive 5** (`directive5_mach_divergence.py`) | Knudsen Continuum Limit $Kn$ | $Kn = 1.0$ at $\tau = 9.0 \times 10^{-16}$ s | 🔴 Continuum hypothesis breaks into Brownian noise |
+| `directive2_thermodynamic_paradox.py` | global kinetic energy $E$ | $E\sim\tau^{+0.485}\to0$ | bounded; the core's energy vanishes |
+| `directive2_thermodynamic_paradox.py` | local energy density | $e_{\text{local}}\sim\tau^{-1.010}\to\infty$ | the decoupled-temperature assumption fails |
+| `directive2_thermodynamic_paradox.py` | enstrophy $\Omega$ | $\Omega\sim\tau^{-0.515}\to\infty$ | total dissipated energy stays finite |
+| `directive2_thermodynamic_paradox.py` | $\|u\|_{L^3}$, $\|u\|_{H^{3/2}}$ | diverge ($\tau^{-0.0067}$, $\tau^{-0.51}$) | as required of any blow-up (Escauriaza–Seregin–Šverák); expected, not a defect |
+| `directive3_jacobian_instability.py` | moment-matrix conditioning | $\kappa(B)\approx4.1\times10^5$ | the raw $\kappa\sim10^{28}$ was a units artifact |
+| `directive4_gevrey_regularity.py` | cutoff regularity | Gevrey index $s=1.5$ | $C^\infty$, not analytic — required for a compactly supported force |
+| `directive5_mach_divergence.py` | Mach 0.3 | $\tau=6.7\times10^{-14}$, **$t\approx6.7$ ps** | compressibility effects begin |
+| `directive5_mach_divergence.py` | Mach 1 | $\tau=6.2\times10^{-15}$, $t\approx0.62$ ps | sonic |
+| `directive5_mach_divergence.py` | core radius at molecular size ($\mathrm{Kn}\approx1$) | $\tau=9.0\times10^{-16}$, $t\approx90$ fs | continuum description ends |
+
+All three limits are one: on the construction's diffusive route ($\mathrm{Re}\approx1$) Mach, Knudsen and Eckert
+numbers reach order one together at $\ell_*=\nu/c_s$ (0.7 nm in water, 45 nm in air).
 
 ---
 
-## 🌊 4. Comparison with Real Fluids & Physical Laws
+## 🌊 4. What a real fluid would do there
 
-### A. The Mach Number Self-Invalidation (Directive 5)
-In physical fluid dynamics, the incompressible assumption $\nabla \cdot u = 0$ is valid **only when local Mach number $\text{Ma} < 0.3$**. 
-When $\tau = 6.7 \times 10^{-14} \text{ s}$ (67 femtoseconds before the mathematical blowup), local fluid velocity reaches:
-$$v_{\text{local}} = 0.3 \times 1500 \text{ m/s} = 450 \text{ m/s}$$
-At this point, compressibility effects take over:
-1. Acoustic compression waves are generated.
-2. Kinetic energy radiates outward as sound waves.
-3. *Open question, not an established mechanism:* whether the collapsing core loses enough energy this way to arrest the singularity is one of v2's open "cutoff law" questions (see `REVIEW_AND_NEW_DIRECTION.md`) — it has not been demonstrated.
+### A. Compressibility
+Mach 0.3 is the onset of compressibility effects, reached near 450 m/s in water. Whether compressibility then stops
+the collapse was tested (paper §9.3): in a compressible Navier–Stokes–Fourier simulation driven the same way, on this
+route the core is slowed but **not stopped** before $\ell_*$. (On a high-Reynolds, inertial route, air stops following a
+driven swirl at a local Mach number of about 0.70 — a lock on Mach number, not on velocity.)
 
-### B. Thermodynamic Consistency — constitutive assumptions, not a Second Law violation
-Viscous fluid motion dissipates energy into heat at rate $\epsilon = \nu |\nabla \times u|^2$.
-For the OpenAI core, local temperature rise scales as:
-$$\Delta T(t) \sim \tau^{-1.010} \to \infty$$
-Inside the idealized mathematical model, energy balance and dissipation $\ge 0$ continue to hold — no law of thermodynamics is violated by the construction itself; what fails is the model's constitutive/isothermal assumptions. In a real fluid, as $\Delta T$ rises:
-- Viscosity $\nu(T)$ changes dynamically.
-- Thermal expansion forces the fluid to expand, lowering local vorticity density.
-- *Open question, not an established fact:* whether background Brownian thermal fluctuations shatter the hyper-delicate phase alignment required for blowup fast enough to preclude it is v2's open "thermal noise survival" question (see `REVIEW_AND_NEW_DIRECTION.md` Q3), not a demonstrated result.
+### B. Heat — constitutive assumptions, not a Second-Law violation
+Viscous heating is $\Delta T\simeq u^2/c_p$: about 48 K at Mach 0.3 and 540 K at Mach 1 in water — hot, nowhere near a
+plasma. Inside the model, energy balance holds and dissipation is non-negative; what fails is the assumption that
+temperature is decoupled from the flow. In water, **cavitation** comes before any of this.
+
+### C. Molecules
+At $\ell_*$ the hydrodynamic description itself ends (kinetic theory: the shear mode terminates at
+$k\lambda=\sqrt{\pi/2}$). A nonlinear kinetic simulation of a driven core found no arrest there. Whether thermal noise
+destroys the phase coherence the **Euler** construction needs is an open question.
 
 ---
 
-## 💻 5. Reproducing the Audit via Python Scripts
-
-You can execute the exact analytical directives to reproduce all tables and ASCII plots:
+## 💻 5. Reproduce
 
 ```bash
-# 1. Mach Number Divergence Analysis (67 fs limit breach)
-python scripts/directive5_mach_divergence.py
-
-# 2. SymPy Audit of Intensive Thermodynamic Paradox (-1.010 exponent)
-python scripts/directive2_thermodynamic_paradox.py
-
-# 3. Jacobian Matrix Preconditioning & Non-Dimensionalization
-python scripts/directive3_jacobian_instability.py
-
-# 4. Gevrey Regularity & Derivatives Analysis (s = 1.5)
-python scripts/directive4_gevrey_regularity.py
-
-# 5. Pre-Singularity Vortex Core Simulation & Visual Plots
+python scripts/directive5_mach_divergence.py         # Mach / Knudsen / boiling times (dimensionless tau and t = T*tau)
+python scripts/directive2_thermodynamic_paradox.py   # energy, energy density, enstrophy exponents
+python scripts/directive3_jacobian_instability.py    # conditioning after non-dimensionalization
+python scripts/directive4_gevrey_regularity.py       # Gevrey index of the cutoffs
 python scripts/directive7_pre_singularity_simulation.py
+scripts/run_benchmarks.sh                             # regenerates and checks the newer results (BENCHMARKS.md)
 ```
 
 ---
 
-## 🛡️ 6. The Neuro-Symbolic Engine Solution
+## 🧠 6. Formal counterpart
 
-While the Lean 4 code from OpenAI compiles cleanly, our **Neuro-Symbolic Physics Engine (LeanFlow)** adds physical admissibility predicates:
-
-```lean
-/-- Thermodynamically Admissible Fluid Flow. -/
-structure ThermodynamicallyAdmissibleFlow (v : ℝ³ → ℝ → ℝ³) (T_blowup : ℝ) (c_s : ℝ) (Ω_max : ℝ) : Prop where
-  incompressible : ∀ t ∈ Ico 0 T_blowup, ∀ x : ℝ³, ‖v x t‖ / c_s ≤ 0.3
-  bounded_enstrophy : 0 < Ω_max ∧ ∀ t ∈ Ico 0 T_blowup, ∫ x, ‖fderiv ℝ (v · t) x‖^2 ≤ Ω_max
-```
-
-With these guardrails active, our kernel-verified theorem `openai_physical_invalidation_master` formally **blocks and refuses** the OpenAI blowup from being accepted as a physically valid fluid solution.
+The verified statement is on OpenAI's **own** definitions:
+[`OpenAIAdmissibility.lean`](../03_Lean4_Topological_Censorship/src/OpenAIAdmissibility.lean) proves, unconditionally and
+with standard axioms only, that any object with OpenAI's `CandidateProperties` exceeds every velocity-gradient bound
+arbitrarily close to the blow-up time, so it leaves $|\nabla u|\lesssim c_s^2/\nu$ for every fluid and choice of units.
+That labels the construction; it does not block or refute it.
 
 ---
 
-## 🔗 7. References & Artifact Links
+## 🔗 7. Links
 
-- 📄 **Main Paper**: [`01_Verification_Paper/OpenAI_NSE_Verification.pdf`](file:///D:/xdev/OpenAI-NSE-Epistemic-Audit/01_Verification_Paper/OpenAI_NSE_Verification.pdf)
-- 🧠 **Proposed Solution & Code Walkthrough**: [`11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md`](file:///D:/xdev/OpenAI-NSE-Epistemic-Audit/11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md)
-- 🛠️ **OpenAI PoC Framework**: [`10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md`](file:///D:/xdev/OpenAI-NSE-Epistemic-Audit/10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md)
-- 🧪 **Interactive Google Colab**: [Open in Colab](https://colab.research.google.com/github/xaviercallens/OpenAI-NSE-Epistemic-Audit/blob/main/07_Tout_Public_Memo/Citizen_Science_Exploration.ipynb)
+- 📄 **Paper**: [`01_Verification_Paper/OpenAI_NSE_Verification.pdf`](../01_Verification_Paper/OpenAI_NSE_Verification.pdf)
+- 🧠 **Model-validity layer proposal**: [`11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md`](../11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md)
+- 🛠️ **PoC proposal**: [`10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md`](../10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md)
+- 🧪 **Notebook**: [Open in Colab](https://colab.research.google.com/github/xaviercallens/OpenAI-NSE-Epistemic-Audit/blob/main/07_Tout_Public_Memo/Citizen_Science_Exploration.ipynb)

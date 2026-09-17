@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 """
+RETIRED (2026-09-17). DO NOT USE.
+
+This is the original Sept-2026 uploader for the withdrawn "Thermodynamic Censorship" preprint. Its
+metadata asserts claims this project has withdrawn (a "Thermodynamic Censorship Principle", a bounded-
+enstrophy admissibility axiom, the raw 10^28 condition number as instability, "physically
+unrealizable"). Running it would publish a new, uncorrected Zenodo record. It now refuses to run.
+
+The current publisher is 01_Verification_Paper/zenodo_push.py (new version of concept DOI
+10.5281/zenodo.22696717; v5.5.0 is 10.5281/zenodo.22806767). The text below is kept for the record.
+
+Original docstring:
 Zenodo Upload Script for Thermodynamic Censorship Paper
 
 Uploads the complete research package to Zenodo via the REST API.
@@ -110,7 +121,10 @@ def get_token():
 
 
 def main():
-    token = get_token()
+    print("zenodo_upload.py is retired: it would publish the withdrawn 'Thermodynamic Censorship' preprint.\n"
+          "Use 01_Verification_Paper/zenodo_push.py instead (see its --help).", file=sys.stderr)
+    return 2
+    token = get_token()  # unreachable: kept for the record
     if not token:
         print("=" * 60)
         print("ZENODO UPLOAD INSTRUCTIONS")

@@ -10,6 +10,10 @@ Corrected per peer-review report for intensive dimensional scaling:
 - Intensive Local Energy Density: ~ |u|^2 ~ tau^(-1-2h) = tau^(-1.010) (for h=1/200)
 - L^3 Norm: ||u||_3 = (∫|u|^3 dV)^(1/3) ~ tau^(-4h/3) = tau^(-0.00667)
 - Sobolev H^(3/2) Norm: ||u||_{H^(3/2)} ~ tau^(-0.5075)
+
+NOTE (2026-09-17): the file name keeps the historical "paradox" label. There is no thermodynamic
+paradox: no law is violated. Local energy density and heating diverge in the model, and what fails is
+the model's decoupled-temperature assumption (paper Sec. 4-5).
 """
 
 import os

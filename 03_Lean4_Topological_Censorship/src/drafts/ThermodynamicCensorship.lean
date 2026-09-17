@@ -1,3 +1,10 @@
+-- UNVERIFIED DRAFT (status note added 2026-09-17, v5.5.0). This file is NOT part of the project's
+-- verified Lean set (see 03_Lean4_Topological_Censorship/README.md: nine files, 74 declarations,
+-- standard axioms). It may contain `sorry`, custom axioms or placeholders, may not compile against
+-- the current toolchain, and belongs to framings since withdrawn ("censorship", "physical
+-- invalidation"). Any "0 sorry" or "kernel-verified" wording below is historical and withdrawn.
+-- Do not cite this file as a result.
+
 import NavierStokes.ProblemStatement
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
