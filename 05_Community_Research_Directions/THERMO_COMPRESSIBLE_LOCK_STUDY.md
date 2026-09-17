@@ -186,3 +186,24 @@ python3 compressible_core_re_sweep.py     # Reynolds sweep + convergence, ~40 mi
 python3 plot_compressible_core.py
 cd ../kinetic_lock_rs && sh run_queue.sh jobs_stage4a.txt   # BGK with tau ~ 1/rho (and 4b)
 ```
+
+## 7. Prediction registered before the molecular-dynamics test (2026-09-18)
+
+The thermal kinetic test (§6, item 1) is being run as molecular dynamics of a Lennard-Jones gas
+(`md_core_rs/`, ρ = 0.15, T = 2, mean free path ≈ 1.5σ), which needs no continuum closure. Before any MD
+forced-run data existed, the continuum solver was run for the matching set-up
+(`experiments/compressible_core_md_match.py`: monatomic ideal gas, γ = 5/3, Pr = 2/3, μ ∝ T^0.75, provisional
+ν = 1.41, c = 1.826 in LJ units, core driven from 40σ to 4σ, sponge where the MD thermostat buffer starts):
+
+| Re | target Mach 0.5 | 1.0 | 1.5 | 2.0 | 3.0 | core at the end |
+|---|---|---|---|---|---|---|
+| 16 | 0.40 | 0.53 | 0.57 | 0.58 | **0.59** | ρ₀ = 0.17 ρ∞, T₀ = 1.66 T∞ |
+| 32 (wide domain) | 0.62 | 0.55 | 0.57 | 0.58 | **0.58** | ρ₀ = 0.12, T₀ = 2.13 |
+| 4 | 0.40 | (target reaches only Mach 0.77) | | | | ρ₀ = 0.47, T₀ = 1.11 |
+
+**Prediction:** if the Mach lock is physical and not an artefact of the Navier–Stokes–Fourier closure, the MD
+core at Re = 16 should saturate at a peak local Mach number near **0.6** (not follow the target to 3), with a
+core evacuated to roughly a fifth of ambient density and heated by roughly two thirds. If the MD core instead
+follows the target, or saturates at a clearly different level, the lock is (at least quantitatively) a
+property of the closure. The numbers will be re-run with the viscosity measured in the MD gas; the
+comparison is reported whichever way it comes out.
