@@ -68,8 +68,12 @@ are the weaker lock by one to two orders of magnitude, because on such a collaps
 through a nonlinearity that is a few percent of the dynamics. Nor is the missing lock a stronger
 drain: the exact shear-mode spectrum of the BGK kinetic model damps small scales \emph{less} than
 viscosity, caps the relaxation rate at the collision frequency, and ends the hydrodynamic mode at
-$k\lambda=\sqrt{\pi/2}$. What operates where the continuum ends is not a regularization of the
-hydrodynamic equations but the termination of the hydrodynamic description itself.
+$k\lambda=\sqrt{\pi/2}$; a nonlinear discrete-velocity BGK simulation of the same forced collapse
+confirms that the kinetic model does not arrest it there. What operates where the continuum ends is
+not a regularization of the hydrodynamic equations but the termination of the hydrodynamic
+description itself. On the formal side, we prove in Lean~4, on OpenAI's own definitions and with no
+additional hypothesis, that any object with their candidate properties exceeds every velocity-gradient
+bound arbitrarily close to the singular time.
 \end{abstract}
 
 % ====================================================================
@@ -746,7 +750,15 @@ band --- and we checked the obvious alternative explanation before accepting thi
 would steepen the curve, and refitting against the measured rather than the target core size gives a
 slope of $2.4$, the wrong direction. The shape is instead that of the fraction of the forcing's
 Gaussian spectrum lying above $k_\alpha$. At $32^3$ the crossing itself falls just below the
-resolved window; a $96^3$ sweep that reaches it is in progress.
+resolved window. We expected a $96^3$ sweep to reach it; it did not --- none of six runs attains
+$B/F=1$, and $B/F$ saturates at $0.25$--$0.56$. The reason is informative: the barrier resists by
+fattening the core, which lowers its own share of the budget, so the ratio levels off instead of
+crossing. The arrest is visible in the core size instead. With the barrier off the core follows
+$\ell\propto\tau^{1/2}$ exactly (local slope $0.500$); with it on, every run decelerates to a local
+slope of $0.04$--$0.16$ at $\ell\approx(1.2$--$1.5)\sqrt{\alpha'}$ by the resolution floor, and the
+window-end exponents against $\alpha'$ are $+0.42$ for $\ell$ and $-0.43$ to $-0.47$ for $u_{\max}$,
+approaching the law's $+1/2$ and $-1/2$ from below. No run has fully stalled, so this supports
+$\ell_c\propto\sqrt{\alpha'}$ without yet establishing a converged arrest.
 
 \subsection{Gate or drain on a \texorpdfstring{$\mathrm{Re}\approx1$}{Re~1} collapse}
 \label{sec:gate-drain}
@@ -852,6 +864,27 @@ Eq.~\eqref{eq:bgk-shear} tends to $\sqrt{\pi/2}/(k\lambda)$, so no root survives
 free-streaming decay of the continuum remains. At $k\lambda=1$ the barrier already damps $1.43$
 times harder than kinetic theory does; at $k\lambda=3$ there is no kinetic mode to compare, and the
 barrier exceeds the collision-rate cap by a factor of $81$ or more.
+
+That is a statement about linear modes. Whether a \emph{driven} nonlinear core is stopped near
+$k\lambda\approx\sqrt{\pi/2}$ is a separate question, and we tested it directly with a
+two-dimensional, two-velocity discrete-velocity BGK solver (entropic discrete Maxwellian, exact
+collision, spectral streaming, Strang splitting), forced by the same manufactured collapse. Before any
+collapse run it reproduces the equilibrium moments to $10^{-15}$, conserves mass and momentum to
+$2\times10^{-15}$ with the discrete $H$ decreasing at every step, agrees with an independent CVODE
+integration at second order, keeps $f\ge0$ in Taylor--Green flows up to Mach $0.6$, and matches the
+exact shear decay rates of Eq.~\eqref{eq:bgk-shear} within $2\%$ for $k\lambda\le1$. The kinetic
+core does not arrest. It runs slightly \emph{ahead} of the Navier--Stokes target (by up to $12\%$ in
+core size), as a model with weaker small-scale damping should, and its apparent stopping point moves
+with the grid rather than with $\lambda$: at fixed $\lambda$, refining the grid spacing from $0.67\lambda$
+to $0.17\lambda$ moves it from $0.98\lambda$ to $0.52\lambda$ at $\mathrm{Re}=1$ and from $0.86\lambda$
+to $0.35\lambda$ at $\mathrm{Re}=0.25$, with $k_\omega\lambda$ at that point rising to $4$--$5$. A
+Navier--Stokes control on the same grid and forcing tracks its target to $4\times10^{-4}$. Within the
+solver's validated range the robust statement is that there is no arrest at or above
+$\ell\approx0.9\lambda$; below it the runs reach Mach numbers of $1$--$3$, strong density depletion and
+small negative populations, and bound rather than measure what happens. The model is isothermal, so
+it contains no thermodynamic limit by construction. This is consistent with the linear result rather
+than in tension with it: a model whose damping is capped at $1/\tau$ offers a body force no
+additional resistance to overcome.
 
 So the lock at $\ell_*$ is neither of the two regularizations tested above. It is not a stronger
 drain, and not a gate on transfer. It is the end of the hydrodynamic description: the velocity
@@ -1024,17 +1057,22 @@ $|\omega|/(c_s^2/\nu)=0.05$ --- with byte-identical numerics in both cases. Mode
 property of the discretization, and a solver that reports its own departure from the modelled
 regime seems to us more useful than one that regularizes the departure away.
 
-We want to be explicit about the current state of this project's own attempt at pillar 3. Five
+We want to be explicit about the current state of this project's own attempt at pillar 3. Seven
 Lean files in this repository compile with no \texttt{sorry} and no axioms beyond the standard
-three, together $45$ theorems. Four are free-standing: the scaling chain of
+three, together $57$ declarations checked with \texttt{\#print axioms} (earlier versions quoted a
+count of $45$ theorems under a different counting convention). Two are new in this version: the
+H-theorem, conservation and positivity of the nonlinear discrete-velocity BGK step used in
+\S\ref{sec:gate-drain}, and the exact cap $-1/\tau\le\operatorname{Re}\mu\le0$ on the eigenvalues of a
+skew streaming operator plus projected relaxation. Four of the others are free-standing: the scaling chain of
 Proposition~\ref{prop:scales} as an equality chain from the diffusive core scalings (core
 Reynolds number one, the Mach and Knudsen times, Eckert number one, and their coincidence at
 $\ell_*$); the bounds on the Leray-$\alpha$ filter symbol; an H-theorem for the discrete BGK
 collision step; and the finite-dimensional identity behind the gate--drain distinction of
 \S\ref{sec:gate-drain}, that a projected skew-adjoint term changes the energy only at second order in
 the step while a dissipative one removes it at first order. The fifth is the first to state results
-about OpenAI's \emph{actual} objects: it imports their \texttt{ProblemStatement} unchanged and is
-described under Direction~2 of \S\ref{sec:directions}, including exactly what it assumes. Each
+about OpenAI's \emph{actual} objects: it imports their \texttt{ProblemStatement} and periodic
+integration library unchanged and is described under Direction~2 of \S\ref{sec:directions}; as of this
+version it assumes nothing beyond their definitions. Each
 file's header states what it does not prove.
 
 \subsection{A Hypothesis on Cutoff Regularizations: Testable Questions, Not a Metric}
@@ -1075,8 +1113,9 @@ advertisement rather than a plan. Three shorter items follow.
 The first two stages of this direction are now built and reported in \S\ref{sec:forced-core} and
 \S\ref{sec:gate-drain}: a manufactured $\mathrm{Re}\approx1$ collapse tracked to $10^{-7}$, the
 single-variable collapse of the barrier's engagement, and the gate--drain comparison. Four things
-remain, in order of value. First, the $B/F=1$ crossing itself, from which the four arrest exponents
-can be fitted directly; the $96^3$ sweep that reaches it is in progress. Second, a collapsing
+remain, in order of value. First, a converged arrest: at $96^3$ the core stalls near
+$(1.2$--$1.5)\sqrt{\alpha'}$ with exponents approaching the law but not yet settled, and $B/F=1$ proved
+the wrong detector (\S\ref{sec:forced-core}); a longer resolved window is needed. Second, a collapsing
 \emph{axial} scale: the meridional cell used here has $\ell_z$ fixed by the box, whereas the
 construction has $\ell_z\asymp\tau^{1/2-h}$, which needs a localized axial envelope. Third, the
 azimuthal stability of the forced column, which the axisymmetric targets used so far cannot probe
@@ -1118,18 +1157,21 @@ proposed in earlier versions is now done. Admissibility is stated on OpenAI's ow
 \texttt{VelocityField}, as a bound on the operator norm of \texttt{spatialDerivative}; that norm
 dominates both strain and vorticity, which settles the ``wrong field?'' question for the purposes of a
 formal statement. Unconditionally, any object satisfying OpenAI's \texttt{CandidateProperties} has a
-uniformly bounded gradient on every $[0,1-\delta]$. Given one hypothesis --- that a uniformly bounded
-gradient on $[0,1)$ excludes \texttt{SpeedUnboundedAtOne} --- the same object exceeds every gradient
+uniformly bounded gradient on every $[0,1-\delta]$, and --- since a uniformly bounded gradient on
+$[0,1)$ excludes \texttt{SpeedUnboundedAtOne}, proved below --- the same object exceeds every gradient
 bound in every window before $t=1$, and therefore leaves the admissible set for every fluid and every
-choice of units. All results compile inside OpenAI's own project with only the standard axioms.
+choice of units. All results compile inside OpenAI's own project with only the standard axioms and no
+remaining hypothesis.
 
 Earlier versions said this hypothesis would be the Beale--Kato--Majda theorem. It is much weaker,
 and saying so matters. OpenAI's candidate properties include spatial periodicity of velocity,
 pressure and force, and zero initial velocity. On the periodic cell the pressure gradient, the
 viscous term and the divergence-free advection all average to zero, so the cell mean obeys
 $d\langle u\rangle/dt=\langle f\rangle$ and stays bounded; a gradient bound $C$ then confines $u$ to
-within $\sqrt3\,C$ of that mean. The hypothesis is an elementary lemma, left unformalized only
-because it needs integration by parts over the periodic cell in a form Mathlib does not yet provide.
+within $\sqrt3\,C$ of that mean. The hypothesis is an elementary lemma. Earlier versions left it
+unformalized for want of integration by parts over the periodic cell; OpenAI's own project supplies
+exactly that (\texttt{NavierStokes.PeriodicIntegration}), and with it the lemma is now proved, so the
+formal result is unconditional.
 The honest reading follows: the formal result is close to ``velocity blow-up forces gradient
 blow-up,'' and its value is that it is the first statement in this project about the proof objects
 themselves, not that it adds physics.
@@ -1225,7 +1267,8 @@ nonlinearity that is a few percent of the dynamics. Nor does the physics beneath
 behave like the stronger of the two: the validity scale is the mean free path, with a constant
 derived from kinetic theory, and the exact kinetic shear spectrum damps small scales less than
 viscosity, caps the rate at the collision frequency, and ends the hydrodynamic mode at
-$k\lambda=\sqrt{\pi/2}$. The lock that acts where the continuum ends is the end of the hydrodynamic
+$k\lambda=\sqrt{\pi/2}$ --- and a nonlinear kinetic simulation of the forced collapse finds no arrest
+there. The lock that acts where the continuum ends is the end of the hydrodynamic
 description, which is where this paper began. The three directions of \S\ref{sec:directions}
 follow, and the second of them
 --- an admissibility criterion stated on the coherence of vorticity direction rather than on its
@@ -1301,6 +1344,11 @@ load-bearing conjunct was a bare \texttt{True} placeholder, and its supporting v
 equation was missing a term). The mathematical content --- a saturating regularization in the
 Leray-$\alpha$ family with a testable cutoff law --- survives with the physical motivation removed;
 see~\cite{Callens2026v2} for the full account of what was found and corrected.
+
+\paragraph{Forecasts not borne out.} Version~5.3.0 stated that a $96^3$ forced-core sweep would
+reach the $B/F=1$ crossing for the upper half of its band. It reached it for none; the result and the
+reason are reported in \S\ref{sec:forced-core}. The same version described the admissibility result
+of Direction~2 as conditional on an unformalized lemma; that lemma is now proved.
 
 % ====================================================================
 \section{The \texttt{r/FluidMechanics} Discussion, in Full}

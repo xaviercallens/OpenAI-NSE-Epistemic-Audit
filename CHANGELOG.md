@@ -1,5 +1,49 @@
 # Changelog
 
+## v5.4.0 — 2026-09-17 — Link 1 unconditional; the kinetic model does not arrest a driven collapse
+
+### Lean 4: the admissibility bridge no longer has a hypothesis
+
+- `OpenAIAdmissibility.lean` proves `bkmHypothesis_holds : BKMHypothesis` (the periodic mean-velocity
+  lemma: `d⟨u⟩/dt = ⟨f⟩` on the unit cell via OpenAI's own `NavierStokes.PeriodicIntegration` and
+  `PeriodicUniqueness`, bounded mean from `u(0) = 0`, oscillation `≤ √3·C`). New unconditional
+  corollaries: `candidate_violates_every_gradient_bound'`, `candidate_not_admissible'`,
+  `candidate_not_admissibleScaled'`, `exits_admissible_near_one'`. Definitions unchanged; 15
+  declarations; standard axioms only.
+- New files: `NonlinearBGKEntropy.lean` (7: discrete entropic equilibrium minimizes H; BGK step
+  conserves mass/momentum, preserves positivity, decreases H; exact-difference forcing conserves
+  mass/momentum) and `KineticSpectralCap.lean` (6: eigenvalues of skew streaming plus projected
+  relaxation satisfy `−1/τ ≤ Re μ ≤ 0`).
+- Count convention: 57 declarations checked by `#print axioms` across seven files (v5.3.0 quoted
+  "45 theorems" under a different convention; by this one it was 36).
+
+### Nonlinear test of the kinetic lock (link 4): null result
+
+`05_Community_Research_Directions/kinetic_lock_rs/` — a Rust 2D-2V discrete-velocity BGK solver, gated
+before use (moments 1e-15; conservation 2e-15 with monotone H; second-order agreement with
+rusty-SUNDIALS CVODE; positivity to Mach 0.6; linear shear decay within 2% of exact BGK for kλ ≤ 1 at
+dt = τ/20 — thin margin, fails at τ/10). Driven by the forced-core target:
+
+- no arrest at `k_ωλ ≈ √(π/2)`; the kinetic core runs up to 12% *ahead* of the NSE target;
+- the apparent stopping point moves with the grid, not with λ (λ = 0.065: Δx 0.67λ → 0.17λ moves it
+  0.98λ → 0.52λ at Re 1, 0.86λ → 0.35λ at Re 0.25); NSE control on the same grid tracks to 4e-4;
+- robust within the validated range: no arrest at or above ≈ 0.9λ. Below it, runs exceed Mach 1 and
+  the positivity gate. Isothermal model — no thermodynamic lock by construction.
+
+### Direction 1: 96³ forced-core sweep
+
+The v5.3.0 forecast of `B/F = 1` crossings **failed** (0/6; B/F saturates at 0.25–0.56 because the
+barrier fattens the core). The core size shows the arrest instead: local collapse rate 0.04–0.16
+(control 0.500) at `ℓ ≈ 1.2–1.5 √α′`; window-end exponents ℓ +0.42, u −0.43 to −0.47 against the
+law's +0.5, −0.5. Not yet converged.
+
+### Paper (25 pages)
+
+Abstract, §9.1 (96³ result), §9.2 (nonlinear kinetic test paragraph), §10.3 (Lean status), Direction
+1 and 2, conclusion, and a new "Forecasts not borne out" paragraph in Appendix A.
+
+Not published to Zenodo or Hugging Face in this release; the latest DOI remains v5.3.0.
+
 ## v5.3.0 — 2026-09-16 — The kinetic lock is a termination, not a drain; first Lean bridge to OpenAI's objects
 
 ### Correction to v5.2.0
