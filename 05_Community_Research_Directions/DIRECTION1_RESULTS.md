@@ -1,6 +1,6 @@
 # Direction 1 — the forced-core test bed: results
 
-**Date:** 2026-09-16 · **Status:** stage 1 complete at 32³; 96³ sweep in progress; stage 2 (axial) in progress
+**Date:** 2026-09-17 · **Status:** stage 1 complete at 32³ and 96³; stage 2 (axial) complete
 **Code:** `experiments/forced_core.py`, `experiments/plot_forced_core.py` · **Tests:** `tests/test_forced_core.py` (9)
 **Data:** `experiments/results/forced_core_32_v3.{json,png}`
 
@@ -70,6 +70,36 @@ below the resolved window floor `τ_min = 24`. The core lags the target by 63–
 increasing monotonically with α′. The 96³ run with a 2.5-cell window reaches `α′/(ντ) ≈ 18` and
 should cross for the upper half of its band — that is the direct test of the crossing exponents,
 and it is running.
+
+### The 96³ sweep (2026-09-17): no B/F crossing — the forecast was wrong, the arrest shows as a stall
+
+The forecast above ("should cross for the upper half") **failed**: 0 of 6 runs reached B/F ≥ 1
+(B/F at window end 0.25 → 0.56; control tracks its target to 1.7×10⁻⁷). The pooled B/F law has
+slope +0.72, R² 0.88, C = 0.14 — flatter than at 32³, because B/F is measured on a core that has
+stopped following the target (lag 95–442%). **B/F ≥ 1 is the wrong arrest detector for this bed**:
+the barrier resists by fattening the core, which lowers the barrier's own share, so the ratio
+saturates instead of crossing.
+
+The core size shows the arrest directly (`results/forced_core_96_v3.json`, series `ell_meas`):
+
+| √α′/ℓ₀ | ℓ/√α′ at τ = 32 → 16 → 7.8 → 4.5 → 2.7 | local d ln ℓ/d ln τ, last 20% |
+|---|---|---|
+| control (α′ = 0) | ℓ = 0.568 → 0.164, tracks `√(ντ)` | **+0.500** |
+| 0.213 | 2.73 → 2.12 → 1.80 → 1.62 → 1.50 | +0.158 |
+| 0.270 | 2.29 → 1.89 → 1.65 → 1.51 → 1.42 | +0.129 |
+| 0.343 | 1.99 → 1.71 → 1.53 → 1.43 → 1.36 | +0.101 |
+| 0.435 | 1.82 → 1.61 → 1.47 → 1.39 → 1.34 | +0.076 |
+| 0.552 | 1.58 → 1.40 → 1.29 → 1.23 → 1.19 | +0.063 |
+| 0.700 | 1.54 → 1.41 → 1.33 → 1.29 → 1.27 | +0.042 |
+
+Every barrier run is decelerating towards a plateau at ℓ ≈ 1.2–1.5 √α′ (collapse rate 0.04–0.16
+against the unarrested 0.5), but none has fully stopped by the resolution floor. Window-end
+exponents against α′ (clean band √α′ ≤ 0.435 / all six): ℓ **+0.42 / +0.42**, u_max **−0.43 / −0.47**,
+ω_max −0.66 / −0.70, against the cutoff law's +0.5, −0.5, −1. Size and speed approach the law;
+vorticity is further off, as expected for a not-yet-stalled, grid-peak-sampled field. What this
+supports: the barrier arrests the forced core at ℓ ∝ √α′ with an O(1) prefactor, and the exponents
+are converging towards the law from below. What it does not yet show: a converged arrest; that
+needs a longer window (larger n or a later τ floor) rather than a different criterion.
 
 ### A design flaw found by the figure, and fixed
 
@@ -219,8 +249,8 @@ so that swirl–axial coupling makes `N(U) ≠ 0`. That is stage 2, in progress
   forcing does the work of sustaining the collapse by construction, and the bed asks only whether a
   regularization can *resist* it.
 * It shows, for the first time with the premise satisfied, that the barrier's engagement obeys the
-  scaling argument's single-variable form. It does not yet show the crossing exponents; that needs
-  the 96³ result.
+  scaling argument's single-variable form. At 96³ the core stalls near ℓ ≈ 1.2–1.5 √α′ with
+  exponents approaching the law (ℓ +0.42, u −0.43 to −0.47); a converged arrest is not yet shown.
 * The prefactor `C ≈ 0.18` is a property of a Gaussian target's spectrum, not a universal number.
 
 ## Reproduction
