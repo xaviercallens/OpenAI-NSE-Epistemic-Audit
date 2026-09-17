@@ -1,0 +1,23 @@
+# (1) main lambda sweep at fixed dx/lambda ~ 0.67, lstart = 4, Q = 24
+main_l0.065_re1       --lambda 0.065 --re 1    --lstart 4
+main_l0.065_re0.25    --lambda 0.065 --re 0.25 --lstart 4
+main_l0.045_re1       --lambda 0.045 --re 1    --lstart 4
+main_l0.045_re0.25    --lambda 0.045 --re 0.25 --lstart 4
+main_l0.03_re1        --lambda 0.03  --re 1    --lstart 4
+main_l0.03_re0.25     --lambda 0.03  --re 0.25 --lstart 4
+main_l0.02_re1        --lambda 0.02  --re 1    --lstart 4
+main_l0.02_re0.25     --lambda 0.02  --re 0.25 --lstart 4
+# (2) lambda sweep at FIXED grid N = 288 (grid-controlled vs lambda-controlled arrest)
+fixn_l0.045_re0.25_n288 --lambda 0.045 --re 0.25 --lstart 4 --n 288
+fixn_l0.045_re1_n288    --lambda 0.045 --re 1    --lstart 4 --n 288
+fixn_l0.03_re0.25_n288  --lambda 0.03  --re 0.25 --lstart 4 --n 288
+fixn_l0.03_re1_n288     --lambda 0.03  --re 1    --lstart 4 --n 288
+fixn_l0.02_re0.25_n288  --lambda 0.02  --re 0.25 --lstart 4 --n 288
+fixn_l0.02_re1_n288     --lambda 0.02  --re 1    --lstart 4 --n 288
+# (3) lattice (Q) dependence at lambda = 0.065, N = 288
+q16_l0.065_re0.25_n288 --lambda 0.065 --re 0.25 --lstart 4 --n 288 --q 16
+q12_l0.065_re0.25_n288 --lambda 0.065 --re 0.25 --lstart 4 --n 288 --q 12
+q16_l0.065_re1_n288    --lambda 0.065 --re 1    --lstart 4 --n 288 --q 16
+# (4) finer sweep point at dx/lambda ~ 0.34
+fine_l0.045_re0.25_n432 --lambda 0.045 --re 0.25 --lstart 4 --n 432
+fine_l0.045_re1_n432    --lambda 0.045 --re 1    --lstart 4 --n 432

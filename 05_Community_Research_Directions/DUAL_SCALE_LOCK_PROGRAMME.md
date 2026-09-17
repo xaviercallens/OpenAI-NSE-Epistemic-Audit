@@ -268,3 +268,27 @@ structure from speculation into the Chapman–Enskog hierarchy. Second, the conj
 with `α ≈ ℓ*` is the Lagrangian average over kinetic fluctuations — which, if true, turns the
 α-model from a chosen closure into a derived intermediate, and if false, settles that the
 dual-scale lock is a modelling convenience. Either outcome is worth the DSMC run that decides it.
+
+## 8. Status update (2026-09-17): the chain after the nonlinear kinetic test
+
+* **Link 1 is now unconditional.** The periodic mean-velocity lemma (formerly named
+  `BKMHypothesis`) is proved in `OpenAIAdmissibility.lean` on OpenAI's own definitions and
+  periodic-integration library: any object with OpenAI's `CandidateProperties` exceeds every
+  velocity-gradient bound arbitrarily close to `t = 1`. Standard axioms only.
+* **Link 4, nonlinear test: null result for the lock as an arrest.** A 2D-2V discrete-velocity
+  BGK solver in Rust (`kinetic_lock_rs/`, gates G1–G5 passed, CVODE cross-check via
+  rusty-SUNDIALS) driven by the forced-core target shows **no arrest at `k_ωλ ≈ √(π/2)`**. The
+  kinetic core runs slightly *ahead* of the Navier–Stokes target (lag down to −11 to −12%;
+  kinetic damping is weaker than viscous, as the linear Burnett sign predicts), and its apparent
+  stopping point moves with the grid — at λ = 0.065, refining `Δx` from 0.67λ to 0.17λ moves it
+  from 0.98λ to 0.52λ (Re = 1) and from 0.86λ to 0.35λ (Re = 0.25), with `k_ωλ` rising to 4–5 —
+  while the NSE control on the same grid tracks the target to |lag| ≤ 4×10⁻⁴. Robustly, within
+  the solver's validated range: no arrest at or above ≈ 0.9λ. Below that the runs reach
+  Mach 1–3, 20–98% density holes and negative `f` beyond the G5 limit, so they bound, rather
+  than measure, what happens there.
+* **Reading.** This is what Lock K's correction (§ Lock K, v5.3.0) implies rather than a
+  surprise: kinetic theory terminates the hydrodynamic *mode* at `kλ = √(π/2)` and caps damping
+  at `1/τ`, so it supplies no extra resistance a body force must overcome. A driven core is
+  stopped, if at all, by something else (compressibility, thermodynamics — Locks C, T), not by
+  the kinetic cutoff. Limits: 2D, isothermal BGK (no energy equation, so Lock T is absent by
+  construction), `Δx ≥ λ/6`, forcing taken from the incompressible solution.

@@ -1,0 +1,8 @@
+# start-length sensitivity (lambda = 0.065, N = 144)
+ls4_l0.065_re1_n144      --lambda 0.065 --re 1    --lstart 4 --n 144
+ls4_l0.065_re0.25_n144   --lambda 0.065 --re 0.25 --lstart 4 --n 144
+# resolution ladder at lstart = 4
+ls4_l0.065_re1_n288      --lambda 0.065 --re 1    --lstart 4 --n 288
+ls4_l0.065_re0.25_n288   --lambda 0.065 --re 0.25 --lstart 4 --n 288
+ls4_l0.065_re0.25_n576   --lambda 0.065 --re 0.25 --lstart 4 --n 576
+ls4_l0.065_re1_n576      --lambda 0.065 --re 1    --lstart 4 --n 576

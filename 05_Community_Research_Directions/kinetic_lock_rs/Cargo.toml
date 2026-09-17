@@ -1,0 +1,25 @@
+[package]
+name = "kinetic_lock_rs"
+version = "0.1.0"
+edition = "2021"
+description = "Isothermal 2D-2V discrete-velocity BGK solver for the kinetic-lock collapse test"
+publish = false
+
+[dependencies]
+rustfft = "6.4.1"
+rayon = "1.12"
+num-complex = "0.4.6"
+nalgebra = { version = "0.34", default-features = false, features = ["std"] }
+serde_json = "1"
+# G3 only: CVODE from rusty-SUNDIALS, read-only path dependency.
+cvode = { path = "../../../../rusty-SUNDIALS/crates/cvode", optional = true }
+nvector = { path = "../../../../rusty-SUNDIALS/crates/nvector", optional = true }
+
+[features]
+default = []
+sundials = ["cvode", "nvector"]
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+lto = "thin"
