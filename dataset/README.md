@@ -28,7 +28,7 @@ pretty_name: "The OpenAI Navier–Stokes and Euler Blow-Up Proofs: A Physical Re
 This dataset accompanies the paper:
 **"The OpenAI Navier–Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation"**, v5.5.0 (2026-09-17)
 *The MechanicaFluidorum Program | Socrate AI Lab*
-**Zenodo:** concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (always the latest version); v5.6.1 is [10.5281/zenodo.22828106](https://doi.org/10.5281/zenodo.22828106)
+**Zenodo:** concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (always the latest version); v5.7.0 is [10.5281/zenodo.22836538](https://doi.org/10.5281/zenodo.22836538)
 **GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit)
 
 > **Earlier versions.** Versions 2.0.0 of this record (`10.5281/zenodo.22725347`, `22727801`) and the
@@ -87,6 +87,6 @@ Exact file lists depend on the upload (Zenodo bundle or Hugging Face); every ver
   publisher = {Zenodo},
   doi       = {10.5281/zenodo.22696717},
   url       = {https://doi.org/10.5281/zenodo.22696717},
-  note      = {Concept DOI; resolves to the latest version. v5.5.0: 10.5281/zenodo.22828106}
+  note      = {Concept DOI; resolves to the latest version. v5.7.0: 10.5281/zenodo.22836538}
 }
 ```

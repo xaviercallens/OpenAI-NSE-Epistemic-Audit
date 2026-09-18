@@ -26,6 +26,9 @@ cyclostrophic wall-tension estimate started from the initial pressure and is sup
 ### Also
 - Axial diagnostic for the water-like box is inconclusive (an emptied core has no meaningful centroid; no undriven liquid control).
 - Benchmark: four new checks (Re = 4 ensemble, 3D gas bound, water-like failed cap, measured-pressure reading).
+### Published
+- GitHub release v5.7.0 (paper PDF attached); Zenodo version DOI **10.5281/zenodo.22836538** (concept 10.5281/zenodo.22696717),
+  66 files checksum-verified against the tagged tree before publishing; HuggingFace dataset synced to v5.7.0.
 - DualScale-Enterprise `numerics/` (PR #1, merged) predates the stress diagnostic; not yet ported.
 
 ## v5.6.1 — 2026-09-18 — Full molecular-dynamics ensemble, a normalization correction, and a velocity bound from cavitation
