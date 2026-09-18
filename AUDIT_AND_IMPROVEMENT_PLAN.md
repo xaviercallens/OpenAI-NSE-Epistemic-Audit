@@ -9,7 +9,7 @@
 > **Status (updated 2026-09-17, v5.5.0) — historical document.** This file predates the project's current
 > position and is kept unedited below this note as a record. Current state: [`README.md`](README.md) ("Current
 > status") and [`CHANGELOG.md`](CHANGELOG.md); the paper is `01_Verification_Paper/OpenAI_NSE_Verification.pdf`
-> (v5.6.0, DOI 10.5281/zenodo.22823647), whose Appendix A lists every withdrawn claim. In short: OpenAI's
+> (v5.6.1, DOI 10.5281/zenodo.22828106), whose Appendix A lists every withdrawn claim. In short: OpenAI's
 > proofs are correct and this project reads them physically rather than refuting them. Withdrawn, wherever
 > they appear below: "physical vacuity", thermodynamic/topological "censorship" (including the Lean files
 > `ThermodynamicCensorship.lean`, `PhysLibThermodynamicCensorship.lean`, `TopologicalCensorship.lean`, which

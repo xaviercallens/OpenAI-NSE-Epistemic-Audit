@@ -36,6 +36,12 @@ target Mach 1.5 and settles at 0.50–0.62**.
 - `analyse_md_core.py`: real-gas local sound speed, dense-bin estimator, figure with all Reynolds numbers, the
   pre-registered continuum curves, and the liquid density profiles.
 
+### Published
+
+- **Zenodo:** v5.6.1 published as **10.5281/zenodo.22828106** (concept DOI 10.5281/zenodo.22696717, verified to
+  resolve to it), from a draft verified beforehand: 66/66 files with MD5s matching the tagged release, PDF
+  byte-identical to the tag, description identical to the committed metadata. Benchmark 59/59.
+
 ## v5.6.0 — 2026-09-18 — A closure-free test of the Mach lock; the quantum-fluid counterpart
 
 ### Molecular dynamics of the forced core (paper §9.3; `md_core_rs/`; preliminary, two seeds)
