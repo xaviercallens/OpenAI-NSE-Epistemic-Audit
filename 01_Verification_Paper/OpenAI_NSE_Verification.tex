@@ -1061,6 +1061,60 @@ relations above, the three orderings and the unbounded growth of the stage Reyno
 cascade with Tao's ratios are formalized in \texttt{BlowupRegimeMap.lean} (thirteen declarations,
 standard axioms).
 
+\subsection{A quantum-fluid counterpart: the core that is allowed to be singular}
+\label{sec:quantum}
+
+There is one class of fluids in which the microscopic scale is part of the equation of motion, and
+it supplies an exact counterpart to the diffusive route. Around a singly quantized vortex of a
+superfluid the velocity is $u=\hbar/(mr)$, so that
+\begin{equation}
+  \frac{u\,r}{\hbar/m}=1\quad\text{at every radius:}
+  \label{eq:quantum-re}
+\end{equation}
+with the quantum of circulation $\hbar/m$ in the place of $\nu$, every quantized vortex is a core of
+Reynolds number one --- the condition that defines the construction's route
+(\S\ref{sec:regime-map}) --- by theorem rather than by design. The Gross--Pitaevskii equation is, by
+the Madelung transform, compressible Euler flow with a barotropic pressure and an additional quantum
+pressure, and its sonic radius $u=c$ is $\hbar/(mc)=\sqrt2\,\xi$, with $\xi$ the healing length: the
+counterpart of $\ell_*=\nu/c_s$.
+
+What the quantum fluid does at that scale is instructive. It does not bound the velocity, which
+diverges on the axis; it removes the mass that would carry it. Solving the stationary vortex, the
+density vanishes as $\rho\simeq(0.825\,r)^2$ (units $\hbar=m=c=1$), reaches half its ambient value at
+$1.55\,\xi$, and the mass current $\rho u$ stays below $0.46$. The classical twin --- isothermal
+compressible Euler flow with the same velocity field, whose cyclostrophic density is exactly
+$\exp(-r_s^2/2r^2)$ --- empties its axis too, and the two agree at leading order far from it. A
+time-dependent simulation of a vortex--antivortex pair makes the same point dynamically: the classical
+translation speed $\kappa/(2\pi d)$ diverges as the separation $d\to0$, whereas in Gross--Pitaevskii
+every speed we measured is below $c$ --- the fastest surviving pair moves at $0.50\,c$ at a separation
+of $2.75\,\xi$, closer pairs annihilate into a sound pulse that approaches but does not reach $c$,
+and at large separation the speed agrees with the point-vortex law to $0.1\%$ (consistent with Jones and
+Roberts~\cite{JonesRoberts1982}). Quantum pressure here, heat in the air core of
+\S\ref{sec:compressible}, and a phase change in water (\S\ref{sec:mach}) are three unrelated pieces of
+microphysics with one outcome: a fluid tolerates $u\propto1/r$ by evacuating the core. None of them acts
+as a filter on the velocity, which is a further reason for the withdrawal of \S\ref{sec:leray-claim}.
+
+Two remarks complete the comparison. First, the superfluid does possess a velocity threshold, and it
+is a geometric property of the excitation spectrum: Landau's criterion gives
+$v_c=\inf_p\varepsilon(p)/p$, the slope of the tangent from the origin to the dispersion curve --- exactly
+$c$ for the Bogoliubov spectrum, zero for a free gas, and about $58$\,m/s in helium-4, a quarter of the
+sound speed, because of the roton minimum~\cite{GodfrinKrotscheck2022}. A normal fluid has no such
+threshold, since viscosity dissipates at any speed; what carries over is the method, and the feature of
+the spectrum that plays the corresponding role in a dilute gas is the termination of the shear mode at
+$k\lambda=\sqrt{\pi/2}$. That a roton-like collective mode also exists in a normal Fermi
+liquid~\cite{Godfrin2012} indicates that dense liquids keep collective modes down to the interparticle
+scale, so the gas-kinetic termination should not be carried over to water. Second, combining two
+published estimates --- a minimal kinematic viscosity
+$\nu_m=\hbar/(4\pi\sqrt{m_em})$~\cite{TrachenkoBrazhkin2020} and a maximal speed of sound
+$v_u=\alpha c\sqrt{m_e/2m_p}/\sqrt A$~\cite{Trachenko2020sound} --- the molecular mass cancels exactly:
+\begin{equation}
+  \ell_*=\frac{\nu}{c_s}\;\gtrsim\;\frac{\nu_m}{v_u}=\frac{\sqrt2}{4\pi}\,a_B\approx6\ \text{pm},
+  \label{eq:lstar-floor}
+\end{equation}
+with $a_B$ the Bohr radius, the same for every fluid (water lies a factor $113$ above it). The identity is
+exact; the two inputs are order-of-magnitude bounds, so Eq.~\eqref{eq:lstar-floor} is an estimate. The
+identities of this subsection are formalized in \texttt{QuantumVortexLink.lean} (eleven declarations).
+
 \subsection{The Leray-\texorpdfstring{$\alpha$}{alpha} anchor claim, re-examined}
 \label{sec:leray-claim}
 
@@ -1705,6 +1759,30 @@ edge cases like this one; that suggestion is the direct motivation for \S\ref{se
   T. Buckmaster, G. Cao-Labora, and J. G\'omez-Serrano,
   ``Smooth imploding solutions for 3D compressible fluids,''
   \emph{Forum Math. Pi} \textbf{13} (2025), e6.
+
+\bibitem{JonesRoberts1982}
+  C. A. Jones and P. H. Roberts,
+  ``Motions in a Bose condensate: IV. Axisymmetric solitary waves,''
+  \emph{J. Phys. A} \textbf{15} (1982), 2599--2619.
+
+\bibitem{GodfrinKrotscheck2022}
+  H. Godfrin and E. Krotscheck,
+  ``The dynamics of quantum fluids,'' arXiv:2206.06039 (2022).
+
+\bibitem{Godfrin2012}
+  H. Godfrin, M. Meschke, H.-J. Lauter, A. Sultan, H. M. B\"ohm, E. Krotscheck, and M. Panholzer,
+  ``Observation of a roton collective mode in a two-dimensional Fermi liquid,''
+  \emph{Nature} \textbf{483} (2012), 576--579.
+
+\bibitem{TrachenkoBrazhkin2020}
+  K. Trachenko and V. V. Brazhkin,
+  ``Minimal quantum viscosity from fundamental physical constants,''
+  \emph{Sci. Adv.} \textbf{6} (2020), eaba3747.
+
+\bibitem{Trachenko2020sound}
+  K. Trachenko, B. Monserrat, C. J. Pickard, and V. V. Brazhkin,
+  ``Speed of sound from fundamental physical constants,''
+  \emph{Sci. Adv.} \textbf{6} (2020), eabc8662.
 
 \bibitem{Tao2016}
   T. Tao,
