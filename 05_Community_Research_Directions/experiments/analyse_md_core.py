@@ -427,8 +427,13 @@ def main():
     runs_out["_estimators"] = __doc__.split("Estimators, and their known biases")[1].strip()
 
     for k in sorted(files):
-        if k.startswith("pstress_"):
-            runs_out["_" + k.rsplit("_s", 1)[0] + "_pressure"] = pressure_metrics(load(files[k]))
+        if k.startswith(("pstress_", "pbaro_")):
+            dd = load(files[k])
+            pm = pressure_metrics(dd)
+            if dd.get("baro"):
+                pm["barostat"] = {"target_p": dd["baro_target_p"], "L_start": dd["L"], "L_end": dd["L_end"],
+                                  "area_change": (dd["L_end"] / dd["L"]) ** 2 - 1}
+            runs_out["_" + (k if k.startswith("pbaro_") else k.rsplit("_s", 1)[0]) + "_pressure"] = pm
     jd = lambda o: json.dumps(o, indent=1, default=lambda x: x.tolist() if hasattr(x, "tolist") else float(x))
     (OUT / "md_core_gates.json").write_text(jd(gates))
     (OUT / "md_core_runs.json").write_text(jd(runs_out))

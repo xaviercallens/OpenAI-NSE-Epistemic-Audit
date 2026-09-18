@@ -246,6 +246,8 @@ fn main() {
     let ramp = argf("--buffer-ramp", 10.0);
     let g_buf = argf("--buffer-gamma", 0.5);
     let half = 0.5 * l;
+    let mut hc = half; // vortex centre and box length; move together when the barostat is on
+    let mut lc = l;
     let (r1, r2) = (r_b + ramp, half - 4.0); // potential-vortex target tapered to zero between r1 and r2
     assert!(r2 > r1 + 5.0, "box too small for the buffer: need L/2 - 4 > R_b + ramp + 5");
     let gamma_c = tgt.gamma;
@@ -266,7 +268,12 @@ fn main() {
         s.vy[i] += u * dx / r;
     }
 
-    s.stress = arg("--stress").map(|x| x == "on").unwrap_or(false);
+    // Optional weak barostat on the box area: holds the far-ring pressure (0.8-1.0 R_b) at its early-run value, so the
+    // ambient pressure does not rise as the emptied core displaces liquid in the closed box (`--baro auto`).
+    let baro = arg("--baro").map(|x| x == "auto").unwrap_or(false);
+    let (baro_tau, baro_k, baro_every, warm_updates) = (argf("--baro-tau", 10.0), argf("--baro-k", 14.0), 20usize, 25usize);
+    s.stress = baro || arg("--stress").map(|x| x == "on").unwrap_or(false);
+    let (mut p_sum, mut p_n, mut p_target, mut p_filt, mut baro_updates) = (0.0f64, 0usize, f64::NAN, f64::NAN, 0usize);
     let mut bins = Bins::new(bin_edges(half));
     let mut windows = vec![];
     // axial diagnostic (3D boxes): per z-slab core density and mass-centroid offset near the axis
@@ -281,7 +288,7 @@ fn main() {
             if !forced {
                 return (0.0, 0.0);
             }
-            let (dx, dy) = (x - half, y - half);
+            let (dx, dy) = (x - hc, y - hc);
             let r = (dx * dx + dy * dy).sqrt();
             if r < 1e-9 || r > r_b {
                 return (0.0, 0.0);
@@ -290,7 +297,7 @@ fn main() {
             (-f * dy / r, f * dx / r)
         };
         let th = |i: usize, x: f64, y: f64, vx: f64, vy: f64, vz: f64| {
-            let (dx, dy) = (x - half, y - half);
+            let (dx, dy) = (x - hc, y - hc);
             let r = (dx * dx + dy * dy).sqrt();
             if r <= r_b {
                 return (vx, vy, vz);
@@ -300,6 +307,43 @@ fn main() {
             langevin(seed.wrapping_add(7919), k as u64, i, g, dt, temp, (-u * dy / r, u * dx / r), (vx, vy, vz))
         };
         s.step(dt, t, &ext, &th);
+        if baro && (k + 1) % baro_every == 0 {
+            let (c, lcur) = (hc, lc);
+            let (rin, rout) = (0.8 * r_b, r_b);
+            let (mut ke, mut wv) = (0.0f64, 0.0f64);
+            for i in 0..s.n {
+                let (dx, dy) = (s.x[i].rem_euclid(lcur) - c, s.y[i].rem_euclid(lcur) - c);
+                let r2 = dx * dx + dy * dy;
+                if r2 < rin * rin || r2 >= rout * rout {
+                    continue;
+                }
+                let r = r2.sqrt();
+                let u = tgt.gamma / (2.0 * PI * r);
+                let (px, py) = (s.vx[i] + u * dy / r, s.vy[i] - u * dx / r);
+                ke += px * px + py * py + s.vz[i] * s.vz[i];
+                wv += s.wxx[i] + s.wyy[i] + s.wzz[i];
+            }
+            let v_ring = PI * (rout * rout - rin * rin) * lz;
+            let p_now = (ke + wv) / (3.0 * v_ring);
+            p_filt = if p_filt.is_nan() { p_now } else { 0.9 * p_filt + 0.1 * p_now };
+            baro_updates += 1;
+            if baro_updates <= warm_updates {
+                p_sum += p_now;
+                p_n += 1;
+                if baro_updates == warm_updates {
+                    p_target = p_sum / p_n as f64;
+                    eprintln!("  barostat target far-ring pressure = {p_target:.4} (mean of first {warm_updates} readings)");
+                }
+            } else {
+                // Berendsen: dV/V = -(dt_b/tau)(p_target - p)/K, xy only so dL/L = dV/V / 2; clamped per update
+                let dvv = -(baro_every as f64 * dt / baro_tau) * (p_target - p_filt) / baro_k;
+                let eps = (0.5 * dvv).clamp(-5e-4, 5e-4);
+                let f = 1.0 + eps;
+                s.scale_xy(f);
+                hc = 0.5 * s.l;
+                lc = s.l;
+            }
+        }
         if (k + 1) % every == 0 {
             bins.sample(&s);
             let t_now = t + dt;
@@ -307,7 +351,7 @@ fn main() {
                 let lt = tgt.ell(t_now);
                 let (r_core, r_cen) = ((0.5 * lt).max(2.0), (2.0 * lt).max(6.0));
                 for i in 0..s.n {
-                    let (dx, dy) = (s.x[i].rem_euclid(l) - half, s.y[i].rem_euclid(l) - half);
+                    let (dx, dy) = (s.x[i].rem_euclid(lc) - hc, s.y[i].rem_euclid(lc) - hc);
                     let r2 = dx * dx + dy * dy;
                     if r2 > r_cen * r_cen {
                         continue;
@@ -348,7 +392,7 @@ fn main() {
                     ax_samples = 0;
                 }
                 windows.push(rec);
-                e_mon.push(json!({"t": t_now, "T_global": s.temperature(), "p_global": s.pressure(), "pe_per_particle": s.pe / s.n as f64}));
+                e_mon.push(json!({"t": t_now, "L": s.l, "p_far_filtered": p_filt, "T_global": s.temperature(), "p_global": s.pressure(), "pe_per_particle": s.pe / s.n as f64}));
                 bins.clear();
                 t_win0 = t_now;
                 if windows.len() % 10 == 0 {
@@ -363,7 +407,7 @@ fn main() {
         "nu_used": nu, "re": re, "l_start": l_start, "l_end": l_end, "Gamma": tgt.gamma, "t_blow": tgt.t_blow, "t_run": t_run,
         "R_b": r_b, "buffer": {"ramp": ramp, "gamma": g_buf, "swirl_taper_r1": r1, "swirl_taper_r2": r2},
         "sample_every_steps": every, "equil_steps": n_eq,
-        "bin_edges": edges, "windows": windows, "monitor": e_mon, "wall_s": wall.elapsed().as_secs_f64(),
+        "bin_edges": edges, "windows": windows, "monitor": e_mon, "L_end": s.l, "baro": baro, "baro_target_p": if baro { json!(p_target) } else { json!(null) }, "wall_s": wall.elapsed().as_secs_f64(),
     });
     std::fs::write(&out, serde_json::to_string(&doc).unwrap()).unwrap();
     eprintln!("wrote {out} ({:.0}s)", wall.elapsed().as_secs_f64());

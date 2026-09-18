@@ -1,0 +1,2 @@
+# v5.8: water-like slab with a barostat holding the far-ring pressure (--baro auto, tau 3): fixed ambient pressure test
+pbaro_wl_re4_s2 --mode vortex --force on --rho 0.79 --temp 0.75 --l 160 --lz 8 --dt 0.004 --equil-steps 8000 --re 4 --nu 2.95 --l-start 20 --l-end 3 --rb 60 --buffer-ramp 8 --baro auto --baro-tau 3 --seed 145

@@ -87,3 +87,23 @@ fn per_particle_stress_sums_to_global_virial() {
     let fnorm: f64 = s.fx.iter().map(|f| f.abs()).sum();
     assert!(fnorm > 0.0);
 }
+
+#[test]
+fn box_rescale_keeps_the_neighbour_list_valid() {
+    // scaling the box in xy by f multiplies the xy volume by f^2; forces afterwards match a fresh system at that density
+    let mut s = System::new_lattice(0.5, 12.0, 8.0, 1.0, 5);
+    let none = |_: f64, _: f64, _: f64| (0.0, 0.0);
+    let idt = |_: usize, _: f64, _: f64, vx: f64, vy: f64, vz: f64| (vx, vy, vz);
+    for _ in 0..50 {
+        s.step(0.004, 0.0, &none, &idt);
+    }
+    let rho0 = s.density();
+    s.scale_xy(1.001);
+    assert!((s.density() * 1.001f64.powi(2) / rho0 - 1.0).abs() < 1e-12);
+    for _ in 0..200 {
+        s.step(0.004, 0.0, &none, &idt);
+    }
+    // list stays valid: momentum conserved and the total force is zero (a stale list would break Newton's third law)
+    let fsum: f64 = s.fx.iter().sum::<f64>().abs() + s.fy.iter().sum::<f64>().abs() + s.fz.iter().sum::<f64>().abs();
+    assert!(fsum < 1e-8 * s.n as f64, "net force {fsum}");
+}

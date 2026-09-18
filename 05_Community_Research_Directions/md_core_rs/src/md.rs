@@ -224,6 +224,15 @@ impl System {
         self.rebuilds += 1;
     }
 
+    /// Isotropic rescale of the periodic box in x and y by factor `f` (positions and the Verlet reference positions
+    /// together, so the displacement criterion and list validity are unaffected; pair distances change by a factor f).
+    pub fn scale_xy(&mut self, f: f64) {
+        self.l *= f;
+        for a in self.x.iter_mut().chain(self.x0.iter_mut()).chain(self.y.iter_mut()).chain(self.y0.iter_mut()) {
+            *a *= f;
+        }
+    }
+
     fn needs_rebuild(&self) -> bool {
         let lim = 0.25 * self.skin * self.skin;
         let (x, y, z, x0, y0, z0) = (&self.x, &self.y, &self.z, &self.x0, &self.y0, &self.z0);
