@@ -1,0 +1,15 @@
+[package]
+name = "md_core_rs"
+version = "0.1.0"
+edition = "2021"
+description = "Lennard-Jones molecular dynamics of the forced collapsing vortex core (thermal kinetic test of the Mach lock; liquid cavitation run)"
+publish = false
+
+[dependencies]
+rayon = "1.12"
+serde_json = "1"
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+lto = "thin"

@@ -1,0 +1,107 @@
+{
+ "M1_nve": {
+  "dt": 0.005,
+  "steps": 4000,
+  "N": 84100,
+  "energy_drift_over_KE_per_particle": [
+   1.0471710704702294e-05,
+   3.851445644957678e-05,
+   3.580794312016954e-05
+  ],
+  "momentum_per_particle_max": 6.405287228073701e-16,
+  "pass": true
+ },
+ "M2_equilibrium": {
+  "rho_actual": 0.15083362029384756,
+  "T_mean": [
+   2.0084047386885557,
+   1.9735541225756408,
+   2.0287355383363046
+  ],
+  "p_md": 0.28158969596684474,
+  "p_second_virial": 0.2665394339173036,
+  "p_third_virial": 0.2794316429802523,
+  "rel_diff_vs_B2": 0.0564654236273745,
+  "rel_diff_vs_B2_B3": 0.007723008616976612,
+  "B2": -0.7720132037112618,
+  "B3": 1.878464009729134,
+  "kurtosis": [
+   3.0009739367770623,
+   2.9979505204784327,
+   3.004749473239305
+  ],
+  "pass": false,
+  "note": "T is measured in NVE after a Langevin equilibration; pass criterion uses the third-virial EOS (B2 alone is off by the size of the B3 term, reported)."
+ },
+ "M3_sound_speed": {
+  "c_adiabatic": 1.9808625655217957,
+  "c_ideal_sqrt_gamma_T": 1.8257418583505538,
+  "gamma_eff_c2_over_dpdrhoT": 2.19129650723205,
+  "cv": 1.6413487629224737,
+  "Z_B2_B3": 0.9262909768918747,
+  "mean_free_path": 1.4922341491292668,
+  "formula": "c^2 = (dp/drho)_T + T (dp/dT)_rho^2 / (rho^2 c_v), third-order virial EOS of the truncated-shifted potential; local Mach numbers use sqrt(gamma T_loc), gamma = 5/3 (approximate)"
+ },
+ "liquid_state_point": {
+  "rho": 0.7896875,
+  "T_mean": 0.9915219113304478,
+  "p_md": 1.4809153836303706,
+  "energy_drift_over_KE": 0.00010604931450740161,
+  "kurtosis": 2.998167489604657,
+  "dt": 0.004
+ },
+ "M4_M5_gas": {
+  "per_seed": [
+   {
+    "seed": 11,
+    "nu": 1.906839670449147,
+    "l0_fit": 21.13088747619869,
+    "rms_residual_l2": 33.56422466194365
+   },
+   {
+    "seed": 12,
+    "nu": 1.3477451133875433,
+    "l0_fit": 21.66118975337966,
+    "rms_residual_l2": 18.304478774907555
+   },
+   {
+    "seed": 13,
+    "nu": 2.09834881179633,
+    "l0_fit": 22.638759566816386,
+    "rms_residual_l2": 31.9640584215699
+   },
+   {
+    "seed": 14,
+    "nu": 2.1201374807450124,
+    "l0_fit": 19.778370949426,
+    "rms_residual_l2": 15.169808056205206
+   }
+  ],
+  "nu_mean": 1.8682677690945082,
+  "nu_se": 0.18000168159770275,
+  "T_inner_over_T_inf_min_max": [
+   0.9947752380317809,
+   1.0059377192424317
+  ],
+  "far_swirl_ratio_min_max": [
+   0.9912430525445032,
+   1.0369787460982762
+  ],
+  "setup": {
+   "re": 8.0,
+   "l_start": 20.0,
+   "R_b": 90.0,
+   "L": 240.0,
+   "Lz": 8.0,
+   "N": 68644,
+   "t_run": 100.0,
+   "dt": 0.005
+  },
+  "peak_mach_at_start": 0.3202867807776809,
+  "chapman_enskog_nu": 1.414688937593733,
+  "modified_enskog_nu": 1.8298938693873465,
+  "ratio_md_over_modified_enskog": 1.0209705602871981,
+  "pass_M4": true,
+  "pass_M5": true
+ }
+}

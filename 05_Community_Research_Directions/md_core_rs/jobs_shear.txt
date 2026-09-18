@@ -1,0 +1,14 @@
+# M4 (adopted method): decay of a transverse shear wave v_x = A sin(k y), k = 2 pi h / L, NVE. nu = rate / k^2.
+# gas, two wavenumbers (k lambda = 0.15 and 0.075) to check the finite-k correction, 4 seeds each
+shear_gas_k2_s1  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --harmonic 2 --amp 0.25 --seed 21
+shear_gas_k2_s2  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --harmonic 2 --amp 0.25 --seed 22
+shear_gas_k2_s3  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --harmonic 2 --amp 0.25 --seed 23
+shear_gas_k2_s4  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --harmonic 2 --amp 0.25 --seed 24
+shear_gas_k1_s1  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 40000 --harmonic 1 --amp 0.25 --seed 31
+shear_gas_k1_s2  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 40000 --harmonic 1 --amp 0.25 --seed 32
+# liquid
+shear_liq_k2_s1  --mode shear --rho 0.80 --temp 1.0 --l 60 --lz 8 --dt 0.004 --equil-steps 8000 --steps 12000 --harmonic 2 --amp 0.25 --seed 41
+shear_liq_k2_s2  --mode shear --rho 0.80 --temp 1.0 --l 60 --lz 8 --dt 0.004 --equil-steps 8000 --steps 12000 --harmonic 2 --amp 0.25 --seed 42
+shear_liq_k1_s1  --mode shear --rho 0.80 --temp 1.0 --l 60 --lz 8 --dt 0.004 --equil-steps 8000 --steps 25000 --harmonic 1 --amp 0.25 --seed 43
+# M2 repeated in the production-size box (T fluctuation of an NVE sample is sqrt(2/3N): 0.9% at N = 7.7k, 0.3% at 84k)
+gate_gas_big_s1  --mode equil --rho 0.15 --temp 2.0 --l 264 --lz 8 --dt 0.005 --equil-steps 8000 --steps 4000 --seed 3

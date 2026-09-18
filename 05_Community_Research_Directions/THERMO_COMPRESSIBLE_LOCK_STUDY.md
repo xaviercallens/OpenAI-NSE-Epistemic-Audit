@@ -207,3 +207,54 @@ core evacuated to roughly a fifth of ambient density and heated by roughly two t
 follows the target, or saturates at a clearly different level, the lock is (at least quantitatively) a
 property of the closure. The numbers will be re-run with the viscosity measured in the MD gas; the
 comparison is reported whichever way it comes out.
+
+## 8. The molecular-dynamics result (2026-09-18; preliminary at two seeds, to be updated)
+
+**Set-up and gates.** `md_core_rs/` (README there): truncated-shifted Lennard-Jones gas, ρ = 0.15, T = 2,
+mean free path 1.49σ, slab 300 × 300 × 8σ (107,584 particles), Langevin buffer beyond 3.2 ℓ_start, the same
+per-unit-mass force as every forced-core experiment. Gates: energy drift ≤ 4×10⁻⁵; pressure within 0.8% of
+the third-virial equation of state; kurtosis 3.00; viscosity measured in situ two ways, **ν = 1.71 ± 0.07**
+(shear waves, 14 runs) and 1.87 ± 0.18 (vortex decay), against modified Enskog 1.83; real-gas sound speed
+c = 1.98; buffer holds the inner temperature to 0.6%. So ℓ* = ν/c = 0.86σ = 0.58λ, and at Re = 16 the sonic
+scale is ≈ 14σ ≈ 9λ. The continuum prediction of §7 re-run with the measured ν and c is unchanged:
+local Mach 0.58–0.59, ρ₀ 0.17, T₀ 1.72 at target Mach 3.
+
+**Result, Re = 16, core driven from 40σ to 4σ (target Mach 0.34 → 3.4):**
+
+| target Mach | continuum: Ma_loc · ρ₀ · T₀ · Kn_loc | MD (2 seeds): Ma_loc (fit / smooth) · ρ₀ · T₀ · Kn_loc | core width MD / continuum |
+|---|---|---|---|
+| 0.50 | 0.41 · 0.60 · 1.02 · 0.04 | 0.45±0.01 / 0.46±0.02 · 0.62±0.01 · 0.97±0.02 · 0.08 | 1.15 / 1.30 |
+| 0.75 | 0.49 · 0.45 · 1.08 · 0.09 | 0.56±0.01 / 0.59±0.01 · 0.46±0.01 · 1.03±0.02 · 0.14 | 1.28 / 1.23 |
+| 1.0 | **0.54** · 0.36 · 1.15 · 0.14 | **0.56±0.01 / 0.62±0.00** · 0.34±0.01 · 1.15±0.03 · 0.20 | 1.59 / 1.32 |
+| 1.5 | 0.57 · 0.26 · 1.29 · 0.25 | 0.55±0.03 / 0.80±0.04 · 0.28±0.00 · 1.42±0.00 · 0.28 | 2.17 / 1.52 |
+| 2.0 | 0.58 · 0.22 · 1.42 · 0.36 | 0.47 / 0.98±0.03 · 0.26±0.02 · 1.58±0.13 · (see text) | 3.50 / 1.70 |
+| 2.9 | 0.59 · 0.18 · 1.61 · 0.56 | 0.43 / 1.07±0.05 · 0.28±0.02 · 1.85±0.01 · (see text) | 5.53 / 2.05 |
+
+Two estimators of the peak local Mach number are given: the amplitude of a Lamb–Oseen fit to the
+azimuthally averaged swirl (robust to noise, but the profile stops being Lamb–Oseen once the core has
+spread), and the maximum of a smoothed `u_θ(r)/√(γT(r))` profile (follows the true shape, but is biased upward
+where bins hold few particles).
+
+**Reading.**
+1. **Where the gas is a gas, the lock is real and quantitatively as predicted.** Up to target Mach ≈ 1 (local
+   Knudsen ≤ 0.2, hundreds of particles per radial bin) both estimators agree with each other and with the
+   closure-free prediction: local Mach 0.56–0.62 against 0.54, core density 0.34 against 0.36, core
+   temperature 1.15 against 1.15. The Navier–Stokes–Fourier closure is not the origin of the lock.
+2. **Beyond that the axis is no longer a fluid.** At target Mach ≥ 1.5 the innermost 5σ hold a few tens of
+   particles at 8–10% of ambient density, with a local mean free path (≈ 19σ) larger than the core: a
+   free-molecular region in which the per-unit-mass force spins isolated particles with nothing to collide
+   with. There the smoothed local Mach number reads ≈ 1.0–1.2 at target Mach 2–3 (raw profile at t = 930:
+   Ma_loc 1.22 in bins holding 11–23 particles), while at r ≈ 10–15σ, where the density is still 30–45% and
+   the bins hold hundreds of particles, it is 0.55–0.67 — the continuum value. The MD core is also much
+   wider than the continuum one (5.5 against 2.1 target widths at the end), and the heating spreads to
+   r ≈ 25σ (T ≈ 1.5 T∞), which the buffer at 128σ does not remove.
+3. **Consequence.** The thermal Mach lock is confirmed by a closure-free method in the regime where a fluid
+   exists, and the evacuated core of §3.3 and of the quantum-fluid study is again what the fluid does with
+   the velocity singularity: it hands it to particles that are no longer a fluid. This is the regime map of
+   §1 acting inside one simulation — the core crosses from the inertial route into the rarefied one as it
+   empties, and the description that applies at the axis changes accordingly.
+
+**Limitations (all as in `md_core_rs/README.md`):** two seeds so far (three planned, plus Re = 4 and 32 and a
+liquid run); thin slab, no three-dimensional instability; local Mach numbers use `√(γT)` with γ = 5/3 in a
+mildly non-ideal gas; Kn_loc in the table is computed with the fitted core width and understates the
+rarefaction of the innermost bins; the thermostat buffer is not an open boundary.

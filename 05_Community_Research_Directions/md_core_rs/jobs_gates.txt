@@ -1,0 +1,9 @@
+# M1/M2: NVE drift, temperature, pressure, kurtosis (gas and liquid state points)
+gate_gas_s1   --mode equil --rho 0.15 --temp 2.0 --l 80 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --seed 1
+gate_gas_s2   --mode equil --rho 0.15 --temp 2.0 --l 80 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --seed 2
+gate_liq_s1   --mode equil --rho 0.80 --temp 1.0 --l 40 --lz 8 --dt 0.004 --equil-steps 8000 --steps 20000 --seed 1
+# M4/M5: free decay of a Lamb-Oseen vortex with the Langevin buffer, no force (viscosity in situ; buffer check)
+decay_gas_s1  --mode vortex --force off --rho 0.15 --temp 2.0 --l 240 --lz 8 --dt 0.005 --equil-steps 6000 --re 8 --nu 1.5 --l-start 20 --rb 90 --t-run 100 --window 5 --sample-every 50 --seed 11
+decay_gas_s2  --mode vortex --force off --rho 0.15 --temp 2.0 --l 240 --lz 8 --dt 0.005 --equil-steps 6000 --re 8 --nu 1.5 --l-start 20 --rb 90 --t-run 100 --window 5 --sample-every 50 --seed 12
+decay_gas_s3  --mode vortex --force off --rho 0.15 --temp 2.0 --l 240 --lz 8 --dt 0.005 --equil-steps 6000 --re 8 --nu 1.5 --l-start 20 --rb 90 --t-run 100 --window 5 --sample-every 50 --seed 13
+decay_gas_s4  --mode vortex --force off --rho 0.15 --temp 2.0 --l 240 --lz 8 --dt 0.005 --equil-steps 6000 --re 8 --nu 1.5 --l-start 20 --rb 90 --t-run 100 --window 5 --sample-every 50 --seed 14

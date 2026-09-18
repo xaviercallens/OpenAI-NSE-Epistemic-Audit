@@ -1,0 +1,4 @@
+# forced core, gas (rho 0.15, T 2), nu = 1.70 measured in situ (shear-wave decay, 14 runs)
+forced_gas_re16_s1  --mode vortex --force on --rho 0.15 --temp 2.0 --l 300 --lz 8 --dt 0.005 --equil-steps 6000 --re 16 --nu 1.70 --l-start 40 --l-end 4 --seed 101
+forced_gas_re16_s3  --mode vortex --force on --rho 0.15 --temp 2.0 --l 300 --lz 8 --dt 0.005 --equil-steps 6000 --re 16 --nu 1.70 --l-start 40 --l-end 4 --seed 103
+forced_gas_re4_s1   --mode vortex --force on --rho 0.15 --temp 2.0 --l 300 --lz 8 --dt 0.005 --equil-steps 6000 --re 4 --nu 1.70 --l-start 40 --l-end 4 --seed 111

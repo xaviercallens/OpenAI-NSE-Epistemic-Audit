@@ -1,0 +1,9 @@
+# more seeds at harmonic 2, plus harmonic 3, to pin nu and its k-dependence (gas)
+shear_gas_k2_s5  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --harmonic 2 --amp 0.25 --seed 25
+shear_gas_k2_s6  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --harmonic 2 --amp 0.25 --seed 26
+shear_gas_k2_s7  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --harmonic 2 --amp 0.25 --seed 27
+shear_gas_k2_s8  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 20000 --harmonic 2 --amp 0.25 --seed 28
+shear_gas_k3_s1  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 10000 --harmonic 3 --amp 0.25 --seed 51
+shear_gas_k3_s2  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 10000 --harmonic 3 --amp 0.25 --seed 52
+shear_gas_k3_s3  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 10000 --harmonic 3 --amp 0.25 --seed 53
+shear_gas_k3_s4  --mode shear --rho 0.15 --temp 2.0 --l 126 --lz 8 --dt 0.005 --equil-steps 6000 --steps 10000 --harmonic 3 --amp 0.25 --seed 54
