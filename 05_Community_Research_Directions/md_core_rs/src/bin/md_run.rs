@@ -39,15 +39,18 @@ struct Bins {
     sr: Vec<f64>,
     sz: Vec<f64>,
     s2: Vec<f64>,
+    srr: Vec<f64>,
+    wrr: Vec<f64>,
+    wtr: Vec<f64>,
     samples: usize,
 }
 impl Bins {
     fn new(edges: Vec<f64>) -> Self {
         let n = edges.len() - 1;
-        Bins { edges, cnt: vec![0.0; n], st: vec![0.0; n], sr: vec![0.0; n], sz: vec![0.0; n], s2: vec![0.0; n], samples: 0 }
+        Bins { edges, cnt: vec![0.0; n], st: vec![0.0; n], sr: vec![0.0; n], sz: vec![0.0; n], s2: vec![0.0; n], srr: vec![0.0; n], wrr: vec![0.0; n], wtr: vec![0.0; n], samples: 0 }
     }
     fn clear(&mut self) {
-        for v in [&mut self.cnt, &mut self.st, &mut self.sr, &mut self.sz, &mut self.s2] {
+        for v in [&mut self.cnt, &mut self.st, &mut self.sr, &mut self.sz, &mut self.s2, &mut self.srr, &mut self.wrr, &mut self.wtr] {
             v.iter_mut().for_each(|a| *a = 0.0);
         }
         self.samples = 0;
@@ -73,6 +76,11 @@ impl Bins {
                 self.sr[b] += vr;
                 self.sz[b] += s.vz[i];
                 self.s2[b] += s.vx[i] * s.vx[i] + s.vy[i] * s.vy[i] + s.vz[i] * s.vz[i];
+                if s.stress {
+                    self.srr[b] += vr * vr;
+                    self.wrr[b] += er_x * er_x * s.wxx[i] + 2.0 * er_x * er_y * s.wxy[i] + er_y * er_y * s.wyy[i];
+                    self.wtr[b] += s.wxx[i] + s.wyy[i] + s.wzz[i];
+                }
             }
         }
         self.samples += 1;
@@ -81,6 +89,8 @@ impl Bins {
     fn record(&self, lz: f64) -> serde_json::Value {
         let nb = self.cnt.len();
         let (mut n, mut rho, mut ut, mut ur, mut tt) = (vec![], vec![], vec![], vec![], vec![]);
+        let (mut prr, mut piso) = (vec![], vec![]);
+        let with_stress = self.wtr.iter().any(|w| *w != 0.0);
         for b in 0..nb {
             let c = self.cnt[b];
             let vol = PI * (self.edges[b + 1].powi(2) - self.edges[b].powi(2)) * lz;
@@ -92,14 +102,29 @@ impl Bins {
                 ur.push(mr);
                 // unbiased-ish: (c/(c-1)) corrects for subtracting the bin mean
                 tt.push((self.s2[b] / c - mt * mt - mr * mr - mz * mz) / 3.0 * c / (c - 1.0));
+                if with_stress {
+                    // local pressure per unit volume: kinetic part of peculiar motion + per-particle virial share
+                    let vs = vol * self.samples.max(1) as f64;
+                    prr.push(((self.srr[b] - c * mr * mr) + self.wrr[b]) / vs);
+                    piso.push(((self.s2[b] - c * (mt * mt + mr * mr + mz * mz)) + self.wtr[b]) / (3.0 * vs));
+                }
             } else {
+                if with_stress {
+                    prr.push(f64::NAN);
+                    piso.push(f64::NAN);
+                }
                 ut.push(f64::NAN);
                 ur.push(f64::NAN);
                 tt.push(f64::NAN);
             }
         }
         let clean = |v: Vec<f64>| v.into_iter().map(|a| if a.is_finite() { json!(a) } else { json!(null) }).collect::<Vec<_>>();
-        json!({"samples": self.samples, "n_per_sample": n, "rho": rho, "u_theta": clean(ut), "u_r": clean(ur), "T": clean(tt)})
+        let mut rec = json!({"samples": self.samples, "n_per_sample": n, "rho": rho, "u_theta": clean(ut), "u_r": clean(ur), "T": clean(tt)});
+        if with_stress {
+            rec["p_rr"] = json!(clean(prr));
+            rec["p_iso"] = json!(clean(piso));
+        }
+        rec
     }
 }
 
@@ -241,6 +266,7 @@ fn main() {
         s.vy[i] += u * dx / r;
     }
 
+    s.stress = arg("--stress").map(|x| x == "on").unwrap_or(false);
     let mut bins = Bins::new(bin_edges(half));
     let mut windows = vec![];
     // axial diagnostic (3D boxes): per z-slab core density and mass-centroid offset near the axis

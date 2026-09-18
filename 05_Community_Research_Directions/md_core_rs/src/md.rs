@@ -25,6 +25,12 @@ pub struct System {
     order: Vec<u32>,
     pub pe: f64,
     pub virial: f64,
+    /// per-particle virial tensor shares (1/2 sum_j F_ij,a r_ij,b) when `stress` is on
+    pub stress: bool,
+    pub wxx: Vec<f64>,
+    pub wxy: Vec<f64>,
+    pub wyy: Vec<f64>,
+    pub wzz: Vec<f64>,
     e_shift: f64,
     // Verlet list (rebuilt when any particle has moved more than skin/2); positions are wrapped only at rebuilds
     pub skin: f64,
@@ -56,7 +62,7 @@ impl System {
             fx: vec![0.0; n], fy: vec![0.0; n], fz: vec![0.0; n],
             ncx: ((l / (RC + 1.0)).floor() as usize).max(3), ncz: ((lz / (RC + 1.0)).floor() as usize).max(2),
             cell_start: vec![], scratch: vec![0.0; n], cell_of: vec![0; n], order: vec![0; n],
-            pe: 0.0, virial: 0.0,
+            pe: 0.0, virial: 0.0, stress: false, wxx: vec![], wxy: vec![], wyy: vec![], wzz: vec![],
             e_shift: 4.0 * (RC.powi(-12) - RC.powi(-6)),
             skin: 0.5, nl_off: vec![], nl_j: vec![], nl_s: vec![], x0: vec![0.0; n], y0: vec![0.0; n], z0: vec![0.0; n], rebuilds: 0, t_force: 0.0, t_rebuild: 0.0, t_other: 0.0,
         };
@@ -239,13 +245,23 @@ impl System {
         for s in 0..27 {
             sh[s] = [(s % 3) as f64 * l - l, ((s / 3) % 3) as f64 * l - l, (s / 9) as f64 * lz - lz];
         }
-        let (pe, vir) = (self.fx.par_iter_mut(), self.fy.par_iter_mut(), self.fz.par_iter_mut())
+        let stress = self.stress;
+        // always sized to n: the arrays are zipped with the force arrays below (an empty one would truncate the loop)
+        if self.wxx.len() != self.n {
+            self.wxx = vec![0.0; self.n];
+            self.wxy = vec![0.0; self.n];
+            self.wyy = vec![0.0; self.n];
+            self.wzz = vec![0.0; self.n];
+        }
+        let (pe, vir) = (self.fx.par_iter_mut(), self.fy.par_iter_mut(), self.fz.par_iter_mut(),
+                         self.wxx.par_iter_mut(), self.wxy.par_iter_mut(), self.wyy.par_iter_mut(), self.wzz.par_iter_mut())
             .into_par_iter()
             .enumerate()
             .with_min_len(1024)
-            .map(|(i, (fx, fy, fz))| {
+            .map(|(i, (fx, fy, fz, wxx, wxy, wyy, wzz))| {
                 let [xi, yi, zi] = pos[i];
                 let (mut ax, mut ay, mut az, mut pe, mut vir) = (0.0, 0.0, 0.0, 0.0, 0.0);
+                let (mut sxx, mut sxy, mut syy, mut szz) = (0.0, 0.0, 0.0, 0.0);
                 for k in off[i]..off[i + 1] {
                     let pj = pos[nj[k] as usize];
                     let s = sh[ns[k] as usize];
@@ -262,11 +278,23 @@ impl System {
                         az -= ff * dz;
                         pe += 4.0 * inv6 * (inv6 - 1.0) - e_shift;
                         vir += ff * r2;
+                        if stress {
+                            sxx += ff * dx * dx;
+                            sxy += ff * dx * dy;
+                            syy += ff * dy * dy;
+                            szz += ff * dz * dz;
+                        }
                     }
                 }
                 *fx = ax;
                 *fy = ay;
                 *fz = az;
+                if stress {
+                    *wxx = 0.5 * sxx;
+                    *wxy = 0.5 * sxy;
+                    *wyy = 0.5 * syy;
+                    *wzz = 0.5 * szz;
+                }
                 (0.5 * pe, 0.5 * vir)
             })
             .reduce(|| (0.0, 0.0), |a, b| (a.0 + b.0, a.1 + b.1));

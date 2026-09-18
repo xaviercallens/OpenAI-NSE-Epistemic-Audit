@@ -166,6 +166,57 @@ def c_real(rho, T):
     return f(pts).reshape(rho.shape)
 
 
+
+# ambient pressure of each liquid state point, measured at equilibration (logs / gate runs)
+P_AMBIENT = {(0.80, 1.0): 1.707, (0.79, 0.75): 0.268}
+
+
+def liquid_metrics(d):
+    """Cavitation onset and the swirl at the liquid wall of the cavity, per window, against the
+    hollow-vortex bound sqrt(2 p_inf / rho)."""
+    e = np.array(d["bin_edges"]); r = 0.5 * (e[1:] + e[:-1])
+    key = min(P_AMBIENT, key=lambda k: abs(k[0] - d["rho"]) + abs(k[1] - d["T_inf"]))
+    p_inf = P_AMBIENT[key]
+    cap = float(np.sqrt(2 * p_inf / d["rho"]))
+    rows, onset = [], None
+    for w in d["windows"]:
+        rho = np.array(w["rho"]) / d["rho"]
+        u_t = d["re"] * d["nu_used"] / w["l_target"]
+        iw = int(np.argmax(rho > 0.5))
+        cav = rho[0] < 0.5
+        if cav and onset is None:
+            onset = {"l_target": w["l_target"], "u_target": u_t}
+        rows.append({"l_target": w["l_target"], "u_target": u_t, "rho_axis": float(rho[0]),
+                     "wall_r": float(r[iw]) if cav else None, "u_wall": float(w["u_theta"][iw]) if cav else None})
+    after = [x for x in rows if x["u_wall"] is not None and x["u_target"] >= 1.5 * (onset or {"u_target": 1e9})["u_target"]]
+    return {"p_inf": p_inf, "hollow_vortex_cap": cap, "cavitation_onset": onset,
+            "u_wall_after_onset_min_max": [min(x["u_wall"] for x in after), max(x["u_wall"] for x in after)] if after else None,
+            "u_target_end": rows[-1]["u_target"], "wall_r_end": rows[-1]["wall_r"], "series": rows}
+
+
+def axial_metrics(d):
+    """3D boxes: per window, axial scatter of core density and of the near-axis mass centroid, each divided
+    by its shot-noise expectation (ratio ~ 1: no axial structure; >> 1: an instability or a Kelvin wave)."""
+    out = []
+    for w in d["windows"]:
+        a = w.get("axial")
+        if not a:
+            continue
+        cd, ns = np.array(a["core_density"]), a["samples"]
+        vol = np.pi * a["r_core"] ** 2 * d["Lz"] / a["slabs"]
+        n_tot = cd * vol * ns                                   # particle-samples per slab in the core
+        rel_scatter = float(np.std(cd) / max(np.mean(cd), 1e-12))
+        rel_noise = float(1.0 / np.sqrt(max(np.mean(n_tot), 1e-12))) if np.mean(n_tot) > 0 else np.nan
+        cx, cy = np.array(a["centroid_x"]), np.array(a["centroid_y"])
+        off = np.sqrt(cx ** 2 + cy ** 2)
+        n_c = np.array(a["n_centroid_per_sample"]) * ns
+        off_noise = float(np.mean(a["r_centroid"] / 2.0 / np.sqrt(np.maximum(n_c, 1.0)) * np.sqrt(np.pi / 2)))
+        out.append({"l_target": w["l_target"], "core_density_mean": float(np.mean(cd)),
+                    "core_density_scatter_over_noise": rel_scatter / rel_noise if rel_noise and np.isfinite(rel_noise) else np.nan,
+                    "centroid_offset_mean": float(np.mean(off)), "centroid_offset_over_noise": float(np.mean(off)) / off_noise,
+                    "centroid_offset_max": float(np.max(off))})
+    return out
+
 def window_metrics(d, w, gamma_gas=GAMMA, min_particles=30.0, dense_particles=200.0):
     r, vol = d["r"], d["vol"]
     inside = r < d["R_b"]
@@ -201,6 +252,9 @@ def window_metrics(d, w, gamma_gas=GAMMA, min_particles=30.0, dense_particles=20
     dense = good & (n_tot >= dense_particles)
     out["mach_peak_dense_real"] = float(np.nanmax((us / c_bins)[dense])) if dense.any() else np.nan
     out["r_inner_dense"] = float(r[dense][0]) if dense.any() else np.nan
+    # geometry-independent version: bins whose (smoothed) density is at least 20% of ambient
+    fluid = good & (rs / d["rho"] >= 0.2)
+    out["mach_peak_rho20_real"] = float(np.nanmax((us / c_bins)[fluid])) if fluid.any() else np.nan
     core = inside & (r < max(0.5 * l_fit, r[0] + 1e-9))
     if not core.any():
         core = np.zeros_like(inside)
@@ -239,7 +293,8 @@ def ensemble(runs, keys):
 KEYS = ["l_fit", "l_fit_gamma_fixed", "gamma_fit_over_gamma", "u_peak_raw", "u_peak_smooth", "u_peak_fit",
         "mach_peak_raw", "mach_peak_smooth", "mach_peak_fit", "rho0_over_rho_inf", "T0_over_T_inf", "kn_local",
         "T_inner_mean_over_T_inf", "far_swirl_over_lamb_oseen", "core_particles_in_window",
-        "mach_peak_fit_real", "mach_peak_smooth_real", "mach_peak_dense_real", "r_inner_dense"]
+        "mach_peak_fit_real", "mach_peak_smooth_real", "mach_peak_dense_real", "r_inner_dense",
+        "mach_peak_rho20_real"]
 
 
 def viscosity_from_decay(runs, skip=2):
@@ -268,7 +323,7 @@ def table(ens, mach_targets, c_inf, re, nu):
         rows.append({"mach_target": float(mt[i]), "l_target": float(lt[i]),
                      **{k: g(k) for k in ("mach_peak_fit", "mach_peak_smooth", "mach_peak_raw", "u_peak_fit",
                                           "mach_peak_fit_real", "mach_peak_smooth_real", "mach_peak_dense_real", "r_inner_dense",
-                                          "rho0_over_rho_inf", "T0_over_T_inf", "kn_local")},
+                                          "mach_peak_rho20_real", "rho0_over_rho_inf", "T0_over_T_inf", "kn_local")},
                      "l_fit_over_l_target": (ens["l_fit"][i] / lt[i], (ens["l_fit_se"][i] or 0) / lt[i] if ens["l_fit_se"][i] is not None else None)})
     return rows
 
@@ -332,7 +387,7 @@ def main():
     # ---- forced runs
     groups = {}
     for k in sorted(files):
-        if k.startswith("forced_"):
+        if k.startswith(("forced_", "forced3d_")):
             groups.setdefault(k.rsplit("_s", 1)[0], []).append(load(files[k]))
     c_inf = gates.get("M3_sound_speed", {}).get("c_adiabatic", np.sqrt(GAMMA * 2.0))
     for name, rs in groups.items():
@@ -353,10 +408,15 @@ def main():
                 "t": float(s["t"][cav]), "l_target": float(s["l_target"][cav]), "u_peak_smooth": float(s["u_peak_smooth"][cav]),
                 "u_target_peak": float(d0["re"] * d0["nu_used"] / s["l_target"][cav]), "rho0_over_rho_inf": float(s["rho0_over_rho_inf"][cav])}
             entry["u_peak_smooth_max"] = float(np.nanmax(s["u_peak_smooth"]))
+            entry["liquid_per_seed"] = [{k: v for k, v in liquid_metrics(json.loads(Path(files[f]).read_text())).items() if k != "series"}
+                                        for f in sorted(files) if f.startswith(name + "_s")]
             entry["u_target_peak_end"] = float(d0["re"] * d0["nu_used"] / s["l_target"][-1])
             snaps = np.linspace(0, len(rs[0]["windows"]) - 1, 6).astype(int)
             entry["density_snapshots"] = [{"t": rs[0]["windows"][i]["t_mid"], "l_target": rs[0]["windows"][i]["l_target"],
                                            "r": rs[0]["r"][:40].tolist(), "rho": rs[0]["windows"][i]["rho"][:40].tolist()} for i in snaps]
+        ax_runs = [axial_metrics(json.loads(Path(files[f]).read_text())) for f in sorted(files) if f.startswith(name + "_s")]
+        if any(ax_runs):
+            entry["axial"] = ax_runs
         runs_out[name] = entry
     runs_out["_comparator"] = {
         "gas": {"nu_md": gates.get("M4_M5_gas", {}).get("nu_mean"), "nu_md_se": gates.get("M4_M5_gas", {}).get("nu_se"),
@@ -366,12 +426,46 @@ def main():
     }
     runs_out["_estimators"] = __doc__.split("Estimators, and their known biases")[1].strip()
 
+    for k in sorted(files):
+        if k.startswith("pstress_"):
+            runs_out["_" + k.rsplit("_s", 1)[0] + "_pressure"] = pressure_metrics(load(files[k]))
     jd = lambda o: json.dumps(o, indent=1, default=lambda x: x.tolist() if hasattr(x, "tolist") else float(x))
     (OUT / "md_core_gates.json").write_text(jd(gates))
     (OUT / "md_core_runs.json").write_text(jd(runs_out))
     plot(runs_out)
     print(jd({k: {kk: vv for kk, vv in v.items() if kk not in ("per_seed",)} for k, v in gates.items()})[:3000])
     return 0
+
+
+def pressure_metrics(d):
+    """Cap re-evaluated with the *measured* far-field pressure (per-bin virial + kinetic, `--stress on`).
+
+    The far field is the ring 0.8-1.0 R_b. In a closed periodic box the emptied core pushes liquid outward
+    and raises the ambient pressure, so the cap sqrt(2 p_far / rho_far) moves with it. The wall is the first
+    bin outward from the axis with rho > 0.5 rho_far once the core density has fallen below 0.5 rho_far."""
+    e = np.array(d["bin_edges"], float)
+    rm = 0.5 * (e[1:] + e[:-1])
+    Rb = d["R_b"]
+    far = (rm > 0.8 * Rb) & (rm < 1.0 * Rb)
+    rows = []
+    for w in d["windows"]:
+        rho, ut, pi = (np.array(w[k], float) for k in ("rho", "u_theta", "p_iso"))
+        rf, pf = float(np.nanmean(rho[far])), float(np.nanmean(pi[far]))
+        row = {"l_target": w["l_target"], "rho_far": rf, "p_far": pf, "cap_measured": float(np.sqrt(2 * pf / rf))}
+        if np.nanmean(rho[:3]) < 0.5 * rf:
+            idx = np.where(rho > 0.5 * rf)[0]
+            idx = idx[idx > 2]
+            if len(idx):
+                i = int(idx[0])
+                row["wall_r"] = float(rm[i])
+                row["u_wall"] = float(np.nanmax(ut[max(i - 1, 0):i + 2]))
+                row["u_wall_over_cap"] = row["u_wall"] / row["cap_measured"]
+        rows.append(row)
+    cav = [r for r in rows if "u_wall" in r]
+    return {"windows": rows, "p_far_start": rows[0]["p_far"], "p_far_max": max(r["p_far"] for r in rows),
+            "u_wall_over_cap_max": max(r["u_wall_over_cap"] for r in cav) if cav else None,
+            "u_wall_max": max(r["u_wall"] for r in cav) if cav else None,
+            "cap_initial_p": float(np.sqrt(2 * rows[0]["p_far"] / rows[0]["rho_far"]))}
 
 
 def plot(runs_out):

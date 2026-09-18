@@ -54,3 +54,36 @@ fn target_is_reynolds_number_re_core() {
     assert!((PEAK - 0.63817).abs() < 1e-4);
     assert!((t.ell(t.t_blow * 0.75) - 20.0).abs() < 1e-9);
 }
+
+#[test]
+fn per_particle_stress_sums_to_global_virial() {
+    // equilibrium liquid: trace of the per-particle virial tensor sums to the pair virial exactly,
+    // and the three normal components agree (isotropy) within sampling noise
+    let mut s = System::new_lattice(0.79, 12.0, 12.0, 1.0, 11);
+    let none = |_: f64, _: f64, _: f64| (0.0, 0.0);
+    for k in 0..600 {
+        let th = |i: usize, _x: f64, _y: f64, vx: f64, vy: f64, vz: f64| langevin(11, k, i, 1.0, 0.004, 1.0, (0.0, 0.0), (vx, vy, vz));
+        s.step(0.004, 0.0, &none, &th);
+    }
+    s.stress = true;
+    let (mut axx, mut ayy, mut azz, mut avir) = (0.0, 0.0, 0.0, 0.0);
+    for k in 600..1400 {
+        let th = |i: usize, _x: f64, _y: f64, vx: f64, vy: f64, vz: f64| langevin(11, k, i, 1.0, 0.004, 1.0, (0.0, 0.0), (vx, vy, vz));
+        s.step(0.004, 0.0, &none, &th);
+        let (xx, yy, zz): (f64, f64, f64) = (s.wxx.iter().sum(), s.wyy.iter().sum(), s.wzz.iter().sum());
+        assert!(((xx + yy + zz) - s.virial).abs() < 1e-9 * s.virial.abs().max(1.0), "trace {} vs virial {}", xx + yy + zz, s.virial);
+        axx += xx;
+        ayy += yy;
+        azz += zz;
+        avir += s.virial;
+    }
+    let m = avir / 3.0;
+    for a in [axx, ayy, azz] {
+        assert!((a / m - 1.0).abs() < 0.05, "normal component {} vs mean {}", a, m);
+    }
+    // stress off leaves the forces untouched (the zipped arrays must not truncate the force loop)
+    s.stress = false;
+    s.compute_forces();
+    let fnorm: f64 = s.fx.iter().map(|f| f.abs()).sum();
+    assert!(fnorm > 0.0);
+}

@@ -1,0 +1,2 @@
+# v5.7: direct per-bin pressure (--stress on), water-like slab; same setup as forced_wl_re4_s1/s2
+pstress_wl_re4_s1 --mode vortex --force on --rho 0.79 --temp 0.75 --l 160 --lz 8 --dt 0.004 --equil-steps 8000 --re 4 --nu 2.95 --l-start 20 --l-end 3 --rb 60 --buffer-ramp 8 --stress on --seed 143

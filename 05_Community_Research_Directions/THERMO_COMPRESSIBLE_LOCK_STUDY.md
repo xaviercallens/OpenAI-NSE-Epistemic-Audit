@@ -353,3 +353,42 @@ core, if thermally excited, would show as centroid offsets above noise without d
   (integrating the same balance), so that comparison is not an independent test and is not claimed as one; what
   the estimate supports is that the overshoot coincides with a wall held in tension. A direct test needs the
   virial pressure tensor per radial bin, which `md_run` does not yet record.
+
+## 11. Direct pressure test and the closed-box confound (2026-09-18, after §10)
+
+**What was added.** `md_run --stress on` records, per radial bin and per sample, the radial normal pressure and
+the isotropic pressure from the peculiar kinetic part plus the per-particle virial share
+(½ Σⱼ **F**ᵢⱼ ⊗ **r**ᵢⱼ). Test: the trace of the per-particle tensor equals the pair virial to 10⁻⁹ and the three
+normal components agree within 5% in an equilibrium liquid (`tests/basic.rs`). One water-like slab run with
+the diagnostic (`pstress_wl_re4_s1`, same setup as runs 1–2, seed 143, N = 161,728).
+
+**Result 1 — the ambient pressure is not constant in the run.** The periodic box is closed (NVT): the emptied
+core pushes liquid outward. The far-field ring (0.8–1.0 R_b) goes from ρ = 0.792 to 0.806 and its measured
+pressure from **0.32 to 0.77**, most of it in the window where the wall swirl peaks. The other water-like runs
+(no pressure diagnostic) show the same far-field density rise (0.790 → 0.809–0.811), and the T = 1 liquid rises
+0.800 → 0.81. The registered cap used the initial ambient pressure p∞ = 0.268 (cap 0.82).
+
+**Result 2 — with the measured far-field pressure the cap is not exceeded.** The wall swirl in this run peaks at
+**1.01** (as in runs 1–2: 1.02) against a cap of **1.30–1.38** from the concurrent far-field pressure: the ratio
+is at most **0.75** in every window after cavitation (0.45–0.75). At the *initial* pressure the same swirl would
+be 13% over the cap (0.89 with the bin-pressure start value 0.32, 0.82 with the equilibrium 0.268).
+
+**How to read this — and how not to.**
+* The registered prediction (cap 0.83 from the initial p∞) **failed as registered** in the slab (+20%) and in the
+  3D box (up to +38%); that stays recorded. Its failure has, in this run, a measured cause: the ambient pressure
+  it assumed rose by more than a factor two. This is a post-hoc reading of one run, **not a passed test**.
+* It also shows that a closed periodic box cannot test a bound that is stated for a fixed ambient pressure.
+  The clean test is a fixed far-field pressure (open boundary or barostat) — not done here.
+* The ratio 0.45–0.75 is not close to 1, so this run does not say the cap is saturated, only that it is not violated.
+* Not tested by this run: the earlier suggestion that the wall holds tension. The wall-pressure estimate above
+  integrated *from p∞ = 0.268*; with the measured far-field pressure it is higher by the same rise (≈ +0.16 at
+  onset, ≈ +0.5 at the overshoot), so those estimates are **superseded** — the −0.95 at onset is about −0.8.
+* Bin pressures are approximate at the axis (few particles) and at the wall (steep gradient); the start value
+  0.32 is 10–15% above the equilibrium pressure 0.27–0.29 (same box size), a measure of that bias. Single run.
+
+**3D water-like box (one run, `forced3d_wl_re4_s1`).** Cavitation at target u = 1.17 (slab: 0.97); the core
+empties completely (ρ₀ ≈ 0); wall swirl 0.88–1.14 (cap at initial p∞: 0.82). Axial diagnostic: scatter/noise of
+the slab core density reaches 12–18 in the windows around onset (the density is changing, not an instability) and
+the centroid offset grows to 2.7–6.4 × noise once the core is empty, where a centroid of ~0 particles is not
+meaningful. **No undriven water-like control exists, so the axial result is inconclusive** for the liquid (for
+the gas it was calibrated, and there was no instability above the undriven control).
