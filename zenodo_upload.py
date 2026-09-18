@@ -8,7 +8,7 @@ enstrophy admissibility axiom, the raw 10^28 condition number as instability, "p
 unrealizable"). Running it would publish a new, uncorrected Zenodo record. It now refuses to run.
 
 The current publisher is 01_Verification_Paper/zenodo_push.py (new version of concept DOI
-10.5281/zenodo.22696717; v5.5.0 is 10.5281/zenodo.22806767). The text below is kept for the record.
+10.5281/zenodo.22696717; v5.6.0 is 10.5281/zenodo.22823647). The text below is kept for the record.
 
 Original docstring:
 Zenodo Upload Script for Thermodynamic Censorship Paper

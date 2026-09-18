@@ -68,4 +68,4 @@ python openai_poc_pi_verifier.py     # writes openai_phys_admissibility_certific
 continuum-scale state. Neither is output from OpenAI's construction or from a "LeanFlow" solver.)
 
 Current release: v5.5.0 · Zenodo concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717)
-(v5.5.0: [10.5281/zenodo.22806767](https://doi.org/10.5281/zenodo.22806767)).
+(v5.6.0: [10.5281/zenodo.22823647](https://doi.org/10.5281/zenodo.22823647)).

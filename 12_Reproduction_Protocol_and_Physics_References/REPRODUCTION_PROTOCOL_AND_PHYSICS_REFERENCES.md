@@ -126,4 +126,4 @@ The full bibliography is in the paper.
 - 🧪 **Research programme**: [`05_Community_Research_Directions/README.md`](../05_Community_Research_Directions/README.md)
 - 🧠 **Model-validity layer proposal**: [`11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md`](../11_Proposed_Solution_NeuroSymbolic_Engine/PROPOSED_SOLUTION_NEUROSYMBOLIC_ENGINE.md)
 - 🧪 **Notebook**: [Open in Colab](https://colab.research.google.com/github/xaviercallens/OpenAI-NSE-Epistemic-Audit/blob/main/07_Tout_Public_Memo/Citizen_Science_Exploration.ipynb)
-- Release v5.5.0 · Zenodo concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (v5.5.0: [10.5281/zenodo.22806767](https://doi.org/10.5281/zenodo.22806767))
+- Release v5.6.0 · Zenodo concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (v5.6.0: [10.5281/zenodo.22823647](https://doi.org/10.5281/zenodo.22823647))

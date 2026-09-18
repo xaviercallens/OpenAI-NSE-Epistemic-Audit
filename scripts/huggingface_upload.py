@@ -107,6 +107,23 @@ FILES_TO_UPLOAD = [
     ("05_Community_Research_Directions/experiments/results/compressible_core_re_sweep.json", "data/compressible_core_re_sweep.json"),
     ("05_Community_Research_Directions/experiments/results/kinetic_lock_gas_law.json", "data/kinetic_lock_gas_law.json"),
     ("05_Community_Research_Directions/experiments/results/compressible_core.png", "figures/compressible_core.png"),
+    # --- v5.6.0 additions ---
+    ("03_Lean4_Topological_Censorship/src/QuantumVortexLink.lean", "lean4/QuantumVortexLink.lean"),
+    ("05_Community_Research_Directions/QUANTUM_FLUID_MICRO_MACRO_LINK.md", "research/QUANTUM_FLUID_MICRO_MACRO_LINK.md"),
+    ("05_Community_Research_Directions/md_core_rs/README.md", "research/MD_CORE_RS_README.md"),
+    ("05_Community_Research_Directions/experiments/quantum_fluid_link.py", "code/quantum_fluid_link.py"),
+    ("05_Community_Research_Directions/experiments/gp_vortex_dipole.py", "code/gp_vortex_dipole.py"),
+    ("05_Community_Research_Directions/experiments/analyse_md_core.py", "code/analyse_md_core.py"),
+    ("05_Community_Research_Directions/experiments/compressible_core_md_match.py", "code/compressible_core_md_match.py"),
+    ("05_Community_Research_Directions/experiments/results/quantum_fluid_link.json", "data/quantum_fluid_link.json"),
+    ("05_Community_Research_Directions/experiments/results/gp_vortex_dipole.json", "data/gp_vortex_dipole.json"),
+    ("05_Community_Research_Directions/experiments/results/md_core_gates.json", "data/md_core_gates.json"),
+    ("05_Community_Research_Directions/experiments/results/md_core_runs.json", "data/md_core_runs.json"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_md_match_preregistered.json", "data/compressible_core_md_match_preregistered.json"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_md_match.json", "data/compressible_core_md_match.json"),
+    ("05_Community_Research_Directions/experiments/results/quantum_fluid_link.png", "figures/quantum_fluid_link.png"),
+    ("05_Community_Research_Directions/experiments/results/gp_vortex_dipole.png", "figures/gp_vortex_dipole.png"),
+    ("05_Community_Research_Directions/experiments/results/md_core.png", "figures/md_core.png"),
     ("BENCHMARKS.md", "BENCHMARKS.md"),
     ("scripts/run_benchmarks.sh", "code/run_benchmarks.sh"),
     ("scripts/compare_benchmarks.py", "code/compare_benchmarks.py"),
@@ -114,8 +131,8 @@ FILES_TO_UPLOAD = [
 
 # Version DOI minted by Zenodo for this release. Fill in after publishing on Zenodo; the script refuses
 # to run while it is PENDING so the card never goes out with a missing or wrong DOI.
-RELEASE = "v5.5.0"
-ZENODO_VERSION_DOI = "22806767"
+RELEASE = "v5.6.0"
+ZENODO_VERSION_DOI = "22823647"
 
 DATASET_CARD = """---
 license: cc-by-4.0
@@ -139,14 +156,14 @@ language:
   - en
 size_categories:
   - n<1K
-pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.5.0)"
+pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.6.0)"
 ---
 
 # The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation
 
 **Socrate AI Lab / MechanicaFluidorum Program** &middot; Lead: Xavier Callens
-**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.5.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.5.0))
-**Zenodo:** concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (always resolves to the latest version) &middot; v5.5.0: [10.5281/zenodo.@DOI@](https://doi.org/10.5281/zenodo.@DOI@)
+**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.5.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.6.0))
+**Zenodo:** concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (always resolves to the latest version) &middot; v5.6.0: [10.5281/zenodo.@DOI@](https://doi.org/10.5281/zenodo.@DOI@)
 
 ## What this is
 
@@ -169,7 +186,7 @@ expressible as one local vorticity bound |&omega;| &lesssim; c<sub>s</sub><sup>2
 Beale-Kato-Majda theorem turns into a genuine admissibility criterion. For liquids, cavitation is
 reached three decades earlier still.
 
-## Results added in v5.2.0 to v5.5.0
+## Results added in v5.2.0 to v5.6.0
 
 - **3D solver validated.** Pseudo-spectral Navier-Stokes solver reproduces the Taylor-Green
   Re = 1600 benchmark: dissipation peak at t = 9.14 against the published t = 9.0.
@@ -195,7 +212,7 @@ reached three decades earlier still.
   kinetic core runs up to 12% ahead of Navier-Stokes, and its apparent stopping point moves with the
   grid (0.98 -> 0.52 lambda at Re 1 as dx goes 0.67 -> 0.17 lambda) while a Navier-Stokes control on
   the same grid tracks its target to 4e-4. Robust down to ~0.9 lambda; isothermal, 2D.
-- **Lean 4.** 74 declarations in nine files on the three standard axioms: scaling chain, Leray-alpha
+- **Lean 4.** 85 declarations in ten files on the three standard axioms: scaling chain, Leray-alpha
   filter bounds, discrete and nonlinear BGK H-theorems, the kinetic eigenvalue cap -1/tau <= Re mu <= 0,
   the gate/drain energy identity, and -- with no remaining hypothesis since v5.4.0 -- the statement on
   OpenAI's own `ProblemStatement` objects that any object with their CandidateProperties exceeds every
@@ -211,6 +228,14 @@ reached three decades earlier still.
   own proved implosion singularities. `code/compressible_core.py`, `data/compressible_core_*.json`.
 - **Leray-alpha anchor claim withdrawn (v5.5.0).** alpha does not appear in the linearized dynamics of
   any alpha-model (`lean4/LerayAlphaLinearization.lean`), so it cannot be calibrated to l*.
+- **Closure-free test of the Mach lock (v5.6.0, preliminary).** Molecular dynamics of a Lennard-Jones gas
+  driven by the same force, viscosity measured in situ, against a continuum prediction registered before
+  the MD data existed: at Re = 16 and target Mach 1, local Mach 0.56-0.62 vs 0.54, core density 0.34 vs
+  0.36, core temperature 1.15 vs 1.15 (two runs). Beyond target Mach ~1.5 the axis becomes free-molecular.
+  `data/md_core_*.json`, `figures/md_core.png`.
+- **Quantum-fluid counterpart (v5.6.0).** A quantized vortex is a Reynolds-number-one core by theorem;
+  quantum pressure, heat and cavitation all let a fluid carry a velocity singularity by emptying the core.
+  `research/QUANTUM_FLUID_MICRO_MACRO_LINK.md`, `lean4/QuantumVortexLink.lean`.
 - **Reproducibility benchmark (v5.4.1).** `BENCHMARKS.md`; `code/run_benchmarks.sh` re-runs tests,
   Lean files, solver gates and fast simulations and checks every regenerated number against the data.
 

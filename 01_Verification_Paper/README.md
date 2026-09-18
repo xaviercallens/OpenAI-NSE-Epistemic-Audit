@@ -47,6 +47,6 @@ Every row below is checked against the current paper text.
 
 ---
 
-- **Zenodo:** concept DOI [`10.5281/zenodo.22696717`](https://doi.org/10.5281/zenodo.22696717) (always resolves to the latest version); v5.5.0 is [`10.5281/zenodo.22806767`](https://doi.org/10.5281/zenodo.22806767). Versions 2.0.0 (`22725347`, `22727801`) carry withdrawn claims and should not be cited.
+- **Zenodo:** concept DOI [`10.5281/zenodo.22696717`](https://doi.org/10.5281/zenodo.22696717) (always resolves to the latest version); v5.6.0 is [`10.5281/zenodo.22823647`](https://doi.org/10.5281/zenodo.22823647). Versions 2.0.0 (`22725347`, `22727801`) carry withdrawn claims and should not be cited.
 - **Hugging Face Dataset:** [`callensxavier/OpenAI-NSE-Thermodynamic-Censorship`](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship) (repository name kept from the earlier framing)
 - **GitHub Repository:** [`github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit`](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit)

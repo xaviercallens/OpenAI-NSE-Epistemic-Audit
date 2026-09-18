@@ -38,6 +38,12 @@
 
 Abstract, §9.3 (molecular-dynamics paragraph), new §9.5, directions list; five new references.
 
+### Published
+
+- **Zenodo:** v5.6.0 published as **10.5281/zenodo.22823647** (concept DOI 10.5281/zenodo.22696717, verified
+  to resolve to it), directly from a draft verified beforehand: 66/66 files with MD5s matching the tagged
+  release, PDF byte-identical to the tagged commit, description identical to the committed metadata.
+
 ## v5.5.1 — 2026-09-17 — Repository-wide realignment with the v5.5.0 positions
 
 No new results. Every tracked artefact was re-read against the current positions (proofs correct, physical
