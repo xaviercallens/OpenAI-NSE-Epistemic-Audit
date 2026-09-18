@@ -328,3 +328,18 @@ inside), and a hollow vortex is classically stable to axisymmetric perturbations
 neither core goes unstable in 3D**: the axial variation of core density and the centroid offsets stay at the
 shot-noise level, and the slab results (Mach lock, cavitation cap) are reproduced. Kelvin waves on the hollow
 core, if thermally excited, would show as centroid offsets above noise without destroying the cap.
+
+**Water-like outcome, run 1 (analysed 2026-09-18 after the predictions above; runs 2 and the 3D box pending).**
+
+* Prediction 1 **held**: the core starts in tension and cavitates only at target u ≈ 0.97 (ℓ ≈ 12σ), far past
+  the vapour-pressure point (u ≈ 0.45) — its tensile strength, not its ambient pressure, sets the onset.
+* Prediction 2 **failed as stated**. The swirl at the cavity wall (half-density radius) rises to **0.97–1.04 for
+  several windows** (target u 1.2–1.4; 2,000–3,300 particle-samples per window, standard error ≈ 0.02), i.e. about
+  20% above √(2p∞/ρ) = 0.82, then falls back to 0.68–0.86 while the target climbs to 3.18. The cavity grows to
+  13.5σ within Δu_target ≈ 0.2 after onset.
+* What survives: the liquid's swirl is still **bounded** — it never exceeds 1.04 while the target reaches 3.18.
+* Proposed reading (not yet tested): the hollow-vortex estimate assumes the wall sits at vapour pressure; a
+  liquid can hold tension at its wall. With p∞ = 0.27, a wall pressure of ≈ −0.15 would raise the bound to ≈ 1.03.
+  In the first liquid (p∞ = 1.7) the same tension changes the bound by a few percent, consistent with its cap
+  holding. At low ambient pressure — water's regime — the bound would then be set by the liquid's tension at the
+  wall rather than by its vapour pressure. To be tested by measuring the pressure at the wall.
