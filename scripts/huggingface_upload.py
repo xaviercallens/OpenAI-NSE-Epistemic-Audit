@@ -261,10 +261,14 @@ with inline withdrawal notices -- **do not cite them for their original claims.*
 - `outputs/`: their console output logs (regenerated 2026-09-15; times are explicitly labelled
   dimensionless &tau; vs. physical seconds t = T&tau;)
 - `superseded/`: the retracted paper and Lean file, with withdrawal notices, for the historical record
-- `lean4/`: the seven verified Lean 4 files and their README (standard axioms only)
+- `lean4/`: the ten verified Lean 4 files (85 declarations) and their README (standard axioms only)
 - `research/`: programme notes and experiment write-ups
-- `code/`: the 3D solver and forced-core test beds
-- `figures/`, `data/`: figures and JSON outputs of the experiments (v5.2.0 onwards)
+- `code/`: every simulation used in the paper -- `code/*.py` (3D pseudo-spectral solver, forced-core test beds,
+  1D compressible Navier-Stokes-Fourier core, Gross-Pitaevskii solvers, BGK spectrum, analysis scripts),
+  `code/tests/` (the pytest suite), and two Rust crates: `code/kinetic_lock_rs/` (discrete-velocity BGK solver)
+  and `code/md_core_rs/` (molecular dynamics of the forced core); `code/benchmark/` re-runs everything
+- `figures/`, `data/`: every figure and JSON result of the experiments (v5.2.0 onwards); `data/md_core_runs/`
+  holds the raw molecular-dynamics runs (validation gates, viscosity measurements and every forced run)
 - `CHANGELOG.md`, `PEER_REVIEW_2026-09-15.md`, `PROJECT_README.md`: project documentation
 
 ## Citation
@@ -281,78 +285,76 @@ REPO_README_POINTER = (
 )
 
 
-def main():
-    token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN")
-    if not token:
-        print("[-] Error: set HF_TOKEN (or HUGGINGFACE_TOKEN).", file=sys.stderr)
-        sys.exit(1)
+def staged_files():
+    """(local path, path in repo) for everything published: the curated list above, plus every experiment
+    script, every result file, the test suite, and the two Rust solver crates (sources only)."""
+    import subprocess
+    out = dict((dst, src) for src, dst in FILES_TO_UPLOAD)
+    tracked = subprocess.run(["git", "ls-files"], cwd=REPO_ROOT, capture_output=True, text=True).stdout.split()
+    exp = "05_Community_Research_Directions/experiments/"
+    for f in tracked:
+        name = f.rsplit("/", 1)[-1]
+        if f.startswith(exp) and f.count("/") == 2 and f.endswith(".py"):
+            out.setdefault(f"code/{name}", f)
+        elif f.startswith(exp + "results/"):
+            sub = "figures" if f.endswith((".png", ".jpg")) else "data"
+            out.setdefault(f"{sub}/{name}", f)
+        elif f.startswith("tests/") and f.endswith(".py"):
+            out.setdefault(f"code/tests/{name}", f)
+        elif f.startswith("scripts/") and name in ("run_benchmarks.sh", "compare_benchmarks.py"):
+            out.setdefault(f"code/benchmark/{name}", f)
+        for crate in ("md_core_rs", "kinetic_lock_rs"):
+            root = f"05_Community_Research_Directions/{crate}/"
+            if f.startswith(root):
+                out.setdefault(f"code/{crate}/{f[len(root):]}", f)
+    for crate in ("md_core_rs", "kinetic_lock_rs"):          # Cargo.lock is git-ignored in one crate
+        lock = f"05_Community_Research_Directions/{crate}/Cargo.lock"
+        if os.path.exists(os.path.join(REPO_ROOT, lock)):
+            out.setdefault(f"code/{crate}/Cargo.lock", lock)
+    # raw molecular-dynamics runs (git-ignored for size, but they are the simulation data)
+    import glob
+    for f in sorted(glob.glob(os.path.join(REPO_ROOT, "05_Community_Research_Directions/md_core_rs/runs/*.json"))):
+        out.setdefault(f"data/md_core_runs/{os.path.basename(f)}", os.path.relpath(f, REPO_ROOT))
+    return sorted((src, dst) for dst, src in out.items())
 
+
+def main():
+    import shutil
+    import tempfile
+    # token from the environment, else the cached `huggingface-cli login`
+    token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN") or None
     if ZENODO_VERSION_DOI == "PENDING":
         print("[-] Error: set ZENODO_VERSION_DOI (the record number minted for this release) first.", file=sys.stderr)
         sys.exit(1)
     api = HfApi(token=token)
-    print(f"[*] Syncing {RELEASE} content to {REPO_TYPE} repo: {REPO_ID}")
+    print(f"[*] Syncing {RELEASE} content to {REPO_TYPE} repo: {REPO_ID} as {api.whoami()['name']}")
 
-    missing = [rel for rel, _ in FILES_TO_UPLOAD if not os.path.exists(os.path.join(REPO_ROOT, rel))]
+    files = staged_files()
+    missing = [src for src, _ in files if not os.path.exists(os.path.join(REPO_ROOT, src))]
     if missing:
-        print("[-] Missing local files, aborting before any upload:", file=sys.stderr)
-        for m in missing:
-            print(f"    - {m}", file=sys.stderr)
+        print("[-] Missing local files, aborting before any upload:", *missing, sep="\n    - ", file=sys.stderr)
         sys.exit(1)
 
-    for rel_path, path_in_repo in FILES_TO_UPLOAD:
-        local_path = os.path.join(REPO_ROOT, rel_path)
-        print(f"  -> {path_in_repo} ({os.path.getsize(local_path):,} bytes)")
-        api.upload_file(
-            path_or_fileobj=local_path,
-            path_in_repo=path_in_repo,
-            repo_id=REPO_ID,
-            repo_type=REPO_TYPE,
-            commit_message=f"{RELEASE}: unconditional Lean bridge, nonlinear kinetic null result, 96^3 sweep, benchmarks",
-        )
-
-    print("  -> README.md (dataset card)")
-    api.upload_file(
-        path_or_fileobj=DATASET_CARD.replace("@DOI@", ZENODO_VERSION_DOI).encode("utf-8"),
-        path_in_repo="README.md",
-        repo_id=REPO_ID,
-        repo_type=REPO_TYPE,
-        commit_message=f"{RELEASE}: update dataset card",
-    )
-
-    print("  -> REPO_README.md (pointer replacing outdated card)")
-    api.upload_file(
-        path_or_fileobj=REPO_README_POINTER.encode("utf-8"),
-        path_in_repo="REPO_README.md",
-        repo_id=REPO_ID,
-        repo_type=REPO_TYPE,
-        commit_message="v5.2.0: replace outdated REPO_README with pointer to README.md",
-    )
-
-    # Optional extras: directive_outputs/, audit certificate, animations, if present.
-    outputs_dir = os.path.join(REPO_ROOT, "scripts", "directive_outputs")
-    if os.path.isdir(outputs_dir):
-        api.upload_folder(
-            folder_path=outputs_dir,
-            repo_id=REPO_ID,
-            path_in_repo="outputs/directive_outputs",
-            repo_type=REPO_TYPE,
-            commit_message="v5.2.0: refresh all directive output logs",
-        )
-        print("  -> outputs/directive_outputs/ (full refresh)")
-
-    anim_dir = os.path.join(REPO_ROOT, "dataset", "animations")
-    if os.path.isdir(anim_dir):
-        api.upload_folder(
-            folder_path=anim_dir,
-            repo_id=REPO_ID,
-            path_in_repo="animations",
-            repo_type=REPO_TYPE,
-            commit_message="v5.2.0: refresh animations",
-        )
-        print("  -> animations/")
-
-    print(f"\n[+] Done. https://huggingface.co/datasets/{REPO_ID}")
+    stage = tempfile.mkdtemp(prefix="hf_stage_")
+    for src, dst in files:
+        os.makedirs(os.path.dirname(os.path.join(stage, dst)) or stage, exist_ok=True)
+        shutil.copy2(os.path.join(REPO_ROOT, src), os.path.join(stage, dst))
+    with open(os.path.join(stage, "README.md"), "w") as fh:
+        fh.write(DATASET_CARD.replace("@DOI@", ZENODO_VERSION_DOI))
+    with open(os.path.join(stage, "REPO_README.md"), "w") as fh:
+        fh.write(REPO_README_POINTER)
+    for extra, dst in ((os.path.join(REPO_ROOT, "scripts", "directive_outputs"), "outputs/directive_outputs"),
+                       (os.path.join(REPO_ROOT, "dataset", "animations"), "animations")):
+        if os.path.isdir(extra):
+            shutil.copytree(extra, os.path.join(stage, dst), dirs_exist_ok=True)
+    n = sum(len(fs) for _, _, fs in os.walk(stage))
+    print(f"  -> staged {n} files; uploading as one commit")
+    info = api.upload_folder(folder_path=stage, repo_id=REPO_ID, repo_type=REPO_TYPE,
+                             commit_message=f"{RELEASE}: paper, data, simulation code (Python + Rust), Lean files "
+                                            f"(Zenodo DOI 10.5281/zenodo.{ZENODO_VERSION_DOI})")
+    print(f"[+] Done: {info.commit_url if hasattr(info, 'commit_url') else info}")
+    print(f"    https://huggingface.co/datasets/{REPO_ID}")
+    shutil.rmtree(stage, ignore_errors=True)
 
 
 if __name__ == "__main__":
