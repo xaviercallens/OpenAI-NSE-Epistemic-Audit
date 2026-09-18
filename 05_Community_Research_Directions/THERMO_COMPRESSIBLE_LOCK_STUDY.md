@@ -343,3 +343,13 @@ core, if thermally excited, would show as centroid offsets above noise without d
   In the first liquid (p∞ = 1.7) the same tension changes the bound by a few percent, consistent with its cap
   holding. At low ambient pressure — water's regime — the bound would then be set by the liquid's tension at the
   wall rather than by its vapour pressure. To be tested by measuring the pressure at the wall.
+* **Wall pressure, estimated from the data** by integrating the quasi-steady cyclostrophic balance
+  `dp/dr = ρu²/r` inward from the ambient value over the measured ρ(r), u_θ(r) profiles. Water-like run 1: the
+  wall is in strong tension at onset (**p_wall ≈ −0.95**), still at −0.3 to −0.5 during the overshoot, and relaxes
+  to ≈ −0.12 at the end. T = 1 liquid, runs 1 and 2: −0.85 and −0.44 at onset, turning positive (+0.5) late in the
+  run, where the quasi-steady assumption evidently fails. So the tensile strength the liquids showed before
+  cavitating is ≈ 0.9 (water-like) and 0.4–0.85 (T = 1), in σ/ε units. **Caveat:** comparing the wall swirl with
+  the tension-corrected bound √(2(p∞ − p_wall)/ρ) is close to an identity for an irrotational outer flow
+  (integrating the same balance), so that comparison is not an independent test and is not claimed as one; what
+  the estimate supports is that the overshoot coincides with a wall held in tension. A direct test needs the
+  virial pressure tensor per radial bin, which `md_run` does not yet record.
