@@ -1,5 +1,41 @@
 # Changelog
 
+## v5.6.1 — 2026-09-18 — Full molecular-dynamics ensemble, a normalization correction, and a velocity bound from cavitation
+
+### Correction to v5.6.0
+
+v5.6.0 compared MD local Mach numbers formed with the ideal-gas sound speed `√(γT)` against continuum Mach
+numbers normalized to the real-gas sound speed; `√(γT)` is 8.5% low at ambient density (1–2% in an evacuated
+core). All MD local Mach numbers now use `c(ρ,T)` from the MD gas's own third-virial equation of state, bin by
+bin. Two v5.6.0 statements change: free molecules on the emptied axis reach **0.84–0.95**, not "≈ 1.2" (that was
+single raw bins with `√(γT)`); the surrounding dense gas does not "stay at 0.55–0.67" but **overshoots to 0.79 at
+target Mach 1.5 and settles at 0.50–0.62**.
+
+### Gas: full ensemble (paper §9.3, study §8)
+
+- Re = 16, three runs, target Mach 1: fitted peak local Mach **0.538 ± 0.011** against the pre-registered 0.54;
+  core density 0.33 ± 0.01 vs 0.36; core temperature 1.15 ± 0.02 vs 1.15.
+- Re = 32 (one run): the dense gas stays at 0.62–0.71 while the target is driven to Mach 3, and falls to 0.47 by
+  target Mach 6.3 (continuum 0.56–0.60). Re = 4 (one run): the target reaches only Mach 0.72 — unlocked, as in the
+  continuum model.
+- In every run the MD core density levels off near a quarter of ambient while the continuum core keeps
+  evacuating: the one place the two descriptions differ.
+
+### Liquid: cavitation and a capped wall speed (paper §9.3, study §9; one run, prediction registered first)
+
+- Lennard-Jones liquid, ρ = 0.80, T = 1, Re = 4. Registered prediction (commit `4f59e04`): no cavitation before
+  u_max ≈ 1.1 (ℓ ≈ 9σ). Outcome: cavitation at u_max ≈ 1.4–1.5 (ℓ ≈ 7σ), after the liquid held a tension of the
+  order of its ambient pressure; core density 0.74 → 0.07 within one averaging window, then vapour.
+- After cavitation the cavity grows to 7.5σ and **the swirl at its liquid wall levels off at 1.77–1.87 while the
+  target rises from 1.6 to 2.8**, below the hollow-vortex bound √(2p∞/ρ) = 2.07: the one genuine velocity bound
+  found in this work, supplied by a phase change. Vapour molecules inside the cavity keep following the force.
+
+### Also
+
+- Liquid run relaunched after the first attempt stopped at start-up (thermostat buffer did not fit the box).
+- `analyse_md_core.py`: real-gas local sound speed, dense-bin estimator, figure with all Reynolds numbers, the
+  pre-registered continuum curves, and the liquid density profiles.
+
 ## v5.6.0 — 2026-09-18 — A closure-free test of the Mach lock; the quantum-fluid counterpart
 
 ### Molecular dynamics of the forced core (paper §9.3; `md_core_rs/`; preliminary, two seeds)

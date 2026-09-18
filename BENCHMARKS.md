@@ -7,6 +7,24 @@ checks each regenerated number against the committed result it came from. Long r
 about 6 h; the kinetic collapse runs, about 5 h) are not re-simulated; their headline numbers are
 re-derived from the committed data, and that distinction is marked in the tables.
 
+## Result for v5.6.1
+
+**59 / 59 checks pass** (`--full` tier, 2026-09-18). Everything in the v5.5.0 and v5.4.1 tables below reproduced
+again; `pytest` runs 140 tests. New in this version:
+
+| check | quoted | reproduced |
+|---|---|---|
+| `QuantumVortexLink.lean` | 11 declarations, standard axioms | 11, 0 errors, no `sorryAx` |
+| Lean total | 85 declarations in ten files | 85 |
+| MD, Re = 16 (3 runs), target Mach 1: fitted local Mach (real-gas c) | 0.538 ± 0.011 (continuum 0.54) | 0.538 |
+| MD, Re = 16, target Mach 1: core density / temperature | 0.33 / 1.15 | 0.33 / 1.15 |
+| MD, Re = 32: dense-gas local Mach for target Mach 0.75–3 | 0.62–0.71 | 0.62–0.71 |
+| MD liquid: swirl at the cavity wall for target u ≥ 2 | 1.77–1.87, below 2.07 | 1.77–1.87 |
+
+The MD numbers are re-derived from the committed analysis output and raw run files (about 7 CPU-hours of
+simulation are not re-run). Writing these checks also caught a variable clash in the comparison script itself,
+fixed before the run was recorded.
+
 ## Result for v5.5.0
 
 **54 / 54 checks pass.** Run 2026-09-17, `--full` tier (wall time 31 min on a machine also running two

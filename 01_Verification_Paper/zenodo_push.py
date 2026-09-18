@@ -114,7 +114,7 @@ FILES_TO_PACKAGE = [
 
 METADATA = {
     "metadata": {
-        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.6.0)",
+        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.6.1)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
@@ -139,7 +139,7 @@ METADATA = {
             "independent one; the external force has no independent physical origin, by construction; "
             "and the Euler datum requires coherent structure below the molecular length, where the "
             "missing physics is viscosity itself, not any exotic short-distance cutoff.</p>"
-            "<p><strong>New in v5.2.0 to v5.6.0.</strong> The cutoff-regularization hypothesis the paper previously "
+            "<p><strong>New in v5.2.0 to v5.6.1.</strong> The cutoff-regularization hypothesis the paper previously "
             "stated as untested is tested with a validated 3D pseudo-spectral solver (Taylor-Green "
             "Re=1600 dissipation peak at t=9.14 against a published 9.0). It is exact given its premise, "
             "but the premise -- a Re~1 diffusive core -- is not produced by generic data. A manufactured "
@@ -178,8 +178,12 @@ METADATA = {
             "does not appear in the linearized dynamics. Lean: 85 declarations in ten files. v5.6.0 tests the Mach lock with no continuum closure at all: molecular dynamics of a "
             "Lennard-Jones gas driven by the same force, with viscosity measured in situ, reproduces the continuum prediction "
             "registered beforehand where the gas is still a continuum (local Mach 0.56-0.62 against 0.54, core density 0.34 "
-            "against 0.36, core temperature 1.15 against 1.15; preliminary, two runs), and shows the core emptying into a "
-            "free-molecular region beyond it. A new section gives the quantum-fluid counterpart: a quantized vortex is a "
+            "against 0.36, core temperature 1.15 against 1.15), and shows the core emptying into a "
+            "free-molecular region beyond it. v5.6.1 completes the ensemble (Re 16: local Mach 0.538 +- 0.011 against 0.54 "
+            "with a consistent real-gas sound speed, correcting a normalization in v5.6.0; Re 32: 0.62-0.71) and adds a "
+            "liquid: the core cavitates, after holding a tension of the order of its ambient pressure, and the swirl at the "
+            "cavity wall then levels off at 1.77-1.87 below the hollow-vortex bound 2.07 -- the one velocity bound found, "
+            "supplied by a phase change. A new section gives the quantum-fluid counterpart: a quantized vortex is a "
             "Reynolds-number-one core by theorem, and quantum pressure, heat and cavitation all let a fluid carry a velocity "
             "singularity by emptying the core rather than by bounding the velocity.</p>"
             "<p>This version supersedes all previous public drafts of this project, including "
@@ -219,7 +223,7 @@ METADATA = {
             "Cavitation",
             "Neuro-Symbolic AI"
         ],
-        "version": "5.6.0",
+        "version": "5.6.1",
         "license": "cc-by-4.0",
         "access_right": "open",
         "related_identifiers": [
@@ -229,7 +233,7 @@ METADATA = {
                 "scheme": "url"
             },
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.6.0",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.6.1",
                 "relation": "isIdenticalTo",
                 "scheme": "url"
             },

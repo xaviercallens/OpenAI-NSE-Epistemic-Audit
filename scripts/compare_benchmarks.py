@@ -163,6 +163,35 @@ def main(run: Path) -> int:
         iso = sw["iso_muRho_mass_re16"]["series"]["mach_local"][-1]
         check("compressible", "nu-const isothermal control does not lock (paper 1.91)", 1.91, round(iso, 2), abs(iso - 1.91) < 0.02)
 
+
+    # --- molecular dynamics (re-derived from committed analysis output) --------------------------------
+    md = load(REF / "md_core_runs.json")
+    if md and "forced_gas_re16" in md:
+        row = min(md["forced_gas_re16"]["table"], key=lambda r: abs(r["mach_target"] - 1.0))
+        m, se = row["mach_peak_fit_real"]
+        check("md", "Re16 x3, target Mach 1: fitted local Mach (paper 0.538 +- 0.011; continuum 0.54)", 0.538, round(m, 3),
+              abs(m - 0.538) < 0.002 and md["forced_gas_re16"]["n_seeds"] == 3)
+        r0, t0 = row["rho0_over_rho_inf"][0], row["T0_over_T_inf"][0]
+        check("md", "Re16 target Mach 1: core density / temperature (paper 0.33 / 1.15)", "0.33 / 1.15", f"{r0:.2f} / {t0:.2f}",
+              abs(r0 - 0.33) < 0.006 and abs(t0 - 1.15) < 0.006)
+    if md and "forced_gas_re32" in md:
+        re32_rows = [x for x in md["forced_gas_re32"]["table"] if 0.7 <= x["mach_target"] <= 3.05]
+        dens = [x["mach_peak_dense_real"][0] for x in re32_rows]
+        check("md", "Re32 dense-gas local Mach, target 0.75-3 (paper 0.62-0.71)", "0.62-0.71", f"{min(dens):.2f}-{max(dens):.2f}",
+              0.615 <= min(dens) and max(dens) <= 0.715)
+    liq = REF.parent.parent / "md_core_rs" / "runs" / "forced_liq_re4_s1.json"
+    if liq.exists():
+        import numpy as np
+        d = json.loads(liq.read_text())
+        walls = []
+        for w in d["windows"]:
+            if d["re"] * d["nu_used"] / w["l_target"] < 2.0:
+                continue
+            rho = np.array(w["rho"]) / d["rho"]; iw = int(np.argmax(rho > 0.5)); walls.append(float(w["u_theta"][iw]))
+        cap = np.sqrt(2 * 1.707 / 0.80)
+        check("md", "liquid: swirl at cavity wall for target u >= 2 (paper 1.77-1.87, below cap 2.07)", "1.77-1.87 < 2.07",
+              f"{min(walls):.2f}-{max(walls):.2f}", max(walls) < cap and abs(min(walls) - 1.77) < 0.01 and abs(max(walls) - 1.87) < 0.01)
+
     # --- Lean ---------------------------------------------------------------------------------------
     for name, n in LEAN_DECLS.items():
         out = log(f"lean_{name}")

@@ -278,3 +278,30 @@ the liquid's sound speed, so compressibility is minor). For a Gaussian core the 
 its vapour pressure until it reaches its spinodal or nucleates, so this is a lower bound on the size at which
 cavitation can occur: **if the core cavitates, the density drop should appear at ℓ ≲ 9σ; if none appears
 by ℓ = 3σ (u_max ≈ 3.3), the core has sustained a large tension.** Either outcome is reported.
+
+**Outcome (one run, analysed after the prediction above was committed).**
+
+| target ℓ (σ) | target u_max | core density / ρ∞ | cavity wall radius | swirl at the liquid wall | vapour inside the cavity |
+|---|---|---|---|---|---|
+| 13.8 → 9.7 | 0.73 → 1.03 | 0.89 → 0.75 (liquid under growing tension) | — | — | — |
+| 7.8 | 1.28 | 0.74 | — | — | — |
+| **7.1 → 6.3** | **1.41 → 1.59** | **0.50 → 0.07 (cavitation)** | 2.5σ → 4.5σ | 0.87 → 1.47 | 300–1,000 molecules |
+| 5.4 | 1.86 | 0.005 | 6.5σ | 1.82 | ~1,700 molecules, max swirl 1.77 |
+| 4.2 | 2.35 | 0.00 | 7.5σ | **1.79** | max swirl 2.53 |
+| 3.6 | 2.81 | 0.01 | 7.5σ | **1.77** | max swirl 3.16 |
+
+1. **The prediction held.** No density drop before ℓ ≈ 9σ; cavitation at ℓ ≈ 7σ, u_max ≈ 1.4–1.5. With the
+   Gaussian-core formula the core pressure at onset is p∞ − 1.70 ρ u² ≈ 1.71 − 2.7 ≈ −1: the liquid held a
+   tension comparable to its ambient pressure before it cavitated (the formula is approximate at this point,
+   because the core had already expanded by 25%).
+2. **After cavitation the liquid's swirl is capped.** The cavity grows to 7.5σ and the swirl at its liquid wall
+   saturates at **1.77–1.87 while the target goes from 1.6 to 2.8**. The hollow-vortex bound √(2p∞/ρ) = 2.07 is
+   respected, the wall speed levelling off at 0.86–0.90 of it. This is the first velocity bound (as opposed to a
+   Mach-number lock) found in this programme, and it comes from a phase change: once the core is vapour, the
+   liquid cannot be spun faster than the pressure difference across the cavity allows.
+3. **The vapour inside keeps following the force.** The few hundred to two thousand vapour molecules in the
+   cavity reach swirl speeds of 2.5–3.2, tracking the target, because a per-unit-mass force acts on each
+   molecule regardless of density — the same thing that happened on the gas's emptied axis.
+
+**Limitations:** one run; a Lennard-Jones liquid, not water; thin slab; the cavity wall is sampled on 1σ
+bins; the per-unit-mass force keeps acting on the vapour, which a real driving mechanism need not do.

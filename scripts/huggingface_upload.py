@@ -131,7 +131,7 @@ FILES_TO_UPLOAD = [
 
 # Version DOI minted by Zenodo for this release. Fill in after publishing on Zenodo; the script refuses
 # to run while it is PENDING so the card never goes out with a missing or wrong DOI.
-RELEASE = "v5.6.0"
+RELEASE = "v5.6.1"
 ZENODO_VERSION_DOI = "22823647"
 
 DATASET_CARD = """---
@@ -156,13 +156,13 @@ language:
   - en
 size_categories:
   - n<1K
-pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.6.0)"
+pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.6.1)"
 ---
 
 # The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation
 
 **Socrate AI Lab / MechanicaFluidorum Program** &middot; Lead: Xavier Callens
-**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.5.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.6.0))
+**GitHub:** [xaviercallens/OpenAI-NSE-Epistemic-Audit](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit) (release [v5.5.0](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.6.1))
 **Zenodo:** concept DOI [10.5281/zenodo.22696717](https://doi.org/10.5281/zenodo.22696717) (always resolves to the latest version) &middot; v5.6.0: [10.5281/zenodo.@DOI@](https://doi.org/10.5281/zenodo.@DOI@)
 
 ## What this is
@@ -186,7 +186,7 @@ expressible as one local vorticity bound |&omega;| &lesssim; c<sub>s</sub><sup>2
 Beale-Kato-Majda theorem turns into a genuine admissibility criterion. For liquids, cavitation is
 reached three decades earlier still.
 
-## Results added in v5.2.0 to v5.6.0
+## Results added in v5.2.0 to v5.6.1
 
 - **3D solver validated.** Pseudo-spectral Navier-Stokes solver reproduces the Taylor-Green
   Re = 1600 benchmark: dissipation peak at t = 9.14 against the published t = 9.0.
@@ -228,10 +228,12 @@ reached three decades earlier still.
   own proved implosion singularities. `code/compressible_core.py`, `data/compressible_core_*.json`.
 - **Leray-alpha anchor claim withdrawn (v5.5.0).** alpha does not appear in the linearized dynamics of
   any alpha-model (`lean4/LerayAlphaLinearization.lean`), so it cannot be calibrated to l*.
-- **Closure-free test of the Mach lock (v5.6.0, preliminary).** Molecular dynamics of a Lennard-Jones gas
+- **Closure-free test of the Mach lock (v5.6.0-5.6.1).** Molecular dynamics of a Lennard-Jones gas
   driven by the same force, viscosity measured in situ, against a continuum prediction registered before
   the MD data existed: at Re = 16 and target Mach 1, local Mach 0.56-0.62 vs 0.54, core density 0.34 vs
-  0.36, core temperature 1.15 vs 1.15 (two runs). Beyond target Mach ~1.5 the axis becomes free-molecular.
+  0.36, core temperature 1.15 vs 1.15 (v5.6.1: three runs, 0.538 +- 0.011 vs 0.54 with a consistent real-gas sound
+  speed; Re 32: 0.62-0.71). Beyond target Mach ~1.5 the axis becomes free-molecular. In a liquid the core
+  cavitates and the swirl at the cavity wall levels off at 1.77-1.87, below the hollow-vortex bound 2.07.
   `data/md_core_*.json`, `figures/md_core.png`.
 - **Quantum-fluid counterpart (v5.6.0).** A quantized vortex is a Reynolds-number-one core by theorem;
   quantum pressure, heat and cavitation all let a fluid carry a velocity singularity by emptying the core.
