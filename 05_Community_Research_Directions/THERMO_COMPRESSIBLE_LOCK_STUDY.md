@@ -267,3 +267,14 @@ MD 0.47–0.52 against continuum 0.39–0.48 — the unlocked regime, as expecte
 **Limitations.** Thin slab (8σ), no three-dimensional instability; one run each at Re = 4 and 32; the thermostat
 buffer is not an open boundary; the Lamb–Oseen fit is biased low after the profile deforms and the profile
 maximum is biased high where bins are sparse, so the two bracket the true peak.
+
+## 9. Liquid run: prediction registered before the data (2026-09-18)
+
+Lennard-Jones liquid, ρ = 0.80, T = 1.0 (measured p∞ ≈ 1.7; single phase), Re = 4, ν = 2.5 (shear-wave
+decay), core driven from 20σ to 3σ, so the target peak swirl rises from 0.50 to 3.3 (target Mach ≲ 0.6 with
+the liquid's sound speed, so compressibility is minor). For a Gaussian core the central pressure deficit is
+1.70 ρ u_max². With a vapour pressure well below p∞ (≲ 0.05 at T = 1), the core reaches the vapour pressure at
+**u_max ≈ √(1.65/(1.70 × 0.80)) ≈ 1.1, i.e. target core size ℓ ≈ 9σ**. A liquid can sustain tension below
+its vapour pressure until it reaches its spinodal or nucleates, so this is a lower bound on the size at which
+cavitation can occur: **if the core cavitates, the density drop should appear at ℓ ≲ 9σ; if none appears
+by ℓ = 3σ (u_max ≈ 3.3), the core has sustained a large tension.** Either outcome is reported.
