@@ -1,4 +1,4 @@
 forced_gas_re16_s2  --mode vortex --force on --rho 0.15 --temp 2.0 --l 300 --lz 8 --dt 0.005 --equil-steps 6000 --re 16 --nu 1.70 --l-start 40 --l-end 4 --seed 102
 forced_gas_re32_s1  --mode vortex --force on --rho 0.15 --temp 2.0 --l 300 --lz 8 --dt 0.005 --equil-steps 6000 --re 32 --nu 1.70 --l-start 40 --l-end 4 --seed 121
 # liquid (rho 0.80, T 1.0), nu = 2.5 (shear-wave decay), exploratory cavitation run
-forced_liq_re4_s1   --mode vortex --force on --rho 0.80 --temp 1.0 --l 160 --lz 8 --dt 0.004 --equil-steps 8000 --re 4 --nu 2.5 --l-start 20 --l-end 3 --seed 131
+forced_liq_re4_s1   --mode vortex --force on --rho 0.80 --temp 1.0 --l 160 --lz 8 --dt 0.004 --equil-steps 8000 --re 4 --nu 2.5 --l-start 20 --l-end 3 --rb 60 --buffer-ramp 8 --seed 131

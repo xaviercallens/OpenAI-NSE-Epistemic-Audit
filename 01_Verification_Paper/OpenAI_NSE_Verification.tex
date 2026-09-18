@@ -21,7 +21,7 @@
 
 \title{\textbf{The OpenAI Navier--Stokes and Euler Blow-Up Proofs:\\ A Physical Reading, Not a Physical Refutation}}
 \author{The MechanicaFluidorum Program \\ \textit{SocrateAI Lab}}
-\date{September 2026 \\ \small Version 5.6.0}
+\date{September 2026 \\ \small Version 5.6.1}
 
 \begin{document}
 
@@ -1012,18 +1012,28 @@ heat-conduction law or equation of state is put in. The simulation reproduces th
 drift below $4\times10^{-5}$, pressure within $0.8\%$ of the third-virial equation of state, and a viscosity
 measured in situ as $1.71\pm0.07$ (decaying shear waves) and $1.87\pm0.18$ (a decaying vortex) against the
 modified-Enskog value $1.83$. The continuum prediction for this set-up was registered before the molecular
-data existed (local Mach number saturating near $0.58$ at $\mathrm{Re}=16$). At $\mathrm{Re}=16$, with the
-target driven from Mach $0.34$ to $3.4$ and two independent runs so far, the two agree where the gas is
-still a continuum: at target Mach $1$ (local Knudsen number $\le0.2$) the molecular core has local Mach
-number $0.56$--$0.62$, density $0.34\pm0.01$ and temperature $1.15\pm0.03$ of ambient, against $0.54$,
-$0.36$ and $1.15$ from the continuum model. The lock is therefore not an artefact of the closure. Driven
-further, the axis empties until it is no longer a fluid: at target Mach $\ge1.5$ the innermost $5\,\sigma$
-hold a few tens of molecules at $8$--$10\%$ of ambient density, with a local mean free path larger than the
-core, and these free molecules are spun up to a local Mach number near $1.2$ while the surrounding gas stays
-at $0.55$--$0.67$. The core crosses, within one simulation, from the continuum regime into the
-free-molecular one, which is the regime map of \S\ref{sec:regime-map} acting on a single flow. These are
-preliminary results from two runs, in a thin slab without three-dimensional instability; further seeds,
-other Reynolds numbers and a liquid run are in progress.
+data existed (local Mach number saturating near $0.58$ at $\mathrm{Re}=16$). Local Mach numbers in the
+molecular gas are formed with the sound speed $c(\rho,T)$ of its own equation of state, bin by bin, which
+matters: the ideal-gas value $\sqrt{\gamma T}$ is $8.5\%$ low at ambient density though only $1$--$2\%$ low
+in an evacuated core. At $\mathrm{Re}=16$ (three independent runs, target driven from Mach $0.34$ to $3.4$) the
+two descriptions agree where the gas is still a continuum: at target Mach $1$ (local Knudsen number
+$\approx0.2$) the peak local Mach number of the molecular core is $0.538\pm0.011$ from a Lamb--Oseen fit
+($0.61$ from the maximum of the smoothed profile), its density $0.33\pm0.01$ and its temperature $1.15\pm0.02$
+of ambient, against $0.54$, $0.36$ and $1.15$ from the continuum model. At $\mathrm{Re}=32$, where the sonic
+scale is larger (local Knudsen number at the fitted core width $\le0.16$), the swirl Mach number of the
+dense gas stays between $0.62$ and $0.71$ while the target is driven from Mach $0.75$ to $3$, and falls to
+$0.47$ as the target goes on to Mach $6$; the continuum prediction is $0.56$--$0.60$. (A few sparse bins on
+the axis again read higher, $0.8$--$1.2$, beyond target Mach $3$.) At $\mathrm{Re}=4$ the
+target reaches only Mach $0.72$ and neither description locks. The lock is therefore not an artefact of the
+closure. What the continuum model does not capture is what happens once the axis has emptied: in every
+molecular run the core density levels off near a quarter of ambient while the continuum core keeps
+evacuating, and at $\mathrm{Re}=16$ beyond target Mach $\approx1.5$ the innermost few $\sigma$ hold only tens of
+molecules, with a local mean free path larger than the core. There the smoothed local Mach number reaches
+$0.84$--$0.95$, while in the surrounding dense gas it overshoots to $0.79$ at target Mach $1.5$ and then settles
+at $0.50$--$0.62$. The core thus crosses, within one simulation, from the continuum regime into the
+free-molecular one --- the regime map of \S\ref{sec:regime-map} acting on a single flow. Limitations: a thin
+slab without three-dimensional instability, one run each at $\mathrm{Re}=4$ and $32$, and a thermostat
+buffer rather than an open boundary.
 
 \subsection{A regime map: which physics a blow-up scenario meets first}
 \label{sec:regime-map}
