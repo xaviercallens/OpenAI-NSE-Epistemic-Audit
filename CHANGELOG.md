@@ -1,5 +1,17 @@
 # Changelog
 
+## v5.8.0 — 2026-09-19 — A fixed-ambient-pressure test: the failed water-like prediction holds once the closed-box pressure rise is removed
+
+- `md_run --baro auto`: a weak barostat on the box area, coupled to the far-ring pressure (study §12); two water-like slab runs.
+- Far-field pressure held within +0.12 / +0.10 of target (uncontrolled: +0.45). The wall swirl plateaus at **0.842 / 0.841**
+  (mean of the six highest windows) against the registered cap **0.824**: +2%, inside one per-window standard error.
+  The prediction therefore **failed in the closed box (+14–24%) and held at fixed ambient pressure**; at the measured
+  pressure the swirl reaches 0.97–1.01 of the bound at the plateau and never more than 0.94 in any window.
+- Caveats: two runs, one state point, a slab; the barostat lags; the plateau statistic is biased upward; K and τ were tuned on one smoke test.
+- Not done: a fixed-pressure test in 3D, an undriven liquid control for the axial diagnostic.
+- Benchmark: four new checks (per run: barostat control; plateau vs the registered cap).
+- DualScale-Enterprise `numerics/dualscale-md` gets the barostat in a follow-up PR.
+
 ## Unreleased — 2026-09-18 — Three corrections to how this project presents itself
 
 No scientific claim changes. All three items are about the gap between what the repository

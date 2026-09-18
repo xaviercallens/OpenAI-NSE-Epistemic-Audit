@@ -131,8 +131,8 @@ FILES_TO_UPLOAD = [
 
 # Version DOI minted by Zenodo for this release. Fill in after publishing on Zenodo; the script refuses
 # to run while it is PENDING so the card never goes out with a missing or wrong DOI.
-RELEASE = "v5.7.0"
-ZENODO_VERSION_DOI = "22836538"
+RELEASE = "v5.8.0"
+ZENODO_VERSION_DOI = "PENDING"
 
 DATASET_CARD = """---
 license: cc-by-4.0
@@ -156,7 +156,7 @@ language:
   - en
 size_categories:
   - n<1K
-pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.7.0)"
+pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.8.0)"
 ---
 
 # The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation
@@ -186,7 +186,7 @@ expressible as one local vorticity bound |&omega;| &lesssim; c<sub>s</sub><sup>2
 Beale-Kato-Majda theorem turns into a genuine admissibility criterion. For liquids, cavitation is
 reached three decades earlier still.
 
-## Results added in v5.2.0 to v5.7.0
+## Results added in v5.2.0 to v5.8.0
 
 - **3D solver validated.** Pseudo-spectral Navier-Stokes solver reproduces the Taylor-Green
   Re = 1600 benchmark: dissipation peak at t = 9.14 against the published t = 9.0.
@@ -240,7 +240,8 @@ reached three decades earlier still.
   continuum 0.27/0.39/0.48. Water-like liquid: the wall swirl exceeded the bound registered at the initial
   pressure (0.94-1.14 vs 0.82: that prediction failed); per-bin pressure (`md_run --stress on`) shows the closed
   box's ambient pressure rose 0.32 -> 0.77, and at that pressure the swirl is 0.45-0.75 of the bound (post hoc,
-  one run). Raw runs in `data/md_core_runs/`, code in `code/md_core_rs/`.
+  one run). v5.8.0: with a barostat holding the far-field pressure fixed (`--baro auto`, two runs) the wall swirl plateaus at 0.84 vs
+  the registered 0.82 (+2%, within one standard error): the prediction held at fixed ambient pressure. Raw runs in `data/md_core_runs/`, code in `code/md_core_rs/`.
   `data/md_core_*.json`, `figures/md_core.png`.
 - **Quantum-fluid counterpart (v5.6.0).** A quantized vortex is a Reynolds-number-one core by theorem;
   quantum pressure, heat and cavitation all let a fluid carry a velocity singularity by emptying the core.

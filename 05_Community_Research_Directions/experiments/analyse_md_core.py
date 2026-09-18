@@ -432,7 +432,11 @@ def main():
             pm = pressure_metrics(dd)
             if dd.get("baro"):
                 pm["barostat"] = {"target_p": dd["baro_target_p"], "L_start": dd["L"], "L_end": dd["L_end"],
-                                  "area_change": (dd["L_end"] / dd["L"]) ** 2 - 1}
+                                  "area_change": (dd["L_end"] / dd["L"]) ** 2 - 1,
+                                  "p_far_max_minus_target": pm["p_far_max"] - dd["baro_target_p"],
+                                  "cap_at_target_pressure": float(np.sqrt(2 * dd["baro_target_p"] / pm["windows"][0]["rho_far"]))}
+                pm["plateau"]["top6_over_registered_cap"] = pm["plateau"]["u_wall_top6_mean"] / 0.8239
+                pm["plateau"]["top6_over_cap_at_target"] = pm["plateau"]["u_wall_top6_mean"] / pm["barostat"]["cap_at_target_pressure"]
             runs_out["_" + (k if k.startswith("pbaro_") else k.rsplit("_s", 1)[0]) + "_pressure"] = pm
     jd = lambda o: json.dumps(o, indent=1, default=lambda x: x.tolist() if hasattr(x, "tolist") else float(x))
     (OUT / "md_core_gates.json").write_text(jd(gates))
@@ -467,7 +471,12 @@ def pressure_metrics(d):
                 row["u_wall_over_cap"] = row["u_wall"] / row["cap_measured"]
         rows.append(row)
     cav = [r for r in rows if "u_wall" in r]
-    return {"windows": rows, "p_far_start": rows[0]["p_far"], "p_far_max": max(r["p_far"] for r in rows),
+    top = sorted((r["u_wall"] for r in cav), reverse=True)[:6]
+    rho_far0 = rows[0]["rho_far"]
+    plateau = {"u_wall_top6_mean": float(np.mean(top)) if top else None,
+               "cap_at_initial_far_pressure": float(np.sqrt(2 * rows[0]["p_far"] / rho_far0)),
+               "cap_registered": 0.8239}
+    return {"plateau": plateau, "windows": rows, "p_far_start": rows[0]["p_far"], "p_far_max": max(r["p_far"] for r in rows),
             "u_wall_over_cap_max": max(r["u_wall_over_cap"] for r in cav) if cav else None,
             "u_wall_max": max(r["u_wall"] for r in cav) if cav else None,
             "cap_initial_p": float(np.sqrt(2 * rows[0]["p_far"] / rows[0]["rho_far"]))}

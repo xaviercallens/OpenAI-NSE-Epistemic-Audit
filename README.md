@@ -43,7 +43,7 @@ In September 2026, an OpenAI multi-agent system produced a **Lean 4 formalized p
 
 ---
 
-## 📍 Current status (v5.7.0, 2026-09-18)
+## 📍 Current status (v5.8.0, 2026-09-19)
 
 The research question behind the later versions is a "lock" chain: does something physical necessarily intervene where the construction goes? Each link, with its evidence and its honest status:
 
@@ -63,7 +63,7 @@ The research question behind the later versions is a "lock" chain: does somethin
 Open gaps, stated plainly:
 - **No arrest mechanism is demonstrated on OpenAI's route.** The kinetic cutoff terminates the linear mode but does not stop a driven core, and neither compressibility nor heat does before $\ell_*$. The Mach lock of link 7 belongs to the inertial route, and the compressible equations it lives in have their own proved implosion singularities.
 - **The problem relocates rather than dissolves:** large-data regularity of the Boltzmann/BGK equations is itself open.
-- **Liquids are not dilute gases:** link 3 is a gas result; in water, cavitation is the first constitutive limit. Molecular dynamics of a Lennard-Jones liquid finds cavitation first, and a swirl at the cavity wall within the hollow-vortex bound at the ambient pressure measured in the run. A water-like liquid *exceeded* the bound registered at the initial pressure (a prediction that failed, v5.7.0): the closed box's ambient pressure rose from 0.32 to 0.77 as the core emptied, and at that pressure the wall swirl stays at 0.45–0.75 of the bound. Post hoc, one run; a fixed-pressure far field is the clean test.
+- **Liquids are not dilute gases:** link 3 is a gas result; in water, cavitation is the first constitutive limit. Molecular dynamics of a Lennard-Jones liquid finds cavitation first, and a swirl at the cavity wall within the hollow-vortex bound at the ambient pressure measured in the run. A water-like liquid *exceeded* the bound registered at the initial pressure (a prediction that failed, v5.7.0): the closed box's ambient pressure rose from 0.32 to 0.77 as the core emptied, and at that pressure the wall swirl stays at 0.45–0.75 of the bound. Post hoc, one run — and then tested directly (v5.8.0): with a barostat holding the far-field pressure fixed, the wall swirl plateaus at 0.84 against the registered 0.82 (+2%, inside one standard error), so the prediction held at fixed ambient pressure. Two runs, a slab.
 - **Cutoff law** $u_{\max}\sim\nu/\sqrt{\alpha'}$: on a manufactured Re ≈ 1 core a dissipative barrier stalls the core at $\ell \approx 1.2$–$1.5\sqrt{\alpha'}$ at 96³, with exponents approaching the law; a converged arrest is not yet shown. Leray-α/LANS-α are one to two orders weaker there — a ranking of two *models*, not a statement about real fluids.
 
 Details: [`05_Community_Research_Directions/DUAL_SCALE_LOCK_PROGRAMME.md`](05_Community_Research_Directions/DUAL_SCALE_LOCK_PROGRAMME.md) §8–9 · [`THERMO_COMPRESSIBLE_LOCK_STUDY.md`](05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md) · [`DIRECTION1_RESULTS.md`](05_Community_Research_Directions/DIRECTION1_RESULTS.md) · reproducible checks and their measured numbers: [`BENCHMARKS.md`](BENCHMARKS.md).
@@ -119,7 +119,7 @@ These rows describe OpenAI's formalization. This project's own Lean files (ten f
 
 ```
 OpenAI-NSE-Epistemic-Audit/
-├── 01_Verification_Paper/               # Flagship paper (v5.7.0, 32 pp) + open peer review
+├── 01_Verification_Paper/               # Flagship paper (v5.8.0, 32 pp) + open peer review
 │   ├── OpenAI_NSE_Verification.pdf
 │   ├── OpenAI_NSE_Verification.tex
 │   ├── PEER_REVIEW_2026-09-15.md
@@ -322,7 +322,7 @@ Whether you want to debate the boundary between abstract Sobolev spaces and flui
                   A Physical Reading, Not a Physical Refutation},
   year         = {2026},
   month        = sep,
-  version      = {5.7.0},
+  version      = {5.8.0},
   publisher    = {Zenodo},
   doi          = {10.5281/zenodo.22836538},
   url          = {https://doi.org/10.5281/zenodo.22836538},

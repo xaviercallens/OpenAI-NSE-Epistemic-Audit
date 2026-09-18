@@ -397,3 +397,31 @@ the slab core density reaches 12–18 in the windows around onset (the density i
 the centroid offset grows to 2.7–6.4 × noise once the core is empty, where a centroid of ~0 particles is not
 meaningful. **No undriven water-like control exists, so the axial result is inconclusive** for the liquid (for
 the gas it was calibrated, and there was no instability above the undriven control).
+
+## 12. Fixed ambient pressure: the barostat test (2026-09-19)
+
+**Set-up.** `md_run --baro auto`: a weak Berendsen-type barostat on the xy box area, coupled to the far-ring pressure
+(0.8–1.0 R_b, from the per-bin stress of §11), τ = 3, compressibility scale K = 14 (a rough figure; the loop is
+self-correcting), target = the ring pressure averaged over the first 25 updates. Positions and the Verlet reference
+positions are rescaled together, and the vortex centre follows the box. Two slab runs, same set-up as water-like runs 1–2
+(`pbaro_wl_re4_s1/s2`, seeds 144/145). Smoke test in a small box: uncontrolled far pressure 0.29 → 1.04, τ = 10 → 0.74,
+**τ = 3 → 0.57**, τ = 1 → 0.50 (with a 2% density undershoot); τ = 3 chosen.
+
+**Control worked.** Box area +6.9% / +7.9% (the cavity area); far-field pressure peak minus target +0.115 / +0.097
+(uncontrolled: +0.45), far density 0.779–0.789 (uncontrolled: up to 0.811).
+
+**Result (both runs).** Wall swirl (maximum over the three bins at the half-density radius), mean of the six highest windows:
+**0.842 / 0.841** vs the registered cap 0.824 (+2.2% / +2.1%); vs the cap at the target pressure 0.867 / 0.830 (0.97 / 1.01);
+the largest single-window value 0.853 / 0.863; at the pressure measured in each window the ratio never exceeds 0.90 / 0.94.
+It then falls to 0.43–0.46 as the target goes to 3.2.
+
+**Reading.**
+* The registered prediction (§10: wall swirl ≤ 0.82–0.83 unless exceeded by more than noise) **failed in the closed box
+  (+14–24%) and held at fixed ambient pressure (+2%, inside one per-window standard error of 0.02–0.03).** So the closed-box
+  failure has its measured cause, and removing the cause removes the failure.
+* The swirl sits *at* the bound during the plateau (ratio 0.97–1.01 at the target pressure), not far below it: the bound is
+  approached, which is what a hollow-vortex balance predicts.
+* Caveats: two runs; one state point; a slab; the barostat lags (far pressure up to 0.1 above target near the plateau, so
+  the ratio at the measured pressure is 0.9–0.94); the plateau statistic selects the highest windows and is biased upward;
+  K and τ are tuning choices (τ = 3 was chosen from a smoke test on one seed of one small box).
+* Not done: the same test in the 3D box, an undriven liquid control for the axial diagnostic, other ambient pressures.

@@ -7,6 +7,19 @@ checks each regenerated number against the committed result it came from. Long r
 about 6 h; the kinetic collapse runs, about 5 h) are not re-simulated; their headline numbers are
 re-derived from the committed data, and that distinction is marked in the tables.
 
+## Result for v5.8.0
+
+**67 / 67 checks pass** (`--full` tier, 2026-09-19). Everything in the v5.7.0 table below reproduced again. New in this version,
+per run (two runs): the barostat held the far-field pressure and the wall-swirl plateau against the registered cap.
+
+| check | quoted | reproduced |
+|---|---|---|
+| water-like, barostat, run 1 / run 2: far pressure above target; box area change | ≤ +0.15; +5…+10% | +0.12, +6.9% / +0.10, +7.9% |
+| water-like, barostat, run 1 / run 2: wall-swirl plateau (mean of the six highest windows) vs the registered cap 0.824 | within 5% (paper 0.842 / 0.841, +2%) | 0.842 (+2.2%) / 0.841 (+2.1%) |
+
+The plateau statistic selects the highest windows and is biased upward; the ±5% tolerance is wider than the per-window standard error
+(0.02–0.03) on purpose. About 2 further CPU-hours of MD are not re-run.
+
 ## Result for v5.7.0
 
 **63 / 63 checks pass** (`--full` tier, 2026-09-18). The first full run gave 62 / 63: the Re = 32 check quoted the

@@ -115,7 +115,7 @@ FILES_TO_PACKAGE = [
 
 METADATA = {
     "metadata": {
-        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.7.0)",
+        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.8.0)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
@@ -140,7 +140,7 @@ METADATA = {
             "independent one; the external force has no independent physical origin, by construction; "
             "and the Euler datum requires coherent structure below the molecular length, where the "
             "missing physics is viscosity itself, not any exotic short-distance cutoff.</p>"
-            "<p><strong>New in v5.2.0 to v5.7.0.</strong> The cutoff-regularization hypothesis the paper previously "
+            "<p><strong>New in v5.2.0 to v5.8.0.</strong> The cutoff-regularization hypothesis the paper previously "
             "stated as untested is tested with a validated 3D pseudo-spectral solver (Taylor-Green "
             "Re=1600 dissipation peak at t=9.14 against a published 9.0). It is exact given its premise, "
             "but the premise -- a Re~1 diffusive core -- is not produced by generic data. A manufactured "
@@ -192,7 +192,9 @@ METADATA = {
             "A registered prediction failed there: the wall swirl exceeded the hollow-vortex bound stated at the initial "
             "pressure (0.94 to 1.14 against 0.82). A direct per-bin pressure measurement shows the closed box's ambient "
             "pressure rose from 0.32 to 0.77 as the core emptied, and at that pressure the wall swirl stays at 0.45-0.75 of "
-            "the bound; this is a post-hoc reading of one run, and a fixed-pressure boundary is needed to test it.</p>"
+            "the bound (post hoc, one run). v5.8.0 tests it directly: a barostat holds the far-field pressure fixed, and in two runs the wall swirl "
+            "plateaus at 0.84 against the registered 0.82 (+2%, within one standard error), so the prediction held at fixed ambient pressure "
+            "and failed only in the closed box (slab, two runs, one state point).</p>"
             "<p>This version supersedes all previous public drafts of this project, including "
             "one previously deposited under this same Zenodo record. Claims withdrawn in this revision "
             "-- \"plasma temperatures\", a global enstrophy-censorship axiom with no stated derivation, "
@@ -230,7 +232,7 @@ METADATA = {
             "Cavitation",
             "Neuro-Symbolic AI"
         ],
-        "version": "5.7.0",
+        "version": "5.8.0",
         "license": "cc-by-4.0",
         "access_right": "open",
         "related_identifiers": [
@@ -240,7 +242,7 @@ METADATA = {
                 "scheme": "url"
             },
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.7.0",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.8.0",
                 "relation": "isIdenticalTo",
                 "scheme": "url"
             },

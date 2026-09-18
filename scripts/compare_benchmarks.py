@@ -196,6 +196,16 @@ def main(run: Path) -> int:
         over = max(x["u_wall_after_onset_min_max"][1] for x in ls)
         check("md", "water-like liquid: registered cap 0.82 (initial p_inf) was exceeded, i.e. the prediction failed (paper: 0.94 at half-density bin)",
               "> 0.82", f"{over:.2f}", over > ls[0]["hollow_vortex_cap"])
+    for sd in (1, 2):
+        pb = md.get(f"_pbaro_wl_re4_s{sd}_pressure") if md else None
+        if pb:
+            bar, pl = pb["barostat"], pb["plateau"]
+            check("md", f"water-like, fixed far-field pressure (barostat), run {sd}: far pressure within +0.15 of target, box area +5..+10%",
+                  "<= +0.15, +5..+10%", f"+{bar['p_far_max_minus_target']:.2f}, {100 * bar['area_change']:+.1f}%",
+                  bar["p_far_max_minus_target"] < 0.15 and 0.05 < bar["area_change"] < 0.10)
+            check("md", f"water-like, fixed far-field pressure, run {sd}: wall-swirl plateau within 5% of the registered cap 0.824 (paper 0.842/0.841)",
+                  "0.824 (+2%)", f"{pl['u_wall_top6_mean']:.3f} ({100 * (pl['top6_over_registered_cap'] - 1):+.1f}%)",
+                  abs(pl["top6_over_registered_cap"] - 1) < 0.05)
     pm = md.get("_pstress_wl_re4_pressure") if md else None
     if pm:
         check("md", "water-like, measured far-field pressure: p_far rises >2x and wall swirl <= 0.76 of the cap at that pressure (post hoc, one run)",
