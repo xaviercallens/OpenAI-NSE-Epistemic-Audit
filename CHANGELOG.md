@@ -10,7 +10,12 @@
 - Caveats: two runs, one state point, a slab; the barostat lags; the plateau statistic is biased upward; K and τ were tuned on one smoke test.
 - Not done: a fixed-pressure test in 3D, an undriven liquid control for the axial diagnostic.
 - Benchmark: four new checks (per run: barostat control; plateau vs the registered cap).
-- DualScale-Enterprise `numerics/dualscale-md` gets the barostat in a follow-up PR.
+- DualScale-Enterprise `numerics/dualscale-md` gets the barostat in PR #3.
+
+### Published
+- GitHub release v5.8.0 (paper PDF attached); Zenodo version DOI **10.5281/zenodo.22838708** (concept 10.5281/zenodo.22696717),
+  66 files checksum-verified against the tagged tree before publishing (the first upload hit Zenodo's 133-requests-per-minute limit and was
+  completed on the same draft); HuggingFace dataset synced to v5.8.0.
 
 ## Unreleased — 2026-09-18 — Three corrections to how this project presents itself
 

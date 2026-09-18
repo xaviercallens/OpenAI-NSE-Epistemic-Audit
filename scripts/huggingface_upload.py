@@ -132,7 +132,7 @@ FILES_TO_UPLOAD = [
 # Version DOI minted by Zenodo for this release. Fill in after publishing on Zenodo; the script refuses
 # to run while it is PENDING so the card never goes out with a missing or wrong DOI.
 RELEASE = "v5.8.0"
-ZENODO_VERSION_DOI = "PENDING"
+ZENODO_VERSION_DOI = "22838708"
 
 DATASET_CARD = """---
 license: cc-by-4.0
