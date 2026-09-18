@@ -21,7 +21,7 @@
 
 \title{\textbf{The OpenAI Navier--Stokes and Euler Blow-Up Proofs:\\ A Physical Reading, Not a Physical Refutation}}
 \author{The MechanicaFluidorum Program \\ \textit{SocrateAI Lab}}
-\date{September 2026 \\ \small Version 5.6.1}
+\date{September 2026 \\ \small Version 5.7.0}
 
 \begin{document}
 
@@ -78,7 +78,9 @@ heat inside the continuum, and plain viscosity. On the second, a one-dimensional
 Navier--Stokes--Fourier simulation finds that air does not follow a driven swirl past a local Mach
 number of $0.70$; on the first, neither compressibility nor heat stops the core before $\ell_*$. A molecular-dynamics simulation with no continuum closure reproduces the lock where the gas remains a
 continuum, and shows the core emptying into a free-molecular region beyond it; in a liquid it finds
-cavitation, after which the swirl at the cavity wall is capped below the hollow-vortex bound. The
+cavitation, after which the swirl at the cavity wall stays within the hollow-vortex bound at the ambient
+pressure measured in the run; a water-like liquid first exceeds the bound stated at the initial pressure, a
+registered prediction that failed, because the closed box's ambient pressure rose. The
 claim that a Leray-$\alpha$ filter of width $\ell_*$ represents the fluid at its continuum limit is
 withdrawn, with a formal reason: the filter width does not appear in the linearized dynamics. On the
 formal side, we prove in Lean~4, on OpenAI's own definitions and with no
@@ -1022,8 +1024,8 @@ $\approx0.2$) the peak local Mach number of the molecular core is $0.538\pm0.011
 ($0.61$ from the maximum of the smoothed profile), its density $0.33\pm0.01$ and its temperature $1.15\pm0.02$
 of ambient, against $0.54$, $0.36$ and $1.15$ from the continuum model. At $\mathrm{Re}=32$, where the sonic
 scale is larger (local Knudsen number at the fitted core width $\le0.16$), the swirl Mach number of the
-dense gas stays between $0.62$ and $0.71$ while the target is driven from Mach $0.75$ to $3$, and falls to
-$0.47$ as the target goes on to Mach $6$; the continuum prediction is $0.56$--$0.60$. (A few sparse bins on
+dense gas (two runs) stays between $0.64$ and $0.73$ while the target is driven from Mach $0.75$ to $3$, while the
+fitted core profile falls from $0.63$ to $0.47$; the continuum prediction is $0.56$--$0.60$. (A few sparse bins on
 the axis again read higher, $0.8$--$1.2$, beyond target Mach $3$.) At $\mathrm{Re}=4$ the
 target reaches only Mach $0.72$ and neither description locks. The lock is therefore not an artefact of the
 closure. What the continuum model does not capture is what happens once the axis has emptied: in every
@@ -1033,20 +1035,40 @@ molecules, with a local mean free path larger than the core. There the smoothed 
 $0.84$--$0.95$, while in the surrounding dense gas it overshoots to $0.79$ at target Mach $1.5$ and then settles
 at $0.50$--$0.62$. The core thus crosses, within one simulation, from the continuum regime into the
 free-molecular one --- the regime map of \S\ref{sec:regime-map} acting on a single flow. Limitations: a thin
-slab without three-dimensional instability, one run each at $\mathrm{Re}=4$ and $32$, and a thermostat
-buffer rather than an open boundary.
+slab, with two runs at $\mathrm{Re}=32$ and three at $\mathrm{Re}=4$ (target Mach $0.30$, $0.50$, $0.72$: fitted
+local Mach $0.29\pm0.02$, $0.40\pm0.04$, $0.50\pm0.04$, against $0.27$, $0.39$, $0.48$ predicted beforehand), and a thermostat buffer
+rather than an open boundary. In a three-dimensional box ($170\times170\times60\,\sigma$, $\mathrm{Re}=16$) the dense
+gas stays below local Mach $0.87$ while the target passes $3$, and the axial density and centroid diagnostics
+show no fluctuation above those of an undriven vortex in the same box.
 
-The same construction in a Lennard-Jones \emph{liquid} ($\rho=0.80$, $T=1$, one run, $\mathrm{Re}=4$) tests the
+The same construction in a Lennard-Jones \emph{liquid} ($\rho=0.80$, $T=1$, two runs, $\mathrm{Re}=4$) tests the
 cavitation reading of \S\ref{sec:mach}. The prediction, again registered before the run, was that the core
 could not cavitate before its swirl reached the value at which the central pressure deficit $1.70\,\rho
 u_{\max}^2$ equals the ambient pressure ($u_{\max}\approx1.1$). It cavitated later, at $u_{\max}\approx1.4$--$1.5$,
 after holding a tension of the order of its ambient pressure; the core density fell from $0.74$ to $0.07$ of the
 liquid value within one averaging window and then to vapour density. Once the cavity had opened it grew to a
-radius of $7.5\,\sigma$, and the swirl speed at its liquid wall levelled off at $1.77$--$1.87$ while the imposed
-target rose from $1.6$ to $2.8$ --- below the hollow-vortex bound $\sqrt{2p_\infty/\rho}=2.07$. This is the one
+radius of $7.5\,\sigma$, and the swirl speed at its liquid wall levelled off at $1.77$--$2.09$ (standard error $0.03$)
+while the imposed target rose from $1.6$ to $2.8$ --- at or below the hollow-vortex bound $\sqrt{2p_\infty/\rho}=2.07$
+within one standard error in both runs. This is the one
 genuine \emph{velocity} bound found in this work, and it is supplied by a phase change: a liquid cannot be spun
 faster than the pressure difference across its vapour core allows. The vapour molecules inside the cavity keep
 following the force, as the free molecules on the emptied axis of the gas did.
+
+A liquid closer to water ($\rho=0.79$, $T=0.75$, ambient pressure $0.27$, viscosity $2.95\pm0.14$; two slab runs and one
+three-dimensional box of $110\times110\times40\,\sigma$, all at $\mathrm{Re}=4$) gave a mixed outcome that we
+report as it came. The prediction that cavitation would wait for the tensile strength held: the core opened at
+target swirl $0.95$--$0.97$ in the slab ($1.17$ in the box), far past the vapour-pressure point at $0.45$. The
+registered prediction of the wall swirl failed: it reached $0.94$ in the slab at the half-density radius ($1.01$--$1.02$ as the maximum over the adjacent
+bins) and $1.14$ in the box, against $0.82$ from $\sqrt{2p_\infty/\rho}$ at the initial pressure ($+14\%$ to $+24\%$
+and $+38\%$). Pressure measured
+per radial bin (virial tensor plus kinetic part, tested against the global virial) in a further slab run shows
+why this comparison was unfair: the emptied core pushes liquid outward in the closed periodic box, and the
+far-field pressure rose from $0.32$ to $0.77$, so the bound at the concurrent pressure is $1.3$--$1.4$ and the wall
+swirl stays at $0.45$--$0.75$ of it. This is a post-hoc reading of one run, not a passed test; a closed box
+cannot test a bound stated for a fixed ambient pressure, and a fixed-pressure boundary is needed. The
+three-dimensional box shows the same cavitation, and its axial diagnostics are inconclusive for the liquid, since
+an emptied core has no meaningful centroid and no undriven liquid control was run. An earlier estimate of the wall
+tension from the cyclostrophic balance started from the initial pressure and is superseded.
 
 \subsection{A regime map: which physics a blow-up scenario meets first}
 \label{sec:regime-map}
@@ -1553,8 +1575,9 @@ correct.
 \paragraph{Four shorter items.} \emph{The molecular test, done in a slab.} The closure-free test of the Mach
 lock proposed in earlier versions has been carried out by molecular dynamics (\S\ref{sec:compressible}): it
 confirms the lock where the gas is a continuum, and in a liquid it finds cavitation followed by a capped wall
-speed. What remains is a three-dimensional box in which the evacuated core and the cavity can go unstable,
-more runs at $\mathrm{Re}=4$ and $32$ and in the liquid, and a liquid model closer to water. \emph{Codimension.} The number of unstable modes of the
+speed. Three-dimensional boxes, further runs at $\mathrm{Re}=4$ and $32$ and a water-like liquid have now been run
+(\S\ref{sec:compressible}); what remains is a fixed-pressure far field for the liquid bound, an undriven liquid control
+for the axial diagnostic, and an ensemble larger than one to three runs per case. \emph{Codimension.} The number of unstable modes of the
 linearized self-similar profile beyond those generated by symmetries is the rigorous form of
 ``non-generic''; it has been computed for related Euler and Boussinesq profiles by
 computer-assisted and neural-network methods~\cite{ChenHou2022,Wang2025}, and needs eigenvalue

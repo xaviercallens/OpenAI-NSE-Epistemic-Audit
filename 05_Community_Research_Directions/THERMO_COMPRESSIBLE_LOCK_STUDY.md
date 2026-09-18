@@ -368,6 +368,11 @@ pressure from **0.32 to 0.77**, most of it in the window where the wall swirl pe
 (no pressure diagnostic) show the same far-field density rise (0.790 → 0.809–0.811), and the T = 1 liquid rises
 0.800 → 0.81. The registered cap used the initial ambient pressure p∞ = 0.268 (cap 0.82).
 
+**Definition note.** "Wall swirl" is read two ways in this study: the value at the first bin with ρ > 0.5 ρ_far
+(`analyse_md_core.py`: slab runs peak at **0.94**, the 3D box at **1.14**) and the maximum over that bin and its two
+neighbours (used in §10 and below: **1.01–1.02**). Against the initial-pressure cap 0.82 the slab overshoot is therefore
++14% or +24% depending on the definition; the box's is +38%. The conclusions below hold for either.
+
 **Result 2 — with the measured far-field pressure the cap is not exceeded.** The wall swirl in this run peaks at
 **1.01** (as in runs 1–2: 1.02) against a cap of **1.30–1.38** from the concurrent far-field pressure: the ratio
 is at most **0.75** in every window after cavitation (0.45–0.75). At the *initial* pressure the same swirl would

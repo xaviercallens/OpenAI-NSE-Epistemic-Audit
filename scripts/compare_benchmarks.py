@@ -177,8 +177,30 @@ def main(run: Path) -> int:
     if md and "forced_gas_re32" in md:
         re32_rows = [x for x in md["forced_gas_re32"]["table"] if 0.7 <= x["mach_target"] <= 3.05]
         dens = [x["mach_peak_dense_real"][0] for x in re32_rows]
-        check("md", "Re32 dense-gas local Mach, target 0.75-3 (paper 0.62-0.71)", "0.62-0.71", f"{min(dens):.2f}-{max(dens):.2f}",
-              0.615 <= min(dens) and max(dens) <= 0.715)
+        check("md", "Re32 x2 dense-gas local Mach, target 0.75-3 (paper 0.64-0.73)", "0.64-0.73", f"{min(dens):.2f}-{max(dens):.2f}",
+              0.635 <= min(dens) and max(dens) <= 0.735 and md["forced_gas_re32"]["n_seeds"] == 2)
+    if md and "forced_gas_re4" in md:
+        rows4 = md["forced_gas_re4"]["table"]
+        fits = [x["mach_peak_fit_real"][0] for x in rows4]
+        cont = [0.273, 0.395, 0.478]  # continuum local Mach at the same targets (compressible_core_md_match.json, re4)
+        check("md", "Re4 x3, target Mach 0.30/0.50/0.72: fitted local Mach (paper 0.29/0.40/0.50 vs 0.27/0.39/0.48)",
+              "0.29/0.40/0.50", "/".join(f"{f:.2f}" for f in fits),
+              md["forced_gas_re4"]["n_seeds"] == 3 and all(abs(f - c) < 0.04 for f, c in zip(fits, cont)))
+    if md and "forced3d_gas_re16" in md:
+        m3 = max(x["mach_peak_rho20_real"][0] for x in md["forced3d_gas_re16"]["table"])
+        t3 = max(x["mach_target"] for x in md["forced3d_gas_re16"]["table"])
+        check("md", "3D gas, Re16: local Mach in bins with rho >= 0.2 rho_inf stays below 0.87+0.01 while target passes 3 (paper 0.87)",
+              "<= 0.88, target > 3", f"{m3:.2f}, target {t3:.2f}", m3 < 0.88 and t3 > 3.0)
+    if md and "forced_wl_re4" in md:
+        ls = md["forced_wl_re4"]["liquid_per_seed"]
+        over = max(x["u_wall_after_onset_min_max"][1] for x in ls)
+        check("md", "water-like liquid: registered cap 0.82 (initial p_inf) was exceeded, i.e. the prediction failed (paper: 0.94 at half-density bin)",
+              "> 0.82", f"{over:.2f}", over > ls[0]["hollow_vortex_cap"])
+    pm = md.get("_pstress_wl_re4_pressure") if md else None
+    if pm:
+        check("md", "water-like, measured far-field pressure: p_far rises >2x and wall swirl <= 0.76 of the cap at that pressure (post hoc, one run)",
+              "p_far 0.32->0.77, ratio <= 0.75", f"{pm['p_far_start']:.2f}->{pm['p_far_max']:.2f}, {pm['u_wall_over_cap_max']:.2f}",
+              pm["p_far_max"] > 2 * pm["p_far_start"] - 0.05 and pm["u_wall_over_cap_max"] < 0.76)
     liq = REF.parent.parent / "md_core_rs" / "runs" / "forced_liq_re4_s1.json"
     if liq.exists():
         import numpy as np

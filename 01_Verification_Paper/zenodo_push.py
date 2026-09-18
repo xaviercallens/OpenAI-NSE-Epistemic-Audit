@@ -107,6 +107,7 @@ FILES_TO_PACKAGE = [
     ("05_Community_Research_Directions/experiments/results/md_core.png", "figure_md_core.png"),
     ("05_Community_Research_Directions/experiments/results/compressible_core_md_match_preregistered.json", "compressible_core_md_match_preregistered.json"),
     ("05_Community_Research_Directions/experiments/results/compressible_core_md_match.json", "compressible_core_md_match.json"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_md_match_3d_lstart20.json", "compressible_core_md_match_3d_lstart20.json"),
     ("BENCHMARKS.md", "BENCHMARKS.md"),
     ("scripts/run_benchmarks.sh", "run_benchmarks.sh"),
     ("scripts/compare_benchmarks.py", "compare_benchmarks.py"),
@@ -114,7 +115,7 @@ FILES_TO_PACKAGE = [
 
 METADATA = {
     "metadata": {
-        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.6.1)",
+        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.7.0)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
@@ -139,7 +140,7 @@ METADATA = {
             "independent one; the external force has no independent physical origin, by construction; "
             "and the Euler datum requires coherent structure below the molecular length, where the "
             "missing physics is viscosity itself, not any exotic short-distance cutoff.</p>"
-            "<p><strong>New in v5.2.0 to v5.6.1.</strong> The cutoff-regularization hypothesis the paper previously "
+            "<p><strong>New in v5.2.0 to v5.7.0.</strong> The cutoff-regularization hypothesis the paper previously "
             "stated as untested is tested with a validated 3D pseudo-spectral solver (Taylor-Green "
             "Re=1600 dissipation peak at t=9.14 against a published 9.0). It is exact given its premise, "
             "but the premise -- a Re~1 diffusive core -- is not produced by generic data. A manufactured "
@@ -180,12 +181,18 @@ METADATA = {
             "registered beforehand where the gas is still a continuum (local Mach 0.56-0.62 against 0.54, core density 0.34 "
             "against 0.36, core temperature 1.15 against 1.15), and shows the core emptying into a "
             "free-molecular region beyond it. v5.6.1 completes the ensemble (Re 16: local Mach 0.538 +- 0.011 against 0.54 "
-            "with a consistent real-gas sound speed, correcting a normalization in v5.6.0; Re 32: 0.62-0.71) and adds a "
+            "with a consistent real-gas sound speed, correcting a normalization in v5.6.0; Re 32: 0.62-0.71 in one run, 0.64-0.73 in two, see v5.7.0) and adds a "
             "liquid: the core cavitates, after holding a tension of the order of its ambient pressure, and the swirl at the "
-            "cavity wall then levels off at 1.77-1.87 below the hollow-vortex bound 2.07 -- the one velocity bound found, "
-            "supplied by a phase change. A new section gives the quantum-fluid counterpart: a quantized vortex is a "
+            "cavity wall then levels off at 1.77-2.09 (two runs), at or below the hollow-vortex bound 2.07 within one standard "
+            "error -- the one velocity bound found, supplied by a phase change. A new section gives the quantum-fluid counterpart: a quantized vortex is a "
             "Reynolds-number-one core by theorem, and quantum pressure, heat and cavitation all let a fluid carry a velocity "
-            "singularity by emptying the core rather than by bounding the velocity.</p>"
+            "singularity by emptying the core rather than by bounding the velocity. v5.7.0 adds three-dimensional boxes "
+            "(the gas core shows no axial instability above an undriven vortex; local Mach stays below 0.87 while the target passes 3), "
+            "larger ensembles at Re 4 (0.29/0.40/0.50 against 0.27/0.39/0.48) and Re 32, and a water-like liquid. "
+            "A registered prediction failed there: the wall swirl exceeded the hollow-vortex bound stated at the initial "
+            "pressure (0.94 to 1.14 against 0.82). A direct per-bin pressure measurement shows the closed box's ambient "
+            "pressure rose from 0.32 to 0.77 as the core emptied, and at that pressure the wall swirl stays at 0.45-0.75 of "
+            "the bound; this is a post-hoc reading of one run, and a fixed-pressure boundary is needed to test it.</p>"
             "<p>This version supersedes all previous public drafts of this project, including "
             "one previously deposited under this same Zenodo record. Claims withdrawn in this revision "
             "-- \"plasma temperatures\", a global enstrophy-censorship axiom with no stated derivation, "
@@ -223,7 +230,7 @@ METADATA = {
             "Cavitation",
             "Neuro-Symbolic AI"
         ],
-        "version": "5.6.1",
+        "version": "5.7.0",
         "license": "cc-by-4.0",
         "access_right": "open",
         "related_identifiers": [
@@ -233,7 +240,7 @@ METADATA = {
                 "scheme": "url"
             },
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.6.1",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.7.0",
                 "relation": "isIdenticalTo",
                 "scheme": "url"
             },

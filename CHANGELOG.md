@@ -1,5 +1,33 @@
 # Changelog
 
+## v5.7.0 — 2026-09-18 — Three-dimensional boxes, a water-like liquid, a direct pressure test, and a prediction that failed
+
+### What was run (paper §9.3, study §10–11)
+
+- Gas ensemble completed: Re = 4 ×3 (target Mach 0.30/0.50/0.72: fitted local Mach 0.29 ± 0.02 / 0.40 ± 0.04 /
+  0.50 ± 0.04 vs continuum 0.27 / 0.39 / 0.48), Re = 32 ×2 (dense gas 0.64–0.73 for target 0.75–3, fitted profile 0.63 → 0.47; the v5.6.1 single-run 0.62–0.71 is superseded).
+- 3D gas box (170 × 170 × 60 σ, Re = 16): dense-gas local Mach ≤ 0.87 while the target reaches 3.1; axial density and
+  centroid diagnostics show no fluctuation above an undriven vortex in the same box (control run).
+- Liquid T = 1 ×2: cavitation at target u 1.49 in both; wall swirl 1.77–2.09 (± 0.03), at or below the cap 2.07 within one s.e.
+- Water-like liquid (ρ 0.79, T 0.75, ν 2.95 ± 0.14): 2 slab runs and one 3D box (110 × 110 × 40 σ).
+
+### A registered prediction that failed, and a measured reason
+
+Registered before the data: cavitation waits for the tensile strength (**held**: onset at target u 0.95–0.97 slab,
+1.17 in the box) and the wall swirl stays below √(2p∞/ρ) = 0.82 (**failed**: 0.94 at the half-density bin, 1.01–1.02
+as the maximum over adjacent bins, 1.14 in the box; +14% to +38%).
+
+New diagnostic `md_run --stress on`: per-bin radial and isotropic pressure (kinetic part + per-particle virial share; the
+tensor trace equals the pair virial to 1e-9, tested). In a further slab run the far-field pressure rises from 0.32 to
+0.77 as the emptied core pushes liquid outward in the closed periodic box, and the wall swirl stays at 0.45–0.75 of the
+cap at that pressure. **Post hoc, one run, not a passed test**; a fixed-pressure far field is needed. The earlier
+cyclostrophic wall-tension estimate started from the initial pressure and is superseded.
+
+### Also
+- Axial diagnostic for the water-like box is inconclusive (an emptied core has no meaningful centroid; no undriven liquid control).
+- Benchmark: four new checks (Re = 4 ensemble, 3D gas bound, water-like failed cap, measured-pressure reading).
+- DualScale-Enterprise `numerics/` (PR #1, merged) predates the stress diagnostic; not yet ported.
+
 ## v5.6.1 — 2026-09-18 — Full molecular-dynamics ensemble, a normalization correction, and a velocity bound from cavitation
 
 ### Correction to v5.6.0

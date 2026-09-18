@@ -131,8 +131,8 @@ FILES_TO_UPLOAD = [
 
 # Version DOI minted by Zenodo for this release. Fill in after publishing on Zenodo; the script refuses
 # to run while it is PENDING so the card never goes out with a missing or wrong DOI.
-RELEASE = "v5.6.1"
-ZENODO_VERSION_DOI = "22828106"
+RELEASE = "v5.7.0"
+ZENODO_VERSION_DOI = "PENDING"
 
 DATASET_CARD = """---
 license: cc-by-4.0
@@ -156,7 +156,7 @@ language:
   - en
 size_categories:
   - n<1K
-pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.6.1)"
+pretty_name: "OpenAI NSE Blow-Up Proofs: A Physical Reading (v5.7.0)"
 ---
 
 # The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation
@@ -186,7 +186,7 @@ expressible as one local vorticity bound |&omega;| &lesssim; c<sub>s</sub><sup>2
 Beale-Kato-Majda theorem turns into a genuine admissibility criterion. For liquids, cavitation is
 reached three decades earlier still.
 
-## Results added in v5.2.0 to v5.6.1
+## Results added in v5.2.0 to v5.7.0
 
 - **3D solver validated.** Pseudo-spectral Navier-Stokes solver reproduces the Taylor-Green
   Re = 1600 benchmark: dissipation peak at t = 9.14 against the published t = 9.0.
@@ -232,8 +232,15 @@ reached three decades earlier still.
   driven by the same force, viscosity measured in situ, against a continuum prediction registered before
   the MD data existed: at Re = 16 and target Mach 1, local Mach 0.56-0.62 vs 0.54, core density 0.34 vs
   0.36, core temperature 1.15 vs 1.15 (v5.6.1: three runs, 0.538 +- 0.011 vs 0.54 with a consistent real-gas sound
-  speed; Re 32: 0.62-0.71). Beyond target Mach ~1.5 the axis becomes free-molecular. In a liquid the core
-  cavitates and the swirl at the cavity wall levels off at 1.77-1.87, below the hollow-vortex bound 2.07.
+  speed; Re 32: 0.62-0.71 in one run, 0.64-0.73 in two). Beyond target Mach ~1.5 the axis becomes free-molecular. In a liquid the core
+  cavitates and the swirl at the cavity wall levels off at 1.77-2.09 (two runs), at or below the hollow-vortex
+  bound 2.07 within one standard error.
+- **Three-dimensional boxes, a water-like liquid and a failed prediction (v5.7.0).** 3D gas: local Mach <= 0.87
+  while the target passes 3, no axial instability above an undriven vortex. Re = 4 (3 runs): 0.29/0.40/0.50 vs
+  continuum 0.27/0.39/0.48. Water-like liquid: the wall swirl exceeded the bound registered at the initial
+  pressure (0.94-1.14 vs 0.82: that prediction failed); per-bin pressure (`md_run --stress on`) shows the closed
+  box's ambient pressure rose 0.32 -> 0.77, and at that pressure the swirl is 0.45-0.75 of the bound (post hoc,
+  one run). Raw runs in `data/md_core_runs/`, code in `code/md_core_rs/`.
   `data/md_core_*.json`, `figures/md_core.png`.
 - **Quantum-fluid counterpart (v5.6.0).** A quantized vortex is a Reynolds-number-one core by theorem;
   quantum pressure, heat and cavitation all let a fluid carry a velocity singularity by emptying the core.

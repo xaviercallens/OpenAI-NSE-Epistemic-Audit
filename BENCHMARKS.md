@@ -7,6 +7,24 @@ checks each regenerated number against the committed result it came from. Long r
 about 6 h; the kinetic collapse runs, about 5 h) are not re-simulated; their headline numbers are
 re-derived from the committed data, and that distinction is marked in the tables.
 
+## Result for v5.7.0
+
+**63 / 63 checks pass** (`--full` tier, 2026-09-18). The first full run gave 62 / 63: the Re = 32 check quoted the
+v5.6.1 single-run range 0.62–0.71, and the two-run ensemble reads 0.64–0.73. The paper's sentence was
+corrected to the ensemble value and the check to two runs; the comparison was then re-run against the same run
+directory (simulations not repeated). New checks:
+
+| check | quoted | reproduced |
+|---|---|---|
+| MD, Re = 32 (2 runs): dense-gas local Mach, target 0.75–3 | 0.64–0.73 | 0.64–0.73 |
+| MD, Re = 4 (3 runs), target Mach 0.30 / 0.50 / 0.72: fitted local Mach | 0.29 / 0.40 / 0.50 (continuum 0.27 / 0.39 / 0.48) | 0.29 / 0.40 / 0.50 |
+| MD 3D gas (Re = 16): local Mach, bins ρ ≥ 0.2 ρ∞, target passing 3 | ≤ 0.87 | 0.87, target 3.13 |
+| MD water-like liquid: wall swirl vs the registered cap 0.82 | exceeded (prediction failed) | 0.94 |
+| MD water-like, measured far-field pressure (post hoc, one run) | p_far 0.32 → 0.77; wall swirl ≤ 0.75 of the cap | 0.32 → 0.77; 0.75 |
+
+Two of these check that a registered prediction *failed* and that a post-hoc reading holds; neither is a pass of
+the original prediction. About 12 further CPU-hours of MD are not re-run.
+
 ## Result for v5.6.1
 
 **59 / 59 checks pass** (`--full` tier, 2026-09-18). Everything in the v5.5.0 and v5.4.1 tables below reproduced
