@@ -1,0 +1,5 @@
+# v5.7: more gas seeds (slab), then the 3D gas box (Lz = 60, axial diagnostic on)
+forced_gas_re4_s2   --mode vortex --force on --rho 0.15 --temp 2.0 --l 300 --lz 8 --dt 0.005 --equil-steps 6000 --re 4 --nu 1.70 --l-start 40 --l-end 4 --seed 112
+forced_gas_re32_s2  --mode vortex --force on --rho 0.15 --temp 2.0 --l 300 --lz 8 --dt 0.005 --equil-steps 6000 --re 32 --nu 1.70 --l-start 40 --l-end 4 --seed 122
+forced3d_gas_re16_s1 --mode vortex --force on --rho 0.15 --temp 2.0 --l 170 --lz 60 --dt 0.005 --equil-steps 6000 --re 16 --nu 1.70 --l-start 20 --l-end 4 --axial-slabs 10 --seed 201
+forced_gas_re4_s3   --mode vortex --force on --rho 0.15 --temp 2.0 --l 300 --lz 8 --dt 0.005 --equil-steps 6000 --re 4 --nu 1.70 --l-start 40 --l-end 4 --seed 113

@@ -305,3 +305,26 @@ by ℓ = 3σ (u_max ≈ 3.3), the core has sustained a large tension.** Either o
 
 **Limitations:** one run; a Lennard-Jones liquid, not water; thin slab; the cavity wall is sampled on 1σ
 bins; the per-unit-mass force keeps acting on the vapour, which a real driving mechanism need not do.
+
+## 10. Water-like liquid and a 3D box: predictions registered before the data (2026-09-18)
+
+**Water-like state.** A Lennard-Jones liquid colder relative to its critical point and at low ambient pressure:
+ρ = 0.79, T = 0.75 (T/T_c ≈ 0.69 for this potential; water at 300 K has 0.46), p∞ = 0.27 (the first liquid had
+1.7), ν = 2.95 ± 0.14 (three shear-wave runs). It is not water — p∞ is still far larger relative to the
+tensile strength than water's 1 atm — but it moves in water's direction: ambient pressure small compared with
+what the liquid can sustain in tension.
+
+**Predictions (Re = 4, core driven from 20σ to 3σ, target swirl 0.59 → 3.9):**
+1. The core passes the vapour-pressure point (1.70 ρ u² = p∞ at u ≈ 0.45) *before the run starts*, so it
+   starts in tension, and cavitation is set by tensile strength, not by ambient pressure.
+2. **After cavitation the swirl at the liquid wall is capped below the hollow-vortex bound √(2p∞/ρ) ≈ 0.83,
+   while the target rises to 3.9** (a factor 4.7 above the cap). If the wall speed exceeds 0.83 by more than
+   noise, the hollow-vortex picture fails.
+
+**3D boxes (axial diagnostic: per-slab core density and near-axis mass-centroid offset).** Gas at Re = 16 in
+170 × 170 × 60σ (ℓ_start = 20σ), and the water-like liquid at Re = 4 in 110 × 110 × 40σ (ℓ_start = 12σ). A
+compressible vortex whose light core is held by centrifugal acceleration is Rayleigh-stable (light fluid
+inside), and a hollow vortex is classically stable to axisymmetric perturbations, so **the prediction is that
+neither core goes unstable in 3D**: the axial variation of core density and the centroid offsets stay at the
+shot-noise level, and the slab results (Mach lock, cavitation cap) are reproduced. Kelvin waves on the hollow
+core, if thermally excited, would show as centroid offsets above noise without destroying the cap.

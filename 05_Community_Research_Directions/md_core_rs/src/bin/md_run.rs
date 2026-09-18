@@ -243,6 +243,10 @@ fn main() {
 
     let mut bins = Bins::new(bin_edges(half));
     let mut windows = vec![];
+    // axial diagnostic (3D boxes): per z-slab core density and mass-centroid offset near the axis
+    let nz_slab = argu("--axial-slabs", ((lz / 6.0).floor() as usize).max(1));
+    let (mut ax_cnt, mut ax_sx, mut ax_sy, mut ax_ncore, mut ax_samples) =
+        (vec![0.0f64; nz_slab], vec![0.0f64; nz_slab], vec![0.0f64; nz_slab], vec![0.0f64; nz_slab], 0usize);
     let (mut t_win0, mut e_mon) = (0.0, vec![]);
     let tg = tgt.clone();
     for k in 0..nsteps {
@@ -273,6 +277,25 @@ fn main() {
         if (k + 1) % every == 0 {
             bins.sample(&s);
             let t_now = t + dt;
+            if nz_slab > 1 {
+                let lt = tgt.ell(t_now);
+                let (r_core, r_cen) = ((0.5 * lt).max(2.0), (2.0 * lt).max(6.0));
+                for i in 0..s.n {
+                    let (dx, dy) = (s.x[i].rem_euclid(l) - half, s.y[i].rem_euclid(l) - half);
+                    let r2 = dx * dx + dy * dy;
+                    if r2 > r_cen * r_cen {
+                        continue;
+                    }
+                    let iz = (((s.z[i].rem_euclid(lz)) / lz * nz_slab as f64) as usize).min(nz_slab - 1);
+                    ax_cnt[iz] += 1.0;
+                    ax_sx[iz] += dx;
+                    ax_sy[iz] += dy;
+                    if r2 < r_core * r_core {
+                        ax_ncore[iz] += 1.0;
+                    }
+                }
+                ax_samples += 1;
+            }
             let w_len = if forced { w_min.max(w_frac * (tgt.t_blow - t_now)) } else { w_fixed };
             if t_now - t_win0 >= w_len || k + 1 == nsteps {
                 let t_mid = 0.5 * (t_win0 + t_now);
@@ -281,6 +304,23 @@ fn main() {
                 rec["t0"] = json!(t_win0);
                 rec["t1"] = json!(t_now);
                 rec["l_target"] = json!(tgt.ell(t_mid));
+                if nz_slab > 1 && ax_samples > 0 {
+                    let ns = ax_samples as f64;
+                    let lt = tgt.ell(t_mid);
+                    let (r_core, r_cen) = ((0.5 * lt).max(2.0), (2.0 * lt).max(6.0));
+                    let vol_core = PI * r_core * r_core * lz / nz_slab as f64;
+                    rec["axial"] = json!({
+                        "slabs": nz_slab, "samples": ax_samples, "r_core": r_core, "r_centroid": r_cen,
+                        "core_density": ax_ncore.iter().map(|c| c / ns / vol_core).collect::<Vec<f64>>(),
+                        "n_centroid_per_sample": ax_cnt.iter().map(|c| c / ns).collect::<Vec<f64>>(),
+                        "centroid_x": ax_sx.iter().zip(&ax_cnt).map(|(a, c)| if *c > 0.0 { a / c } else { 0.0 }).collect::<Vec<f64>>(),
+                        "centroid_y": ax_sy.iter().zip(&ax_cnt).map(|(a, c)| if *c > 0.0 { a / c } else { 0.0 }).collect::<Vec<f64>>(),
+                    });
+                    for v in [&mut ax_cnt, &mut ax_sx, &mut ax_sy, &mut ax_ncore] {
+                        v.iter_mut().for_each(|x| *x = 0.0);
+                    }
+                    ax_samples = 0;
+                }
                 windows.push(rec);
                 e_mon.push(json!({"t": t_now, "T_global": s.temperature(), "p_global": s.pressure(), "pe_per_particle": s.pe / s.n as f64}));
                 bins.clear();

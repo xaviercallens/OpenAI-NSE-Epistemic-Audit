@@ -1,0 +1,5 @@
+# v5.7: water-like liquid (rho 0.79, T 0.75, p 0.27) viscosity, then a second seed of the T = 1 liquid
+shear_wl_k2_s1  --mode shear --rho 0.79 --temp 0.75 --l 60 --lz 8 --dt 0.004 --equil-steps 8000 --steps 12000 --harmonic 2 --amp 0.25 --seed 61
+shear_wl_k2_s2  --mode shear --rho 0.79 --temp 0.75 --l 60 --lz 8 --dt 0.004 --equil-steps 8000 --steps 12000 --harmonic 2 --amp 0.25 --seed 62
+shear_wl_k1_s1  --mode shear --rho 0.79 --temp 0.75 --l 60 --lz 8 --dt 0.004 --equil-steps 8000 --steps 25000 --harmonic 1 --amp 0.25 --seed 63
+forced_liq_re4_s2   --mode vortex --force on --rho 0.80 --temp 1.0 --l 160 --lz 8 --dt 0.004 --equil-steps 8000 --re 4 --nu 2.5 --l-start 20 --l-end 3 --rb 60 --buffer-ramp 8 --seed 132
