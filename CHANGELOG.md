@@ -1,5 +1,60 @@
 # Changelog
 
+## Unreleased — 2026-09-18 — Three corrections to how this project presents itself
+
+No scientific claim changes. All three items are about the gap between what the repository
+asserted and what a reader could actually check, which is the same class of defect this project
+exists to find in other people's work.
+
+### The continuous-integration badge was removed
+
+The README carried a CI badge for a workflow named "Physical Censorship Audit Pipeline". Two
+things were wrong with it. The name is the framing this project withdrew in September. And the
+workflow has **never produced a job**: every run on record ends in `startup_failure`, which points
+at a repository or account setting rather than at the workflow file. A badge for a gate that has
+never executed is an advertisement for verification that did not happen, and it sits at the top of
+the page where a skeptical reader looks first. Removed rather than fixed, because removing a false
+signal does not require first solving the account problem.
+
+### The kernel transcripts are now committed
+
+Every "verified" Lean file ends in `#print axioms`, and the declaration counts quoted in the
+README come from running those. Those transcripts existed only on the author's machine:
+`.gitignore` excluded `benchmark_runs/`, and a global `*.log` rule excluded them a second time.
+From GitHub, every count was therefore an unbacked self-report — precisely what this project
+refuses to accept from the work it audits.
+
+`benchmark_runs/v5.6.1/logs/` and `benchmark_runs/v5.7.0/logs/` are now tracked, 36 files and
+about 180 KB. They contain the raw kernel output, for example:
+
+```
+'OpenAIAdmissibility.bkmHypothesis_holds' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+The README now also states plainly how to re-derive them, and what remains uncheckable from
+GitHub alone.
+
+### `LL.md` was rewritten
+
+The previous version was an "Anti-Pattern Playbook" for public posting. Several of its lessons
+were real and are kept: do not argue that a correct PDE proof is physically vacuous, do not ask
+strangers to run your code, lead with a figure, read a venue's rules.
+
+The rest was reputation management and has been removed, with the removal itemised in the file
+itself. It contained a "Terminology Blacklist" mapping accurate descriptions of the work to casual
+substitutes so that "We conducted a Physical Verification" would be presented as "I was playing
+around with the equations"; a rule of zero links in an initial post and an instruction to say
+nothing about the repository unless asked; an instruction to agree immediately with any
+challenger regardless of whether they were right; an adopted persona of a curious explorer rather
+than someone presenting an audit, which is what this is; and quotations of individual people by
+account handle.
+
+The replacement rule is: **disclose how the work was done, link the source, and let the work carry
+it.** This project is AI-assisted, its history is mixed human and agent, and its subject is an
+AI-generated proof. None of that is embarrassing. Concealing any of it would be, and in a project
+whose whole subject is the gap between looking correct and being correct, a file optimising for
+reception over correctness was the wrong instinct.
+
 ## v5.7.0 — 2026-09-18 — Three-dimensional boxes, a water-like liquid, a direct pressure test, and a prediction that failed
 
 ### What was run (paper §9.3, study §10–11)

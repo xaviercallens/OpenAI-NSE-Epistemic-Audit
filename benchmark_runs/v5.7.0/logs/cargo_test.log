@@ -1,0 +1,42 @@
+    Finished `release` profile [optimized] target(s) in 0.08s
+     Running unittests src/lib.rs (target/release/deps/kinetic_lock_rs-52a57c0966ed152a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/collapse_analyze.rs (target/release/deps/collapse_analyze-e54b5e8b3562b7cd)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/collapse_run.rs (target/release/deps/collapse_run-f91d701ed9b15d0d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/gates.rs (target/release/deps/gates-c0324266eb8b129d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/g1_g2.rs (target/release/deps/g1_g2-9c3da6f959b963d8)
+
+running 5 tests
+test erfcx_branches_agree ... ok
+test g2_exact_difference_force_adds_rho_du ... ok
+test gauss_hermite_moments_exact ... ok
+test g2_collision_conserves_and_h_nonincreasing ... ok
+test g1_newton_moments_exact_and_b_to_u ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+   Doc-tests kinetic_lock_rs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

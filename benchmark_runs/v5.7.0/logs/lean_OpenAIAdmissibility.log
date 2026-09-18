@@ -1,0 +1,17 @@
+'OpenAIAdmissibility.admissibleScaled_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.candidate_violates_every_gradient_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.candidate_not_admissible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.candidate_not_admissibleScaled' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.spatialDerivative_eq_fderivWithin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.gradient_bounded_before' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.exits_admissible_near_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.mean_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.mean_hasDerivAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.mean_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.bkmHypothesis_holds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.candidate_violates_every_gradient_bound'' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'OpenAIAdmissibility.candidate_not_admissible'' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.candidate_not_admissibleScaled'' depends on axioms: [propext, Classical.choice, Quot.sound]
+'OpenAIAdmissibility.exits_admissible_near_one'' depends on axioms: [propext, Classical.choice, Quot.sound]

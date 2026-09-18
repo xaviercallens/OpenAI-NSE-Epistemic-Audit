@@ -4,7 +4,6 @@
 
 ### *A Physical Reading, Not a Physical Refutation*
 
-[![CI Pipeline](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/audit-pipeline.yml/badge.svg)](https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/actions/workflows/audit-pipeline.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22696717.svg)](https://doi.org/10.5281/zenodo.22696717)
 [![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-Dataset-yellow)](https://huggingface.co/datasets/callensxavier/OpenAI-NSE-Thermodynamic-Censorship)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
@@ -21,6 +20,17 @@
 
 </div>
 
+> **How to check the Lean claims, and what is not yet checkable from here.** Every "verified"
+> Lean file ends in `#print axioms`, and the counts of verified declarations quoted below come
+> from running those locally. **Those transcripts are not currently committed to this repository**,
+> so from GitHub alone the counts are a self-report and should be read as one. To check them
+> yourself, clone `openai/NavierStokesAndEuler` at the revision pinned in
+> `openai_lean_audit_certificate.json` and run `lake env lean` on each verified file; the axiom
+> footprint printed at the foot of each is the actual claim. A continuous-integration badge used
+> to sit above. It was removed on 2026-09-18 because every run of that workflow has ended in
+> `startup_failure` and it therefore advertised a gate that has never executed, under a name this
+> project has withdrawn.
+>
 > **Note on earlier versions.** In September 2026 this project dropped its original "physical vacuity"/"censorship" framing and its string-theory/T-duality motivation after community and scientific review. Claims withdrawn along the way (plasma temperatures, the raw 10²⁸ condition number as fragility, the global enstrophy constant, the T-duality link, v5.2.0's "dissipative kinetic lock", and v5.5.0's withdrawal of the Leray-α "physical anchor at ℓ*") are itemized in [`CHANGELOG.md`](CHANGELOG.md) and in Appendix A of the paper. Zenodo versions 2.0.0 (`10.5281/zenodo.22725347`, `22727801`) carry withdrawn claims and should not be cited.
 
 ---

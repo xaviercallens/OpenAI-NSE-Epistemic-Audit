@@ -1,0 +1,6 @@
+'KineticSpectralCap.re_inner_skew_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KineticSpectralCap.numerical_range_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KineticSpectralCap.eigenvalue_damping_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KineticSpectralCap.streaming_skew' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KineticSpectralCap.meanProj_idem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'KineticSpectralCap.meanProj_selfAdj' depends on axioms: [propext, Classical.choice, Quot.sound]

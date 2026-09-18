@@ -1,0 +1,36 @@
+==============================================================================
+ FORCED CORE WITH AXIAL STRUCTURE (stage 2): gates vs drain on the same target
+==============================================================================
+ n=32^3 nu=0.01 l0=1.0 T=100 window l in (0.589, 1.0)  k_z=1 (axial scale NOT collapsing -- stated limitation)
+
+[0] nonlinearity / solenoidality / finite-difference checks (n=24)
+    nse_nonlinear_rel: 8.569e-05
+    leray_nonlinear_rel: 5.664e-05
+    lans_nonlinear_rel: 6.935e-05
+    div_rel_before_projection: 1.774e-06
+    div_rel_after_projection: 8.663e-18
+    fd_consistency_rel: 4.112e-09
+    not_inert: True
+
+[1] CONTROL (plain NSE, same forcing)
+    max rel L2 error 6.502e-07 (final 4.390e-07), 53 steps, 9.2s  -> PASS (<1e-3)
+
+[2] GATES (Leray-a, LANS-a) and DRAIN (barrier, sqrt(a')=a) on the SAME target/forcing
+ model    alpha  lag_end  l_min  l_tgt  stall  u/u_tgt  merid%  tgt%    L2err    s
+ leray     0.25     0.2%  0.590  0.589   1.00    1.003    3.1%  3.1% 6.41e-03   10
+ leray     0.35     0.2%  0.590  0.589   1.00    1.004    3.1%  3.1% 8.99e-03   10
+ leray     0.50     0.3%  0.591  0.589   1.00    1.004    3.1%  3.1% 1.18e-02   10
+ lans      0.25     0.3%  0.591  0.589   1.00    1.001    3.1%  3.1% 6.73e-03   10
+ lans      0.35     0.3%  0.591  0.589   1.00    1.001    3.1%  3.1% 9.93e-03    9
+ lans      0.50     0.4%  0.591  0.589   1.01    1.000    3.1%  3.1% 1.36e-02    9
+ barrier   0.25     4.8%  0.617  0.589   0.78    0.951    2.5%  3.1% 4.37e-02    9
+ barrier   0.35    19.2%  0.702  0.589   0.60    0.895    1.5%  3.1% 1.06e-01    9
+ barrier   0.50    45.0%  0.854  0.589   0.53    0.775    1.0%  3.1% 2.02e-01    9
+
+ computed conclusions:
+  leray    lag>0 all: True  lag grows with alpha: True  arrest in window: False  dl/dt / target at end: ['1.00', '1.00', '1.00']
+  lans     lag>0 all: True  lag grows with alpha: True  arrest in window: False  dl/dt / target at end: ['1.00', '1.00', '1.01']
+  barrier  lag>0 all: True  lag grows with alpha: True  arrest in window: False  dl/dt / target at end: ['0.78', '0.60', '0.53']
+  window floor l_min=0.589 vs largest alpha 0.5: arrest scale l~alpha lies BELOW the window floor -- arrest cannot be observed at this n
+
+ written to /home/xavkal/xdev/OpenAINavierStokesEuler/OpenAI-NSE-Verification/benchmark_runs/20260918T184420Z/experiments/results/forced_core_axial_32.json

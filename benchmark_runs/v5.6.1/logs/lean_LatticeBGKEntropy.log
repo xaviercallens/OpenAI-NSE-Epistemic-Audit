@@ -1,0 +1,7 @@
+'LatticeBGKEntropy.bgk_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeBGKEntropy.bgk_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeBGKEntropy.bgk_fixed_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeBGKEntropy.relEnt_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeBGKEntropy.H_convex_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeBGKEntropy.relative_entropy_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeBGKEntropy.bgk_relative_entropy_decreases' depends on axioms: [propext, Classical.choice, Quot.sound]

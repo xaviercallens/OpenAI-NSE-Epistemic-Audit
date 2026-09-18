@@ -1,0 +1,7 @@
+'NonlinearBGKEntropy.entropic_eq_minimizes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NonlinearBGKEntropy.bgk_step_conserves_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NonlinearBGKEntropy.bgk_step_conserves_momentum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NonlinearBGKEntropy.bgk_step_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NonlinearBGKEntropy.bgk_step_entropy_decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NonlinearBGKEntropy.force_exact_difference_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NonlinearBGKEntropy.force_exact_difference_momentum' depends on axioms: [propext, Classical.choice, Quot.sound]

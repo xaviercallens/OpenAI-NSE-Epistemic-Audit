@@ -1,0 +1,5 @@
+'AlphaEnergyIdentity.skew_self_inner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AlphaEnergyIdentity.gate_no_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AlphaEnergyIdentity.energy_conserved_discrete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AlphaEnergyIdentity.drain_decreases_of_small' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AlphaEnergyIdentity.drain_is_first_order' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -65,7 +65,24 @@ skills/
 # Claude Code session artifacts and local clone of the OpenAI repo
 .claude/
 01_Verification_Paper/NavierStokesAndEuler/
-benchmark_runs/
+
+# Benchmark runs are large and mostly regenerable, so the tree is ignored -- EXCEPT the
+# kernel transcripts, which are the only published evidence for the axiom-footprint claims.
+# Ignoring those made every "verified declarations" count in the README a self-report, which
+# is exactly what this project refuses to accept from anyone else. 88 KB is a cheap price for
+# a claim that a reader can check without cloning anything.
+benchmark_runs/*
+!benchmark_runs/v5.6.1/
+benchmark_runs/v5.6.1/*
+!benchmark_runs/v5.6.1/logs/
+!benchmark_runs/v5.7.0/
+benchmark_runs/v5.7.0/*
+!benchmark_runs/v5.7.0/logs/
+# The global `*.log` rule above also catches these, so it has to be overridden explicitly.
+# These last two lines are what actually publishes the evidence; without them the six lines
+# above look correct and do nothing, which is the failure mode this programme keeps finding.
+!benchmark_runs/v5.6.1/logs/*.log
+!benchmark_runs/v5.7.0/logs/*.log
 
 # LaTeX build byproducts
 *.bbl

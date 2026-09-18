@@ -1,0 +1,4 @@
+'LerayAlphaLinearization.filtered_quadratic_hasFDerivAt_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaLinearization.linearization_independent_of_filter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaLinearization.same_linearization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaLinearization.viscous_rate_exceeds_any_cap' depends on axioms: [propext, Classical.choice, Quot.sound]

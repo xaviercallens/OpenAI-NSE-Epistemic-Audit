@@ -1,0 +1,7 @@
+'LerayAlphaFilter.φ_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaFilter.φ_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaFilter.φ_eq_one_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaFilter.φ_le_high_freq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaFilter.φ_even' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaFilter.φ_antitoneOn_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LerayAlphaFilter.φ_sq_le' depends on axioms: [propext, Classical.choice, Quot.sound]
