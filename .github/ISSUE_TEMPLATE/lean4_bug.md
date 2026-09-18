@@ -8,7 +8,7 @@ assignees: xaviercallens
 
 ## File
 
-`03_Lean4_Topological_Censorship/src/` → (specify file; say whether it is one of the nine verified files or a legacy/draft file)
+`03_Lean4_Topological_Censorship/src/` → (specify file; say whether it is one of the ten verified files or a legacy/draft file)
 
 ## Issue Description
 

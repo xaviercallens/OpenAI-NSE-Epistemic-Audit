@@ -21,7 +21,7 @@
 
 \title{\textbf{The OpenAI Navier--Stokes and Euler Blow-Up Proofs:\\ A Physical Reading, Not a Physical Refutation}}
 \author{The MechanicaFluidorum Program \\ \textit{SocrateAI Lab}}
-\date{September 2026 \\ \small Version 5.5.1}
+\date{September 2026 \\ \small Version 5.6.0}
 
 \begin{document}
 
@@ -76,7 +76,8 @@ and a recent human-written Euler blow-up through the relation $\mathrm{Kn}=\math
 shows that the three scenarios meet different physics first: kinetic termination, compressibility and
 heat inside the continuum, and plain viscosity. On the second, a one-dimensional compressible
 Navier--Stokes--Fourier simulation finds that air does not follow a driven swirl past a local Mach
-number of $0.70$; on the first, neither compressibility nor heat stops the core before $\ell_*$. The
+number of $0.70$; on the first, neither compressibility nor heat stops the core before $\ell_*$. A molecular-dynamics simulation with no continuum closure reproduces the lock where the gas remains a
+continuum, and shows the core emptying into a free-molecular region beyond it. The
 claim that a Leray-$\alpha$ filter of width $\ell_*$ represents the fluid at its continuum limit is
 withdrawn, with a formal reason: the filter width does not appear in the linearized dynamics. On the
 formal side, we prove in Lean~4, on OpenAI's own definitions and with no
@@ -1001,8 +1002,28 @@ have their own proved finite-time singularities, by implosion~\cite{MRRS2022,BCG
 the hierarchy hands its breakdown to the next. A cross-check in the kinetic solver with
 $\tau\propto1/\rho$ agrees in direction but is small where that solver is valid (peak Mach $0.72$
 against $0.77$ for constant $\tau$ at $\mathrm{Re}=3$, target $\mathrm{Ma}=0.75$); the solver is
-isothermal and limited to $\mathrm{Re}\le3$ and to Mach numbers below about $0.6$, so
-a thermal kinetic test remains to be done.
+isothermal and limited to $\mathrm{Re}\le3$ and to Mach numbers below about $0.6$.
+
+\paragraph{A closure-free test by molecular dynamics.} The lock was therefore tested with no continuum
+closure at all: molecular dynamics of a Lennard-Jones gas ($\rho=0.15\,\sigma^{-3}$, $T=2\,\epsilon/k_B$,
+mean free path $1.49\,\sigma$; $107{,}584$ particles in a $300\times300\times8\,\sigma$ slab), driven by the
+same per-unit-mass force, with a thermostat acting only beyond $3.2$ initial core radii. No viscosity law,
+heat-conduction law or equation of state is put in. The simulation reproduces the gas it models --- energy
+drift below $4\times10^{-5}$, pressure within $0.8\%$ of the third-virial equation of state, and a viscosity
+measured in situ as $1.71\pm0.07$ (decaying shear waves) and $1.87\pm0.18$ (a decaying vortex) against the
+modified-Enskog value $1.83$. The continuum prediction for this set-up was registered before the molecular
+data existed (local Mach number saturating near $0.58$ at $\mathrm{Re}=16$). At $\mathrm{Re}=16$, with the
+target driven from Mach $0.34$ to $3.4$ and two independent runs so far, the two agree where the gas is
+still a continuum: at target Mach $1$ (local Knudsen number $\le0.2$) the molecular core has local Mach
+number $0.56$--$0.62$, density $0.34\pm0.01$ and temperature $1.15\pm0.03$ of ambient, against $0.54$,
+$0.36$ and $1.15$ from the continuum model. The lock is therefore not an artefact of the closure. Driven
+further, the axis empties until it is no longer a fluid: at target Mach $\ge1.5$ the innermost $5\,\sigma$
+hold a few tens of molecules at $8$--$10\%$ of ambient density, with a local mean free path larger than the
+core, and these free molecules are spun up to a local Mach number near $1.2$ while the surrounding gas stays
+at $0.55$--$0.67$. The core crosses, within one simulation, from the continuum regime into the
+free-molecular one, which is the regime map of \S\ref{sec:regime-map} acting on a single flow. These are
+preliminary results from two runs, in a thin slab without three-dimensional instability; further seeds,
+other Reynolds numbers and a liquid run are in progress.
 
 \subsection{A regime map: which physics a blow-up scenario meets first}
 \label{sec:regime-map}
@@ -1341,9 +1362,9 @@ $|\omega|/(c_s^2/\nu)=0.05$ --- with byte-identical numerics in both cases. Mode
 property of the discretization, and a solver that reports its own departure from the modelled
 regime seems to us more useful than one that regularizes the departure away.
 
-We want to be explicit about the current state of this project's own attempt at pillar 3. Nine
+We want to be explicit about the current state of this project's own attempt at pillar 3. Ten
 Lean files in this repository compile with no \texttt{sorry} and no axioms beyond the standard
-three, together $74$ declarations checked with \texttt{\#print axioms}. One states results about
+three, together $85$ declarations checked with \texttt{\#print axioms}. One states results about
 OpenAI's \emph{actual} objects: it imports their \texttt{ProblemStatement} and periodic-integration
 library unchanged, is described under Direction~2 of \S\ref{sec:directions}, and assumes nothing
 beyond their definitions. Four support the physical reading: the scaling chain of
@@ -1357,7 +1378,8 @@ the Leray-$\alpha$ filter symbol; an H-theorem for a simpler discrete BGK collis
 finite-dimensional identity behind the gate--drain distinction of \S\ref{sec:gate-drain}, that a
 projected skew-adjoint term changes the energy only at second order in the step while a dissipative
 one removes it at first order; and the absence of the filter width from the linearization of every
-$\alpha$-model, which is the formal reason given in \S\ref{sec:leray-claim}. Each file's header states
+$\alpha$-model, which is the formal reason given in \S\ref{sec:leray-claim}. The tenth collects the exact
+identities of the quantum-fluid comparison of \S\ref{sec:quantum}. Each file's header states
 what it does not prove.
 
 \subsection{The Dual-Scale Cutoff Hypothesis: History and Outcome}
@@ -1505,12 +1527,10 @@ in view: fluctuating hydrodynamics is itself a coarse-grained model with a valid
 pushing it to nanometre scales repeats, in a new place, exactly the error this audit was written to
 correct.
 
-\paragraph{Four shorter items.} \emph{A thermal kinetic test.} The Mach lock of
-\S\ref{sec:compressible} was found in a continuum model with a Navier--Stokes--Fourier closure, and the
-kinetic solver that could check it is isothermal. A discrete-velocity BGK model with a
-temperature-dependent equilibrium, or direct simulation Monte Carlo, driven by the same forced core
-at $\mathrm{Re}\gtrsim16$, would show whether the lock survives when the continuum closure is removed;
-it is the most direct next experiment. \emph{Codimension.} The number of unstable modes of the
+\paragraph{Four shorter items.} \emph{The molecular test, completed.} The closure-free test of the Mach lock
+proposed in earlier versions has been started by molecular dynamics (\S\ref{sec:compressible}) and
+confirms the lock where the gas is a continuum; what remains is the full ensemble, other Reynolds numbers,
+a liquid with cavitation, and a three-dimensional box in which the evacuated core can go unstable. \emph{Codimension.} The number of unstable modes of the
 linearized self-similar profile beyond those generated by symmetries is the rigorous form of
 ``non-generic''; it has been computed for related Euler and Boussinesq profiles by
 computer-assisted and neural-network methods~\cite{ChenHou2022,Wang2025}, and needs eigenvalue

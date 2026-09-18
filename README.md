@@ -33,7 +33,7 @@ In September 2026, an OpenAI multi-agent system produced a **Lean 4 formalized p
 
 ---
 
-## 📍 Current status (v5.5.1, 2026-09-17)
+## 📍 Current status (v5.6.0, 2026-09-18)
 
 The research question behind the later versions is a "lock" chain: does something physical necessarily intervene where the construction goes? Each link, with its evidence and its honest status:
 
@@ -45,7 +45,7 @@ The research question behind the later versions is a "lock" chain: does somethin
 | **4** | At $\ell_*$ the hydrodynamic shear mode ends at $k\lambda=\sqrt{\pi/2}$; kinetic damping is *below* $\nu k^2$ and capped at $1/\tau$ | exact linear BGK spectrum ([`lock_k_kinetic_spectrum.py`](05_Community_Research_Directions/experiments/lock_k_kinetic_spectrum.py)); [`KineticSpectralCap.lean`](03_Lean4_Topological_Censorship/src/KineticSpectralCap.lean); nonlinear Rust solver [`kinetic_lock_rs/`](05_Community_Research_Directions/kinetic_lock_rs/README.md) | **Linear: exact. Nonlinear: null** — a forced kinetic core is *not* arrested at that scale; its apparent stopping point follows the grid |
 | **5** | The kinetic model is thermodynamically consistent (discrete H-theorem, conservation, positivity) | [`LatticeBGKEntropy.lean`](03_Lean4_Topological_Censorship/src/LatticeBGKEntropy.lean), [`NonlinearBGKEntropy.lean`](03_Lean4_Topological_Censorship/src/NonlinearBGKEntropy.lean) | **Proved** |
 | **6** | Which physics a blow-up meets first depends on its route, by $\mathrm{Kn}=\mathrm{Ma}/\mathrm{Re}$. OpenAI's route ($\mathrm{Re}\approx1$): everything at $\ell_*$. Inertial route ($\mathrm{Re}\to\infty$, Tao 2016): compressibility first, inside the continuum, at $\mathrm{Re}\,\ell_*$. Bounded-velocity route (human-written forced Euler blow-up): viscosity first, at $\ell_*/\mathrm{Ma}$ | [`BlowupRegimeMap.lean`](03_Lean4_Topological_Censorship/src/BlowupRegimeMap.lean) | **Proved** (algebra, not PDE) |
-| **7** | A compressible, heat-conducting gas driven by the same force: on OpenAI's route nothing stops the core before $\ell_*$ (it lags 14–25%); on the inertial route ($\mathrm{Re}\gtrsim16$) air **locks at local Mach 0.70** however far the target is driven | [`compressible_core.py`](05_Community_Research_Directions/experiments/compressible_core.py), [`THERMO_COMPRESSIBLE_LOCK_STUDY.md`](05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md) | **Measured**, grid-converged; 1D ideal gas, open-loop force; a lock on Mach number, not on velocity or core size; thermal kinetic test pending |
+| **7** | A compressible, heat-conducting gas driven by the same force: on OpenAI's route nothing stops the core before $\ell_*$ (it lags 14–25%); on the inertial route ($\mathrm{Re}\gtrsim16$) air **locks at local Mach 0.70** however far the target is driven | [`compressible_core.py`](05_Community_Research_Directions/experiments/compressible_core.py), [`THERMO_COMPRESSIBLE_LOCK_STUDY.md`](05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md) | **Measured** (1D continuum, grid-converged) and **confirmed without a closure** by molecular dynamics where the gas is a continuum (local Mach 0.56–0.62 vs 0.54 predicted beforehand; preliminary, 2 seeds); beyond that the axis becomes free-molecular. A lock on Mach number, not on velocity or core size |
 | — | *Withdrawn:* "a Leray-α filter of width $\ell_*$ represents the fluid at its continuum limit" | [`LerayAlphaLinearization.lean`](03_Lean4_Topological_Censorship/src/LerayAlphaLinearization.lean): α does not appear in the linearized dynamics, which stay $\nu k^2$, above any kinetic cap | **Refuted** (paper §9.5) |
 
 **What the chain establishes:** the construction necessarily passes the scale at which the hydrodynamic description ends. **What it does not establish:** that anything physical *stops* the collapse there.
@@ -99,7 +99,7 @@ This analysis uses a **Dual-Framework**: Lean 4 for the mathematics, and explici
 | Sobolev weakening | None | ✅ None |
 | Global *L²* energy bound | Uniform | ✅ ∃ E, ∀ t, kineticEnergy u t ≤ E |
 
-These rows describe OpenAI's formalization. This project's own Lean files (nine files, 74 declarations checked with `#print axioms`, no `sorry`) are listed in [`03_Lean4_Topological_Censorship/README.md`](03_Lean4_Topological_Censorship/README.md).
+These rows describe OpenAI's formalization. This project's own Lean files (ten files, 85 declarations checked with `#print axioms`, no `sorry`) are listed in [`03_Lean4_Topological_Censorship/README.md`](03_Lean4_Topological_Censorship/README.md).
 
 **Conclusion:** The AI accurately and brilliantly navigated the Millennium Prize rulebook. The gap highlighted here is strictly physical, shedding light on the boundary between abstract mathematical exploration and real-world fluid dynamics.
 
@@ -109,7 +109,7 @@ These rows describe OpenAI's formalization. This project's own Lean files (nine 
 
 ```
 OpenAI-NSE-Epistemic-Audit/
-├── 01_Verification_Paper/               # Flagship paper (v5.5.1, 29 pp) + open peer review
+├── 01_Verification_Paper/               # Flagship paper (v5.6.0, 31 pp) + open peer review
 │   ├── OpenAI_NSE_Verification.pdf
 │   ├── OpenAI_NSE_Verification.tex
 │   ├── PEER_REVIEW_2026-09-15.md

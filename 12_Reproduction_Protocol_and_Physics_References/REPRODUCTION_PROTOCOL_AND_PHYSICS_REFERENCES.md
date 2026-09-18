@@ -65,7 +65,7 @@ cd NavierStokesAndEuler                               # OpenAI's repository, Mat
 lake build NavierStokes.PeriodicUniqueness
 lake env lean <path>/03_Lean4_Topological_Censorship/src/OpenAIAdmissibility.lean
 ```
-Nine verified files, 74 declarations, no `sorry`, standard axioms only — listed in
+Ten verified files, 85 declarations, no `sorry`, standard axioms only — listed in
 [`03_Lean4_Topological_Censorship/README.md`](../03_Lean4_Topological_Censorship/README.md).
 
 ---

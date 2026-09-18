@@ -138,7 +138,7 @@ as a test interface and mean "outside the incompressible model's validity range"
 ## 🔗 7. Sources
 
 - Verified Lean: [`03_Lean4_Topological_Censorship/README.md`](../03_Lean4_Topological_Censorship/README.md)
-  (74 declarations in nine files, standard axioms)
+  (85 declarations in ten files, standard axioms)
 - The paper: [`01_Verification_Paper/OpenAI_NSE_Verification.pdf`](../01_Verification_Paper/OpenAI_NSE_Verification.pdf)
 - Compressible/thermal study: [`05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md`](../05_Community_Research_Directions/THERMO_COMPRESSIBLE_LOCK_STUDY.md)
 - PoC proposal: [`10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md`](../10_OpenAI_PoC_Proposal/OPENAI_POC_PROPOSAL.md)

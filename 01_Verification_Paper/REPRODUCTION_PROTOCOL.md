@@ -4,7 +4,7 @@ This protocol provides step-by-step instructions for peer reviewers, fluid dynam
 
 > **Scope and status (v5.5.0).** OpenAI's Lean proofs are correct; these steps reproduce a *physical reading* of them,
 > not a refutation. This file covers the original directives (Steps 1–6). The later results — the 3D spectral solver,
-> forced collapsing core, kinetic BGK and compressible/thermal simulations, and all nine verified Lean files — are
+> forced collapsing core, kinetic BGK and compressible/thermal simulations, and all ten verified Lean files — are
 > regenerated and checked by `scripts/run_benchmarks.sh`; see [`../BENCHMARKS.md`](../BENCHMARKS.md).
 
 ---
@@ -147,8 +147,8 @@ Key results (no `sorry`, standard axioms only, no remaining hypothesis):
 - `exits_admissible_near_one'`: any object with OpenAI's `CandidateProperties` exceeds every velocity-gradient bound arbitrarily close to $t = 1$;
 - `candidate_not_admissible'`, `candidate_not_admissibleScaled'`: so it leaves $|\nabla u| \lesssim c_s^2/\nu$ for every fluid and every choice of units.
 
-That is a bridge to the proof objects ("velocity blow-up forces gradient blow-up"), not new physics. All nine verified
-files (74 declarations) are listed in `03_Lean4_Topological_Censorship/README.md`.
+That is a bridge to the proof objects ("velocity blow-up forces gradient blow-up"), not new physics. All ten verified
+files (85 declarations) are listed in `03_Lean4_Topological_Censorship/README.md`.
 
 ---
 

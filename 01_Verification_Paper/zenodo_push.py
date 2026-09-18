@@ -90,6 +90,23 @@ FILES_TO_PACKAGE = [
     ("05_Community_Research_Directions/experiments/results/compressible_core_re_sweep.json", "compressible_core_re_sweep.json"),
     ("05_Community_Research_Directions/experiments/results/kinetic_lock_gas_law.json", "kinetic_lock_gas_law.json"),
     ("05_Community_Research_Directions/experiments/results/compressible_core.png", "figure_compressible_core.png"),
+    # --- v5.6.0: molecular dynamics of the forced core, quantum-fluid counterpart ---
+    ("03_Lean4_Topological_Censorship/src/QuantumVortexLink.lean", "QuantumVortexLink.lean"),
+    ("05_Community_Research_Directions/QUANTUM_FLUID_MICRO_MACRO_LINK.md", "QUANTUM_FLUID_MICRO_MACRO_LINK.md"),
+    ("05_Community_Research_Directions/experiments/quantum_fluid_link.py", "quantum_fluid_link.py"),
+    ("05_Community_Research_Directions/experiments/gp_vortex_dipole.py", "gp_vortex_dipole.py"),
+    ("05_Community_Research_Directions/experiments/results/quantum_fluid_link.json", "quantum_fluid_link.json"),
+    ("05_Community_Research_Directions/experiments/results/quantum_fluid_link.png", "figure_quantum_fluid_link.png"),
+    ("05_Community_Research_Directions/experiments/results/gp_vortex_dipole.json", "gp_vortex_dipole.json"),
+    ("05_Community_Research_Directions/experiments/results/gp_vortex_dipole.png", "figure_gp_vortex_dipole.png"),
+    ("05_Community_Research_Directions/md_core_rs/README.md", "MD_CORE_RS_README.md"),
+    ("05_Community_Research_Directions/experiments/analyse_md_core.py", "analyse_md_core.py"),
+    ("05_Community_Research_Directions/experiments/compressible_core_md_match.py", "compressible_core_md_match.py"),
+    ("05_Community_Research_Directions/experiments/results/md_core_gates.json", "md_core_gates.json"),
+    ("05_Community_Research_Directions/experiments/results/md_core_runs.json", "md_core_runs.json"),
+    ("05_Community_Research_Directions/experiments/results/md_core.png", "figure_md_core.png"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_md_match_preregistered.json", "compressible_core_md_match_preregistered.json"),
+    ("05_Community_Research_Directions/experiments/results/compressible_core_md_match.json", "compressible_core_md_match.json"),
     ("BENCHMARKS.md", "BENCHMARKS.md"),
     ("scripts/run_benchmarks.sh", "run_benchmarks.sh"),
     ("scripts/compare_benchmarks.py", "compare_benchmarks.py"),
@@ -97,7 +114,7 @@ FILES_TO_PACKAGE = [
 
 METADATA = {
     "metadata": {
-        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.5.0)",
+        "title": "The OpenAI Navier-Stokes and Euler Blow-Up Proofs: A Physical Reading, Not a Physical Refutation (v5.6.0)",
         "upload_type": "publication",
         "publication_type": "preprint",
         "description": (
@@ -122,7 +139,7 @@ METADATA = {
             "independent one; the external force has no independent physical origin, by construction; "
             "and the Euler datum requires coherent structure below the molecular length, where the "
             "missing physics is viscosity itself, not any exotic short-distance cutoff.</p>"
-            "<p><strong>New in v5.2.0 to v5.5.0.</strong> The cutoff-regularization hypothesis the paper previously "
+            "<p><strong>New in v5.2.0 to v5.6.0.</strong> The cutoff-regularization hypothesis the paper previously "
             "stated as untested is tested with a validated 3D pseudo-spectral solver (Taylor-Green "
             "Re=1600 dissipation peak at t=9.14 against a published 9.0). It is exact given its premise, "
             "but the premise -- a Re~1 diffusive core -- is not produced by generic data. A manufactured "
@@ -158,7 +175,13 @@ METADATA = {
             "Mach number of 0.70 -- a lock on Mach number, not on velocity or size, in a model whose own "
             "equations have proved implosion singularities. The claim that a Leray-alpha filter of width l* "
             "represents the fluid at its continuum limit is withdrawn, with a formal reason: the filter width "
-            "does not appear in the linearized dynamics. Lean: 74 declarations in nine files.</p>"
+            "does not appear in the linearized dynamics. Lean: 85 declarations in ten files. v5.6.0 tests the Mach lock with no continuum closure at all: molecular dynamics of a "
+            "Lennard-Jones gas driven by the same force, with viscosity measured in situ, reproduces the continuum prediction "
+            "registered beforehand where the gas is still a continuum (local Mach 0.56-0.62 against 0.54, core density 0.34 "
+            "against 0.36, core temperature 1.15 against 1.15; preliminary, two runs), and shows the core emptying into a "
+            "free-molecular region beyond it. A new section gives the quantum-fluid counterpart: a quantized vortex is a "
+            "Reynolds-number-one core by theorem, and quantum pressure, heat and cavitation all let a fluid carry a velocity "
+            "singularity by emptying the core rather than by bounding the velocity.</p>"
             "<p>This version supersedes all previous public drafts of this project, including "
             "one previously deposited under this same Zenodo record. Claims withdrawn in this revision "
             "-- \"plasma temperatures\", a global enstrophy-censorship axiom with no stated derivation, "
@@ -196,7 +219,7 @@ METADATA = {
             "Cavitation",
             "Neuro-Symbolic AI"
         ],
-        "version": "5.5.0",
+        "version": "5.6.0",
         "license": "cc-by-4.0",
         "access_right": "open",
         "related_identifiers": [
@@ -206,7 +229,7 @@ METADATA = {
                 "scheme": "url"
             },
             {
-                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.5.0",
+                "identifier": "https://github.com/xaviercallens/OpenAI-NSE-Epistemic-Audit/releases/tag/v5.6.0",
                 "relation": "isIdenticalTo",
                 "scheme": "url"
             },

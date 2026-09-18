@@ -1,5 +1,43 @@
 # Changelog
 
+## v5.6.0 — 2026-09-18 — A closure-free test of the Mach lock; the quantum-fluid counterpart
+
+### Molecular dynamics of the forced core (paper §9.3; `md_core_rs/`; preliminary, two seeds)
+
+- Lennard-Jones gas (ρ = 0.15, T = 2, mean free path 1.49σ, 107,584 particles), same per-unit-mass force,
+  thermostat only beyond 3.2 core radii. No viscosity law, heat-conduction law or equation of state is put in.
+- Gates: energy drift ≤ 4×10⁻⁵; pressure within 0.8% of the third-virial EOS; viscosity measured in situ
+  1.71 ± 0.07 (shear waves, 14 runs) and 1.87 ± 0.18 (vortex decay) vs modified Enskog 1.83.
+- **The continuum prediction was registered before the MD data existed** (commit `de1f539`). At Re = 16 and
+  target Mach 1 (local Knudsen ≤ 0.2): MD local Mach 0.56–0.62, core density 0.34 ± 0.01, core temperature
+  1.15 ± 0.03 vs continuum 0.54, 0.36, 1.15. **The lock is not an artefact of the Navier–Stokes–Fourier
+  closure.**
+- Beyond target Mach ≈ 1.5 the axis becomes free-molecular (tens of molecules at 8–10% density, mean free
+  path larger than the core); those molecules reach local Mach ≈ 1.2 while the surrounding gas stays at
+  0.55–0.67. The core crosses from the continuum into the free-molecular regime within one simulation.
+- Limitations: two seeds; thin slab (no 3D instability); ideal-gas sound speed for local Mach numbers.
+  Further seeds, Re = 4 and 32, and a liquid (cavitation) run are running and will be added in v5.6.1.
+
+### The quantum-fluid counterpart (paper §9.5, new)
+
+- A quantized vortex has `u r/(ħ/m) = 1` at every radius — a Reynolds-number-one core by theorem — with
+  sonic radius `ħ/(mc) = √2 ξ` in the place of ℓ*. The GP vortex, its classical compressible twin, the air
+  core and cavitating water all tolerate `u ∝ 1/r` by emptying the core.
+- GP vortex dipole: every measured speed below c (fastest pair 0.50 c; annihilation pulses up to 0.92 c;
+  point-vortex law recovered to 0.1% at large separation).
+- Landau criterion as the tangent to the dispersion curve (c, 0, ≈ 58 m/s in He-4); Godfrin's roton in a 2D
+  Fermi liquid as the warning not to carry the gas-kinetic termination over to water.
+- Mass-independent estimate `ℓ* ≳ (√2/4π) a_B ≈ 6 pm` from published minimal-viscosity and maximal-sound-
+  speed bounds (identity proved in Lean; the inputs are estimates).
+- `QuantumVortexLink.lean` (11 declarations): **Lean total 85 declarations in ten files**, standard axioms.
+- Moonshine (Mathieu/umbral) was examined and is *not* in the paper: no mechanism connects M₂₄ or K3 to
+  fluids; the only shared object is the Dedekind η and SL(2,ℤ), which also fixes the hexagonal vortex lattice
+  (`QUANTUM_FLUID_MICRO_MACRO_LINK.md` §4).
+
+### Paper (31 pp, Version 5.6.0)
+
+Abstract, §9.3 (molecular-dynamics paragraph), new §9.5, directions list; five new references.
+
 ## v5.5.1 — 2026-09-17 — Repository-wide realignment with the v5.5.0 positions
 
 No new results. Every tracked artefact was re-read against the current positions (proofs correct, physical

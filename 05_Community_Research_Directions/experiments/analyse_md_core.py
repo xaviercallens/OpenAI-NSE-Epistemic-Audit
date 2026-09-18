@@ -351,7 +351,8 @@ def plot(runs_out):
     except Exception as e:  # pragma: no cover
         print("plot skipped:", e)
         return
-    fig, ax = plt.subplots(1, 3, figsize=(16, 4.6))
+    has_liq = any(not n.startswith("_") and "density_snapshots" in e for n, e in runs_out.items())
+    fig, ax = plt.subplots(1, 3 if has_liq else 2, figsize=(16, 4.6) if has_liq else (11.5, 4.6))
     cols = {"forced_gas_re16": "tab:red", "forced_gas_re4": "tab:blue", "forced_gas_re32": "tab:purple"}
     for name, e in runs_out.items():
         if name.startswith("_") or "mach_target" not in e:
@@ -360,19 +361,23 @@ def plot(runs_out):
         m, se = np.array(s["mach_peak_fit"], float), np.array([x or 0 for x in s["mach_peak_fit_se"]], float)
         ax[0].plot(mt, m, color=c, label=f"MD {name} (fit estimator, n={e['n_seeds']})")
         ax[0].fill_between(mt, m - se, m + se, color=c, alpha=0.25)
-        ax[0].plot(mt, s["mach_peak_smooth"], color=c, ls=":", lw=0.9)
+        ax[0].plot(mt, s["mach_peak_smooth"], color=c, ls=":", lw=0.9, label=f"MD {name} (smoothed-profile max; biased up where bins are sparse)")
         ax[1].plot(mt, s["rho0_over_rho_inf"], color=c, label=f"rho0 {name}")
         ax[1].plot(mt, s["T0_over_T_inf"], color=c, ls="--", label=f"T0 {name}")
     match = OUT / "compressible_core_md_match.json"
-    if match.exists():                                          # hook: continuum prediction from the 1D solver
+    if match.exists():                                          # continuum prediction (1D NSF solver, same set-up)
         cm = json.loads(match.read_text())
-        for key, v in (cm.items() if "mach_target" not in cm else [("continuum", cm)]):
-            if isinstance(v, dict) and "mach_target" in v:
-                ax[0].plot(v["mach_target"], v["mach_local"], "k--", lw=1.2, label=f"1D continuum {key}")
-                if "rho0" in v:
-                    ax[1].plot(v["mach_target"], v["rho0"], "k-", lw=0.8)
-                if "T0" in v:
-                    ax[1].plot(v["mach_target"], v["T0"], "k--", lw=0.8)
+        for key, byrun in cm.items():
+            if key.startswith("_") or not isinstance(byrun, dict):
+                continue
+            v = byrun.get("buffer_3.2") or next(iter(byrun.values()))
+            c = cols.get(f"forced_gas_{key}", "k")
+            if f"forced_gas_{key}" not in runs_out:
+                continue                                        # only overlay Reynolds numbers that have MD data
+            ax[0].plot(v["mach_target"], v["mach_local"], color=c, ls="--", lw=1.4,
+                       label=f"continuum prediction {key} (registered before the MD runs)")
+            ax[1].plot(v["mach_target"], v["rho0"], color="k", lw=0.9, label=f"continuum rho0 {key}")
+            ax[1].plot(v["mach_target"], v["T0"], color="k", ls="--", lw=0.9, label=f"continuum T0 {key}")
     x = np.array([0.2, 3.5])
     ax[0].plot(x, x, "k:", lw=0.8, label="incompressible target")
     ax[0].set_xlabel("target Mach number  Re nu / (l c)"); ax[0].set_ylabel("peak local Mach number")
@@ -384,6 +389,7 @@ def plot(runs_out):
         for sshot in liq[0]["density_snapshots"]:
             ax[2].plot(sshot["r"], sshot["rho"], label=f"l_target = {sshot['l_target']:.1f}")
         ax[2].set_xlabel("r / sigma"); ax[2].set_ylabel("density"); ax[2].set_title("liquid run: density profiles (exploratory)"); ax[2].legend(fontsize=7)
+
     for a in ax:
         a.grid(alpha=0.3, which="both")
     fig.tight_layout(); fig.savefig(OUT / "md_core.png", dpi=130)

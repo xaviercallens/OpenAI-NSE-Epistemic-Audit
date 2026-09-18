@@ -19,7 +19,7 @@ OPENAI_LEAN="${OPENAI_LEAN:-$REPO/../NavierStokesAndEuler}"
 EXP="$REPO/05_Community_Research_Directions/experiments"
 RUST="$REPO/05_Community_Research_Directions/kinetic_lock_rs"
 LEAN_SRC="$REPO/03_Lean4_Topological_Censorship/src"
-LEAN_FILES=(CoreScaling LerayAlphaFilter LatticeBGKEntropy AlphaEnergyIdentity NonlinearBGKEntropy KineticSpectralCap OpenAIAdmissibility BlowupRegimeMap LerayAlphaLinearization)
+LEAN_FILES=(CoreScaling LerayAlphaFilter LatticeBGKEntropy AlphaEnergyIdentity NonlinearBGKEntropy KineticSpectralCap OpenAIAdmissibility BlowupRegimeMap LerayAlphaLinearization QuantumVortexLink)
 
 mkdir -p "$RUN/experiments/results" "$RUN/logs"
 cp "$EXP"/*.py "$RUN/experiments/"

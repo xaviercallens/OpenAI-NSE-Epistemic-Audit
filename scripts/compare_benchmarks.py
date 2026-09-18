@@ -20,7 +20,8 @@ REF = REPO / "05_Community_Research_Directions" / "experiments" / "results"
 STD_AXIOMS = "[propext, Classical.choice, Quot.sound]"
 LEAN_DECLS = {"CoreScaling": 10, "LerayAlphaFilter": 7, "LatticeBGKEntropy": 7, "AlphaEnergyIdentity": 5,
               "NonlinearBGKEntropy": 7, "KineticSpectralCap": 6, "OpenAIAdmissibility": 15,
-              "BlowupRegimeMap": 13, "LerayAlphaLinearization": 4}
+              "BlowupRegimeMap": 13, "LerayAlphaLinearization": 4,
+              "QuantumVortexLink": 11}
 
 
 def load(p: Path):
