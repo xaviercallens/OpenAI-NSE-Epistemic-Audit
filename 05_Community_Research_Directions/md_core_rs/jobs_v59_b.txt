@@ -1,0 +1,2 @@
+# v5.9: undriven control for the 3D water-like axial diagnostic (same box, same initial vortex, no force)
+decay3d_wl_s1 --mode vortex --force off --rho 0.79 --temp 0.75 --l 110 --lz 40 --dt 0.004 --equil-steps 8000 --re 4 --nu 2.95 --l-start 12 --l-end 3 --rb 36 --buffer-ramp 8 --axial-slabs 8 --t-run 44 --seed 342

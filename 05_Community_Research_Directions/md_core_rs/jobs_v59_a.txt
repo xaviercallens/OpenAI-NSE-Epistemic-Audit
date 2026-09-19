@@ -1,0 +1,2 @@
+# v5.9: 3D water-like box with the far-ring barostat (fixed ambient pressure) and the per-slab radial profile
+pbaro3d_wl_re4_s1 --mode vortex --force on --rho 0.79 --temp 0.75 --l 110 --lz 40 --dt 0.004 --equil-steps 8000 --re 4 --nu 2.95 --l-start 12 --l-end 3 --rb 36 --buffer-ramp 8 --axial-slabs 8 --baro auto --baro-tau 3 --seed 341

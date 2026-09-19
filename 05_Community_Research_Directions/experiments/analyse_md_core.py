@@ -427,7 +427,12 @@ def main():
     runs_out["_estimators"] = __doc__.split("Estimators, and their known biases")[1].strip()
 
     for k in sorted(files):
-        if k.startswith(("pstress_", "pbaro_")):
+        if k.startswith("pbaro3d_"):
+            dd = load(files[k])
+            runs_out["_" + k + "_slab"] = slab_profile_metrics(dd)
+        if k.startswith("decay3d_wl"):
+            runs_out["_" + k + "_dispersion_control"] = dispersion_control(load(files[k]))
+        if k.startswith(("pstress_", "pbaro_", "pbaro3d_")):
             dd = load(files[k])
             pm = pressure_metrics(dd)
             if dd.get("baro"):
@@ -437,7 +442,7 @@ def main():
                                   "cap_at_target_pressure": float(np.sqrt(2 * dd["baro_target_p"] / pm["windows"][0]["rho_far"]))}
                 pm["plateau"]["top6_over_registered_cap"] = pm["plateau"]["u_wall_top6_mean"] / 0.8239
                 pm["plateau"]["top6_over_cap_at_target"] = pm["plateau"]["u_wall_top6_mean"] / pm["barostat"]["cap_at_target_pressure"]
-            runs_out["_" + (k if k.startswith("pbaro_") else k.rsplit("_s", 1)[0]) + "_pressure"] = pm
+            runs_out["_" + (k if k.startswith(("pbaro_", "pbaro3d_")) else k.rsplit("_s", 1)[0]) + "_pressure"] = pm
     jd = lambda o: json.dumps(o, indent=1, default=lambda x: x.tolist() if hasattr(x, "tolist") else float(x))
     (OUT / "md_core_gates.json").write_text(jd(gates))
     (OUT / "md_core_runs.json").write_text(jd(runs_out))
@@ -480,6 +485,75 @@ def pressure_metrics(d):
             "u_wall_over_cap_max": max(r["u_wall_over_cap"] for r in cav) if cav else None,
             "u_wall_max": max(r["u_wall"] for r in cav) if cav else None,
             "cap_initial_p": float(np.sqrt(2 * rows[0]["p_far"] / rows[0]["rho_far"]))}
+
+
+def slab_profile_metrics(d, r_far=(26, 34)):
+    """Slab-resolved cavity wall (3D boxes with `radial_counts`, 1 sigma bins).
+
+    Per window: per-slab density profile -> cavity wall radius per slab (first bin outside the core where the density
+    exceeds 0.5 of the far-ring density, linearly interpolated), and a dispersion index D = var_slabs(count) / mean(count)
+    per radial bin (1 for independent Poisson counts; time correlation of the samples raises it). The test statistic is
+    D at the wall (wall-1 .. wall+1) divided by D in the far ring: 1 if the cavity is axially uniform, above 1 if the wall
+    radius varies between slabs. The undriven control gives the same ratio with no cavity at the same radii."""
+    rows = []
+    for w in d["windows"]:
+        ax = w.get("axial")
+        if not ax or "radial_counts" not in ax:
+            continue
+        c = np.array(ax["radial_counts"], float)  # slabs x bins
+        ns, nb = c.shape
+        edges = np.arange(nb + 1, dtype=float)
+        vol = np.pi * (edges[1:] ** 2 - edges[:-1] ** 2) * d["Lz"] / ns * ax["samples"]
+        rho = c / vol
+        rho_far = float(np.mean(rho[:, r_far[0]:r_far[1]]))
+        with np.errstate(invalid="ignore", divide="ignore"):
+            disp = np.nanvar(c, axis=0, ddof=1) / np.nanmean(c, axis=0)
+        far_D = float(np.nanmean(disp[r_far[0]:r_far[1]]))
+        walls = []
+        for s_ in range(ns):
+            prof = rho[s_]
+            if np.mean(prof[:3]) >= 0.5 * rho_far:
+                walls = []
+                break
+            idx = np.where(prof > 0.5 * rho_far)[0]
+            idx = idx[idx > 2]
+            if not len(idx):
+                walls = []
+                break
+            i = int(idx[0])
+            lo, hi = prof[i - 1], prof[i]
+            walls.append(float(i - 0.5 + (0.5 * rho_far - lo) / max(hi - lo, 1e-12)))
+        row = {"l_target": w["l_target"], "rho_far": rho_far, "D_far": far_D}
+        if walls:
+            wm = float(np.mean(walls))
+            j = int(round(wm))
+            row.update({"wall_r_slabs": walls, "wall_r_mean": wm, "wall_r_std_slabs": float(np.std(walls, ddof=1)),
+                        "D_wall": float(np.nanmean(disp[max(j - 1, 0):j + 2])),
+                        "D_wall_over_D_far": float(np.nanmean(disp[max(j - 1, 0):j + 2]) / far_D)})
+        rows.append(row)
+    cav = [r for r in rows if "wall_r_mean" in r]
+    out = {"windows": rows, "n_cavity_windows": len(cav)}
+    if cav:
+        out["D_wall_over_D_far_median"] = float(np.median([r["D_wall_over_D_far"] for r in cav]))
+        out["wall_r_std_slabs_median"] = float(np.median([r["wall_r_std_slabs"] for r in cav]))
+        out["wall_r_mean_median"] = float(np.median([r["wall_r_mean"] for r in cav]))
+    return out
+
+
+def dispersion_control(d, r_lo=8, r_hi=24, r_far=(26, 34)):
+    """Undriven control (no cavity): the same dispersion ratio D(r)/D(far) over a range of radii comparable to the cavity wall."""
+    vals = []
+    for w in d["windows"]:
+        ax = w.get("axial")
+        if not ax or "radial_counts" not in ax:
+            continue
+        c = np.array(ax["radial_counts"], float)
+        with np.errstate(invalid="ignore", divide="ignore"):
+            disp = np.nanvar(c, axis=0, ddof=1) / np.nanmean(c, axis=0)
+        far_D = float(np.nanmean(disp[r_far[0]:r_far[1]]))
+        vals.append(float(np.nanmean(disp[r_lo:r_hi]) / far_D))
+    return {"D_over_D_far_windows": vals, "median": float(np.median(vals)) if vals else None,
+            "max": float(np.max(vals)) if vals else None, "n_windows": len(vals)}
 
 
 def plot(runs_out):

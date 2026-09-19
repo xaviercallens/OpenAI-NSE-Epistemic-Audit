@@ -280,6 +280,9 @@ fn main() {
     let nz_slab = argu("--axial-slabs", ((lz / 6.0).floor() as usize).max(1));
     let (mut ax_cnt, mut ax_sx, mut ax_sy, mut ax_ncore, mut ax_samples) =
         (vec![0.0f64; nz_slab], vec![0.0f64; nz_slab], vec![0.0f64; nz_slab], vec![0.0f64; nz_slab], 0usize);
+    // per z-slab radial count profile (1 sigma bins to N_PROF): the cavity wall radius can be read slab by slab afterwards
+    const N_PROF: usize = 40;
+    let mut ax_prof = vec![vec![0.0f64; N_PROF]; nz_slab];
     let (mut t_win0, mut e_mon) = (0.0, vec![]);
     let tg = tgt.clone();
     for k in 0..nsteps {
@@ -353,10 +356,14 @@ fn main() {
                 for i in 0..s.n {
                     let (dx, dy) = (s.x[i].rem_euclid(lc) - hc, s.y[i].rem_euclid(lc) - hc);
                     let r2 = dx * dx + dy * dy;
+                    let iz = (((s.z[i].rem_euclid(lz)) / lz * nz_slab as f64) as usize).min(nz_slab - 1);
+                    let rb_ = r2.sqrt() as usize;
+                    if rb_ < N_PROF {
+                        ax_prof[iz][rb_] += 1.0;
+                    }
                     if r2 > r_cen * r_cen {
                         continue;
                     }
-                    let iz = (((s.z[i].rem_euclid(lz)) / lz * nz_slab as f64) as usize).min(nz_slab - 1);
                     ax_cnt[iz] += 1.0;
                     ax_sx[iz] += dx;
                     ax_sy[iz] += dy;
@@ -384,11 +391,13 @@ fn main() {
                         "core_density": ax_ncore.iter().map(|c| c / ns / vol_core).collect::<Vec<f64>>(),
                         "n_centroid_per_sample": ax_cnt.iter().map(|c| c / ns).collect::<Vec<f64>>(),
                         "centroid_x": ax_sx.iter().zip(&ax_cnt).map(|(a, c)| if *c > 0.0 { a / c } else { 0.0 }).collect::<Vec<f64>>(),
+                        "radial_counts": ax_prof.clone(), "radial_bin_width": 1.0,
                         "centroid_y": ax_sy.iter().zip(&ax_cnt).map(|(a, c)| if *c > 0.0 { a / c } else { 0.0 }).collect::<Vec<f64>>(),
                     });
                     for v in [&mut ax_cnt, &mut ax_sx, &mut ax_sy, &mut ax_ncore] {
                         v.iter_mut().for_each(|x| *x = 0.0);
                     }
+                    ax_prof.iter_mut().for_each(|v| v.iter_mut().for_each(|x| *x = 0.0));
                     ax_samples = 0;
                 }
                 windows.push(rec);
